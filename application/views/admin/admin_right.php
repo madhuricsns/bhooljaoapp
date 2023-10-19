@@ -1,0 +1,166 @@
+<!-- Page Sidebar Start-->
+<?php $sessiondata=$this->session->userdata('logged_in');
+	#print_r($sessiondata);exit;
+$session_admin_id=$sessiondata['admin_id']; 
+$session_admin_name=$sessiondata['admin_name'];
+$session_user_type=$sessiondata['user_type'];
+//$session_subroles=$sessiondata['subroles'];
+$session_subroles="";
+
+//if($session_user_type=="Subadmin" && $session_subroles!="NULL")
+{
+	// $modulesId=$this->Admin_model->getmodulelist($session_subroles);
+}
+//echo $this->db->last_query();
+ //echo '<pre>';print_r($modulesId);exit;
+?>
+
+        <div class="page-sidebar" style="width:270px;">
+            <div class="main-header-left d-none d-lg-block">
+                <div class="logo-wrapper"><a href="<?php echo base_url();?>backend/dashboard"><img class="blur-up lazyloaded" src="<?php echo base_url('template/admin/');?>assets/images/dashboard/BHOOLJAO_logo.png" alt="BHOOLJAO logo"></a></div>
+            </div>
+            <div class="sidebar custom-scrollbar">
+               
+                <ul class="sidebar-menu">
+                   
+					 <li <?php if($this->router->fetch_class()=='Dashboard'){?>style="background-color: rgb(68 114 196);"<?php }?>class="  <?php if($this->router->fetch_method()=='Dashboard'){?>nav-expanded nav-active <?php }?>" <?php //if(isset($modulesId)&& count($modulesId)>0)
+							//{ 
+								// if ($modulesId[0]['view'] == 'Yes') 
+								// { 
+								// 	echo 'style="display:block;"';
+							 //    } 
+								// else 
+								// { 
+									echo 'style="display:block;"'; 
+								//}
+							//}
+							?>>
+						<a class="sidebar-header" href="<?php echo base_url("backend/");?>dashboard"><!-- <i data-feather="home"></i> --><img src="<?php echo base_url()."/uploads/flaticon/dashboard.png"?>" style="max-height: 30px;max-width: 30px;"> &nbsp;&nbsp;<span>DASHBOARD</span></a>                        
+					</li>
+					<!--<li class=" <?php if($this->router->fetch_method()=='manageUsers'){?>nav-expanded nav-active <?php }?>">
+						<a class="sidebar-header" href="<?php //echo base_url("backend/");?>dashboard"><i data-feather="file-text"></i><span>ANALYTICS & REPORTS</span></a>                        
+					</li>-->
+					<li  <?php if($this->router->fetch_class()=='Booking'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageBooking'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
+							{ 
+								if ($modulesId[1]['view'] == 'Yes') 
+								{ 
+									echo 'style="display:block;"';
+							    } 
+								else 
+								{ 
+									echo 'style="display:none;"'; 
+								}
+							}
+							?>>
+						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Booking/manageBooking"><!-- <i data-feather="home"></i> -->
+						<img src="<?php echo base_url()."/uploads/flaticon/Orders.png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
+						<span>BOOKINGS </span></a>                        
+					</li>
+					
+					<li <?php if($this->router->fetch_class()=='Users' || $this->router->fetch_class()=='users'){?>style="background-color: rgb(68 114 196);"<?php }?> class=" <?php if($this->router->fetch_method()=='manageUsers'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
+							{ 
+								if ($modulesId[2]['view'] == 'Yes') 
+								{ 
+									echo 'style="display:block;"';
+							    } 
+								else 
+								{ 
+									echo 'style="display:none;"'; 
+								}
+							}
+							?>>
+						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Users/manageUsers"><!-- <i data-feather="home"></i> --><img src="<?php echo base_url()."/uploads/flaticon/value.png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;<span>CUSTOMER</span></a>                        
+					</li>
+					<li  <?php if($this->router->fetch_class()=='Booking'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageCategory'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
+							{ 
+								if ($modulesId[1]['view'] == 'Yes') 
+								{ 
+									echo 'style="display:block;"';
+							    } 
+								else 
+								{ 
+									echo 'style="display:none;"'; 
+								}
+							}
+							?>>
+						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Category/manageCategory"><!-- <i data-feather="home"></i> -->
+						<img src="<?php echo base_url()."/uploads/flaticon/manager.png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
+						<span>SERVICE PROVIDER </span></a>                        
+					</li>
+					<li  <?php if($this->router->fetch_class()=='Category'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageCategory'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
+							{ 
+								if ($modulesId[1]['view'] == 'Yes') 
+								{ 
+									echo 'style="display:block;"';
+							    } 
+								else 
+								{ 
+									echo 'style="display:none;"'; 
+								}
+							}
+							?>>
+						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Category/manageCategory"><!-- <i data-feather="home"></i> -->
+						<img src="<?php echo base_url()."/uploads/flaticon/category.png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
+						<span>SERVICE CATEGORY</span></a>                        
+					</li>
+
+					<li  <?php if($this->router->fetch_class()=='Zone'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageZones'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
+							{ 
+								if ($modulesId[1]['view'] == 'Yes') 
+								{ 
+									echo 'style="display:block;"';
+							    } 
+								else 
+								{ 
+									echo 'style="display:none;"'; 
+								}
+							}
+							?>>
+						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Zone/manageZones"><!-- <i data-feather="home"></i> -->
+						<img src="<?php echo base_url()."/uploads/flaticon/categories.png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
+						<span>ZONE MANAGEMENT </span></a>                        
+					</li>
+					<li  <?php if($this->router->fetch_class()=='Material'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageMaterial'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
+							{ 
+								if ($modulesId[1]['view'] == 'Yes') 
+								{ 
+									echo 'style="display:block;"';
+							    } 
+								else 
+								{ 
+									echo 'style="display:none;"'; 
+								}
+							}
+							?>>
+						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Material/manageMaterial"><!-- <i data-feather="home"></i> -->
+						<img src="<?php echo base_url()."/uploads/flaticon/categories.png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
+						<span>MATERIAL MANAGEMENT </span></a>                        
+					</li>
+					
+
+					<li  <?php if($this->router->fetch_class()=='Banners'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageBanner'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
+							{ 
+								if ($modulesId[1]['view'] == 'Yes') 
+								{ 
+									echo 'style="display:block;"';
+							    } 
+								else 
+								{ 
+									echo 'style="display:none;"'; 
+								}
+							}
+							?>>
+						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Banners/manageBanner"><!-- <i data-feather="home"></i> -->
+						<img src="<?php echo base_url()."/uploads/flaticon/Banners .png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
+						<span>BANNERS</span></a>                        
+					</li>
+					
+					<li><a class="sidebar-header" href="<?php echo base_url();?>backend/Login/logout"><!-- <i data-feather="home"></i> --><img src="<?php echo base_url()."/uploads/flaticon/exit.png"?>" style="max-height: 25px;max-width: 25px;">  &nbsp;&nbsp;<span>LOGOUT</span></a>
+                    </li>	
+                 </ul>
+            </div>
+        </div>
+
+        <!-- Page Sidebar Ends-->
+
+        
