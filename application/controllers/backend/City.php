@@ -63,8 +63,9 @@ class City extends CI_Controller {
 	{
 		$data['title']='Add City';
 		$data['error_msg']='';
+		$data['stateList']=$this->City_model->getAllState(1,"","");
 				
-		if(isset($_POST['btn_adduser']))
+		if(isset($_POST['btn_addcity']))
 		{
 			
 			$this->form_validation->set_rules('city_name','City Name','required');
@@ -177,13 +178,14 @@ class City extends CI_Controller {
 		//echo "segment--".$this->uri->segment(4);exit();
 		$city_id=base64_decode($this->uri->segment(4));
 		//echo "Brand_id--".$brand_id;exit();
+		$data['stateList']=$this->City_model->getAllState(1,"","");
 		if($city_id)
 		{
 			$cityInfo=$this->City_model->getSingleCityInfo($city_id,0);
 			if($cityInfo>0)
 			{
 				$data['cityInfo'] = $this->City_model->getSingleCityInfo($city_id,1);
-				if(isset($_POST['btn_uptuser']))
+				if(isset($_POST['btn_uptcity']))
 				{
 					$this->form_validation->set_rules('city_name','City Name','required');
 			
@@ -257,13 +259,13 @@ class City extends CI_Controller {
 // 					exit();
 						if($city_data)
 						{	
-							$this->session->set_flashdata('success','SubCategory updated successfully.');
+							$this->session->set_flashdata('success','City Updated successfully.');
 
 							redirect(base_url().'backend/City/managescity');	
 						}
 						else
 						{
-							$this->session->set_flashdata('error','Error while updating SubCategory.');
+							$this->session->set_flashdata('error','Error while updating City.');
 
 							redirect(base_url().'backend/City/update_city/'.base64_encode($city_id));
 						}	
@@ -448,7 +450,7 @@ class City extends CI_Controller {
 			if(count($cityInfo) > 0)
 			{   
 				$input_data = array(
-					'city_status'=>'Deleted',
+					'city_status'=>'Delete',
 					'dateupdated' => date('Y-m-d H:i:s')
 				);
 

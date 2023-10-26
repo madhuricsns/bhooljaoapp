@@ -67,6 +67,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 									</thead>	
 									<tbody>			
 										<?php $i=1;
+										// print_r($City);
 										foreach($City as $city)
 										{
 										?>		
@@ -74,7 +75,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<td><?php echo $i;?></td>
 												
 												<td><?php echo $city['city_name'];?></td>
-												<td><?php echo $city['state_id'];?></td>
+												<td><?php echo $city['state_name'];?></td>
 												<td><?php echo $city['city_status'];?></td>
 												
 												

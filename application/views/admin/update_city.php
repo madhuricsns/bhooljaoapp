@@ -27,7 +27,7 @@
 						</div>
 						<?php }?>
 						<?php $encodedValueId=base64_encode($cityInfo[0]['city_id']); ?>
-						<form class="needs-validation" name="frm_updateuser" id="frm_updateuser" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/City/updatecity/<?php echo $encodedValueId;?>">
+						<form class="needs-validation" name="frm_updatecity" id="frm_updatecity" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/City/updatecity/<?php echo $encodedValueId;?>">
                         <div class="tab-content" >
                             <div class="tab-pane fade active show">
                                     <div class="row">
@@ -37,7 +37,8 @@
                                         	 <div class="form-group row">
                                                 <label for="full_name" class="col-xl-3 col-md-4"><span>*</span>City Name</label>
                                                 <input type="text" class="form-control  col-md-6" id="city_name" name="city_name"  required value="<?php echo $cityInfo[0]['city_name'];?>">
-												 <div id="err_full_name" class="error_msg"></div>
+												 <div id="err_city_name" class="error_msg"></div>
+												 
                                             </div>
 
                                         	 <div class="form-group row">
@@ -45,12 +46,15 @@
 												<select name="state_id" id="state_id" class="form-control  col-md-6" required onchange="showDiv(this)">
 
                                                             <option value="">Select State</option>
-                                                           
-													<option value="27" <?php if($cityInfo[0]['state_id']=="27"){ echo 'selected="selected"';}?>>Maharashtra</option>
-													<option value="30" <?php if($cityInfo[0]['state_id']=="30"){ echo 'selected="selected"';}?>>Goa</option>
+                                                       <?php
+													foreach($stateList as $state){
 
+													?>    
+													<option value="<?php echo $state['state_id'] ?>" <?php if($cityInfo[0]['state_id']==$state['state_id']){ echo 'selected="selected"';}?>><?php echo $state['state_name'] ?></option>
+													<?php } ?>
 
 												</select>
+												 <div id="err_state_id" class="error_msg"></div>
                                             </div>
 
 											
@@ -68,8 +72,8 @@
 
                                             <div class="form-group row">
                                             	<div class="offset-xl-3 offset-sm-4">
-						                            <button type="submit" class="btn btn-primary" name="btn_uptuser" id="btn_uptuser">Update</button>
-													<a href="<?php echo base_url();?>backend/Users/index" class="btn btn-primary" >Cancel</a>
+						                            <button type="submit" class="btn btn-primary" name="btn_uptcity" id="btn_uptcity">Update</button>
+													<a href="<?php echo base_url();?>backend/City/managescity" class="btn btn-primary" >Cancel</a>
 						                        </div>
                                             </div>
                                         </div>

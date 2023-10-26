@@ -26,14 +26,14 @@
 							<?php echo $this->session->flashdata('error_msg');?>
 						</div>
 						<?php }?>
-						<form class="needs-validation" name="frm_adduser" id="frm_adduser" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/City/addcity">
+						<form class="needs-validation" name="frm_addcity" id="frm_addcity" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/City/addcity">
                         <div class="tab-content" >
                             <div class="tab-pane fade active show">
                                     <div class="row">
                                         <div class="col-sm-12">
                                         	
                                             <div class="form-group row">
-                                                <label for="full_name" class="col-xl-3 col-md-4"><span>*</span>City Name</label>
+                                                <label for="city_name" class="col-xl-3 col-md-4"><span>*</span>City Name</label>
                                                 <input type="text" class="form-control  col-md-6" id="city_name" name="city_name" placeholder="Enter City Name "  required>
 												 <div id="err_city_name" class="error_msg"></div>
                                             </div>
@@ -44,9 +44,14 @@
                                                 <label class="col-xl-3 col-md-4"><span>*</span>State</label>
 												<select name="state_id" id="state_id" class="form-control  col-md-6" required onchange="showDiv(this)">
 													<option value="">Select State </option>
-													<option value="27">Maharashtra</option>
-													<option value="30">Goa </option>
+													<?php
+													foreach($stateList as $state){
+
+													?>
+													<option value="<?php echo $state['state_id'] ?>"><?php echo $state['state_name'] ?></option>
+												<?php } ?>
 												</select>
+												 <div id="err_state_id" class="error_msg"></div>
                                             </div>
                                             
                                            
@@ -58,11 +63,12 @@
 													<option value="Active">Active</option>
 													<option value="Inactive">Inactive</option>
 												</select>
+												 <div id="err_status" class="error_msg"></div>
                                             </div>
                                             <div class="form-group row">
                                             	<div class="offset-xl-3 offset-sm-4">
-						                            <button type="submit" class="btn btn-primary" name="btn_adduser" id="btn_adduser">Add</button>
-													<a href="<?php echo base_url();?>backend/Users/index" class="btn btn-primary" >Cancel</a>
+						                            <button type="submit" class="btn btn-primary" name="btn_addcity" id="btn_addcity">Add</button>
+													<a href="<?php echo base_url();?>backend/City/managescity" class="btn btn-primary" >Cancel</a>
 						                        </div>
                                             </div>
                                         </div>

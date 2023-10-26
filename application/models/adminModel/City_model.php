@@ -44,16 +44,39 @@ Class City_model extends CI_Model {
 	{
 		/*echo "PerPage--".$per_page;
 		echo "page--".$page;exit();*/
-		$this->db->select('*');
-		$this->db->where('city_status',$city_status = "Active");
+		$this->db->select('c.*,s.state_name');
+		$this->db->join(TBLPREFIX.'state as s','s.state_id=c.state_id','left');
+		// $this->db->where('city_status',$city_status = "Active");
 
-		$this->db->order_by('city_id','DESC');
+		$this->db->order_by('c.city_id','DESC');
 		if($per_page!="")
 		{
 			$this->db->limit($per_page,$page);
 		}
 
-		$result = $this->db->get(TBLPREFIX.'city');
+		$result = $this->db->get(TBLPREFIX.'city as c');
+		//echo $this->db->last_query();exit;
+		if($res == 1)
+			return $result->result_array();
+		else
+			return $result->num_rows();
+
+	}
+
+	public function getAllState($res,$per_page,$page)
+	{
+		/*echo "PerPage--".$per_page;
+		echo "page--".$page;exit();*/
+		$this->db->select('*');
+		$this->db->where('state_status',"Active");
+
+		$this->db->order_by('state_id','DESC');
+		if($per_page!="")
+		{
+			$this->db->limit($per_page,$page);
+		}
+
+		$result = $this->db->get(TBLPREFIX.'state');
 		//echo $this->db->last_query();exit;
 		if($res == 1)
 			return $result->result_array();

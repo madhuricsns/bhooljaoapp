@@ -293,6 +293,88 @@ $('#btn_addmaterial').click(function(){
 });
 /* end add material */
 
+
+/* valdiation for add  city*/
+$('#btn_addcity').click(function(){
+	var city_name=$("#city_name").val();
+	var state_id=$("#state_id").val();
+	var status=$("#status").val();
+
+	$("#err_city_name").html('');
+	$("#err_state_id").html('');
+	$("#err_status").html('');
+	var flag=1;
+	
+	if(city_name=="")
+	{
+		$("#err_city_name").html('Enter City name.');
+		flag=0;
+	}
+	if(state_id=="")
+	{
+		$("#err_state_id").html('Please select state.');
+		flag=0;
+	}
+	if(status=="")
+	{
+		$("#err_status").html('Please select status.');
+		flag=0;
+	}
+	
+	if(flag==1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+});
+/* end add city */
+/* valdiation for add  Material*/
+$('#btn_uptcity').click(function(){
+		var city_name=$("#city_name").val();
+	var state_id=$("#state_id").val();
+	var status=$("#status").val();
+
+	$("#err_city_name").html('');
+	$("#err_status").html('');
+	var flag=1;
+	
+	if(city_name=="")
+	{
+		$("#err_city_name").html('Enter City name.');
+		flag=0;
+	}
+	if(state_id=="")
+	{
+		$("#err_state_id").html('Please select state.');
+		flag=0;
+	}
+	if(status=="")
+	{
+		$("#err_status").html('Please select status.');
+		flag=0;
+	}
+	
+	if(flag==1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+});
+/* end add city */
+
+
+
+
+
+
+
+
 /* code for driver payment */
 $('#btn_adddriverpayment').click(function(){
 	var weekday=$("#weekday").val();
