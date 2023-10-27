@@ -57,7 +57,8 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 									<thead>
 										<tr>
 											<th style="width:10%;">Sr.No</th>	
-											<th style="width:70%;">Zone Name</th>
+											<th style="width:50%;">Zone Name</th>
+											<th style="width:20%;">Pin Code</th>
 											<th style="width:10%;">Status</th>
 											<th style="width:10%;">Actions</th>	
 										</tr>
@@ -70,9 +71,10 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 										<tr>
 												<td><?php echo $i;?></td>
 												<td><?php echo $zone['zone_name'];?></td>
+												<td><?php echo $zone['zone_pincode'];?></td>
 												<td><?php echo $zone['zone_status'];?></td>
 												<td class="actions">                     
-													<a href="<?php echo base_url();?>backend/Zone/updateZone/<?php echo base64_encode($zone['zone_id']);?>"><i data-feather="edit"></i></a>
+			   <a href="<?php echo base_url();?>backend/Zone/update_Zone/<?php echo base64_encode($zone['zone_id']);?>"><i data-feather="edit"></i></a>
 													<a href="<?php echo base_url();?>backend/Zone/deleteZone/<?php echo base64_encode($zone['zone_id']);?>" onclick="javascript:return chk_isDeleteComnfirm();">
 													<i data-feather="trash-2"></i>
 													</a>

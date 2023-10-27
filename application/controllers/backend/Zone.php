@@ -66,29 +66,38 @@ class Zone extends CI_Controller {
 		if(isset($_POST['btn_addzone']))
 		{
 			$this->form_validation->set_rules('zone_name','Zone Name','required');
-			
+			$this->form_validation->set_rules('zone_pincode','Zone Pincode','required');
 			$this->form_validation->set_rules('status','Zone Status','required');
 			if($this->form_validation->run())
 			{
-				$zone_name=$this->input->post('zone_name');
+				$address=$this->input->post('zone_name');
+				$zone_pincode=$this->input->post('zone_pincode');
 				$status=$this->input->post('status');
                 		
-				$zonename=$this->Zone_model->chkZoneName($zone_name,0);
+				$zonename=$this->Zone_model->chkZoneName($address,0);
+
+				$latlong=$this->get_lat_long($address);
+						$parts=explode(",",$latlong);
+						$zone_lat=$parts[0];
+						$zone_long=$parts[1];
 
 				if($zonename==0)
 				{
 					$input_data = array(
-						'zone_name'=>trim($zone_name),
+						'zone_name'=>trim($address),
 						'zone_status'=>$status,
+						'zone_pincode'=>$zone_pincode,
+						'zone_lat'=>$zone_lat,
+						'zone_long'=>$zone_long,
 						'dateupdated' => date('Y-m-d H:i:s'),
 						'dateadded' => date('Y-m-d H:i:s')
 						);
 
-					/*echo"<pre>";
-					print_r($input_data);
-					exit();*/
+					// echo"<pre>";
+					// print_r($input_data);
+					// exit();
 					
-					$zone_id = $this->Common_Model->insert_data('zone',$input_data);
+					$zone_id = $this->Zone_model->insert_zone(TBLPREFIX.'zone',$input_data);
 					
 					if($zone_id)
 					{	
@@ -121,7 +130,7 @@ class Zone extends CI_Controller {
 		$this->load->view('admin/admin_footer');
 	}
 	
-	public function updateZone()
+	public function update_Zone()
 	{
 		$data['title']='Update Zone';
 		$data['error_msg']='';
@@ -139,21 +148,32 @@ class Zone extends CI_Controller {
 				{
                     print_r($_POST);//exit;
 					$this->form_validation->set_rules('zone_name','Zone Name','required');
-			
+					$this->form_validation->set_rules('zone_pincode','Zone Pincode','required');
 			        $this->form_validation->set_rules('status','Zone Status','required');
 
 					if($this->form_validation->run())
 					{
-						$zone_name=$this->input->post('zone_name');
-						$status=$this->input->post('status');
+						$address=$this->input->post('zone_name');
+				$zone_pincode=$this->input->post('zone_pincode');
+				$status=$this->input->post('status');
+                		
+				$zonename=$this->Zone_model->chkZoneName($address,0);
+
+				$latlong=$this->get_lat_long($address);
+						$parts=explode(",",$latlong);
+						$zone_lat=$parts[0];
+						$zone_long=$parts[1];
 							
 						$input_data = array(
-                            'zone_name'=>trim($zone_name),
+                            'zone_name'=>trim($address),
 							'zone_status'=>$status,
-							'dateupdated' => date('Y-m-d H:i:s'),
+							'zone_pincode'=>$zone_pincode,
+						'zone_lat'=>$zone_lat,
+						'zone_long'=>$zone_long,
+							'dateupdated' => date('Y-m-d H:i:s')
                             );
 					
-						$zonedata = $this->Common_Model->update_data('zone','zone_id',$zone_id,$input_data);
+						$zonedata = $this->Zone_model->uptdate_zone($input_data,$zone_id);
                        
                         // echo $this->db->last_query();exit;
 						if($zonedata)
@@ -257,4 +277,28 @@ class Zone extends CI_Controller {
 			redirect(base_url().'backend/Zone/manageZones');
 		}
 	}
+
+
+
+
+/* start lat & long function*/
+public function get_lat_long($address)
+  {
+  echo $address = str_replace(" ", "+", $address);
+
+    // echo "http://maps.google.com/maps/api/geocode/json?address=$zone_name&sensor=false";
+    // exit;
+    $json1 = file_get_contents("https://maps.google.com/maps/api/geocode/json?address=$address&sensor=false&key=AIzaSyB0-m0BRbw8AtbMAawt7YPC4hFKmAO2hBI");
+    $json = json_decode($json1);
+
+    $lat = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
+    $longl = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
+    return $lat.','.$longl;
+    //return "19.95099258,73.84654236";
+    //echo json_encode(array('lat'=>$lat,'longl'=>$longl));
+  }
+
+/* End lat & long function*/
+
+
 }

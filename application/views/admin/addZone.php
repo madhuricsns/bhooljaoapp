@@ -36,7 +36,11 @@
                                                 <input type="text" class="form-control  col-md-6" id="zone_name" name="zone_name"  required>
 												 <div id="err_zone_name" class="error_msg"></div>
                                             </div>
-											
+											<div class="form-group row">
+                                                <label for="zone_pincode" class="col-xl-3 col-md-4"><span>*</span>Pincode</label>
+                                                <input type="text" class="form-control  col-md-6" id="zone_pincode" name="zone_pincode"  required>
+												 <div id="err_zone_pincode" class="error_msg"></div>
+                                            </div>
                                             <div class="form-group row">
                                                 <label class="col-xl-3 col-md-4"><span>*</span>Status</label>
 												<select name="status" id="status" class="form-control  col-md-6" required>
@@ -46,6 +50,8 @@
 												</select>
                                                 <div id="err_status" class="error_msg"></div>
                                             </div>
+
+                                            
                                             <div class="form-group row">
                                             	<div class="offset-xl-3 offset-sm-4">
 						                            <button type="submit" class="btn btn-primary" name="btn_addzone" id="btn_addzone">Add</button>

@@ -59,5 +59,30 @@ Class Zone_model extends CI_Model {
 			return $query->num_rows();
 		}	
 	}
+
+	public function insert_zone($input_data) 
+	{
+		$res = $this->db->insert(TBLPREFIX.'zone',$input_data);
+		if($res)
+		{
+			return $this->db->insert_id();
+		}
+		else
+			return false;
+	}
+
+	public function uptdate_zone($input_data,$zone_id)
+	{
+		$this->db->where('zone_id',$zone_id);
+		$query=$this->db->update(TBLPREFIX."zone",$input_data);
+		if($query==1)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}	
+	}
 	
 }
