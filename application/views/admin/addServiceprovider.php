@@ -31,6 +31,11 @@
                             <div class="tab-pane fade active show">
                                     <div class="row">
                                         <div class="col-sm-12">
+                                        	<div class="form-group row">
+                                                <label for="full_name" class="col-xl-3 col-md-4"><span>*</span>Profile</label>
+                                                <input type="file" class="form-control  col-md-6" id="servicefile" name="servicefile" >
+												
+                                            </div>
                                             <div class="form-group row">
                                                 <label for="full_name" class="col-xl-3 col-md-4"><span>*</span>Full Name</label>
                                                 <input type="text" class="form-control  col-md-6" id="full_name" name="full_name"  required>
@@ -40,20 +45,46 @@
 											<div class="form-group row">
                                                 <label for="email_address" class="col-xl-3 col-md-4"><span>*</span> Email Address</label>
                                                <input type="email" name="email_address" id="email_address" class="form-control  col-md-6" required>
+                                                <div id="err_email_address" class="error_msg"></div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="password" class="col-xl-3 col-md-4"><span>*</span> Password</label>
+                                               <input type="password" name="password" id="password" class="form-control  col-md-6" required>
+                                                <div id="err_password" class="error_msg"></div>
                                             </div>
                                              
                                             <div class="form-group row">
                                                 <label for="mobile_number" class="col-xl-3 col-md-4"><span>*</span> Mobile Number</label>
                                                 <input type="tel" name="mobile_number" id="mobile_number" class="form-control  col-md-6"required pattern="[0-9]{10}">
+                                                <div id="err_mobile_number" class="error_msg"></div>
                                             </div>
 
                                             <div class="form-group row">
                                                 <label for="mobile_number" class="col-xl-3 col-md-4"><span>*</span> Gender</label>
-                                               <label class="col-md-1" > <input type="radio" name="gender" class="gender"value="Male" required > Male</label>
-                                               <label class="col-md-1s" > <input type="radio" name="gender" class="gender"  value="Female" required > Female</label>
-                                               <label class="col-md-1" > <input type="radio" name="gender" class="gender"  value="Other" required > Other</label>
+                                               <label class="col-md-1" > <input type="radio" name="gender" id="gender" class="gender"value="Male" required > Male</label>
+                                               <label class="col-md-1s" > <input type="radio" name="gender" id="gender" class="gender"  value="Female" required > Female</label>
+                                               <label class="col-md-1" > <input type="radio" name="gender" id="gender" class="gender"  value="Other" required > Other</label>
+
+                                                <div id="err_gender" class="error_msg"></div>
                                             </div>
-                                            
+                                             <div class="form-group row">
+                                                <label class="col-xl-3 col-md-4"><span>*</span>Zone</label>
+												<select name="zone_id" id="zone_id" class="form-control  col-md-6" required onchange="showDiv(this)">
+													<option value="">Select Zone </option>
+													<?php
+													foreach($zoneList as $zone){
+
+													?>
+													<option value="<?php echo $zone['zone_id'] ?>"><?php echo $zone['zone_name'] ?></option>
+												<?php } ?>
+												</select>
+												 <div id="err_zone_id" class="error_msg"></div>
+                                            </div>
+                                             <div class="form-group row">
+                                                <label class="col-xl-3 col-md-4"><span>*</span>Address</label>
+                                                <textarea name="address" id="address" class="form-control  col-md-6" required></textarea>
+												 <div id="err_address" class="error_msg"></div>
+                                            </div>
                                             
                                             <div class="form-group row">
                                                 <label class="col-xl-3 col-md-4"><span>*</span> Status</label>
@@ -62,6 +93,7 @@
 													<option value="Active">Active</option>
 													<option value="Inactive">Inactive</option>
 												</select>
+												 <div id="err_status" class="error_msg"></div>
                                             </div>
                                             <div class="form-group row">
                                             	<div class="offset-xl-3 offset-sm-4">

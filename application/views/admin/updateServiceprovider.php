@@ -32,6 +32,18 @@
                             <div class="tab-pane fade active show">
                                     <div class="row">
                                         <div class="col-sm-12">
+                                        	<div class="form-group row">
+                                                <label for="banner_image" class="col-xl-3 col-md-4"><span>*</span> Profile</label>
+                                                <input class="form-control col-xl-4 col-md-4" id="servicefile" type="file"  name="servicefile" />
+												<div class="err_msg" id="err_banner_image"></div>
+												<?php if($userInfo[0]['profile_pic']!="")
+												{
+												$str_images='<img src="'.base_url().'uploads/service_provider/'.$userInfo[0]['profile_pic'].'" style="width:110px;height:110px">';
+												}?>
+												<span><?php echo $str_images;?></span><br/>
+												
+												<span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span><br/>
+                                            </div>
                                             <div class="form-group row">
                                                 <label for="full_name" class="col-xl-3 col-md-4"><span></span>Full Name</label>
                                                 <input type="text" class="form-control  col-md-6" id="full_name" name="full_name"  required value="<?php echo $userInfo[0]['full_name'];?>">
@@ -55,8 +67,26 @@
                                                <label class="col-md-2" > <input type="radio" name="gender" class="gender"  value="Female" required <?php if($userInfo[0]['gender']=="Female"){ echo 'checked="checked"';}?>> Female</label>
                                                <label class="col-md-1" > <input type="radio" name="gender" class="gender"  value="Other" required <?php if($userInfo[0]['gender']=="Other"){ echo 'checked="checked"';}?>> Other</label>
                                             </div>
-                                            
-                                           
+                                             <div class="form-group row">
+                                                <label class="col-xl-3 col-md-4"><span>*</span> Zone</label>
+												<select name="zone_id" id="zone_id" class="form-control  col-md-6" required onchange="showDiv(this)">
+
+                                                            <option value="">Select Zone</option>
+                                                       <?php
+													foreach($zoneList as $zone){
+
+													?>    
+													<option value="<?php echo $zone['zone_id'] ?>" <?php if($userInfo[0]['zone_id']==$zone['zone_id']){ echo 'selected="selected"';}?>><?php echo $zone['zone_name'] ?></option>
+													<?php } ?>
+
+												</select>
+												 <div id="err_state_id" class="error_msg"></div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-xl-3 col-md-4"><span>*</span>Address</label>
+                                                <textarea name="address" id="address" class="form-control  col-md-6" required><?php echo $userInfo[0]['address'];?></textarea>
+												
+                                            </div>
                                             <div class="form-group row">
                                                 <label class="col-xl-3 col-md-4"><span></span>Status</label>
 												<select name="status" id="status" class="form-control  col-md-6" required>

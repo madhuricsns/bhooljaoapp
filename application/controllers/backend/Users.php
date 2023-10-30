@@ -423,13 +423,16 @@ class Users extends CI_Controller {
 	{
 		$data['title']='Add Service Provider';
 		$data['error_msg']='';
+		$data['zoneList']=$this->User_model->getAllzone(1,"","");
 				
 		if(isset($_POST['btn_addsp']))
 		{
 			$this->form_validation->set_rules('full_name','Full Name','required');
 			$this->form_validation->set_rules('email_address', 'Email Address', 'required|valid_email');
 			// $this->form_validation->set_rules('mobile_number', 'Mobile Number ', 'required'); //{10} for 10 digits number
-
+			$this->form_validation->set_rules('zone_id','Zone Id','required');
+			$this->form_validation->set_rules('password','Password','required');
+					$this->form_validation->set_rules('address', 'Address ', 'required');
 			$this->form_validation->set_rules('mobile_number', 'Mobile Number ', 'required|numeric|min_length[7]|max_length[13]'); //{10} for 10 digits number
 			$this->form_validation->set_rules('gender','Gender','required');
 			$this->form_validation->set_rules('status','Status','required');
@@ -439,22 +442,58 @@ class Users extends CI_Controller {
 				$full_name=$this->input->post('full_name');
 				$mobile_number=$this->input->post('mobile_number');
 				$email_address=$this->input->post('email_address');
-
-				$gender=$this->input->post('gender');
-				$status=$this->input->post('status');
+				$password=$this->input->post('password');
+						$address=$this->input->post('address');
+						$zone_id=$this->input->post('zone_id');
+						$gender=$this->input->post('gender');
+						$status=$this->input->post('status');
 				//$description=$this->input->post('description');
-						
+					$servicefile='';
+				if($_FILES['servicefile'])
+				{
+					if($_FILES['servicefile']['name']!="")
+					{
+						$photo_imagename='';
+						$new_image_name = rand(1, 99999).$_FILES['servicefile']['name'];
+						$config = array(
+									'upload_path' => "uploads/service_provider/",
+									'allowed_types' => "gif|jpg|png|bmp|jpeg",
+									'max_size' => "0", 
+									'file_name' =>$new_image_name
+						);
+						$this->load->library('upload', $config);
+						if($this->upload->do_upload('servicefile'))
+						{ 
+							$imageDetailArray = $this->upload->data();								
+							$photo_imagename =  $imageDetailArray['file_name'];
+						}else
+						{
+							$errorMsg = $this->upload->display_errors();
+							$this->session->set_flashdata('error',$errorMsg);
+							redirect(base_url().'backend/Service_provider/addservice_provider/');
+
+						}
+						if($_FILES['servicefile']['error']==0)
+						{ 
+							$servicefile=$photo_imagename;
+						}
+					}
+				}	
 				$usertitle=$this->User_model->chkUserName($mobile_number,$email_address,0);
 
 				if($usertitle==0)
 				{
 					$input_data = array(
-						'full_name'=>trim($full_name),
-						'email'=>$email_address,
-						'mobile'=>$mobile_number,
-						'gender'=>$gender,
-						'status'=>$status,
-						'user_type'=>'Service Provider',
+						'profile_pic'=>$servicefile,
+							'full_name'=>trim($full_name),
+							'email'=>$email_address,
+							'password'=>md5($password),
+							'gender'=>$gender,
+							'mobile'=>$mobile_number,
+							'address'=>$address,
+							'status'=>$status,
+							'zone_id'=>$zone_id,
+							'user_type'=>'Service Provider',
 						'dateupdated' => date('Y-m-d H:i:s'),
 						'dateadded' => date('Y-m-d H:i:s')
 						);
@@ -503,6 +542,7 @@ class Users extends CI_Controller {
 		//echo "segment--".$this->uri->segment(4);exit();
 		$user_id=base64_decode($this->uri->segment(4));
 		//echo "Brand_id--".$brand_id;exit();
+		$data['zoneList']=$this->User_model->getAllzone(1,"","");
 		if($user_id)
 		{
 			$userInfo=$this->User_model->getSingleUserInfo($user_id,0);
@@ -514,7 +554,10 @@ class Users extends CI_Controller {
 					$this->form_validation->set_rules('full_name','Full Name','required');
 					$this->form_validation->set_rules('email_address', 'Email Address', 'required|valid_email');
 					$this->form_validation->set_rules('mobile_number', 'Mobile Number ', 'required|numeric|min_length[7]|max_length[13]');
+					//$this->form_validation->set_rules('password','Password','required');
+					$this->form_validation->set_rules('address', 'Address ', 'required');
 					$this->form_validation->set_rules('gender','Gender','required');
+					$this->form_validation->set_rules('zone_id','Zone Id','required');
 			        $this->form_validation->set_rules('status','User Status','required');
 
 					if($this->form_validation->run())
@@ -522,16 +565,54 @@ class Users extends CI_Controller {
 						$full_name=$this->input->post('full_name');
 						$mobile_number=$this->input->post('mobile_number');
 						$email_address=$this->input->post('email_address');
+						//$password=$this->input->post('password');
+						$address=$this->input->post('address');
+						$zone_id=$this->input->post('zone_id');
 						$gender=$this->input->post('gender');
 						$status=$this->input->post('status');
 						//$description = $this->input->post('description');
+						$servicefile='';
+				if($_FILES['servicefile'])
+				{
+					if($_FILES['servicefile']['name']!="")
+					{
+						$photo_imagename='';
+						$new_image_name = rand(1, 99999).$_FILES['servicefile']['name'];
+						$config = array(
+									'upload_path' => "uploads/service_provider/",
+									'allowed_types' => "gif|jpg|png|bmp|jpeg",
+									'max_size' => "0", 
+									'file_name' =>$new_image_name
+						);
+						$this->load->library('upload', $config);
+						if($this->upload->do_upload('servicefile'))
+						{ 
+							$imageDetailArray = $this->upload->data();								
+							$photo_imagename =  $imageDetailArray['file_name'];
+						}else
+						{
+							$errorMsg = $this->upload->display_errors();
+							$this->session->set_flashdata('error',$errorMsg);
+							redirect(base_url().'backend/Service_provider/addservice_provider/');
+
+						}
+						if($_FILES['servicefile']['error']==0)
+						{ 
+							$servicefile=$photo_imagename;
+						}
+					}
+				}
 							
 						$input_data = array(
+							'profile_pic'=>$servicefile,
 							'full_name'=>trim($full_name),
 							'email'=>$email_address,
+							//'password'=>md5($password),
 							'gender'=>$gender,
 							'mobile'=>$mobile_number,
+							'address'=>$address,
 							'status'=>$status,
+							'zone_id'=>$zone_id,
 							'user_type'=>'Service Provider',
 							'dateupdated' => date('Y-m-d H:i:s'),
 								);
