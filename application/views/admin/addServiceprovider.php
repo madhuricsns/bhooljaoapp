@@ -4,7 +4,7 @@
 	<div class="container-fluid">
                 <div class="card tab2-card">
                     <div class="card-header">
-                        <h5>UPDATE CUSTOMER</h5>
+                        <h5>ADD SERVICE PROVIDER</h5>
                     </div>
                     <div class="card-body">
                       <?php if($this->session->flashdata('success')!=""){?>
@@ -26,53 +26,52 @@
 							<?php echo $this->session->flashdata('error_msg');?>
 						</div>
 						<?php }?>
-						<?php $encodedValueId=base64_encode($userInfo[0]['user_id']); ?>
-						<form class="needs-validation" name="frm_updateuser" id="frm_updateuser" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/users/updateUser/<?php echo $encodedValueId;?>">
+						<form class="needs-validation" name="frm_adduser" id="frm_adduser" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/users/addServiceprovider">
                         <div class="tab-content" >
                             <div class="tab-pane fade active show">
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="form-group row">
-                                                <label for="full_name" class="col-xl-3 col-md-4"><span></span>Full Name</label>
-                                                <input type="text" class="form-control  col-md-6" id="full_name" name="full_name"  required value="<?php echo $userInfo[0]['full_name'];?>">
+                                                <label for="full_name" class="col-xl-3 col-md-4"><span>*</span>Full Name</label>
+                                                <input type="text" class="form-control  col-md-6" id="full_name" name="full_name"  required>
 												 <div id="err_full_name" class="error_msg"></div>
                                             </div>
-                                            <div class="form-group row">
-                                                <label for="email_address" class="col-xl-3 col-md-4"><span></span> Email Address</label>
-                                               <input type="email" name="email_address" id="email_address" class="form-control  col-md-6" value="<?php echo $userInfo[0]['email'];?>">
-                                            </div>
-                                            
-                                            
+											
 											<div class="form-group row">
-                                                <label for="mobile_number" class="col-xl-3 col-md-4"><span></span>Mobile Number</label>
-                                                <input type="text" class="form-control  col-md-6" id="mobile_number" name="mobile_number"  required value="<?php echo $userInfo[0]['mobile'];?>">
-												 <div id="err_mobile_number" class="error_msg"></div>
+                                                <label for="email_address" class="col-xl-3 col-md-4"><span>*</span> Email Address</label>
+                                               <input type="email" name="email_address" id="email_address" class="form-control  col-md-6" required>
+                                            </div>
+                                             
+                                            <div class="form-group row">
+                                                <label for="mobile_number" class="col-xl-3 col-md-4"><span>*</span> Mobile Number</label>
+                                                <input type="tel" name="mobile_number" id="mobile_number" class="form-control  col-md-6"required pattern="[0-9]{10}">
                                             </div>
 
                                             <div class="form-group row">
                                                 <label for="mobile_number" class="col-xl-3 col-md-4"><span>*</span> Gender</label>
-                                               <label class="col-md-1" > <input type="radio" name="gender" class="gender"value="Male" required <?php if($userInfo[0]['gender']=="Male"){ echo 'checked="checked"';}?>> Male</label>
-                                               <label class="col-md-2" > <input type="radio" name="gender" class="gender"  value="Female" required <?php if($userInfo[0]['gender']=="Female"){ echo 'checked="checked"';}?>> Female</label>
-                                               <label class="col-md-1" > <input type="radio" name="gender" class="gender"  value="Other" required <?php if($userInfo[0]['gender']=="Other"){ echo 'checked="checked"';}?>> Other</label>
+                                               <label class="col-md-1" > <input type="radio" name="gender" class="gender"value="Male" required > Male</label>
+                                               <label class="col-md-1s" > <input type="radio" name="gender" class="gender"  value="Female" required > Female</label>
+                                               <label class="col-md-1" > <input type="radio" name="gender" class="gender"  value="Other" required > Other</label>
                                             </div>
                                             
-                                           
+                                            
                                             <div class="form-group row">
-                                                <label class="col-xl-3 col-md-4"><span></span>Status</label>
+                                                <label class="col-xl-3 col-md-4"><span>*</span> Status</label>
 												<select name="status" id="status" class="form-control  col-md-6" required>
 													<option value="">Select Status</option>
-													<option value="Active" <?php if($userInfo[0]['status']=="Active"){ echo 'selected="selected"';}?>>Active</option>
-													<option value="Inactive" <?php if($userInfo[0]['status']=="Inactive"){ echo 'selected="selected"';}?>>Inactive</option>
+													<option value="Active">Active</option>
+													<option value="Inactive">Inactive</option>
 												</select>
                                             </div>
                                             <div class="form-group row">
                                             	<div class="offset-xl-3 offset-sm-4">
-						                            <button type="submit" class="btn btn-primary" name="btn_uptuser" id="btn_uptuser">Update</button>
-													<a href="<?php echo base_url();?>backend/Users/index" class="btn btn-primary" >Cancel</a>
+						                            <button type="submit" class="btn btn-primary" name="btn_addsp" id="btn_addsp">Add</button>
+													<a href="<?php echo base_url();?>backend/Users/manageServiceProvider" class="btn btn-primary" >Cancel</a>
 						                        </div>
                                             </div>
                                         </div>
                                     </div>
+                                
                             </div>
                         </div>
                         
@@ -82,6 +81,7 @@
             </div>
 	<!-- Container-fluid Ends-->
 </div>
+
 <script type="text/javascript">
 function showDiv(select){
 	//alert("Hi");

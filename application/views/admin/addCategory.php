@@ -1,10 +1,10 @@
 <div class="page-body">
-
 	<!-- Container-fluid starts-->
+	
 	<div class="container-fluid">
                 <div class="card tab2-card">
                     <div class="card-header">
-                        <h5>ADD CUSTOMER</h5>
+                        <h5>Add Category</h5>
                     </div>
                     <div class="card-body">
                       <?php if($this->session->flashdata('success')!=""){?>
@@ -26,35 +26,36 @@
 							<?php echo $this->session->flashdata('error_msg');?>
 						</div>
 						<?php }?>
-						<form class="needs-validation" name="frm_adduser" id="frm_adduser" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/users/addUser">
+						<form class="needs-validation" name="frm_addbanner" id="frm_addbanner" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/Category/addCategory">
                         <div class="tab-content" >
                             <div class="tab-pane fade active show">
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="form-group row">
-                                                <label for="full_name" class="col-xl-3 col-md-4"><span>*</span>Full Name</label>
-                                                <input type="text" class="form-control  col-md-6" id="full_name" name="full_name"  required>
-												 <div id="err_full_name" class="error_msg"></div>
+                                                <label for="category_name" class="col-xl-3 col-md-4"><span>*</span> Category Name</label>
+                                                <input type="text" class="form-control  col-md-6" id="category_name" name="category_name"  required value="">
+												 <div id="err_category_name" class="error_msg"></div>
                                             </div>
 											
 											<div class="form-group row">
-                                                <label for="email_address" class="col-xl-3 col-md-4"><span>*</span> Email Address</label>
-                                               <input type="email" name="email_address" id="email_address" class="form-control  col-md-6" required>
+                                                <label for="description" class="col-xl-3 col-md-4"><span>*</span> Description</label>
+                                               <textarea name="description" id="description" class="form-control  col-md-6"></textarea>
                                             </div>
-                                             
                                             <div class="form-group row">
-                                                <label for="mobile_number" class="col-xl-3 col-md-4"><span>*</span> Mobile Number</label>
-                                                <input type="tel" name="mobile_number" id="mobile_number" class="form-control  col-md-6"required pattern="[0-9]{10}">
+                                                <label for="category_image" class="col-xl-3 col-md-4"><span>*</span> Category Image</label>
+                                                <input class="form-control col-xl-6 col-md-6" id="category_image" type="file" required="" name="category_image" />
+												<span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span><br/>
+												<div class="err_msg" id="err_category_image"></div>
                                             </div>
-
-                                            <div class="form-group row">
-                                                <label for="mobile_number" class="col-xl-3 col-md-4"><span>*</span> Gender</label>
-                                               <label class="col-md-1" > <input type="radio" name="gender" class="gender"value="Male" required > Male</label>
-                                               <label class="col-md-1s" > <input type="radio" name="gender" class="gender"  value="Female" required > Female</label>
-                                               <label class="col-md-1" > <input type="radio" name="gender" class="gender"  value="Other" required > Other</label>
-                                            </div>
-                                            
-                                            
+                                            <!--<div class="form-group row">
+                                                <label class="col-xl-3 col-md-4"><span></span>Daily Report</label>
+												<select name="daily_report" id="daily_report" class="form-control  col-md-3" required>
+													
+													<option value="Yes">Yes</option>
+													<option value="No">No</option>
+												</select>
+                                            </div>-->
+											
                                             <div class="form-group row">
                                                 <label class="col-xl-3 col-md-4"><span>*</span> Status</label>
 												<select name="status" id="status" class="form-control  col-md-6" required>
@@ -65,9 +66,10 @@
                                             </div>
                                             <div class="form-group row">
                                             	<div class="offset-xl-3 offset-sm-4">
-						                            <button type="submit" class="btn btn-primary" name="btn_adduser" id="btn_adduser">Add</button>
-													<a href="<?php echo base_url();?>backend/Users/index" class="btn btn-primary" >Cancel</a>
+						                            <button type="submit" class="btn btn-primary" name="btn_addcategory" id="btn_addcategory">Add</button>
+													<a href="<?php echo base_url();?>backend/Category/manageCategory" class="btn btn-primary" >Cancel</a>
 						                        </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -81,14 +83,3 @@
             </div>
 	<!-- Container-fluid Ends-->
 </div>
-
-<script type="text/javascript">
-function showDiv(select){
-	//alert("Hi");
-   if(select.value=="Yes"){
-    document.getElementById('daily_report').disabled  = true;
-   } else{
-   	document.getElementById('daily_report').disabled  = false;
-   }
-} 
-</script>

@@ -21,12 +21,11 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 			<div class="col-sm-12">
 				<div class="card">
 					<div class="card-header">
-						<h5>CUSTOMERS</h5>			
+						<h5>SERVICES</h5>			
 						<div class="card-header-right">
 						<div class="row">
 							<div class="col-lg-12">
-								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Users/addUser" style="float:right;"><i class="fa fa-plus-circle"></i>Add Customer</a>
-								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Users/exportCustomerCSV" style="float:right;margin-right: 5px;"><i class="fa fa-download"></i>Export CSV</a>
+								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Service/addService" style="float:right;"><i class="fa fa-plus-circle"></i>Add service</a>
 							</div>
 							</div>
 						</div>	 
@@ -57,41 +56,38 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 								<table class="table table-bordered table-striped mb-0" id="datatable-default">
 									<thead>
 										<tr>
-											<th>Sr.No</th>	
-											<th>Full Name</th>
-											<th>Email Address</th>
-											<th>Mobile Number</th>
-											<th>Status</th>
-											<th>Change Status</th>
-											<th>Actions</th>	
+											<th style="width:5%">Sr.No</th>
+											<th style="width:10%"> Image</th>	
+											<th style="width:10%">Category</th>
+											<th style="width:15%">Service Name</th>
+											<th style="width:25%">Description</th>
+											<th style="width:10%">Price</th>
+											<th style="width:10%">Status</th>
+											<th style="width:10%">Actions</th>	
 										</tr>
 									</thead>	
 									<tbody>			
 										<?php $i=1;
-										foreach($users as $user)
+										// print_r($serviceList);
+										foreach($serviceList as $service)
 										{
 										?>		
 										<tr>
 												<td><?php echo $i;?></td>
-												<td><?php echo $user['full_name'];?></td>
-												<td><?php echo $user['email'];?></td>
-												<td><?php echo $user['mobile'];?></td>
-												<td><?php echo $user['status'];?></td>
-												<td>
-													<?php if($user['status']!='Active') { ?>
-														<a href="<?php echo base_url();?>backend/Users/change_status/<?php echo base64_encode($user['user_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-success">Active</a>
-														<?php } else { ?>
-														<a href="<?php echo base_url();?>backend/Users/change_status/<?php echo base64_encode($user['user_id']);?>/<?php echo base64_encode('Inactive');?>" class="btn-sm btn-danger">Inactive</a>
-													<?php } ?>
-												</td>
+												<td><img src="<?php echo $service['service_image'];?>" width="50px"></td>
+												<td><?php echo $service['category_name'];?></td>
+												<td><?php echo $service['service_name'];?></td>
+												<td><?php echo $service['service_description'];?></td>
+												<td><?php echo "₹".$service['min_price']."- ₹".$service['max_price'];?></td>
+												<td><?php echo $service['service_status'];?></td>
 												<td class="actions">                     
-													<a href="<?php echo base_url();?>backend/Users/updateUser/<?php echo base64_encode($user['user_id']);?>"><i data-feather="edit"></i></a>
+													<a href="<?php echo base_url();?>backend/Service/updateService/<?php echo base64_encode($service['service_id']);?>"><i data-feather="edit"></i></a>
 													
-													<a href="<?php echo base_url();?>backend/Users/deleteUser/<?php echo base64_encode($user['user_id']);?>" onclick="javascript:return chk_isDeleteComnfirm();">
+													<a href="<?php echo base_url();?>backend/Service/deleteService/<?php echo base64_encode($service['service_id']);?>" onclick="javascript:return chk_isDeleteComnfirm();">
 													<i data-feather="trash-2"></i>
 													</a>
 
-													<a href="<?php echo base_url();?>backend/Users/viewUserDetails/<?php echo base64_encode($user['user_id']);?>"><i data-feather="eye"></i></a>
+													<a href="<?php echo base_url();?>backend/Service/viewService/<?php echo base64_encode($service['service_id']);?>"><i data-feather="eye"></i></a>
 											</td>				
 											</tr>											
 											<?php $i++; }?>

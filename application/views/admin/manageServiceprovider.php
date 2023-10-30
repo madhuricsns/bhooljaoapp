@@ -21,11 +21,12 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 			<div class="col-sm-12">
 				<div class="card">
 					<div class="card-header">
-						<h5>SERVICE PROVIDER</h5>			
+						<h5>SERVICE PROVIDERS</h5>			
 						<div class="card-header-right">
 						<div class="row">
 							<div class="col-lg-12">
-								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Service_provider/addservice_provider" style="float:right;"><i class="fa fa-plus-circle"></i>Add User</a>
+								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Users/addServiceprovider" style="float:right;"><i class="fa fa-plus-circle"></i>Add Service Provider</a>
+								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Users/exportSPCSV" style="float:right;margin-right: 5px;"><i class="fa fa-download"></i>Export CSV</a>
 							</div>
 							</div>
 						</div>	 
@@ -52,41 +53,45 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 						<?php }?>										
 						<div class="table-responsive">
 							<div id="basicScenario" class="product-physical"></div>
-							<?php if($usercnt > 0)	{ ?>
+							<?php if($serviceproviderscnt > 0)	{ ?>
 								<table class="table table-bordered table-striped mb-0" id="datatable-default">
 									<thead>
 										<tr>
 											<th>Sr.No</th>	
-											<th>Profile</th>
 											<th>Full Name</th>
 											<th>Email Address</th>
-											<th>Zone</th>
 											<th>Mobile Number</th>
 											<th>Status</th>
+											<th>Change Status</th>
 											<th>Actions</th>	
 										</tr>
 									</thead>	
 									<tbody>			
 										<?php $i=1;
-										foreach($service_provider as $service)
+										foreach($serviceproviders as $user)
 										{
 										?>		
 										<tr>
 												<td><?php echo $i;?></td>
-												<td><img src="<?php echo base_url().'./uploads/service_provider/'.$service['profile_pic'];?>" width="50"></td>
-												<td><?php echo $service['full_name'];?></td>
-												<td><?php echo $service['email'];?></td>
-												<td><?php echo $service['zone_name'];?></td>
-												<td><?php echo $service['mobile'];?></td>
-												<td><?php echo $service['status'];?></td>
+												<td><?php echo $user['full_name'];?></td>
+												<td><?php echo $user['email'];?></td>
+												<td><?php echo $user['mobile'];?></td>
+												<td><?php echo $user['status'];?></td>
+												<td>
+													<?php if($user['status']!='Active') { ?>
+														<a href="<?php echo base_url();?>backend/Users/spchange_status/<?php echo base64_encode($user['user_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-success">Active</a>
+														<?php } else { ?>
+														<a href="<?php echo base_url();?>backend/Users/spchange_status/<?php echo base64_encode($user['user_id']);?>/<?php echo base64_encode('Inactive');?>" class="btn-sm btn-danger">Inactive</a>
+													<?php } ?>
+												</td>
 												<td class="actions">                     
-													<a href="<?php echo base_url();?>backend/Service_provider/updateservice/<?php echo base64_encode($service['user_id']);?>"><i data-feather="edit"></i></a>
+													<a href="<?php echo base_url();?>backend/Users/updateServiceprovider/<?php echo base64_encode($user['user_id']);?>"><i data-feather="edit"></i></a>
 													
-													<a href="<?php echo base_url();?>backend/Service_provider/deleteservice/<?php echo base64_encode($service['user_id']);?>" onclick="javascript:return chk_isDeleteComnfirm();">
+													<a href="<?php echo base_url();?>backend/Users/deleteServiceprovider/<?php echo base64_encode($user['user_id']);?>" onclick="javascript:return chk_isDeleteComnfirm();">
 													<i data-feather="trash-2"></i>
 													</a>
 
-													<a href="<?php echo base_url();?>backend/Users/viewUsertask/<?php echo base64_encode($service['user_id']);?>"><i data-feather="eye"></i></a>
+													<a href="<?php echo base_url();?>backend/Users/viewUsertask/<?php echo base64_encode($user['user_id']);?>"><i data-feather="eye"></i></a>
 											</td>				
 											</tr>											
 											<?php $i++; }?>

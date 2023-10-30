@@ -136,6 +136,101 @@ document.getElementById("doPrintinvoice").addEventListener("click", function() {
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+  var rowIdx = 1;
+    //Add Option row
+    $('#addBtn').on('click', function () {
+  
+    // Adding a row inside the tbody.
+    $('#tbody').append(`<tr id="R${++rowIdx}">
+           <td>
+            <input type="text" class="form-control optionsArr" id="optionsArr" name="optionsArr[]" placeholder="Enter Option" required >
+            <div id="err_optionsArr" class="error_msg err_optionsArr"></div>
+            </td>
+            <td>
+            <input type="text" class="form-control amountArr" id="amountArr" name="amountArr[]" placeholder="Enter Amount" required >
+            <div id="err_optionsArr" class="error_msg err_optionsArr"></div>
+            </td>
+            <td class="text-center">
+            <button class="btn btn-danger remove" 
+                type="button"><i class="fa fa-remove"></i></button>
+            </td>
+            </tr>`);
+    });
+
+    // Remove opion row
+    // jQuery button click event to remove a row
+    $('#tbody').on('click', '.remove', function () {
+  
+    // Getting all the rows next to the 
+    var child = $(this).closest('tr').nextAll();
+
+    child.each(function () {
+        var id = $(this).attr('id');
+        // Getting the <p> inside the .row-index class.
+        var idx = $(this).children('.row-index').children('p');
+        // Gets the row number from <tr> id.
+        var dig = parseInt(id.substring(1));
+        // Modifying row index.
+        idx.html(`${dig - 1}`);
+        // Modifying row id.
+        $(this).attr('id', `R${dig - 1}`);
+    });
+    // Removing the current row.
+    $(this).closest('tr').remove();
+    // Decreasing the total number of rows by 1.
+    rowIdx--;
+    });
+
+// Add More label row
+$('#addRow').on('click', function () {
+  
+  // Adding a row inside the tbody.
+  $('#tbodyLabel').append(`<tr id="L${++rowIdx}">
+         <td>
+          <input type="text" class="form-control labelArr" id="labelArr" name="labelArr[]" placeholder="Enter Label" required >
+          <div id="err_labelArr" class="error_msg err_labelArr"></div>
+          </td>
+          <td>
+          <input type="text" class="form-control labelvalueArr" id="labelvalueArr" name="labelvalueArr[]" placeholder="Enter Values(ex.Yes,No)" required >
+          <div id="err_labelvalueArr" class="error_msg err_labelvalueArr"></div>
+          </td>
+          <td class="text-center">
+          <button class="btn btn-danger removeRow" 
+              type="button"><i class="fa fa-remove"></i></button>
+          </td>
+          </tr>`);
+  });
+
+// Remove Label row
+    // jQuery button click event to remove a row
+    $('#tbodyLabel').on('click', '.removeRow', function () {
+  
+  // Getting all the rows next to the 
+  var child = $(this).closest('tr').nextAll();
+
+  child.each(function () {
+      var id = $(this).attr('id');
+      // Getting the <p> inside the .row-index class.
+      var idx = $(this).children('.row-index').children('p');
+      // Gets the row number from <tr> id.
+      var dig = parseInt(id.substring(1));
+      // Modifying row index.
+      idx.html(`${dig - 1}`);
+      // Modifying row id.
+      $(this).attr('id', `L${dig - 1}`);
+  });
+  // Removing the current row.
+  $(this).closest('tr').remove();
+  // Decreasing the total number of rows by 1.
+  rowIdx--;
+  });
+
+
+
+
+
+
   $("#frm_addCuisine").on("submit", function(){
     $("#body").fadeOut();
     $("#pageloader").fadeIn();

@@ -57,7 +57,7 @@ $session_subroles="";
 						<span>BOOKINGS </span></a>                        
 					</li>
 					
-					<li <?php if($this->router->fetch_class()=='Users' || $this->router->fetch_class()=='users'){?>style="background-color: rgb(68 114 196);"<?php }?> class=" <?php if($this->router->fetch_method()=='manageUsers'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
+					<li <?php if($this->router->fetch_class()=='Users/manageUsers' || $this->router->fetch_class()=='users/manageUsers'){?>style="background-color: rgb(68 114 196);"<?php }?> class=" <?php if($this->router->fetch_method()=='manageUsers' || $this->router->fetch_method()=='addUser' || $this->router->fetch_method()=='updateUser' || $this->router->fetch_method()=='viewUserDetails'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
 							{ 
 								if ($modulesId[2]['view'] == 'Yes') 
 								{ 
@@ -71,7 +71,7 @@ $session_subroles="";
 							?>>
 						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Users/manageUsers"><!-- <i data-feather="home"></i> --><img src="<?php echo base_url()."/uploads/flaticon/value.png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;<span>CUSTOMER</span></a>                        
 					</li>
-					<li  <?php if($this->router->fetch_class()=='Booking'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageCategory'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
+					<li  <?php if($this->router->fetch_class()=='Users/manageServiceProvider' || $this->router->fetch_class()=='Users/addServiceprovider' || $this->router->fetch_class()=='Users/updateServiceprovider'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageServiceProvider' || $this->router->fetch_method()=='addServiceprovider' || $this->router->fetch_method()=='updateServiceprovider'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
 							{ 
 								if ($modulesId[1]['view'] == 'Yes') 
 								{ 
@@ -83,7 +83,7 @@ $session_subroles="";
 								}
 							}
 							?>>
-						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Category/manageCategory"><!-- <i data-feather="home"></i> -->
+						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Users/manageServiceProvider"><!-- <i data-feather="home"></i> -->
 						<img src="<?php echo base_url()."/uploads/flaticon/manager.png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
 						<span>SERVICE PROVIDER </span></a>                        
 					</li>
@@ -102,6 +102,22 @@ $session_subroles="";
 						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Category/manageCategory"><!-- <i data-feather="home"></i> -->
 						<img src="<?php echo base_url()."/uploads/flaticon/category.png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
 						<span>SERVICE CATEGORY</span></a>                        
+					</li>
+					<li  <?php if($this->router->fetch_class()=='Service'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageService'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
+							{ 
+								if ($modulesId[1]['view'] == 'Yes') 
+								{ 
+									echo 'style="display:block;"';
+							    } 
+								else 
+								{ 
+									echo 'style="display:none;"'; 
+								}
+							}
+							?>>
+						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Service/manageService"><!-- <i data-feather="home"></i> -->
+						<img src="<?php echo base_url()."/uploads/flaticon/category.png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
+						<span>SERVICES</span></a>                        
 					</li>
 
 					<li  <?php if($this->router->fetch_class()=='Zone'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageZones'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)

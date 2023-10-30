@@ -25,7 +25,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 						<div class="card-header-right">
 						<div class="row">
 							<div class="col-lg-12">
-								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Booking/exportBooking" style="float:right"><i class="fa fa-download"></i>Export CSV</a>
+								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Booking/exportBookingCSV" style="float:right"><i class="fa fa-download"></i>Export CSV</a>
 							</div>
 							</div>
 						</div>	 
@@ -59,6 +59,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 											<th>Order No</th>
 											<th>Booking Date</th>
 											<th>Time</th>
+											<th>Service Name</th>
 											<th>Customer</th>
 											<th>Status</th>
 											<th>Actions</th>	
@@ -68,32 +69,18 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 										<?php 
 										foreach($bookingList as $booking)
 										{
+                                            $booking['booking_date']= new DateTime($booking['booking_date']);
+                                            $booking['booking_date']=$booking['booking_date']->format('d-M-Y');
 											?>		
 										<tr>
-												<td><?php echo $booking['banner_title'];?></td>
-												<td><?php echo $booking['time_slot'];?></td>
+												<td><?php echo $booking['order_no'];?></td>
 												<td><?php echo $booking['booking_date'];?></td>
-												<td><?php echo $booking['banner_status'];?></td>
-												<td><?php echo $booking['banner_status'];?></td>
-												<td class="actions" <?php
-												
-												/* if(isset($modulesId)&& count($modulesId)>0)
-							{ 
-								if (array_search('CATEGORY', array_column($modulesId, 'edit')) !== FALSE) 
-								{ 
-									echo 'style="display:block;"';
-							    } 
-								else 
-								{ 
-									echo 'style="display:none;"'; 
-								}
-							} */
-							?>>
-													<a href="<?php echo base_url();?>backend/Banners/updateBanner/<?php echo base64_encode($banner['banner_id']);?>"><i data-feather="edit"></i></a>
-													
-													<a href="<?php echo base_url();?>backend/Banners/deleteBanner/<?php echo base64_encode($banner['banner_id']);?>" onclick="javascript:return chk_isDeleteComnfirm();">
-													<i data-feather="trash-2"></i>
-													</a>
+												<td><?php echo $booking['time_slot'];?></td>
+												<td><?php echo $booking['category_name'];?></td>
+												<td><?php echo $booking['full_name'];?></td>
+												<td><?php echo $booking['booking_status'];?></td>
+												<td class="actions">
+													<a href="<?php echo base_url();?>backend/Booking/viewBookingDetails/<?php echo base64_encode($booking['booking_id']);?>"><i data-feather="eye"></i></a>
 											</td>				
 											</tr>											
 											<?php  }?>
