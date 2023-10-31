@@ -33,8 +33,8 @@
                                         <div class="col-sm-12">
                                             <div class="form-group row">
                                                 <label for="banner_title" class="col-xl-3 col-md-4"><span>*</span> Banner Title</label>
-                                                <input type="text" class="form-control  col-md-6" id="banner_title" name="banner_title"  required value="">
-												 <div id="err_banner_title" class="error_msg"></div>
+                                                <input type="text" class="form-control  col-md-6" id="banner_title" name="banner_title" id="banner_title"  required value="">
+										 <div id="err_banner_title" class="error_msg"></div>
                                             </div>
 											
 											<!--<div class="form-group row">
@@ -44,8 +44,9 @@
                                             <div class="form-group row">
                                                 <label for="banner_image" class="col-xl-3 col-md-4"><span>*</span> Banner Image</label>
                                                 <input class="form-control col-xl-6 col-md-6" id="banner_image" type="file" required="" name="banner_image" />
-												<span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span><br/>
-												<div class="err_msg" id="err_banner_image"></div>
+                                                <div class="error_msg" id="err_banner_image"></div>
+												<span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span>
+												
                                             </div>
                                             <!--<div class="form-group row">
                                                 <label class="col-xl-3 col-md-4"><span></span>Daily Report</label>
@@ -63,11 +64,12 @@
 													<option value="Active">Active</option>
 													<option value="Inactive">Inactive</option>
 												</select>
+												 <div id="err_status" class="error_msg"></div>
                                             </div>
                                             <div class="form-group row">
                                             	<div class="offset-xl-3 offset-sm-4">
 						                            <button type="submit" class="btn btn-primary" name="btn_addbanner" id="btn_addbanner">Add</button>
-													<a href="<?php echo base_url();?>backend/Brands/index" class="btn btn-primary" >Cancel</a>
+													<a href="<?php echo base_url();?>backend/Banners/manageBanner" class="btn btn-primary" >Cancel</a>
 						                        </div>
 
                                             </div>
