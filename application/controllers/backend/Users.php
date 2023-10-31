@@ -17,7 +17,7 @@ class Users extends CI_Controller {
 	{
 		redirect(base_url().'backend/Users/manageUsers','refresh');
 	}
-	public function()
+	public function manageUsers()
 	{
 		$data['title']='Manage Users';
 
@@ -504,12 +504,14 @@ class Users extends CI_Controller {
 		$data['title']='Add Service Provider';
 		$data['error_msg']='';
 		$data['zoneList']=$this->User_model->getAllzone(1,"","");
+		$data['categoryList']=$this->User_model->getAllCategory(1,"","");
 				
 		if(isset($_POST['btn_addsp']))
 		{
 			$this->form_validation->set_rules('full_name','Full Name','required');
 			$this->form_validation->set_rules('email_address', 'Email Address', 'required|valid_email');
 			// $this->form_validation->set_rules('mobile_number', 'Mobile Number ', 'required'); //{10} for 10 digits number
+			$this->form_validation->set_rules('category_id','Category Id','required');
 			$this->form_validation->set_rules('zone_id','Zone Id','required');
 			$this->form_validation->set_rules('password','Password','required');
 					$this->form_validation->set_rules('address', 'Address ', 'required');
@@ -524,6 +526,7 @@ class Users extends CI_Controller {
 				$email_address=$this->input->post('email_address');
 				$password=$this->input->post('password');
 						$address=$this->input->post('address');
+						$category_id=$this->input->post('category_id');
 						$zone_id=$this->input->post('zone_id');
 						$gender=$this->input->post('gender');
 						$status=$this->input->post('status');
@@ -572,6 +575,7 @@ class Users extends CI_Controller {
 							'mobile'=>$mobile_number,
 							'address'=>$address,
 							'status'=>$status,
+							'category_id'=>$category_id,
 							'zone_id'=>$zone_id,
 							'user_type'=>'Service Provider',
 						'dateupdated' => date('Y-m-d H:i:s'),
@@ -623,6 +627,7 @@ class Users extends CI_Controller {
 		$user_id=base64_decode($this->uri->segment(4));
 		//echo "Brand_id--".$brand_id;exit();
 		$data['zoneList']=$this->User_model->getAllzone(1,"","");
+		$data['categoryList']=$this->User_model->getAllCategory(1,"","");
 		if($user_id)
 		{
 			$userInfo=$this->User_model->getSingleUserInfo($user_id,0);
@@ -637,6 +642,7 @@ class Users extends CI_Controller {
 					//$this->form_validation->set_rules('password','Password','required');
 					$this->form_validation->set_rules('address', 'Address ', 'required');
 					$this->form_validation->set_rules('gender','Gender','required');
+					$this->form_validation->set_rules('category_id','Category Id','required');
 					$this->form_validation->set_rules('zone_id','Zone Id','required');
 			        $this->form_validation->set_rules('status','User Status','required');
 
@@ -647,6 +653,7 @@ class Users extends CI_Controller {
 						$email_address=$this->input->post('email_address');
 						//$password=$this->input->post('password');
 						$address=$this->input->post('address');
+						$category_id=$this->input->post('category_id');
 						$zone_id=$this->input->post('zone_id');
 						$gender=$this->input->post('gender');
 						$status=$this->input->post('status');
@@ -692,6 +699,7 @@ class Users extends CI_Controller {
 							'mobile'=>$mobile_number,
 							'address'=>$address,
 							'status'=>$status,
+							'category_id'=>$category_id,
 							'zone_id'=>$zone_id,
 							'user_type'=>'Service Provider',
 							'dateupdated' => date('Y-m-d H:i:s'),

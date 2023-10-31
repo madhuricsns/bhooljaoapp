@@ -386,6 +386,7 @@ $('#btn_addsp').click(function(){
 	var mobile_number=$("#mobile_number").val(); 
 	var gender=$("#gender").val();
 	var zone_id=$("#zone_id").val();
+	var category_id=$("#category_id").val();
 	var daily_report=$("#daily_report").val();
 
 	var status=$("#status").val();
@@ -398,6 +399,7 @@ $('#btn_addsp').click(function(){
 	$("#err_mobile_number").html('');
 	$("#err_gender").html('');
 	$("#err_zone_id").html('');
+	$("#err_category_id").html('');
 	$("#err_daily_report").html('');
 	$("#err_status").html('');
 	var flag=1;
@@ -435,6 +437,11 @@ $('#btn_addsp').click(function(){
 	if(zone_id=="")
 	{
 		$("#err_zone_id").html('Select Zone.');
+		flag=0;
+	}
+	if(category_id=="")
+	{
+		$("#err_category_id").html('Select Category');
 		flag=0;
 	}
 	if(address=="")

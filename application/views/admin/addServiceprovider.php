@@ -68,6 +68,19 @@
                                                 <div id="err_gender" class="error_msg"></div>
                                             </div>
                                              <div class="form-group row">
+                                                <label class="col-xl-3 col-md-4"><span>*</span>Category</label>
+												<select name="category_id" id="category_id" class="form-control  col-md-6" required onchange="showDiv(this)">
+													<option value="">Select Category </option>
+													<?php
+													foreach($categoryList as $category){
+
+													?>
+													<option value="<?php echo $category['category_id'] ?>"><?php echo $category['category_name'] ?></option>
+												<?php } ?>
+												</select>
+												 <div id="err_category_id" class="error_msg"></div>
+                                            </div>
+                                             <div class="form-group row">
                                                 <label class="col-xl-3 col-md-4"><span>*</span>Zone</label>
 												<select name="zone_id" id="zone_id" class="form-control  col-md-6" required onchange="showDiv(this)">
 													<option value="">Select Zone </option>

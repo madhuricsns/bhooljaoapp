@@ -36,10 +36,17 @@
                                                 <label for="banner_image" class="col-xl-3 col-md-4"><span>*</span> Profile</label>
                                                 <input class="form-control col-xl-4 col-md-4" id="servicefile" type="file"  name="servicefile" />
 												<div class="err_msg" id="err_banner_image"></div>
-												<?php if($userInfo[0]['profile_pic']!="")
+												<?php 
+                                                   if($userInfo[0]['profile_pic']!="")
 												{
+	
 												$str_images='<img src="'.base_url().'uploads/service_provider/'.$userInfo[0]['profile_pic'].'" style="width:110px;height:110px">';
-												}?>
+												}
+												else
+												{
+												$str_images='<img src="'.base_url().'uploads/service_provider/default.png" style="width:110px;height:110px">';
+												}
+												?>
 												<span><?php echo $str_images;?></span><br/>
 												
 												<span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span><br/>
@@ -67,6 +74,25 @@
                                                <label class="col-md-2" > <input type="radio" name="gender" class="gender"  value="Female" required <?php if($userInfo[0]['gender']=="Female"){ echo 'checked="checked"';}?>> Female</label>
                                                <label class="col-md-1" > <input type="radio" name="gender" class="gender"  value="Other" required <?php if($userInfo[0]['gender']=="Other"){ echo 'checked="checked"';}?>> Other</label>
                                             </div>
+
+                                             <div class="form-group row">
+                                                <label class="col-xl-3 col-md-4"><span>*</span> Category</label>
+												<select name="category_id" id="category_id" class="form-control  col-md-6" required onchange="showDiv(this)">
+
+                                                            <option value="">Select Category</option>
+                                                       <?php
+													foreach($categoryList as $category){
+
+													?>    
+													<option value="<?php echo $category['category_id'] ?>" <?php if($userInfo[0]['category_id']==$category['category_id']){ echo 'selected="selected"';}?>><?php echo $category['category_name'] ?></option>
+													<?php } ?>
+
+												</select>
+												 <div id="err_state_id" class="error_msg"></div>
+                                            </div>
+
+
+
                                              <div class="form-group row">
                                                 <label class="col-xl-3 col-md-4"><span>*</span> Zone</label>
 												<select name="zone_id" id="zone_id" class="form-control  col-md-6" required onchange="showDiv(this)">

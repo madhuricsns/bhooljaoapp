@@ -158,8 +158,9 @@ Class User_model extends CI_Model {
 	{
 		/*echo "PerPage--".$per_page;
 		echo "page--".$page;exit();*/
-		$this->db->select('u.*,z.zone_name');
+		$this->db->select('u.*,z.zone_name,c.category_name');
 		$this->db->join(TBLPREFIX.'zone as z','z.zone_id=u.zone_id','left');
+		$this->db->join(TBLPREFIX.'category as c','c.category_id=u.category_id','left');
 		$this->db->where('user_type','Service Provider');
 		$this->db->order_by('user_id','DESC');
 		if($per_page!="")
@@ -191,6 +192,27 @@ Class User_model extends CI_Model {
 		}
 
 		$result = $this->db->get(TBLPREFIX.'zone');
+		//echo $this->db->last_query();exit;
+		if($res == 1)
+			return $result->result_array();
+		else
+			return $result->num_rows();
+
+	}
+	public function getAllCategory($res,$per_page,$page)
+	{
+		/*echo "PerPage--".$per_page;
+		echo "page--".$page;exit();*/
+		$this->db->select('*');
+		$this->db->where('category_status',"Active");
+
+		$this->db->order_by('category_id','DESC');
+		if($per_page!="")
+		{
+			$this->db->limit($per_page,$page);
+		}
+
+		$result = $this->db->get(TBLPREFIX.'category');
 		//echo $this->db->last_query();exit;
 		if($res == 1)
 			return $result->result_array();
