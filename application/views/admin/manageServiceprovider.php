@@ -57,13 +57,10 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 								<table class="table table-bordered table-striped mb-0" id="datatable-default">
 									<thead>
 										<tr>
-											<th>Sr.No</th>
-											<th>Profile</th>	
+											<th>Sr.No</th>	
 											<th>Full Name</th>
 											<th>Email Address</th>
 											<th>Mobile Number</th>
-											<th>Zone</th>
-											<th>Address</th>
 											<th>Status</th>
 											<th>Change Status</th>
 											<th>Actions</th>	
@@ -76,12 +73,9 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 										?>		
 										<tr>
 												<td><?php echo $i;?></td>
-												<td><img src="<?php echo base_url().'./uploads/service_provider/'.$user['profile_pic'];?>" width="50"></td>
 												<td><?php echo $user['full_name'];?></td>
 												<td><?php echo $user['email'];?></td>
 												<td><?php echo $user['mobile'];?></td>
-												<td><?php echo $user['zone_name'];?></td>
-												<td><?php echo $user['address'];?></td>
 												<td><?php echo $user['status'];?></td>
 												<td>
 													<?php if($user['status']!='Active') { ?>

@@ -235,15 +235,22 @@ $(document).ready(function($)
 /* valdiation for add  zone*/
 $('#btn_addzone').click(function(){
 	var zone_name=$("#zone_name").val();
+	var zone_pincode=$("#zone_pincode").val(); 
 	var status=$("#status").val();
 
 	$("#err_zone_name").html('');
+	$("#err_zone_pincode").html('');
 	$("#err_status").html('');
 	var flag=1;
 	
 	if(zone_name=="")
 	{
 		$("#err_zone_name").html('Enter zone name.');
+		flag=0;
+	}
+	if(zone_pincode=="")
+	{
+		$("#err_zone_pincode").html('Enter Pincode.');
 		flag=0;
 	}
 	if(status=="")
@@ -330,7 +337,7 @@ $('#btn_addcity').click(function(){
 		return false;
 	}
 });
-/* end add city */
+/* end Eidt city */
 /* valdiation for add  Material*/
 $('#btn_uptcity').click(function(){
 		var city_name=$("#city_name").val();
@@ -369,7 +376,88 @@ $('#btn_uptcity').click(function(){
 /* end add city */
 
 
+/* valdiation for Add  Service provider*/
+$('#btn_addsp').click(function(){
+	var full_name=$("#full_name").val();
+	var servicefile=$("#servicefile").val();
+	var email_address=$("#email_address").val();
+	var password=$("#password").val();
+	var address=$("#address").val();
+	var mobile_number=$("#mobile_number").val(); 
+	var gender=$("#gender").val();
+	var zone_id=$("#zone_id").val();
+	var daily_report=$("#daily_report").val();
 
+	var status=$("#status").val();
+
+	$("#err_servicefile").html('');
+	$("#err_full_name").html('');
+	$("#err_email_address").html('');
+	$("#err_password").html('');
+	$("#err_address").html('');
+	$("#err_mobile_number").html('');
+	$("#err_gender").html('');
+	$("#err_zone_id").html('');
+	$("#err_daily_report").html('');
+	$("#err_status").html('');
+	var flag=1;
+	
+	if(servicefile=="")
+	{
+		$("#err_servicefile").html('Choose Your Profile.');
+		flag=0;
+	}
+	if(full_name=="")
+	{
+		$("#err_full_name").html('Enter Full name.');
+		flag=0;
+	}
+	if(email_address=="")
+	{
+		$("#err_email_address").html('Enter Email Id.');
+		flag=0;
+	}
+	if(password=="")
+	{
+		$("#err_password").html('Enter Password.');
+		flag=0;
+	}
+	if(mobile_number=="")
+	{
+		$("#err_mobile_number").html('Enter Mobile number.');
+		flag=0;
+	}
+	if(gender=="")
+	{
+		$("#err_gender").html('Select Gender.');
+		flag=0;
+	}
+	if(zone_id=="")
+	{
+		$("#err_zone_id").html('Select Zone.');
+		flag=0;
+	}
+	if(address=="")
+	{
+		$("#err_address").html('Enter Address.');
+		flag=0;
+	}
+	if(status=="")
+	{
+		$("#err_status").html('Please select status.');
+		flag=0;
+	}
+	
+	if(flag==1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+});
+/* end add zone */
 
 
 
