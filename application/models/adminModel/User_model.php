@@ -154,6 +154,29 @@ Class User_model extends CI_Model {
 			return $result->num_rows();
 	}
 
+	public function getAllServiceBooking($user_id,$res,$per_page,$page)
+	{
+		/*echo "PerPage--".$per_page;
+		echo "page--".$page;exit();*/
+		$this->db->select('b.*,u.full_name,bd.*,c.category_name');
+		$this->db->join(TBLPREFIX.'category as c','c.category_id=b.service_category_id','left');
+		$this->db->join(TBLPREFIX.'users as u','u.user_id=b.user_id','left');
+		$this->db->join(TBLPREFIX.'booking_details as bd','bd.booking_id=b.booking_id','left');
+		$this->db->where('b.service_provider_id',$user_id);
+		$this->db->order_by('b.booking_id','DESC');
+		if($per_page!="")
+		{
+			$this->db->limit($per_page,$page);
+		}
+
+		$result = $this->db->get(TBLPREFIX.'booking as b');
+		// echo $this->db->last_query();exit;
+		if($res == 1)
+			return $result->result_array();
+		else
+			return $result->num_rows();
+	}
+
 	public function getAllServiceProvider($res,$per_page,$page)
 	{
 		/*echo "PerPage--".$per_page;

@@ -106,7 +106,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 													<i data-feather="trash-2"></i>
 													</a>
 
-													<a href="<?php echo base_url();?>backend/Users/viewUsertask/<?php echo base64_encode($user['user_id']);?>"><i data-feather="eye"></i></a>
+													<a href="<?php echo base_url();?>backend/Users/viewServiceProviderDetails/<?php echo base64_encode($user['user_id']);?>"><i data-feather="eye"></i></a>
 											</td>				
 											</tr>											
 											<?php $i++; }?>

@@ -775,6 +775,27 @@ class Users extends CI_Controller {
 			redirect(base_url().'backend/Users/manageServiceProvider');
 		}
 	}
+
+public function viewServiceProviderDetails()
+	{
+		$data['title']='View ServiceProvider Details';
+		$user_id=base64_decode($this->uri->segment(4));
+		//echo "user_id--".$user_id;exit();
+		$data['user_id'] = $user_id;
+		$user_id_base64 = base64_encode($user_id);
+		$data['userinfo']=$this->User_model->getSingleUserInfo($user_id,1);
+		$data['bookingList']=$this->User_model->getAllServiceBooking($user_id,1,"","");
+		
+		$this->load->view('admin/admin_header',$data);
+		$this->load->view('admin/viewServiceProviderDetails',$data);
+		$this->load->view('admin/admin_footer');
+	}
+
+
+
+
+
+
 	public function exportSPCSV()
 	{
 		$this->load->helper('download');
