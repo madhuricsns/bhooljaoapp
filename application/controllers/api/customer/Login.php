@@ -45,7 +45,7 @@ class Login extends REST_Controller {
 					// Send OTP
 					$otp_code = $this->Common_Model->otp();
 					$strMessage=urlencode("Dear user your CSNS Login OTP for LOBA is $otp_code");
-					//$output=$this->Common_Model->SendSms($strMessage, $mobile_number);	
+					$output=$this->Common_Model->SendSms($strMessage, $result->mobile);	
 					$response_array['OTP'] = $otp_code;
 
 					//Send Email
@@ -116,7 +116,7 @@ class Login extends REST_Controller {
 							'full_name' => $result->full_name,
 							'mobile' => $result->mobile,
 							'email' => $result->email,
-							'status_flag' => $result->status_flag);
+							'status' => $result->status);
 						
 						$response_array['data'] = $session_data;
 						$response_array['responsecode'] = "200";

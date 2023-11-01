@@ -13,7 +13,7 @@ Class LoginModel extends CI_Model {
 		{
 			$condition = "email = '".$data['username']."' OR mobile = '".$data['username']."'";
 			$this->db->select('*');
-			$this->db->from(TBPREFIX.'users');
+			$this->db->from(TBLPREFIX.'users');
 			$this->db->where($condition);
 			$this->db->where('user_type','Customer');
 			$this->db->limit(1);
@@ -28,7 +28,7 @@ Class LoginModel extends CI_Model {
 	{
 		$condition = "(email = '".$data['username']."' OR mobile = '".$data['username']."') ";	
 		$this->db->select('*');
-		$this->db->from(TBPREFIX.'users');
+		$this->db->from(TBLPREFIX.'users');
 		$this->db->where($condition);
 		$this->db->where('user_type','Customer');
 		$this->db->limit(1);
@@ -49,7 +49,7 @@ Class LoginModel extends CI_Model {
 		if(!empty ($user_id))
 		{
 			$this->db->select('*');
-			$this->db->from(TBPREFIX.'users');
+			$this->db->from(TBLPREFIX.'users');
 			$this->db->where('user_id',$user_id);
 			$this->db->where('user_type','Customer');
 			$this->db->limit(1);
@@ -65,7 +65,7 @@ Class LoginModel extends CI_Model {
 		if(!empty ($data))
 		{
 			$this->db->select('*');
-			$this->db->from(TBPREFIX.'users');
+			$this->db->from(TBLPREFIX.'users');
 			$this->db->where('user_id',$data['user_id']);
 			$this->db->where('otp',$data['otp']);
 			$this->db->where('user_type','Customer');
@@ -89,7 +89,7 @@ Class LoginModel extends CI_Model {
 		{
 			$condition = "(email = '".$username."' OR mobile = '".$username."') ";		
 			$this->db->select('*');
-			$this->db->from(TBPREFIX.'users');
+			$this->db->from(TBLPREFIX.'users');
 			$this->db->where($condition);
 			$this->db->where('user_type','Customer');
 			$this->db->limit(1);
