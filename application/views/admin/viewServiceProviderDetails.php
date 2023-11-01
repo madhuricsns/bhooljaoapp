@@ -26,10 +26,10 @@
 										
 											<div class="col-sm-12">
 												<h4>
-													<?php if(isset($userinfo[0]['profile_pic']) && $userinfo[0]['profile_pic']!=""){ ?>
-													<img src="<?php echo base_url()."uploads/user_profile/".$userinfo[0]['profile_pic']?>" width="30px" height="30px" style="border-radius:100%">
+												<?php if(isset($userinfo[0]['profile_pic']) && $userinfo[0]['profile_pic']!=""){ ?>
+													<img src="<?php echo base_url()."./uploads/service_provider/".$userinfo[0]['profile_pic']?>" width="30px" height="30px" style="border-radius:100%">
 													<?php } else { ?>
-														<img src="<?php echo base_url()?>uploads/user_profile/user.jpg" alt="" class="rounded-circle" width="32" height="32">
+														<img src="<?php echo base_url()?>./uploads/service_provider/default.png" alt="" class="rounded-circle" width="32" height="32">
 													<?php } ?>
 													<?php  echo $userinfo[0]['full_name'];?>
 												</h4>
