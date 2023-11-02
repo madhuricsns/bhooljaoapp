@@ -785,6 +785,8 @@ public function viewServiceProviderDetails()
 		$user_id_base64 = base64_encode($user_id);
 		$data['userinfo']=$this->User_model->getSingleUserInfo($user_id,1);
 		$data['bookingList']=$this->User_model->getAllServiceBooking($user_id,1,"","");
+		$data['zoneList']=$this->User_model->getAllzone(1,"","");
+		$data['categoryList']=$this->User_model->getAllCategory(1,"","");
 		
 		$this->load->view('admin/admin_header',$data);
 		$this->load->view('admin/viewServiceProviderDetails',$data);

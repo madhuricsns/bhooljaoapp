@@ -38,6 +38,8 @@
 												<p class="info"><i class="fa fa-phone"></i> <?php echo $userinfo[0]['mobile'];?></p>
 												<p class="info"><i class="fa fa-user"></i> <?php echo $userinfo[0]['gender'];?></p>
 												<p class="info"><i class="fa fa-map-marker"></i> <?php echo $userinfo[0]['address'];?></p>
+												<p class="info"><i class="fa fa-area-chart"> Zone :-</i> <?php echo $userinfo[0]['zone_name'];?></p>
+												<p class="info"><i class="fa fa-list-alt"> Category :-</i> <?php echo $userinfo[0]['category_name'];?></p>
 											</div>
 										</div>
 									</div>
@@ -76,6 +78,8 @@
                                                         <th>Time</th>
                                                         <th>Service Name</th>
                                                         <th>Customer</th>
+                                                         
+                                                       
                                                         <th>Status</th>
                                                         <th>Actions</th>	
                                                     </tr>
@@ -93,6 +97,9 @@
                                                             <td><?php echo $booking['time_slot'];?></td>
                                                             <td><?php echo $booking['category_name'];?></td>
                                                             <td><?php echo $booking['full_name'];?></td>
+                                                           
+
+
                                                             <td><?php echo $booking['booking_status'];?></td>
                                                             <td class="actions">
                                                                 <a href="<?php echo base_url();?>backend/Booking/viewBookingDetails/<?php echo base64_encode($booking['booking_id']);?>"><i data-feather="eye"></i></a>

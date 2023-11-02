@@ -9,9 +9,11 @@ Class User_model extends CI_Model {
 	
 	public function getSingleUserInfo($user_id,$res)
 	{
-		$this->db->select('*');
+		$this->db->select('b.*,z.zone_name,c.category_name');
+		$this->db->join(TBLPREFIX.'zone as z','z.zone_id=b.zone_id','left');
+		$this->db->join(TBLPREFIX.'category as c','c.category_id=b.category_id','left');
 		$this->db->where('user_id',$user_id);
-		$query = $this->db->get(TBLPREFIX."users");
+		$query = $this->db->get(TBLPREFIX."users as b");
 		if($res == 1)
 		{
 			return $query->result_array();
@@ -162,6 +164,7 @@ Class User_model extends CI_Model {
 		$this->db->join(TBLPREFIX.'category as c','c.category_id=b.service_category_id','left');
 		$this->db->join(TBLPREFIX.'users as u','u.user_id=b.user_id','left');
 		$this->db->join(TBLPREFIX.'booking_details as bd','bd.booking_id=b.booking_id','left');
+
 		$this->db->where('b.service_provider_id',$user_id);
 		$this->db->order_by('b.booking_id','DESC');
 		if($per_page!="")
