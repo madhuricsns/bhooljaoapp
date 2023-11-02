@@ -103,4 +103,15 @@ Class LoginModel extends CI_Model {
 			return $user;
 		}
 	}
+	
+	public function chkUserEmailExists($email) 
+	{
+		$this->db->select('*');
+		$this->db->from(TBLPREFIX.'users');
+		$this->db->where('user_type','Customer');
+		$this->db->where('email',$email);
+		$this->db->limit(1);
+		$query = $this->db->get();
+		return $query->row();
+	}
 }
