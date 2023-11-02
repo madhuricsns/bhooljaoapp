@@ -315,7 +315,10 @@ class Login extends REST_Controller {
 					$usersOtp = $this->LoginModel->chk_otp($dataToVerify,1);
 					
 					if(!empty($usersOtp))
-					{ 					
+					{ 			
+						$updateData['password'] = md5($password);
+						$updateUser 	= $this->Common_Model->update_data('users','user_id',$usersOtp->user_id,$updateData);
+						
 						$arrUserDetails = $this->CustomerModel->getUserDetails($usersOtp->user_id);
 						$response_array['responsecode'] = "200";
 						$response_array['responsemessage'] = 'Your password has been updated';
