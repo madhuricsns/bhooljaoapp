@@ -7,6 +7,7 @@ class Login extends REST_Controller {
     {
         parent::__construct();
 		$this->load->model('ApiModels/customer/LoginModel');
+		$this->load->model('ApiModels/customer/CustomerModel');
 		$this->load->model('ApiModels/UserModel');
 		$this->load->model('Common_Model');
 	}
@@ -243,7 +244,7 @@ class Login extends REST_Controller {
 	public function forgot_password_post()
 	{
 		$token 	= $this->input->post("token");
-		$email	= $this->input->post('email_address');
+		$email	= $this->input->post('email');
 		
 		if($token == TOKEN)
 		{
@@ -256,17 +257,17 @@ class Login extends REST_Controller {
 							
 				//$rnd_number = "5678"; //default SMS
 				$rnd_number = $this->Common_Model->otp();
-				$updateData['confirm_otp'] 	= $rnd_number;
+				$updateData['otp'] 	= $rnd_number;
 					
-				$updateOtp 	= $this->UserModel->updateData('users','userid',$userExists->userid,$updateData);
-				$arrUserDetails = $this->UserModel->getUserDetails($userExists->userid);
+				$updateOtp 	= $this->Common_Model->update_data('users','user_id',$userExists->user_id,$updateData);
+				$arrUserDetails = $this->CustomerModel->getUserDetails($userExists->user_id);
 				//print_r($arrUserDetails);
 
 				//Send Mail
-				$subject="MSMED Forgot Password OTP";
+				/*$subject="MSMED Forgot Password OTP";
 				$strMessage="Dear user your Forgot Password OTP for MSMED is ".$rnd_number;
 				$output=$this->Common_Model->SendMail($email,$strMessage,$subject);
-
+				*/
 				$response_array['responsecode'] = "200";
 				$response_array['responsemessage'] = 'OTP sent successfully.';
 				$response_array['data'] = $arrUserDetails;
@@ -292,8 +293,8 @@ class Login extends REST_Controller {
 	public function reset_password_post()
 	{
 		$token 			=   $this->input->post("token");
-		$email_address	=	$this->input->post('email_address');
-		$otp_code		=	$this->input->post('otp_code');
+		$email_address	=	$this->input->post('email');
+		$otp_code		=	$this->input->post('otp');
 		$password		=	$this->input->post('password');
 		$cpassword		=	$this->input->post('cpassword');
 
@@ -306,20 +307,34 @@ class Login extends REST_Controller {
 			}
 			else 
 			{
-				$usersOtp = $this->UserModel->checkOtp($email_address,$otp_code);
-				
-				if(!empty($usersOtp))
-				{ 					
-					$arrUserDetails = $this->UserModel->getUserDetails($usersOtp->userid);
-					$response_array['responsecode'] = "200";
-					$response_array['responsemessage'] = 'Your password has been updated';
-					
-					$response_array['userDetails'] = $arrUserDetails;
-				}
-				else  
+				$userExists=$this->LoginModel->chkUserEmailExists($email_address);
+			
+				if(!empty($userExists))
 				{
-					$response_array['responsecode'] = "402";
-					$response_array['responsemessage'] = 'OTP does not match.';
+					$dataToVerify = array('user_id'=>$userExists->user_id,'otp'=>$otp_code);
+					$usersOtp = $this->LoginModel->chk_otp($dataToVerify,1);
+					
+					if(!empty($usersOtp))
+					{ 			
+						$updateData['password'] = md5($password);
+						$updateUser 	= $this->Common_Model->update_data('users','user_id',$usersOtp->user_id,$updateData);
+						
+						$arrUserDetails = $this->CustomerModel->getUserDetails($usersOtp->user_id);
+						$response_array['responsecode'] = "200";
+						$response_array['responsemessage'] = 'Your password has been updated';
+						
+						$response_array['userDetails'] = $arrUserDetails;
+					}
+					else  
+					{
+						$response_array['responsecode'] = "402";
+						$response_array['responsemessage'] = 'OTP does not match.';
+					}
+				}
+				else {
+				$response_array['responsecode'] = "402";
+				$response_array['responsemessage'] = 'Invalid email';
+				
 				}
 			}
 		}

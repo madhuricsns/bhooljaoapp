@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-define('TOKEN', md5('S@$#P!*)^a%1C-=e~+l:o:o&n')); //b57c27a0f78149bb4614723a6f508e4b
+// define('TOKEN', md5('S@$#P!*)^a%1C-=e~+l:o:o&n')); //b57c27a0f78149bb4614723a6f508e4b
+define('TOKEN', md5('Bh$O@O#L@J#A$O#')); //66514bf3ccc137160c8a07d119b93af6
 define('POSTLIMIT',"25");
 /*
 |--------------------------------------------------------------------------
