@@ -30,39 +30,48 @@
 			<form class="needs-validation" name="frm_updatezone" id="frm_updatezone" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/Zone/update_Zone/<?php echo $encodedValueId;?>">
                         <div class="tab-content" >
                             <div class="tab-pane fade active show">
-                                    <div class="row">
+                                    <!-- <div class="row"> -->
                                         <div class="col-sm-12">
-                                            <div class="form-group row">
-                                                <label for="zone_name" class="col-xl-3 col-md-4"><span>*</span>Zone Name</label>
-                                                <input type="text" class="form-control  col-md-6" id="zone_name" name="zone_name" value="<?php if(isset($zoneInfo[0]['zone_name'])) echo $zoneInfo[0]['zone_name'];?>" required>
+                                        	<div class="row">
+                                        		<div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="zone_name" ><span>*</span>Zone Name</label>
+                                                <input type="text" class="form-control  " id="zone_name" name="zone_name" value="<?php if(isset($zoneInfo[0]['zone_name'])) echo $zoneInfo[0]['zone_name'];?>" required>
 												 <div id="err_zone_name" class="error_msg"></div>
                                             </div>
-
-                                            <div class="form-group row">
-                                                <label for="zone_pincode" class="col-xl-3 col-md-4"><span>*</span>Pincode</label>
-                                                <input type="text" class="form-control  col-md-6" id="zone_pincode" name="zone_pincode" value="<?php if(isset($zoneInfo[0]['zone_pincode'])) echo $zoneInfo[0]['zone_pincode'];?>" required>
-												 <div id="err_zone_pincode" class="error_msg"></div>
                                             </div>
 
+                                           <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="zone_pincode"><span>*</span>Pincode</label>
+                                                <input type="text" class="form-control" id="zone_pincode" name="zone_pincode" value="<?php if(isset($zoneInfo[0]['zone_pincode'])) echo $zoneInfo[0]['zone_pincode'];?>" required>
+												 <div id="err_zone_pincode" class="error_msg"></div>
+                                            </div>
+                                           </div>
+                                          </div>
 
 											
-                                            <div class="form-group row">
-                                                <label class="col-xl-3 col-md-4"><span>*</span>Status</label>
-												<select name="status" id="status" class="form-control  col-md-6" required>
+                                            <div class="row">
+                                        		<div class="col-md-6">
+                                            <div class="form-group">
+                                                <label ><span>*</span>Status</label>
+												<select name="status" id="status" class="form-control  " required>
 													<option value="">Select Status</option>
 													<option value="Active" <?php if(isset($zoneInfo[0]['zone_status'])) if($zoneInfo[0]['zone_status']=='Active'){ echo 'selected';} ?>>Active</option>
 													<option value="Inactive" <?php if(isset($zoneInfo[0]['zone_status'])) if($zoneInfo[0]['zone_status']=='Inactive'){ echo 'selected';} ?>>Inactive</option>
 												</select>
                                                 <div id="err_status" class="error_msg"></div>
                                             </div>
+                                        </div>
+                                    </div>
                                             <div class="form-group row">
-                                            	<div class="offset-xl-3 offset-sm-4">
+                                            	<div class="offset-xl-8 offset-sm-4">
 						                            <button type="submit" class="btn btn-primary" name="btn_updatezone" id="btn_updatezone">Update</button>
 													<a href="<?php echo base_url();?>backend/Zone/manageZones" class="btn btn-primary" >Cancel</a>
 						                        </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    <!-- </div> -->
                                 
                             </div>
                         </div>

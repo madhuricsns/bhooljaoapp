@@ -29,37 +29,49 @@
 						<form class="needs-validation" name="frm_addzone" id="frm_addzone" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/Zone/addZone">
                         <div class="tab-content" >
                             <div class="tab-pane fade active show">
-                                    <div class="row">
+                                  
                                         <div class="col-sm-12">
-                                            <div class="form-group row">
-                                                <label for="zone_name" class="col-xl-3 col-md-4"><span>*</span>Zone Name</label>
-                                                <input type="text" class="form-control  col-md-6" id="zone_name" name="zone_name"  required>
+                                            <div class="row">
+                                            <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="zone_name" ><span>*</span>Zone Name</label>
+                                                <input type="text" class="form-control" id="zone_name" name="zone_name"  required>
 												 <div id="err_zone_name" class="error_msg"></div>
                                             </div>
-											<div class="form-group row">
-                                                <label for="zone_pincode" class="col-xl-3 col-md-4"><span>*</span>Pincode</label>
-                                                <input type="text" class="form-control  col-md-6" id="zone_pincode" name="zone_pincode"  required>
+                                        </div>
+											
+                                            <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="zone_pincode" ><span>*</span>Pincode</label>
+                                                <input type="text" class="form-control" id="zone_pincode" name="zone_pincode"  required>
 												 <div id="err_zone_pincode" class="error_msg"></div>
                                             </div>
-                                            <div class="form-group row">
-                                                <label class="col-xl-3 col-md-4"><span>*</span>Status</label>
-												<select name="status" id="status" class="form-control  col-md-6" required>
+                                        </div>
+                                    </div>
+
+                                     <div class="row">
+                              			 <div class="col-md-6">
+                                            <div class="form-group ">
+                                            	
+                                                <label><span>*</span>Status</label>
+												<select name="status" id="status" class="form-control" required>
 													<option value="">Select Status</option>
 													<option value="Active">Active</option>
 													<option value="Inactive">Inactive</option>
 												</select>
                                                 <div id="err_status" class="error_msg"></div>
                                             </div>
-
+                                          </div>
+                                        </div>
                                             
                                             <div class="form-group row">
-                                            	<div class="offset-xl-3 offset-sm-4">
+                                            	<div class="offset-xl-10 offset-sm-4">
 						                            <button type="submit" class="btn btn-primary" name="btn_addzone" id="btn_addzone">Add</button>
 													<a href="<?php echo base_url();?>backend/Zone/manageZones" class="btn btn-primary" >Cancel</a>
 						                        </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    <!-- </div> -->
                                 
                             </div>
                         </div>

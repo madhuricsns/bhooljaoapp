@@ -32,23 +32,28 @@
                             <div class="tab-pane fade active show">
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <div class="form-group row">
-                                                <label for="zone_name" class="col-xl-3 col-md-4"><span>*</span>Material Name</label>
-                                                <input type="text" class="form-control  col-md-6" id="material_name" name="material_name" value="<?php if(isset($materialInfo[0]['material_name'])) echo $materialInfo[0]['material_name'];?>" required>
+                                        	 <div class="row">
+                                        	 	 <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="zone_name" ><span>*</span>Material Name</label>
+                                                <input type="text" class="form-control " id="material_name" name="material_name" value="<?php if(isset($materialInfo[0]['material_name'])) echo $materialInfo[0]['material_name'];?>" required>
 												 <div id="err_material_name" class="error_msg"></div>
                                             </div>
-											
-                                            <div class="form-group row">
-                                                <label class="col-xl-3 col-md-4"><span>*</span>Status</label>
-												<select name="status" id="status" class="form-control  col-md-6" required>
+                                        </div>
+											 <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label><span>*</span>Status</label>
+												<select name="status" id="status" class="form-control " required>
 													<option value="">Select Status</option>
 													<option value="Active" <?php if(isset($materialInfo[0]['material_status'])) if($materialInfo[0]['material_status']=='Active'){ echo 'selected';} ?>>Active</option>
 													<option value="Inactive" <?php if(isset($materialInfo[0]['material_status'])) if($materialInfo[0]['material_status']=='Inactive'){ echo 'selected';} ?>>Inactive</option>
 												</select>
                                                 <div id="err_status" class="error_msg"></div>
                                             </div>
+                                        </div>
+                                    </div>
                                             <div class="form-group row">
-                                            	<div class="offset-xl-3 offset-sm-4">
+                                            	<div class="offset-xl-8 offset-sm-4">
 						                            <button type="submit" class="btn btn-primary" name="btn_updatematerial" id="btn_addmaterial">Update</button>
 													<a href="<?php echo base_url();?>backend/Material/manageMaterial" class="btn btn-primary" >Cancel</a>
 						                        </div>
