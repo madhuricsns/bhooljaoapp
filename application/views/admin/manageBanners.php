@@ -59,6 +59,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												
 											<th>Banner Title</th>
 											<th>Banner Image</th>
+											<th>Banner Type</th>
 											<th>Status</th>
 											<th>Actions</th>	
 										</tr>
@@ -80,6 +81,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<?php } else {?>
 												<td> <img src="<?php echo base_url();?>template/admin/assets/images/lookbook.jpg" alt="No image Found"style="width:80px;height:80px" /></td>
 												<?php } ?>
+												<td><?php echo $banner['banner_type'];?></td>
 												<td><?php echo $banner['banner_status'];?></td>
 												<td class="actions" <?php
 												

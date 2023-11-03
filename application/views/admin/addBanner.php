@@ -60,6 +60,17 @@
                                             </div>-->
 											
                                            <div class="row">
+                                           	<div class="col-md-6">
+                                            <div class="form-group">
+                                                <label ><span>*</span> Banner Type</label>
+												<select name="bannertype" id="bannertype" class="form-control" required>
+													<option value="">Select Banner Type</option>
+													<option value="Customer">Customer</option>
+													<option value="Service Provider">Service Provider</option>
+												</select>
+												 <div id="err_bannertype" class="error_msg"></div>
+                                            </div>
+                                        </div>
                                         		<div class="col-md-6">
                                             <div class="form-group">
                                                 <label ><span>*</span> Status</label>

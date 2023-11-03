@@ -58,6 +58,16 @@
                                         </div>
                                     </div>
 											  <div class="row">
+											  	 <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label ><span>*</span>Banner Type</label>
+												<select name="banner_type" id="banner_type" class="form-control  " required>
+													<option value="">Select Status</option>
+													<option value="Active" <?php if($BannerInfo[0]['banner_type']=="Customer"){ echo 'selected="selected"';}?>>Customer</option>
+													<option value="Inactive" <?php if($BannerInfo[0]['banner_type']=="Service Provider"){ echo 'selected="selected"';}?>>Service Provider</option>
+												</select>
+                                            </div>
+                                        </div>
                                         	  	<div class="col-md-6">
                                             <div class="form-group ">
                                             	<label for="banner_image"><span>*</span> Banner Image</label>

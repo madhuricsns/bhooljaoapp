@@ -62,10 +62,12 @@ class Banners extends CI_Controller {
 		if(isset($_POST['btn_addbanner']))
 		{
 			$this->form_validation->set_rules('banner_title','Banner Title','required');
+			$this->form_validation->set_rules('bannertype','Banner Type ','required');
 			$this->form_validation->set_rules('status','Banner Status','required');
 			if($this->form_validation->run())
 			{
 				$banner_title=$this->input->post('banner_title');
+				$banner_type=$this->input->post('bannertype');
 				$status=$this->input->post('status');
 				$banner_image='';
 				if(isset($_FILES['banner_image']))
@@ -106,6 +108,7 @@ class Banners extends CI_Controller {
 				{
 					$input_data = array(
 						'banner_title'=>trim($banner_title),
+						'banner_type'=>$banner_type,
 						'banner_status'=>$status,
 						'dateupdated' => date('Y-m-d H:i:s'),
 						'dateadded' => date('Y-m-d H:i:s'),
@@ -162,11 +165,13 @@ class Banners extends CI_Controller {
 				if(isset($_POST['btn_uptbanner']))
 				{
 					$this->form_validation->set_rules('banner_title','Banner Title','required');
+					$this->form_validation->set_rules('bannertype','Banner Type ','required');
 					$this->form_validation->set_rules('status','Banner Status','required');
 
 					if($this->form_validation->run())
 					{
 						$banner_title = $this->input->post('banner_title');
+						$banner_type=$this->input->post('bannertype');
 						$status = $this->input->post('status');
 						$banner_image='';
 				if(isset($_FILES['banner_image']))
@@ -203,6 +208,7 @@ class Banners extends CI_Controller {
 									
 						$input_data = array(
 								'banner_title'=>trim($banner_title),
+								'banner_type'=>$banner_type,
 								'banner_status'=>$status,
 								'banner_image'=>$banner_image,
 								'dateupdated' => date('Y-m-d H:i:s')
