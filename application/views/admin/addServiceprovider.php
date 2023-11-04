@@ -148,11 +148,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                            <div class="form-group row">
-                                            	<div class="offset-xl-10 offset-sm-4">
+                                            <div class="pull-right">
 						                            <button type="submit" class="btn btn-primary" name="btn_addsp" id="btn_addsp">Add</button>
 													<a href="<?php echo base_url();?>backend/Users/manageServiceProvider" class="btn btn-primary" >Cancel</a>
-						                        </div>
                                             </div>
                                         <!-- </div> -->
                                     </div>
@@ -166,14 +164,3 @@
             </div>
 	<!-- Container-fluid Ends-->
 </div>
-
-<script type="text/javascript">
-function showDiv(select){
-	//alert("Hi");
-   if(select.value=="Yes"){
-    document.getElementById('daily_report').disabled  = true;
-   } else{
-   	document.getElementById('daily_report').disabled  = false;
-   }
-} 
-</script>

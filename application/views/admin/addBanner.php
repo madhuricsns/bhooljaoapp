@@ -84,13 +84,12 @@
                                         </div>
                                     </div>
 
-                                            <div class="form-group row">
-                                            	<div class="offset-xl-10 offset-sm-4">
-						                            <button type="submit" class="btn btn-primary" name="btn_addbanner" id="btn_addbanner">Add</button>
-													<a href="<?php echo base_url();?>backend/Banners/manageBanner" class="btn btn-primary" >Cancel</a>
-						                        </div>
+									<div class="pull-right">
+										<button type="submit" class="btn btn-primary" name="btn_addbanner" id="btn_addbanner">Add</button>
+										<a href="<?php echo base_url();?>backend/Banners/manageBanner" class="btn btn-primary" >Cancel</a>
+									</div>
 
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                 

@@ -51,11 +51,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                            <div class="form-group">
-                                            	<div class="offset-xl-10 offset-sm-4">
+											<div class="pull-right">
 						                            <button type="submit" class="btn btn-primary" name="btn_addmaterial" id="btn_addmaterial">Add</button>
 													<a href="<?php echo base_url();?>backend/Material/manageMaterial" class="btn btn-primary" >Cancel</a>
-						                        </div>
                                             </div>
                                         </div>
                                     </div>

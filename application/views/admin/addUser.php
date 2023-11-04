@@ -84,11 +84,12 @@
 
                                           
                                            <div class="col-md-6">
-                                           	<label for="mobile_number" ><span>*</span> Gender</label>
-                                            <div class="form-group ">  
+                                           <div class="form-group ">
+                                           	<label for="gender" ><span>*</span> Gender</label>
+                                             <br>
                                                <label class="col-md-2"> <input type="radio" name="gender" class="gender"value="Male" required > Male</label>
-                                               <label class="col-md-2" > <input type="radio" name="gender" class="gender"  value="Female" required > Female</label>
-                                               <label class="col-md-2" > <input type="radio" name="gender" class="gender"  value="Other" required > Other</label>
+                                               <label class="col-md-3" > <input type="radio" name="gender" class="gender"  value="Female" required > Female</label>
+                                               <label class="col-md-3" > <input type="radio" name="gender" class="gender"  value="Other" required > Other</label>
                                                
                                                <div id="err_gender" class="error_msg"></div>
                                             </div>
@@ -116,14 +117,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                            <div class="form-group ">
-                                            	<div class="offset-xl-10 offset-sm-4">
-						                            <button type="submit" class="btn btn-primary" name="btn_adduser" id="btn_adduser">Add</button>
-													<a href="<?php echo base_url();?>backend/Users/manageUsers" class="btn btn-primary" >Cancel</a>
-						                        </div>
-                                            <!-- </div> -->
-                                        </div>
+                                    <div class="pull-right">
+                                        <button type="submit" class="btn btn-primary" name="btn_adduser" id="btn_adduser">Add</button>
+                                        <a href="<?php echo base_url();?>backend/Users/manageUsers" class="btn btn-primary" >Cancel</a>
                                     </div>
+                                    </div>
+                                        
                                 
                             </div>
                         </div>

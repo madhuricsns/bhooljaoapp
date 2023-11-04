@@ -64,11 +64,10 @@
                                           </div>
                                         </div>
                                             
-                                            <div class="form-group row">
-                                            	<div class="offset-xl-10 offset-sm-4">
+                                            <div class="pull-right">
 						                            <button type="submit" class="btn btn-primary" name="btn_addzone" id="btn_addzone">Add</button>
 													<a href="<?php echo base_url();?>backend/Zone/manageZones" class="btn btn-primary" >Cancel</a>
-						                        </div>
+						                        
                                             </div>
                                         </div>
                                     <!-- </div> -->
