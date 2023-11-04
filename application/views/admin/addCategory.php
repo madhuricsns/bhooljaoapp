@@ -30,20 +30,19 @@
                         <div class="tab-content" >
                             <div class="tab-pane fade active show">
                                     <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="form-group row">
-                                                <label for="category_name" class="col-xl-3 col-md-4"><span>*</span> Category Name</label>
-                                                <input type="text" class="form-control  col-md-6" id="category_name" name="category_name"  required value="">
+                                            <div class="form-group col-md-6">
+                                                <label for="category_name"><span>*</span> Category Name</label>
+                                                <input type="text" class="form-control" id="category_name" name="category_name"  required value="">
 												 <div id="err_category_name" class="error_msg"></div>
                                             </div>
 											
-											<div class="form-group row">
-                                                <label for="description" class="col-xl-3 col-md-4"><span>*</span> Description</label>
-                                               <textarea name="description" id="description" class="form-control  col-md-6"></textarea>
+											<div class="form-group col-md-6">
+                                                <label for="description" ><span>*</span> Description</label>
+                                               <textarea name="description" id="description" class="form-control"></textarea>
                                             </div>
-                                            <div class="form-group row">
-                                                <label for="category_image" class="col-xl-3 col-md-4"><span>*</span> Category Image</label>
-                                                <input class="form-control col-xl-6 col-md-6" id="category_image" type="file" required="" name="category_image" />
+                                            <div class="form-group col-md-6">
+                                                <label for="category_image"><span>*</span> Category Image</label>
+                                                <input class="form-control" id="category_image" type="file" required="" name="category_image" />
 												<span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span><br/>
 												<div class="err_msg" id="err_category_image"></div>
                                             </div>
@@ -56,23 +55,22 @@
 												</select>
                                             </div>-->
 											
-                                            <div class="form-group row">
-                                                <label class="col-xl-3 col-md-4"><span>*</span> Status</label>
-												<select name="status" id="status" class="form-control  col-md-6" required>
+                                            <div class="form-group col-md-6">
+                                                <label><span>*</span> Status</label>
+												<select name="status" id="status" class="form-control" required>
 													<option value="">Select Status</option>
 													<option value="Active">Active</option>
 													<option value="Inactive">Inactive</option>
 												</select>
                                             </div>
-                                            <div class="form-group row">
-                                            	<div class="offset-xl-3 offset-sm-4">
+											</div>
+                                            <div class="pull-right">
 						                            <button type="submit" class="btn btn-primary" name="btn_addcategory" id="btn_addcategory">Add</button>
 													<a href="<?php echo base_url();?>backend/Category/manageCategory" class="btn btn-primary" >Cancel</a>
-						                        </div>
 
                                             </div>
-                                        </div>
-                                    </div>
+                                        
+                                   
                                 
                             </div>
                         </div>
