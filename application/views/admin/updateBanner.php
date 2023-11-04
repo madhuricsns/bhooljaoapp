@@ -93,12 +93,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                            <div class="form-group row">
-                                            	<div class="offset-xl-8 offset-sm-4">
+                                            
+                                            	<div class="pull-right">
 						                            <button type="submit" class="btn btn-primary" name="btn_uptbanner" id="btn_uptbanner">Update</button>
 													<a href="<?php echo base_url();?>backend/Brands/index" class="btn btn-primary" >Cancel</a>
 						                        </div>
-                                            </div>
+                                           
 
                                         </div>
                                     </div>
