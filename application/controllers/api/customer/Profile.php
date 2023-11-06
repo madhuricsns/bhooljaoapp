@@ -95,7 +95,7 @@ class Profile extends REST_Controller {
 					'full_name' => $fullname,
 					'mobile' => $mobile_number,
 					'email' => $email_address,
-					'edit_date' => date('Y-m-d H:i:s')
+					'dateupdated' => date('Y-m-d H:i:s')
 					);
 						  
 				$result   = $this->Common_Model->update_data('users','user_id',$user_id,$arrUserData);
@@ -135,7 +135,7 @@ class Profile extends REST_Controller {
 				 if(count($_FILES) > 0) 
 				 {
 					 $ImageName1 = "profile_photo";
-					 $target_dir = "uploads/user/profile_photo/";
+					 $target_dir = "uploads/user_profile/";
 					 $profile_pic= $this->Common_Model->ImageUpload($ImageName1,$target_dir);
 				 }
 				$arrUserData = array('profile_pic' => $profile_pic);

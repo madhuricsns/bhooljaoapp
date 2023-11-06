@@ -14,16 +14,7 @@ class Address extends REST_Controller {
 	{
 		$token 			= $this->input->post("token");
 		$user_id		= $this->input->post("user_id");
-		$type		    = $this->input->post("type");
-		$language	    = $this->input->post("lang");
-		if($language=='zh')
-		{ 
-			$lang="chinese"; 
-		}
-		else
-		{
-			$lang="english";
-		}
+		//$type		    = $this->input->post("type");
 				
 		if($token == TOKEN)
 		{
@@ -34,8 +25,9 @@ class Address extends REST_Controller {
             }
             else
             {
-                $Arraddress = $this->AddressModel->getAllAddress($user_id,$lang);
-                foreach($Arraddress as $key=>$address)
+                $Arraddress = $this->AddressModel->getAllAddress($user_id);
+                /*
+				foreach($Arraddress as $key=>$address)
                 {
                     $address['selected']= false;
                     if($type=='Pickup')
@@ -53,7 +45,7 @@ class Address extends REST_Controller {
                         }
                     }
                     $Arraddress[$key]=$address;
-                }
+                }*/
                 $data['responsecode'] = "200";
                 $data['data'] = $Arraddress;
             }

@@ -11,7 +11,7 @@ Class LoginModel extends CI_Model {
 	{
 		if(!empty ($data))
 		{
-			$condition = "email = '".$data['username']."' OR mobile = '".$data['username']."'";
+			$condition = "email = '".$data['username']."' OR mobile = '".$data['username']."' AND password = '".md5($data['password'])."'";
 			$this->db->select('*');
 			$this->db->from(TBLPREFIX.'users');
 			$this->db->where($condition);
@@ -26,7 +26,7 @@ Class LoginModel extends CI_Model {
 	// Read data using username and password
 	public function chk_login($data,$qty) 
 	{
-		$condition = "(email = '".$data['username']."' OR mobile = '".$data['username']."') ";	
+		$condition = "(email = '".$data['username']."' OR mobile = '".$data['username']."' AND password = '".md5($data['password'])."') ";	
 		$this->db->select('*');
 		$this->db->from(TBLPREFIX.'users');
 		$this->db->where($condition);

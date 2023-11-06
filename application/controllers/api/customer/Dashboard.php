@@ -10,11 +10,12 @@ class Dashboard extends REST_Controller {
 		$this->load->model('Common_Model');
 	}
 	
-	public function dashboard_post()
+	public function index_post()
 	{
 		$token 			= $this->input->post("token");
 		$user_id		= $this->input->post("user_id");
-				
+		$userLat 		= $this->input->post("userLat");
+		$userLong 		= $this->input->post("userLong");		
 		if($token == TOKEN)
 		{
             if($user_id=="")
@@ -25,12 +26,16 @@ class Dashboard extends REST_Controller {
             else
             {
                 $userdetails = $this->DashboardModel->getUserDetails($user_id);
-                $banners = $this->DashboardModel->getAllBanners();
+				
+				$categories = $this->DashboardModel->getCategory();
+				
+                //$banners = $this->DashboardModel->getAllBanners();
                
                 //$this->Common_Model->insert_data('banner',$inputArr);
                 $data['responsecode'] = "200";
                 $data['data'] = $userdetails;
-                $data['banners'] = $banners;
+                $data['categories'] = $categories;
+                //$data['banners'] = $banners;
             }
 		}
 		else

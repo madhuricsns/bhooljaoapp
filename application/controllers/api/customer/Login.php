@@ -16,17 +16,19 @@ class Login extends REST_Controller {
 	{
 		$token 		  = $this->input->post("token");
 		$username	  = $this->input->post('username');
+		$password	  = $this->input->post('password');
 		$fcm		  = $this->input->post('fcm');
 		
 		if($token == TOKEN)
 		{
-			$data = array('username' => $this->input->post('username'));
+			$data = array('username' => $this->input->post('username'), 'password' => $this->input->post('password'));
 		
 			$isLogin = $this->LoginModel->check_login($data);
 		
 			if ($isLogin > 0) 
 			{
 				$result = $this->LoginModel->chk_login($data,1);
+				
 				$status = $result->status;
 
 				//*** FCM Update */
@@ -45,14 +47,14 @@ class Login extends REST_Controller {
 
 					// Send OTP
 					$otp_code = $this->Common_Model->otp();
-					$strMessage=urlencode("Dear user your CSNS Login OTP for LOBA is $otp_code");
-					$output=$this->Common_Model->SendSms($strMessage, $result->mobile);	
+					/*$strMessage=urlencode("Dear user your CSNS Login OTP for LOBA is $otp_code");
+					$output=$this->Common_Model->SendSms($strMessage, $result->mobile);	*/
 					$response_array['OTP'] = $otp_code;
 
 					//Send Email
-					$Subject="Login OTP";
+					/*$Subject="Login OTP";
 					$msg="OTP for your login is $otp_code . Do not share it with anyone.";
-					$usermail=$this->Common_Model->SendMail($result->email,$msg,$Subject);
+					$usermail=$this->Common_Model->SendMail($result->email,$msg,$Subject);*/
 
 					//*** User Update */
 					$updatedata=array('user_fcm'=>$fcm,'otp'=>$otp_code);
@@ -77,7 +79,7 @@ class Login extends REST_Controller {
 			else
 			{
 				$response_array['responsecode'] = "402";
-				$response_array['responsemessage'] = 'Invalid Username!';
+				$response_array['responsemessage'] = 'Invalid Username or Password';
 				
 			}
 		}
@@ -317,6 +319,7 @@ class Login extends REST_Controller {
 					if(!empty($usersOtp))
 					{ 			
 						$updateData['password'] = md5($password);
+						$updateData['otp'] = '';
 						$updateUser 	= $this->Common_Model->update_data('users','user_id',$usersOtp->user_id,$updateData);
 						
 						$arrUserDetails = $this->CustomerModel->getUserDetails($usersOtp->user_id);

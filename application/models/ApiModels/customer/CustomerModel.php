@@ -98,7 +98,7 @@
                 $user= $query->row();
                 if(isset($user->profile_pic) && $user->profile_pic!="")
                 {
-                    $user->profile_pic=base_url()."uploads/user/profile_photo/".$user->profile_pic;;
+                    $user->profile_pic=base_url()."uploads/user_profile/".$user->profile_pic;;
                 }
                 
 				$user->mpin=$user->otp;

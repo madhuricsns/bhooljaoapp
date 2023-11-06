@@ -25,17 +25,17 @@
             }
         }
 	
-		function getAllAddress($user_id,$lng)
+		function getAllAddress($user_id)
 		{
 			$this->db->select('*');
-			$this->db->from(TBPREFIX.'adresses');
-			$this->db->where('adress_status','Active');
+			$this->db->from(TBLPREFIX.'addresses');
+			$this->db->where('address_status','Active');
 			$this->db->where('user_id',$user_id);
-            if(!isset($lng))
+            /*if(!isset($lng))
             {
               $lng='english';  
             }
-            $this->db->where('address_language',$lng);
+            $this->db->where('address_language',$lng);*/
 			return $this->db->get()->result_array();			
 		}
 
