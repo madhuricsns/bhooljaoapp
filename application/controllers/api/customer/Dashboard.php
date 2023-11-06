@@ -27,14 +27,21 @@ class Dashboard extends REST_Controller {
             {
                 $userdetails = $this->DashboardModel->getUserDetails($user_id);
 				
-				$categories = $this->DashboardModel->getCategory();
+				$categories = $this->DashboardModel->getCategory($limit=6);
 				
+				$arrOngoingServices = $this->DashboardModel->ongoingServices($user_id);
+				
+				$arrServiceGivers = $this->DashboardModel->getNearByServiceGivers(3,$userLat,$userLong);
+				
+				//print_r($arrServiceGivers);
                 //$banners = $this->DashboardModel->getAllBanners();
                
                 //$this->Common_Model->insert_data('banner',$inputArr);
                 $data['responsecode'] = "200";
-                $data['data'] = $userdetails;
-                $data['categories'] = $categories;
+                $data['UserData'] = $userdetails;
+                $data['Categories'] = $categories;
+				$data['OngoingServices'] = $arrOngoingServices;
+                $data['NearByServiceGivers'] = $arrServiceGivers;
                 //$data['banners'] = $banners;
             }
 		}

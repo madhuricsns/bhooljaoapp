@@ -8,7 +8,30 @@
 			parent::__construct();
 			$this->load->database();
 		}
-
+		
+		public function getMyBookings($user_id,$status)
+		{
+			$this->db->select("c.category_name,c.category_image,u.profile_id,u.full_name,(DATE_FORMAT(DATE(b.booking_date),'%M/%d/,%Y')) as booking_date,b.time_slot,b.expiry_date,b.booking_status");
+            $this->db->from(TBLPREFIX.'booking b');
+            $this->db->where('b.user_id',$user_id);
+            $this->db->where('b.booking_status',$status);
+            $this->db->join(TBLPREFIX.'users as u','u.user_id =b.user_id','left');
+            $this->db->join(TBLPREFIX.'category as c','c.category_id = b.service_category_id','left');
+			$query = $this->db->get();
+            $result= $query->result_array();
+			if(!empty ($result) )
+			{
+				foreach($result as $key=>$row)
+				{
+					if(isset($row['category_image']) && $row['category_image']!="")
+					{
+						$row['category_image']=base_url()."uploads/category_images/".$row['category_image'];
+					}
+					$result[$key]=$row;
+				}
+			}
+			return $result;
+		}
     
 		public function getPromocode($service_id) 
         {
@@ -193,7 +216,7 @@
             return $result;
         }
 
-        public function getMyBookings($user_id,$status='')
+        public function getMyBookingsold($user_id,$status='')
         {
             $this->db->select('b.booking_id,b.service_category_id,b.booking_category_id,b.booking_date,b.time_slot,b.no_of_hourse,b.select_mobility_aid,b.booking_status,b.booking_sub_status,b.service_provider_id
             ,s.service_name,s.service_image,s.service_app_image,u.full_name,u.user_id,u.profile_pic,u.mobile,pickup.address1 as pickup_location,drop.address1 as drop_location,pickup.address_lat as pickup_address_lat,pickup.address_lng as pickup_address_lng,drop.address_lat as drop_address_lat,drop.address_lng as drop_address_lng

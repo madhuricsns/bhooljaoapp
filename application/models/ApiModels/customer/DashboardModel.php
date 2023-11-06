@@ -48,12 +48,16 @@
             }
         }
 		
-		public function getCategory()
+		public function getCategory($limit)
 		{
 			$this->db->select('*');
             $this->db->from(TBLPREFIX.'category');
             $this->db->where('category_status','Active');
             $query = $this->db->get();
+			if(isset($limit) && $limit!='')
+			{
+				$this->db->limit($limit);
+			}
             $result= $query->result_array();
             foreach($result as $key=>$row)
             {
@@ -66,25 +70,31 @@
             return $result;
 		}
 		
-		public function ongoingServices()
+		public function ongoingServices($user_id)
 		{
-			$this->db->select('*');
-            $this->db->from(TBLPREFIX.'category');
-            $this->db->where('category_status','Active');
-            $query = $this->db->get();
+			$this->db->select("c.category_name,c.category_image,u.profile_id,u.full_name,(DATE_FORMAT(DATE(b.booking_date),'%M/%d/,%Y')) as booking_date,b.time_slot,b.expiry_date,b.booking_status");
+            $this->db->from(TBLPREFIX.'booking b');
+            $this->db->where('b.user_id',$user_id);
+            $this->db->where('b.booking_status','ongoing');
+            $this->db->join(TBLPREFIX.'users as u','u.user_id =b.user_id','left');
+            $this->db->join(TBLPREFIX.'category as c','c.category_id = b.service_category_id','left');
+			$query = $this->db->get();
             $result= $query->result_array();
-            foreach($result as $key=>$row)
-            {
-                if(isset($row['category_image']) && $row['category_image']!="")
-                {
-                    $row['category_image']=base_url()."uploads/category_images/".$row['category_image'];
-                }
-                $result[$key]=$row;
-            }
-            return $result;
+			if(!empty ($result) )
+			{
+				foreach($result as $key=>$row)
+				{
+					if(isset($row['category_image']) && $row['category_image']!="")
+					{
+						$row['category_image']=base_url()."uploads/category_images/".$row['category_image'];
+					}
+					$result[$key]=$row;
+				}
+			}
+			return $result;
 		}
 		
-		function getNearByServices($limit,$userLat,$userLong,$pagination='',$pageid=0,$Offset=0)
+		function getNearByServiceGivers($limit,$userLat,$userLong,$pagination='',$pageid=0,$Offset=0)
 		{
 			//$distance_customer='10';
 			
@@ -96,13 +106,11 @@
 				)
 			  ) AS distance';
 									  
-			$this->db->select($distance_parameter.','.'a.agencyid,a.agency_name,a.agency_email,a.agency_address,a.agency_license_no,a.established_year,a.added_by,a.agency_lat,a.agency_long,a.status,a.status_flag,u.available_in_call,u.mobile_number,u.available_now');
-			$this->db->from('agency as a');
-			$this->db->join('agency_users as u','a.added_by=u.user_id','left');
-			$this->db->where('u.available_now','YES');
-			$this->db->where('a.status','Accepted');
-			$this->db->where('a.status_flag','Active');
-			$this->db->order_by('agencyid', 'desc');
+			$this->db->select($distance_parameter.','.'u.full_name,u.address,u.profile_pic');
+			$this->db->from(TBLPREFIX.'users as u');
+			$this->db->where('u.user_type','Service Provider');
+			$this->db->where('u.status','Active');
+			$this->db->order_by('user_id', 'desc');
 			$this->db->having("distance <=" ,NEARDISTANCE);
 			if(isset($limit) && $limit!='')
 			{
@@ -119,6 +127,17 @@
 					$this->db->limit(POSTLIMIT,$Offset);
 				}
 			}
-			return $this->db->get()->result_array();
+			$result = $this->db->get()->result_array();
+			if(!empty ($result) )
+			{
+				foreach($result as $key=>$row)
+				{
+					if(isset($row['category_image']) && $row['category_image']!="")
+					{
+						$row['category_image']=base_url()."uploads/category_images/".$row['category_image'];
+					}
+					$result[$key]=$row;
+				}
+			}
 		}
 	}

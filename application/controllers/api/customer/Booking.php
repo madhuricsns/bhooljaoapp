@@ -10,6 +10,64 @@ class Booking extends REST_Controller {
 		$this->load->model('Common_Model');
 	}
 	
+	public function index_post()
+	{
+		$token 		= $this->input->post("token");
+		$user_id	= $this->input->post("user_id");
+		$status		= $this->input->post("status");
+		
+		if($token == TOKEN)
+		{
+            if($user_id=="")
+            {
+                $data['responsemessage'] = 'Please provide valid data ';
+                $data['responsecode'] = "400"; //create an array
+            }
+            else
+            {
+             	$arrBookings = $this->BookingModel->getMyBookings($user_id, $status);
+				
+				if(!empty ($arrBookings))
+				{
+					foreach($arrBookings as $key=>$booking)
+					{
+						if($booking['booking_status']=='waiting')
+						{
+							$booking['booking_status']="Waiting";
+						}
+						else if($booking['booking_status']=='accepted')
+						{
+							$booking['booking_status']="Accepted";
+						}
+						else if($booking['booking_status']=='ongoing')
+						{
+							$booking['booking_status']="Ongoing";
+						}
+						else if($booking['booking_status']=='completed')
+						{
+							$booking['booking_status']="Completed";
+						}
+						else if($booking['booking_status']=='cancelled')
+						{
+							$booking['booking_status']="Cancelled";
+						}
+					}
+				}
+				
+                $data['responsecode'] = "200";
+                $data['data'] = $arrBookings;
+            }
+		}
+		else
+		{
+			$data['responsecode'] = "201";
+			$data['responsemessage'] = 'Token did not match';
+		}	
+		$obj = (object)$data;//Creating Object from array
+		$response = json_encode($obj);
+		print_r($response);
+	}
+	
 	public function promocodeList_post()
 	{
 		$token 		= $this->input->post("token");
