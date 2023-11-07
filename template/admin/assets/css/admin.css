@@ -48564,7 +48564,9 @@ body.rtl .account-setting {
 .card-body.total-booking::before {
   background-image: url("../images/dashboard/icins_total-order.png");
 }
-
+.card-body.total-category::before {
+  background-image: url("../images/dashboard/category1.png");
+}
 .card-body.Operational-Health-icon::before {
   background-image: url("../images/dashboard/Operational-Health-icon.png");
 }
