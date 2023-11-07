@@ -29,16 +29,23 @@
 
 		public function getCategoryDetails($category_id) 
         {
-            $this->db->select('*');
+            $this->db->select('category_name,category_image,category_description,category_amount');
+			$this->db->where('category_id',$category_id);
             $this->db->from(TBLPREFIX.'category');
             $query = $this->db->get();
-			$result= $query->row();
+			$result = $query->row();
             
 			if(isset($result->category_image) && $result->category_image != "")
 			{
 				$result->category_image = base_url()."uploads/category_images/".$result->category_image;
 			}
-
+			
+			$this->db->select('*');
+            $this->db->where('category_id',$category_id);
+			$this->db->from(TBLPREFIX.'category_details');
+			$qry = $this->db->get();
+            $categoryDetails = $qry->result_array();
+			$result->categoryDetails = $categoryDetails;
             return $result;
         }
 	}
