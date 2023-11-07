@@ -12,7 +12,7 @@
         public function getAllBanners() 
         {
             $this->db->select('*');
-            $this->db->from(TBPREFIX.'banner');
+            $this->db->from(TBLPREFIX.'banner');
             $this->db->where('banner_status	','Active');
             $this->db->where('banner_type','Customer');
             $query = $this->db->get();
@@ -74,7 +74,10 @@
 		{
 			$this->db->select("c.category_name,c.category_image,u.profile_id,u.full_name,(DATE_FORMAT(DATE(b.booking_date),'%M/%d/,%Y')) as booking_date,b.time_slot,b.expiry_date,b.booking_status");
             $this->db->from(TBLPREFIX.'booking b');
-            $this->db->where('b.user_id',$user_id);
+			if($user_id != '')
+			{
+				$this->db->where('b.user_id',$user_id);
+			}
             $this->db->where('b.booking_status','ongoing');
             $this->db->join(TBLPREFIX.'users as u','u.user_id =b.user_id','left');
             $this->db->join(TBLPREFIX.'category as c','c.category_id = b.service_category_id','left');
@@ -139,5 +142,6 @@
 					$result[$key]=$row;
 				}
 			}
+			return $result;
 		}
 	}

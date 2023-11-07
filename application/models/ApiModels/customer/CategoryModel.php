@@ -43,6 +43,7 @@
 			$this->db->select('*');
             $this->db->where('category_id',$category_id);
 			$this->db->from(TBLPREFIX.'category_details');
+			//$this->db->group_by('option_label');
 			$qry = $this->db->get();
             $categoryDetails = $qry->result_array();
 			$result->categoryDetails = $categoryDetails;

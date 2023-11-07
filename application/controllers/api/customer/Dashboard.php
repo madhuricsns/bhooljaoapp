@@ -18,14 +18,16 @@ class Dashboard extends REST_Controller {
 		$userLong 		= $this->input->post("userLong");		
 		if($token == TOKEN)
 		{
-            if($user_id=="")
+            /*if($user_id=="")
             {
                 $data['responsemessage'] = 'Please provide valid data ';
                 $data['responsecode'] = "400"; //create an array
             }
             else
-            {
+            { */
                 $userdetails = $this->DashboardModel->getUserDetails($user_id);
+                
+				$banners = $this->DashboardModel->getAllBanners();
 				
 				$categories = $this->DashboardModel->getCategory($limit=6);
 				
@@ -39,11 +41,12 @@ class Dashboard extends REST_Controller {
                 //$this->Common_Model->insert_data('banner',$inputArr);
                 $data['responsecode'] = "200";
                 $data['UserData'] = $userdetails;
+                $data['Banners'] = $banners;
                 $data['Categories'] = $categories;
 				$data['OngoingServices'] = $arrOngoingServices;
                 $data['NearByServiceGivers'] = $arrServiceGivers;
                 //$data['banners'] = $banners;
-            }
+            // }
 		}
 		else
 		{
