@@ -19,7 +19,14 @@ class Dashboard extends CI_Controller {
 	{
 		$data['title']='Dashboard';
 		$todays=date('Y-m-d');
-		// $data['usercnt']=$this->Dashboard_model->getAllUsercount(0);
+		 $data['User']=$this->Dashboard_model->getAllUsercount(0);
+		 $data['ServiceProvider']=$this->Dashboard_model->getAllServiceProvidercount(0);
+		 $data['Booking']=$this->Dashboard_model->getAllBookingcount(0);
+		  $data['BookingWaiting']=$this->Dashboard_model->getAllBookingWaitingcount(0);
+		  $data['BookingAccepted']=$this->Dashboard_model->getAllBookingAcceptedcount(0);
+		   $data['BookingOngoing']=$this->Dashboard_model->getAllBookingOngoingcount(0);
+		    $data['BookingCompleted']=$this->Dashboard_model->getAllBookingCompletedcount(0);
+		//exit();
 		// //$data['feedbackcnt']=$this->Dashboard_model->getAllFeedbackcount(0,"","");
 		// $data['feedbacks']=$this->Feedback_model->getAllFeedbacks(1,10,0);
 		// $data['feedbackcnt']=$this->Feedback_model->getAllFeedbacks(0,'',0);
@@ -29,9 +36,9 @@ class Dashboard extends CI_Controller {
 		// $data['ScheduledFlights'] = $this->Flights_model->getscheduledFlights();
 		// $data['PastFlights'] = $this->Flights_model->getPastFlights();
 		// //echo "count--".$getlatcnt;exit();
-		// /*echo "<pre>";
-		// print_r($data['latrecords']);
-		// exit();*/
+		// echo "<pre>";
+		// print_r($data['User']);
+		// exit();
 
 		$this->load->view('admin/admin_header',$data);
 		$this->load->view('admin/dashboard',$data);

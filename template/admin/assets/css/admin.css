@@ -40536,16 +40536,6 @@ body.rtl .account-setting {
 
       display: none; }
 
-  .collection-product-wrapper .product-top-filter .product-filter-content .product-page-filter {
-
-    border-right: 1px solid #dddddd;
-
-    width: 30%; }
-
-  .collection-product-wrapper .product-top-filter .product-filter-content .product-page-per-view {
-
-    width: 30%; }
-
   .collection-product-wrapper .product-top-filter .popup-filter .collection-view {
 
     width: 10%; }
@@ -48566,7 +48556,13 @@ body.rtl .account-setting {
   background-image: url("../images/dashboard/Business-health-score.png");
 }
 .card-body.user-icon::before {
-  background-image: url("../images/dashboard/icins_user.png");
+  background-image: url("../images/dashboard/userlogo.png");
+}
+.card-body.service-pro-icon::before {
+  background-image: url("../images/dashboard/icins_service-provider.png");
+}
+.card-body.total-booking::before {
+  background-image: url("../images/dashboard/icins_total-order.png");
 }
 
 .card-body.Operational-Health-icon::before {
@@ -48574,6 +48570,9 @@ body.rtl .account-setting {
 }
 .card-body.Marketing-Health-icon::before {
   background-image: url("../images/dashboard/Marketing-Health-icon.png");
+}
+.card-body.pending-icon::before {
+  background-image: url("../images/dashboard/icins_pending-order.png");
 }
 .card-body.accepted-icon::before {
   background-image: url("../images/dashboard/icins_accepted-order.png");
