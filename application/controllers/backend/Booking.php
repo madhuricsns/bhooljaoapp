@@ -55,102 +55,230 @@ class Booking extends CI_Controller {
 		//echo "ConttPerPage--".$config["per_page"];
 		//echo "Conttpage--".$page;
 		//exit();
-		$data['bookingList']=$this->Booking_model->getAllBooking(1,$config["per_page"],$page);
-		//echo $this->db->last_query();exit;
+		//$data['bookingList']=$this->Booking_model->getAllBooking(1,$config["per_page"],$page);
+		// $data['Bookingstatus'] = $this->Booking_model->getBookingstatus();
+		$filter=array();
+		//$date_filter=array();
+		 $selectedBookingstatus = $this->input->get('bookingstatus');
+		  $search_date = $this->input->get('datesearch');
+
+			if ($search_date) {
+	            // If a category is selected, filter the records by that Booking
+	            $filter['datesearch']=$search_date;
+	            $data['datesearch']=$search_date;
+	        } 
+
+		  if ($selectedBookingstatus) {
+            // If a category is selected, filter the records by that Booking
+            $filter['status']=$selectedBookingstatus;
+        } 
+
+           $data['bookingList']=$this->Booking_model->getAllBooking(1,$config["per_page"],$page,$filter);
+        //echo $this->db->last_query();
+		// print_r($data1);
+		//  exit;
 		$this->load->view('admin/admin_header',$data);
 		$this->load->view('admin/manageBooking',$data);
 		$this->load->view('admin/admin_footer');
 	}
-
-    public function viewBookingDetails()
-	{
-		$data['title']='Booking Details';
 	
-		$booking_id=base64_decode($this->uri->segment(4));
-        
-		$data['orderInfo']=$this->Booking_model->getSingleBookingInfo($booking_id,1);
-		//echo $this->db->last_query();exit;
+	public function addMaterial()
+	{
+		$data['title']='Add Material';
+		$data['error_msg']='';
+				
+		if(isset($_POST['btn_addmaterial']))
+		{
+			$this->form_validation->set_rules('material_name','Zone Name','required');
+			
+			$this->form_validation->set_rules('status','Zone Status','required');
+			if($this->form_validation->run())
+			{
+				$material_name=$this->input->post('material_name');
+				$status=$this->input->post('status');
+                		
+				$materialname=$this->Booking_model->chkMaterialName($material_name,0);
+
+				if($materialname==0)
+				{
+					$input_data = array(
+						'material_name'=>trim($material_name),
+						'material_status'=>$status,
+						'dateupdated' => date('Y-m-d H:i:s'),
+						'dateadded' => date('Y-m-d H:i:s')
+						);
+
+					/*echo"<pre>";
+					print_r($input_data);
+					exit();*/
+					
+					$insert_id = $this->Common_Model->insert_data('material',$input_data);
+					
+					if($insert_id)
+					{	
+						$this->session->set_flashdata('success','Material added successfully.');
+
+						redirect(base_url().'backend/Material/manageMaterial');	
+					}
+					else
+					{
+						$this->session->set_flashdata('error','Error while adding user.');
+
+						redirect(base_url().'backend/Material/addMaterial');
+					}	
+				}
+				else
+				{
+					$this->session->set_flashdata('error','Material name  already exist.');
+
+					redirect(base_url().'backend/Material/addMaterial');	
+				}
+
+			}else{
+				$this->session->set_flashdata('error','Validation failed. Please enter valid data.');
+				redirect(base_url().'backend/Material/addMaterial');
+			}
+		}
+
 		$this->load->view('admin/admin_header',$data);
-		$this->load->view('admin/viewBookingDetails',$data);
+		$this->load->view('admin/addMaterial',$data);
 		$this->load->view('admin/admin_footer');
 	}
 	
-	public function exportBookingCSV()
+	public function updateMaterial()
 	{
-		$this->load->helper('download');
-        $data['error']=$data['success']="";
-		$todaysdate=date('d-M-YHi');
-		
-		// $data['session_from_date'] = $this->session->userdata('session_from_date');		
-		// $data['session_to_date'] = $this->session->userdata('session_to_date');		
-		// $input_data = array(
-		// 	'from_date'=> $data['session_from_date'] ?? ''	,
-		// 	'to_date'=>$data['session_to_date'] ?? '');
-		
-		$array[] = array('','','','','Bhooljao - Export CSV For Bookings','','','','','');
-		
-		$i=1;
-
-		$data['bookingList']=$bookingList=$this->Booking_model->getAllBooking(1,"","");
-
-		$people = array('Sr.','Order No','Date','Time','Service Name','Customer','Hrs','Status');
-		$array[] =$people;
-
-	   	if(isset($bookingList) && count($bookingList)>0)
-		{  	
-			foreach($bookingList as $g)
+		$data['title']='Update Material';
+		$data['error_msg']='';
+		// echo "segment--".$this->uri->segment(4);exit();
+		$material_id=base64_decode($this->uri->segment(4));
+        // echo $zone_id;
+        if($material_id)
+		{
+			$materialInfo=$this->Booking_model->getSingleMaterialInfo($material_id,0);
+			if($materialInfo>0)
 			{
-				$booking_id =$g['booking_id'];
-				$order_no=$g['order_no'];
-				$category_name=$g['category_name'];
-				$full_name=ucfirst($g['full_name']);
-				$booking_date=$g['booking_date'];
-				$time_slot=$g['time_slot'];
-				$no_of_hourse=$g['no_of_hourse'];
-				$status=$g['booking_status'];
-				
-				//echo "<pre>";print_r($straddress); exit;
-				if(is_array($people) &&count($people)> 0){
-					foreach ($people as $key => $peopledtls) {
-						$strVal = $peopledtls;
-						switch ($peopledtls) {
-							case 'Sr.':
-								$strDtlVal = $i;
-								break;
-							case 'Order No':
-								$strDtlVal = $order_no;
-								break;
-							case 'Date':
-								$strDtlVal = date('d-m-Y',strtotime($booking_date));
-								break;
-							case 'Time':
-								$strDtlVal = $time_slot;
-								break;
-							case 'Service Name':
-								$strDtlVal = $category_name;
-								break;
-							case 'Customer':
-								$strDtlVal = $full_name;
-								break;
-							case 'Hrs':
-								$strDtlVal = $no_of_hourse;
-								break;
-							case 'Status':
-								$strDtlVal = $status;
-								break;
+				$data['materialInfo'] = $this->Booking_model->getSingleMaterialInfo($material_id,1);
+
+				if(isset($_POST['btn_updatematerial']))
+				{
+                    print_r($_POST);//exit;
+					$this->form_validation->set_rules('material_name','Material Name','required');
+			
+			        $this->form_validation->set_rules('status','Material Status','required');
+
+					if($this->form_validation->run())
+					{
+						$material_name=$this->input->post('material_name');
+						$status=$this->input->post('status');
+							
+						$input_data = array(
+                            'material_name'=>trim($material_name),
+							'material_status'=>$status,
+							'dateupdated' => date('Y-m-d H:i:s'),
+                            );
+					
+						$updatedata = $this->Common_Model->update_data('material','material_id',$material_id,$input_data);
+                       
+                        // echo $this->db->last_query();exit;
+						if($updatedata)
+						{	
+							$this->session->set_flashdata('success','Material updated successfully.');
+
+							redirect(base_url().'backend/Material/manageMaterial');	
 						}
-						
-						$arrayCSV[$peopledtls]=$strDtlVal;
+						else
+						{
+							$this->session->set_flashdata('error','Error while updating Zone.');
+
+							redirect(base_url().'backend/Material/updateMaterial/'.base64_encode($user_id));
+						}	
+					}
+					else
+					{
+						$this->session->set_flashdata('error',$this->form_validation->error_string());
+
+						redirect(base_url().'backend/Material/updateMaterial/'.base64_encode($user_id));
 					}
 				}
-				$array[] = $arrayCSV;
-				$i++;
 			}
-			#print_r($array); exit;
+			else
+			{
+				$data['error_msg'] = 'Material not found.';
+			}
 		}
-		  $this->load->helper('csv');
-		  $csvname = 'BookingExport'.$todaysdate.'.csv';
-		  array_to_csv($array,$csvname);
-		  $data['success']= "download sample export data successfully!";
+		
+		$this->load->view('admin/admin_header',$data);
+		$this->load->view('admin/updateMaterial',$data);
+		$this->load->view('admin/admin_footer');
+	}
+
+	public function updateStatus()
+	{
+		$data['title']='Update Status';
+		$data['error_msg']='';
+		//echo "segment--".$this->uri->segment(4);exit();
+
+		//echo "seg4--".$this->uri->segment(4);
+		//echo "seg5--".$this->uri->segment(5);exit();
+		$action=$this->uri->segment(4);
+
+		$task_id=base64_decode($this->uri->segment(5));
+		$user_id=$this->uri->segment(6);
+		//echo "user_id--".$user_id;exit();
+		if($action=='accept'){
+			$statusTobeUpdated="Accepted";
+		}elseif($action=='reject'){
+			 $statusTobeUpdated="Rejected";
+		}
+
+		if($task_id)
+		{
+			$input_data = array(
+								'zone_status'=> $statusTobeUpdated
+								);
+			$usertaskdata = $this->Booking_model->uptdateStatus($input_data,$task_id);
+			if($usertaskdata){
+				$this->session->set_flashdata('success','Status updated successfully.');
+				redirect(base_url().'backend/users/viewUsertask/'.$user_id);
+				}
+		}
+	}
+	public function deleteMaterial()
+	{
+		$data['error_msg']='';
+		$material_id = base64_decode($this->uri->segment(4));
+		if($material_id)
+		{
+			$materialInfo=$this->Booking_model->getSingleMaterialInfo($material_id,0);
+			if($materialInfo>0)
+			{
+				$input_data = array(
+					'material_status'=>'Delete',
+					'dateupdated' => date('Y-m-d H:i:s')
+				);
+
+				$delrecord =$this->Common_Model->update_data('material','material_id',$material_id,$input_data);
+                       
+				if($delrecord > 0)
+				{
+					$this->session->set_flashdata('success','Material deleted successfully.');
+					redirect(base_url().'backend/Material/manageMaterial');	
+				}
+				else
+				{
+					$this->session->set_flashdata('error','Error while deleting zone.');
+					redirect(base_url().'backend/Material/manageMaterial');
+				}
+			}
+			else
+			{
+				$data['error_msg'] = 'Material not found.';
+			}
+		}
+		else
+		{
+			$this->session->set_flashdata('error','Material not found.');
+			redirect(base_url().'backend/Material/manageMaterial');
+		}
 	}
 }

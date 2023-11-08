@@ -49,7 +49,43 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 							<?php echo $this->session->flashdata('error_msg');?>
 						</div>
-						<?php }?>										
+						<?php }?>	
+
+
+
+ <form method="get">
+ 		
+<div class="form-group row">
+            <div class="col-sm-3">
+            	<label for="Search"> Search</label>
+		<select name="bookingstatus" id="bookingstatus"class="form-control">
+	            <option value="">All</option>
+	            <option value="waiting">Waiting</option>
+	            <option value="accepted">Accepted</option>
+	            <option value="ongoing">Ongoing</option>
+	            <option value="completed">Completed</option>
+	           
+	        </select>
+	    </div>
+	    <div class="col-sm-3">
+	    	<br>
+            	<input type="date" name="datesearch"class="form-control" value="<?php if(isset($datesearch)) echo $datesearch; ?>">
+	    </div>
+	        <div class="col-sm-2">
+	        	<br>
+	        <button type="submit" class="btn btn-outline-success" name="Search" id="Search">Search</button></div>
+	        
+ </div>
+
+
+
+	        
+ 
+    
+
+                                           
+    </form>
+
 						<div class="table-responsive">
 							<div id="basicScenario" class="product-physical"></div>
 							<?php if($bookingcnt > 0)	{ ?>
@@ -69,11 +105,11 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 										<?php 
 										foreach($bookingList as $booking)
 										{
-                                            $booking['booking_date']= new DateTime($booking['booking_date']);
+                                             $booking['booking_date']= new DateTime($booking['booking_date']);
                                             $booking['booking_date']=$booking['booking_date']->format('d-M-Y');
 											?>		
 										<tr>
-												<td><?php echo $booking['order_no'];?></td>
+												<td><?php echo $booking['booking_id'];?></td> 
 												<td><?php echo $booking['booking_date'];?></td>
 												<td><?php echo $booking['time_slot'];?></td>
 												<td><?php echo $booking['category_name'];?></td>
