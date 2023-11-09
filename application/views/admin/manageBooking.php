@@ -56,7 +56,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
  <form method="get">
  		
 <div class="form-group row">
-            <div class="col-sm-3">
+            <div class="col-sm-2">
             	<label for="Search"> Search</label>
 		<select name="bookingstatus" id="bookingstatus"class="form-control">
 	            <option value="">All</option>
@@ -67,13 +67,17 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 	           
 	        </select>
 	    </div>
-	    <div class="col-sm-3">
+	    <div class="col-sm-2">
 	    	<br>
             	<input type="date" name="datesearch"class="form-control" value="<?php if(isset($datesearch)) echo $datesearch; ?>">
 	    </div>
 	        <div class="col-sm-2">
 	        	<br>
-	        <button type="submit" class="btn btn-outline-success" name="Search" id="Search">Search</button></div>
+	        	<div class="row">
+	        <button type="submit" class="btn btn-outline-success" name="Search" id="Search">Search</button>
+	        <a href="<?php echo base_url();?>backend/Booking/manageBooking" class="btn btn-outline-secondary" >Clear</a>
+	    </div>
+	    </div>
 	        
  </div>
 
