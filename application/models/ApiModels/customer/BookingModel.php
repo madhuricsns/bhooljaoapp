@@ -16,7 +16,7 @@
             $this->db->where('b.user_id',$user_id);
             $this->db->where('b.booking_status',$status);
             $this->db->join(TBLPREFIX.'users as u','u.user_id =b.user_id','left');
-            $this->db->join(TBLPREFIX.'category as c','c.category_id = b.service_category_id','left');
+            $this->db->join(TBLPREFIX.'category as c','c.category_id = b.category_id','left');
 			$query = $this->db->get();
             $result= $query->result_array();
 			if(!empty ($result) )

@@ -27,7 +27,7 @@
 	
 		function getAllAddress($user_id)
 		{
-			$this->db->select('*');
+			$this->db->select('address_id,user_id,address_type,address_lat,address_lng,city,zip,address1 as address,address_status');
 			$this->db->from(TBLPREFIX.'addresses');
 			$this->db->where('address_status','Active');
 			$this->db->where('user_id',$user_id);
