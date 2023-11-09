@@ -21,7 +21,7 @@
             {
                 if(isset($row['banner_image']) && $row['banner_image']!="")
                 {
-                    $row['banner_image']=base_url()."uploads/banners/".$row['banner_image'];
+                    $row['banner_image']=base_url()."uploads/banner_images/".$row['banner_image'];
                 }
                 $result[$key]=$row;
             }
@@ -40,10 +40,10 @@
                 $this->db->where('user_type','Customer');
                 $query = $this->db->get();
                 $result= $query->row();
-                // if(isset($result->profile_pic) && $result->profile_pic!="")
-                // {
-                //     $result->profile_pic=base_url()."uploads/user/profile_photo/".$result->profile_pic;
-                // }
+                if(isset($result->profile_pic) && $result->profile_pic!="")
+                {
+                    $result->profile_pic=base_url()."uploads/user_profile/".$result->profile_pic;
+                }
                 return $result;
             }
         }
@@ -72,7 +72,7 @@
 		
 		public function ongoingServices($user_id)
 		{
-			$this->db->select("c.category_name,c.category_image,u.profile_id,u.full_name,(DATE_FORMAT(DATE(b.booking_date),'%M/%d/,%Y')) as booking_date,b.time_slot,b.expiry_date,b.booking_status");
+			$this->db->select("c.category_name,c.category_image,u.profile_id,u.profile_pic,u.full_name,(DATE_FORMAT(DATE(b.booking_date),'%M/%d/,%Y')) as booking_date,b.time_slot,b.expiry_date,b.booking_status,b.service_provider_id");
             $this->db->from(TBLPREFIX.'booking b');
 			if($user_id != '')
 			{
@@ -90,6 +90,14 @@
 					if(isset($row['category_image']) && $row['category_image']!="")
 					{
 						$row['category_image']=base_url()."uploads/category_images/".$row['category_image'];
+					}
+					if(isset($row['profile_pic']) && $row['profile_pic']!="")
+					{
+						$row['profile_pic']=base_url()."uploads/user_profile/".$row['profile_pic'];
+					}
+					else
+					{
+						$row['profile_pic']="";
 					}
 					$result[$key]=$row;
 				}
@@ -109,12 +117,13 @@
 				)
 			  ) AS distance';
 									  
-			$this->db->select($distance_parameter.','.'u.full_name,u.address,u.profile_pic');
+			$this->db->select($distance_parameter.','.'u.full_name,u.address,u.profile_id,u.profile_pic,u.category_id,c.category_name');
 			$this->db->from(TBLPREFIX.'users as u');
+			$this->db->join(TBLPREFIX.'category as c','c.category_id=u.category_id','left');
 			$this->db->where('u.user_type','Service Provider');
 			$this->db->where('u.status','Active');
 			$this->db->order_by('user_id', 'desc');
-			$this->db->having("distance <=" ,NEARDISTANCE);
+			// $this->db->having("distance <=" ,NEARDISTANCE);
 			if(isset($limit) && $limit!='')
 			{
 				$this->db->limit($limit);

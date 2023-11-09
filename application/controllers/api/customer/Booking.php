@@ -2209,6 +2209,46 @@ class Booking extends REST_Controller {
 		print_r($response);
 	}
 
-	
+	public function change_status_post()
+	{
+		$substatus="";
+		$token 		= $this->input->post("token");
+		$user_id 		= $this->input->post("user_id");
+		$booking_id 	= $this->input->post("booking_id");
+		$status 		= $this->input->post("status");
+	 
+		if($token == TOKEN)
+		{
+			if($user_id=="" || $booking_id=="" || $status=="")
+			{
+				$response_array['responsecode'] = "400";
+				$response_array['responsemessage'] = 'Please Provide valid data';
+			}
+			else
+			{
+				// echo $this->db->last_query();
+				//print_r($user);
+				$checkBooking=0;
+				
+					$inputData=array(
+						'booking_status' => $status,
+						'booking_sub_status' => $substatus,
+						'service_provider_id'=>5
+					);
+					$this->Common_Model->update_data('booking','booking_id',$booking_id,$inputData);
+					// echo $this->db->last_query();
+					$response_array['responsecode'] = "200";
+					$response_array['responsemessage'] = 'Please Provide valid data';
+			}
+		}
+		else
+		{
+			$response_array['responsecode'] = "201";
+			$response_array['responsemessage'] = 'Token did not match';
+		}
+		$obj = (object)$response_array;//Creating Object from array
+		$response = json_encode($obj);
+		print_r($response);
+	}
 
 }

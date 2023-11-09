@@ -26,15 +26,88 @@ class Dashboard extends REST_Controller {
             else
             { */
                 $userdetails = $this->DashboardModel->getUserDetails($user_id);
-                
-				$banners = $this->DashboardModel->getAllBanners();
+                if(!isset($userdetails->full_name))
+				{
+					$userdetails->full_name="";
+				}
+				if(!isset($userdetails->profile_pic))
+				{
+					$userdetails->profile_pic="";
+				}
+				if(!isset($userdetails->address))
+				{
+					$userdetails->address="";
+				}
+				if(!isset($userdetails->user_lat))
+				{
+					$userdetails->user_lat="";
+				}
 				
+
+				$banners = $this->DashboardModel->getAllBanners();
+				foreach($banners as $key=>$banner)
+				{
+					if($banner['banner_url']=="")
+					{
+						$banner['banner_url']="";
+					}
+					if($banner['banner_start_date']=="")
+					{
+						$banner['banner_start_date']="";
+					}
+					if($banner['banner_end_date']=="")
+					{
+						$banner['banner_end_date']="";
+					}
+
+					$banners[$key]=$banner;
+				}
 				$categories = $this->DashboardModel->getCategory($limit=6);
 				
 				$arrOngoingServices = $this->DashboardModel->ongoingServices($user_id);
-				
+				foreach($arrOngoingServices as $key=>$booking)
+				{
+					$booking['expiry_date']="Oct 16,2023";
+					$booking['expiry_day']="8 days left";
+					if(!isset($booking['full_name']))
+					{
+						$booking['full_name']="";
+					}
+					if(!isset($booking['profile_pic']))
+					{
+						$booking['profile_pic']="";
+					}
+
+					$arrOngoingServices[$key]=$booking;
+				}
+
+
 				$arrServiceGivers = $this->DashboardModel->getNearByServiceGivers(3,$userLat,$userLong);
-				
+				foreach($arrServiceGivers as $key=>$sp)
+				{
+					$sp['total_rating']="120";
+					$sp['rating_avg']="4.5";
+					$sp['isVerified']=true;
+					$sp['isFavourite']=false;
+					if(!isset($sp['distance']))
+					{
+						$sp['distance']="";
+					}
+					if(!isset($sp['address']))
+					{
+						$sp['address']="";
+					}
+					if(!isset($sp['category_name']))
+					{
+						$sp['category_name']="";
+					}
+					if(!isset($sp['profile_pic']))
+					{
+						$sp['profile_pic']="";
+					}
+
+					$arrServiceGivers[$key]=$sp;
+				}
 				//print_r($arrServiceGivers);
                 //$banners = $this->DashboardModel->getAllBanners();
                
