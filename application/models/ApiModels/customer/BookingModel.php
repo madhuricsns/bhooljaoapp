@@ -32,6 +32,50 @@
 			}
 			return $result;
 		}
+		
+		public function getBookingData($booking_id)
+		{
+			$this->db->select('c.category_name,c.category_description,c.category_image,ad.address1 as address,b.booking_date,duration');
+			$this->db->from(TBLPREFIX.'booking as b');
+			$this->db->where('b.booking_id',$booking_id);
+			$this->db->join(TBLPREFIX.'category as c','c.category_id = b.category_id','left');
+			$this->db->join(TBLPREFIX.'addresses as ad','ad.address_id = b.address_id','left');
+			$query = $this->db->get();
+			$result= $query->row();
+			
+			if(isset($result->category_image) && $result->category_image!="")
+			{
+				$result->category_image = base_url()."uploads/category_images/".$result->category_image;
+			}
+					
+			return $result;
+		}
+		
+		public function getServiceDetailsWOPricing($booking_id) 
+		{
+			$this->db->select('s.service_name,bd.option_label,bd.option_value');
+			$this->db->from(TBLPREFIX.'booking as b');
+			$this->db->where('b.booking_id',$booking_id);
+			$this->db->join(TBLPREFIX.'booking_details as bd','bd.booking_id = b.booking_id','left');
+			$this->db->where('bd.option_amount =',0);
+			$this->db->join(TBLPREFIX.'service as s','s.service_id = bd.service_id','left');
+			$query = $this->db->get();
+			$result= $query->result_array();
+			return $result;
+		}
+		
+		public function getServiceDetails($booking_id) 
+		{
+			$this->db->select('s.service_name,bd.option_amount,b.duration,b.admin_commision,b.gst_amount,b.gst_percentage,b.coupon_code,b.coupon_amount,b.coupon_percentage');
+			$this->db->from(TBLPREFIX.'booking as b');
+			$this->db->where('b.booking_id',$booking_id);
+			$this->db->join(TBLPREFIX.'booking_details as bd','bd.booking_id = b.booking_id','left');
+			$this->db->where('bd.option_amount >',0);
+			$this->db->join(TBLPREFIX.'service as s','s.service_id = bd.service_id','left');
+			$query = $this->db->get();
+			$result= $query->result_array();
+			return $result;
+		}
     
 		public function getPromocode($service_id) 
         {
@@ -310,7 +354,7 @@
                 return $query->num_rows();
         }
 
-        public function getServiceDetails($service_id) 
+        /*public function getServiceDetails($service_id) 
         {
             if(!empty($service_id))
             {
@@ -330,7 +374,7 @@
                 return $result;
             }
         }
-
+		*/
         public function getUserDetails($user_id) 
         {
             if(!empty($user_id))
