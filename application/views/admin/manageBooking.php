@@ -53,42 +53,44 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 
 
 
- <form method="get">
- 		
-<div class="form-group row">
-            <div class="col-sm-2">
-            	<label for="Search"> Search</label>
-		<select name="bookingstatus" id="bookingstatus"class="form-control">
-	            <option value="">All</option>
-	            <option value="waiting">Waiting</option>
-	            <option value="accepted">Accepted</option>
-	            <option value="ongoing">Ongoing</option>
-	            <option value="completed">Completed</option>
-	           
-	        </select>
-	    </div>
-	    <div class="col-sm-2">
-	    	<br>
-            	<input type="date" name="datesearch"class="form-control" value="<?php if(isset($datesearch)) echo $datesearch; ?>">
-	    </div>
-	        <div class="col-sm-2">
-	        	<br>
-	        	<div class="row">
-	        <button type="submit" class="btn btn-outline-success" name="Search" id="Search">Search</button>
-	        <a href="<?php echo base_url();?>backend/Booking/manageBooking" class="btn btn-outline-secondary" >Clear</a>
-	    </div>
-	    </div>
-	        
- </div>
+						 <form method="get">
+						 		 <div class="tab-content" >
+						                            <div class="tab-pane fade active show">
+						                                    <!-- <div class="row"> -->
+						                                        <div class="col-sm-12">
+						                                        	<label for="Search">Search</label>
+						         <div class="form-group row">
+						            
+						            	
 
+								<select name="bookingstatus" id="bookingstatus"class="form-control col-sm-2">
+							            <option value="">All</option>
+							            <option value="waiting">Waiting</option>
+							            <option value="accepted">Accepted</option>
+							            <option value="ongoing">Ongoing</option>
+							            <option value="completed">Completed</option>
+							           
+							        </select>&nbsp;&nbsp;
 
+							 <input type="date" name="datesearch"class="form-control col-sm-2" value="<?php if(isset($datesearch)) echo $datesearch; ?>"/>&nbsp;&nbsp;
+							  
+							       
+							        	
+							        	
+							        <button type="submit" class="btn btn-outline-success" name="Search" id="Search"><span><i class="fa fa-search"></i><span></button>&nbsp;&nbsp;
+							        <a href="<?php echo base_url();?>backend/Booking/manageBooking" class="btn btn-outline-secondary" ><span><i class="fa fa-remove"></i></span></a>
+							    
+							    
+							    </div>
+							        
+						 </div>
+						</div>
+						</div>
 
-	        
- 
-    
+						                                   
+						    </form>
+						    <hr>
 
-                                           
-    </form>
 
 						<div class="table-responsive">
 							<div id="basicScenario" class="product-physical"></div>
