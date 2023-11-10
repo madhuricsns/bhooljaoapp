@@ -260,6 +260,92 @@ class Booking extends REST_Controller {
 		print_r($response);
 	}
 	
+	
+	public function details_post()
+	{
+		$token 		= $this->input->post("token");
+		$booking_id = $this->input->post("booking_id");
+		
+		if($token == TOKEN)
+		{
+            if($booking_id =="")
+            {
+                $data['responsemessage'] = 'Please provide valid data ';
+                $data['responsecode'] = "400"; //create an array
+            }
+            else
+            {
+				$arrBookingData = $this->BookingModel->getBookingData($booking_id);
+				
+				$arrServiceDetails = $this->BookingModel->getServiceDetailsWOPricing($booking_id);
+				
+				$arrServiceDetailsPricing = $this->BookingModel->getServiceDetails($booking_id);
+				
+				$total = $admin_commision = $gst_percentage = $gst_amount = $coupon_amount = $coupon_percentage = 0;
+				
+				if(!empty($arrServiceDetailsPricing))
+				{
+					foreach($arrServiceDetailsPricing as $key=>$serviceDetails)
+					{
+						//print_r($serviceDetails);exit;
+						$serviceDetails['SubTotal'] = $serviceDetails['option_amount'] * $serviceDetails['duration'];
+						
+						$arrServiceDetailsPricing[$key] = $serviceDetails;
+						
+						$admin_commision = $serviceDetails['admin_commision'];
+						
+						$gst_percentage = $serviceDetails['gst_percentage'];
+						
+						$gst_amount = $serviceDetails['gst_amount'];
+						
+						$total += $serviceDetails['SubTotal'];
+						
+						$coupon_amount = $serviceDetails['coupon_amount'];
+						
+						$coupon_percentage = $serviceDetails['coupon_percentage'];
+						unset($arrServiceDetailsPricing[$key]['admin_commision']);
+						unset($arrServiceDetailsPricing[$key]['gst_percentage']);
+						unset($arrServiceDetailsPricing[$key]['gst_amount']);
+						unset($arrServiceDetailsPricing[$key]['coupon_code']);
+						unset($arrServiceDetailsPricing[$key]['coupon_amount']);
+						unset($arrServiceDetailsPricing[$key]['coupon_percentage']);
+					}
+					
+					if(isset($coupon_amount) && $coupon_amount != 0)
+					{
+						$total = $total - $coupon_amount;
+					}
+					
+					$arrServiceDetailsPricing['total'] = $total;
+					$arrServiceDetailsPricing['admin_commision'] = $admin_commision;
+					
+					$arrServiceDetailsPricing['gst_percentage'] = $gst_percentage;
+					$arrServiceDetailsPricing['gst_amount'] = $gst_amount;
+					$arrServiceDetailsPricing['coupon_amount'] = $coupon_amount;
+					$arrServiceDetailsPricing['coupon_percentage'] = $coupon_percentage;
+					
+					
+					$arrServiceDetailsPricing['PayAmount'] = $total + $gst_amount + $admin_commision;
+					
+				}
+				
+                $data['responsecode'] = "200";
+                $data['data'] = $arrBookingData;
+                $data['ServiceDetails'] = $arrServiceDetails;
+				$data['ServiceDetailsPricing'] = $arrServiceDetailsPricing;
+                
+			}
+		}
+		else
+		{
+			$data['responsecode'] = "201";
+			$data['responsemessage'] = 'Token did not match';
+		}	
+		$obj = (object)$data;//Creating Object from array
+		$response = json_encode($obj);
+		print_r($response);
+	}
+	
 	/* ------------------------------------------- */ 	
 	
 	
