@@ -346,10 +346,52 @@ class Booking extends REST_Controller {
 		print_r($response);
 	}
 	
+	public function addBooking_post()
+	{
+		$token 		= $this->input->post("token");
+		$user_id	= $this->input->post("user_id");
+		$category_id	= $this->input->post("category_id");
+		$address_id = $this->input->post("address_id");
+		$booking_date = $this->input->post("booking_date");
+		$time_slot = $this->input->post("time_slot");
+		$duration = $this->input->post("duration");
+				
+		if($token == TOKEN)
+		{
+			if($user_id=="")
+            {
+                $data['responsemessage'] = 'Please provide valid data ';
+                $data['responsecode'] = "400"; //create an array
+            }
+            else
+            {
+                $arrBookingData = array(
+								'payment_type'=>'Cash On Delivery',
+								'category_id' => $category_id,
+								'address_id' => $address_id,
+								'booking_date' => $booking_date,
+								'time_slot' => $time_slot,
+								'duration' => $duration,
+								'booking_status' => 'Booked',
+								'dateadded' => date('Y-m-d H:i:s'),
+								);
+				$this->Common_Model->insert_data('booking',$arrBookingData);
+				
+                $data['responsecode'] = "200";
+                $data['data'] = $arrBookingData;
+            }
+		}
+		else
+		{
+			$data['responsecode'] = "201";
+			$data['responsemessage'] = 'Token did not match';
+		}	
+		$obj = (object)$data;//Creating Object from array
+		$response = json_encode($obj);
+		print_r($response);
+	}	
+	
 	/* ------------------------------------------- */ 	
-	
-	
-	
 	public function promocodeList_post()
 	{
 		$token 		= $this->input->post("token");
@@ -789,7 +831,7 @@ class Booking extends REST_Controller {
 		print_r($response);
 	}
 
-	public function addBooking_post()
+	public function addBookingOld_post()
 	{
         ini_set('display_errors', 1);
 		ini_set('display_startup_errors', 1);
