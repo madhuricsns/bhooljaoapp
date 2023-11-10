@@ -160,9 +160,9 @@ class Booking extends REST_Controller {
             }
             else
             {
-				$arrAddress = $this->AddressModel->getAllAddress($user_id);
+				/*$arrAddress = $this->AddressModel->getAllAddress($user_id);
 				$data['responsecode'] = "200";
-                $data['data'] = $arrAddress;
+                $data['data'] = $arrAddress;*/
 			}
 		}
 		else
@@ -260,7 +260,7 @@ class Booking extends REST_Controller {
 		print_r($response);
 	}
 	
-<?php /* ------------------------------------------- */ ?>	
+	/* ------------------------------------------- */ 	
 	
 	
 	
