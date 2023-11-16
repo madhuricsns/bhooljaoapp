@@ -106,6 +106,8 @@ class Booking extends REST_Controller {
 		$address	    = $this->input->post("address");
 		$city	        = $this->input->post("city");
 		$zip		    = $this->input->post("zip");
+		$latitude	    = $this->input->post("latitude");
+		$longitude	    = $this->input->post("longitude");
 		
 		if($token == TOKEN)
 		{
@@ -118,10 +120,12 @@ class Booking extends REST_Controller {
 			{
                 $arrUserData = array(
                         'user_id' => $user_id,
-                        'address_type'=>$type,
-                        'address1'=>$address,
-                        'city'=>$city,
-						'zip'=>$zip,
+                        'address_type'=> $type,
+						'address_lat'=> $latitude,
+						'address_lng'=> $longitude,
+                        'address1'=> $address,
+                        'city'=> $city,
+						'zip'=> $zip,
 						'address_status'=>'Active',
                         'dateadded'=>date('Y-m-d H:i:s')
 					    );
@@ -351,11 +355,13 @@ class Booking extends REST_Controller {
 		$token 		= $this->input->post("token");
 		$user_id	= $this->input->post("user_id");
 		$category_id	= $this->input->post("category_id");
+		$serviceData	= $this->input->post("serviceData");
 		$address_id = $this->input->post("address_id");
 		$booking_date = $this->input->post("booking_date");
 		$time_slot = $this->input->post("time_slot");
 		$duration = $this->input->post("duration");
-				
+		$is_demo = $this->input->post("is_demo");
+		
 		if($token == TOKEN)
 		{
 			if($user_id=="")
@@ -367,6 +373,7 @@ class Booking extends REST_Controller {
             {
                 $arrBookingData = array(
 								'payment_type'=>'Cash On Delivery',
+								'user_id' => $user_id,
 								'category_id' => $category_id,
 								'address_id' => $address_id,
 								'booking_date' => $booking_date,
@@ -375,10 +382,28 @@ class Booking extends REST_Controller {
 								'booking_status' => 'Booked',
 								'dateadded' => date('Y-m-d H:i:s'),
 								);
-				$this->Common_Model->insert_data('booking',$arrBookingData);
+				$booking_id = $this->Common_Model->insert_data('booking',$arrBookingData);
 				
+				if(!empty($serviceData)) 
+				{
+					foreach($serviceData as $service)
+					{
+						$arrBookingDetails = array(
+							'booking_id' => $booking_id,
+							'service_id' => $service['service_id'],
+							'option_label' => $service['option_label'],
+							'option_value' => $service['option_value'],
+							'option_amount' => $service['option_amount'],
+							'dateadded' => date('Y-m-d H:i:s')
+						);
+						
+						$this->Common_Model->insert_data('booking_details',$arrBookingDetails);
+					}
+				}
+		
                 $data['responsecode'] = "200";
-                $data['data'] = $arrBookingData;
+                $data['Booking'] = $arrBookingData;
+				$data['BookingDetails'] = $arrBookingDetails;
             }
 		}
 		else
