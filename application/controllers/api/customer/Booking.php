@@ -401,9 +401,9 @@ class Booking extends REST_Controller {
 						$this->Common_Model->insert_data('booking_details',$arrBookingDetails);
 					}
 				}
-		
+				$bookingData = $this->BookingModel->getBookingDetails($booking_id);
                 $data['responsecode'] = "200";
-                $data['Booking'] = $arrBookingData;
+                $data['Booking'] = $bookingData;
 				
 				$data['BookingDetails'] = $bookingDetails;
             }

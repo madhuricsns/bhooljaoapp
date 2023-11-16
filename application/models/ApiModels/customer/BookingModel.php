@@ -51,6 +51,16 @@
 			return $result;
 		}
 		
+		public function getBookingDetails($booking_id)
+		{
+			$this->db->select('*');
+			$this->db->from(TBLPREFIX.'booking as b');
+			$this->db->where('b.booking_id',$booking_id);
+			$query = $this->db->get();
+			$result= $query->row();
+			return $result;
+		}
+		
 		public function getServiceDetailsWOPricing($booking_id) 
 		{
 			$this->db->select('s.service_name,bd.option_label,bd.option_value');
@@ -299,7 +309,7 @@
             return $tsr;
         }
 
-        public function getBookingDetails($booking_id)
+        public function getBookingDetailsOld($booking_id)
         {
             $this->db->select('b.booking_id,b.service_category_id,b.booking_date,b.time_slot,b.no_of_hourse,b.select_mobility_aid,b.booking_status,b.booking_sub_status,b.doctor_id,b.nurse_id,b.service_provider_id,
             b.pickup_address_id,b.drop_address_id,b.booking_category_id
