@@ -383,7 +383,7 @@ class Booking extends REST_Controller {
 								'dateadded' => date('Y-m-d H:i:s'),
 								);
 				$booking_id = $this->Common_Model->insert_data('booking',$arrBookingData);
-				
+				$bookingDetails = array();
 				if(!empty($serviceData)) 
 				{
 					foreach($serviceData as $service)
@@ -396,6 +396,7 @@ class Booking extends REST_Controller {
 							'option_amount' => $service['option_amount'],
 							'dateadded' => date('Y-m-d H:i:s')
 						);
+						$bookingDetails[] = $arrBookingDetails;
 						
 						$this->Common_Model->insert_data('booking_details',$arrBookingDetails);
 					}
@@ -403,7 +404,8 @@ class Booking extends REST_Controller {
 		
                 $data['responsecode'] = "200";
                 $data['Booking'] = $arrBookingData;
-				$data['BookingDetails'] = $arrBookingDetails;
+				
+				$data['BookingDetails'] = $bookingDetails;
             }
 		}
 		else
