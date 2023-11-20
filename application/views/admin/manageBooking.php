@@ -98,6 +98,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 								<table class="table table-bordered table-striped mb-0" id="datatable-default">
 									<thead>
 										<tr>
+											
 											<th>Order No</th>
 											<th>Booking Date</th>
 											<th>Time</th>
@@ -108,14 +109,15 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 										</tr>
 									</thead>	
 									<tbody>			
-										<?php 
+										<?php $i=1;
 										foreach($bookingList as $booking)
 										{
                                              $booking['booking_date']= new DateTime($booking['booking_date']);
                                             $booking['booking_date']=$booking['booking_date']->format('d-M-Y');
 											?>		
 										<tr>
-												<td><?php echo $booking['booking_id'];?></td> 
+												
+												<td><?php echo $booking['order_no'];?></td> 
 												<td><?php echo $booking['booking_date'];?></td>
 												<td><?php echo $booking['time_slot'];?></td>
 												<td><?php echo $booking['category_name'];?></td>
@@ -125,7 +127,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 													<a href="<?php echo base_url();?>backend/Booking/viewBookingDetails/<?php echo base64_encode($booking['booking_id']);?>"><i data-feather="eye"></i></a>
 											</td>				
 											</tr>											
-											<?php  }?>
+											<?php $i++; }?>
 									</tbody>									
 								</table>
 								<div class="dataTables_paginate paging_simple_numbers" id="datatable-default_paginate" style="margin-top:10px;">

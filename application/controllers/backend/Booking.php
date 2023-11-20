@@ -60,12 +60,13 @@ class Booking extends CI_Controller {
 		$filter=array();
 		//$date_filter=array();
 		 $selectedBookingstatus = $this->input->get('bookingstatus');
+		
 		  $search_date = $this->input->get('datesearch');
 
 			if ($search_date) {
 	            // If a category is selected, filter the records by that Booking
 	            $filter['datesearch']=$search_date;
-	            $data['datesearch']=$search_date;
+	           //  $data['datesearch']=$search_date;
 	        } 
 
 		  if ($selectedBookingstatus) {
@@ -74,12 +75,14 @@ class Booking extends CI_Controller {
         } 
 
            $data['bookingList']=$this->Booking_model->getAllBooking(1,$config["per_page"],$page,$filter);
-        //echo $this->db->last_query();
-		// print_r($data1);
+      //   echo $this->db->last_query();
+		// print_r($filter);
 		//  exit;
 		$this->load->view('admin/admin_header',$data);
 		$this->load->view('admin/manageBooking',$data);
 		$this->load->view('admin/admin_footer');
+		
+		 
 	}
 	
 	public function addMaterial()
