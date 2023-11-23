@@ -36,13 +36,15 @@
 											
 											<div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="banner_image" ><span>*</span> Promocode Code</label>
-                                                <input type="text" class="form-control" id="promocode_code" name="promocode_code"   required value="<?php echo $PromocodeInfo[0]['promocode_code'];?>">
+                                                <label for="banner_image" ><span>*</span> Promocode</label>
+                                                <input type="text" class="form-control" id="promocode_code" name="promocode_code"   required value="<?php echo $PromocodeInfo[0]['promocode_code'];?>" readonly>
 										 <div id="err_promocode_code" class="error_msg"></div>
 												
                                             </div>
                                         </div>
-                                   
+                                    </div>
+
+                                    <div class="row">
                                            	<div class="col-md-6">
                                             <div class="form-group">
                                                 <label ><span>*</span> Promocode Description</label>
@@ -50,9 +52,7 @@
 												 <div id="err_promocode_description" class="error_msg"></div>
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <div class="row">
+                                   
                                         		<div class="col-md-6">
                                             <div class="form-group">
                                                 <label ><span>*</span> Promocode Discount</label>
@@ -60,7 +60,9 @@
 												 <div id="err_promocode_discount" class="error_msg"></div>
                                             </div>
                                         </div>
-                                    
+                                    </div>
+											
+                                           <div class="row">
                                            	<div class="col-md-6">
                                             <div class="form-group">
                                                 <label ><span>*</span> Promocode Type</label>
@@ -73,9 +75,7 @@
                                             </div>
                                         </div>
 
-                                        </div>
-											
-                                           <div class="row">
+                                       
                                         		<div class="col-md-6">
                                             <div class="form-group">
                                                 <label ><span>*</span> Status</label>
@@ -96,7 +96,7 @@
                                     
                             </div>
                         </div>
-                        
+                         </div>
 						</form>
                     </div>
                 </div>

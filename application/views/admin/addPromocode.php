@@ -51,7 +51,7 @@
 											<div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="banner_image" ><span>*</span> Promocode </label>
-                                                <input type="text" class="form-control" id="promocode_code" name="promocode_code" required="" readonly placeholder="Generate Code">
+                                                <input type="text" class="form-control" id="promocode_code" name="promocode_code" required placeholder="Generate Code"readonly>
 										 <div id="err_promocode_code" class="error_msg"></div>
 												
                                             </div>
