@@ -59,11 +59,11 @@ class Promocode extends CI_Controller {
 	{
 		$data['title']='Add Promocode';
 		$data['error_msg']='';
-		$data['serviceList']=$this->Promocode_model->getAllservice(1,"","");
+		//$data['serviceList']=$this->Promocode_model->getAllservice(1,"","");
 				
 		if(isset($_POST['btn_addPromocode']))
 		{
-			$this->form_validation->set_rules('service_id','Service Id','required');
+			
 			$this->form_validation->set_rules('promocode_code','Promocode Code ','required');
 			$this->form_validation->set_rules('promocode_description','Promocode Description','required');
 			$this->form_validation->set_rules('promocode_discount','Promocode Discount','required');
@@ -72,7 +72,7 @@ class Promocode extends CI_Controller {
 			$this->form_validation->set_rules('status','Promocode Status','required');
 			if($this->form_validation->run())
 			{
-				$service_id=$this->input->post('service_id');
+				
 				$promocode_code=$this->input->post('promocode_code');
 				$promocode_description=$this->input->post('promocode_description');
 				$promocode_discount=$this->input->post('promocode_discount');
@@ -86,7 +86,7 @@ class Promocode extends CI_Controller {
 				if($promocode==0)
 				{
 					$input_data = array(
-						'service_id'=>$service_id,
+						
 						'promocode_code'=>$promocode_code,
 						'promocode_description'=>$promocode_description,
 						'promocode_type'=>$promocode_type,

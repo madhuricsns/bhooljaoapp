@@ -50,13 +50,17 @@
 											 -->
 											<div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="banner_image" ><span>*</span> Promocode Code</label>
-                                                <input type="text" class="form-control" id="promocode_code" name="promocode_code"   required value="">
+                                                <label for="banner_image" ><span>*</span> Promocode </label>
+                                                <input type="text" class="form-control" id="promocode_code" name="promocode_code" required="" readonly placeholder="Generate Code">
 										 <div id="err_promocode_code" class="error_msg"></div>
 												
                                             </div>
                                         </div>
-                                    
+                                        <div class="col-sm-6"><br>
+	                                                <button class="btn btn-success" id="generate_code" type="button" required="" name="generate_code" onclick="Random();">Generate Code</button>
+												</div>
+                                     </div>
+                                            <div class="row">
                                            	<div class="col-md-6">
                                             <div class="form-group">
                                                 <label ><span>*</span> Promocode Description</label>
@@ -65,15 +69,8 @@
                                             </div>
                                         </div>
 
-                                        </div>
-                                            <div class="row">
-                                        		<div class="col-md-6">
-                                            <div class="form-group">
-                                                <label ><span>*</span> Promocode Discount</label>
-												 <input type="text" class="form-control" id="promocode_discount" name="promocode_discount"   required value="">
-												 <div id="err_promocode_discount" class="error_msg"></div>
-                                            </div>
-                                        </div>
+                                       
+                                        	
                                     
                                            	<div class="col-md-6">
                                             <div class="form-group">
@@ -86,9 +83,17 @@
 												 <div id="err_promocode_type" class="error_msg"></div>
                                             </div>
                                         </div>
-                                        </div>
+                                         </div>
 											
                                            <div class="row">
+                                        	<div class="col-md-6">
+                                            <div class="form-group">
+                                                <label ><span>*</span> Promocode Discount</label>
+												 <input type="text" class="form-control" id="promocode_discount" name="promocode_discount"   required value="">
+												 <div id="err_promocode_discount" class="error_msg"></div>
+                                            </div>
+                                        </div>
+                                       
                                         		<div class="col-md-6">
                                             <div class="form-group">
                                                 <label ><span>*</span> Status</label>
@@ -121,3 +126,23 @@
             <!-- </div> -->
 	<!-- Container-fluid Ends-->
 </div>
+<script>
+function Random() {
+        var rnd = Math.random().toString(36).substring(3,9).toUpperCase();
+        document.getElementById('promocode_code').value = rnd;
+    }
+</script>
+<script>  
+$(document).ready(function() {  
+$('#generate_code').click(function() {  
+ var number = 1 + Math.floor(Math.random() * 6);
+  $('#promocode_code').text(number);
+// Select the text box element using jQuery selectors  
+var nameTextBox = $('#promocode_code');  
+// Call the val() method on the selected element to retrieve its value  
+var name = number.val();  
+// Display the retrieved value  
+alert(name);  
+});  
+});  
+</script>  
