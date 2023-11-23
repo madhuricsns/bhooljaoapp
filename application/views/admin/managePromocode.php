@@ -57,7 +57,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 									<thead>
 										<tr>
 											<th>Sr.No</th>
-											<th>Service Name</th>	
+												
 											<th>Promocode Code</th>
 											<th>Promocode Discription</th>
 											<th>Promocode Type</th>
@@ -74,7 +74,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 											?>		
 										<tr>
 											<td><?php echo $i;?></td>
-											<td><?php echo $promocode['service_name'];?></td>
+											
 												<td><?php echo $promocode['promocode_code'];?></td>
 												
 												<td><?php echo $promocode['promocode_description'];?></td>

@@ -32,22 +32,7 @@
                             <div class="tab-pane fade active show">
                                      <div class="col-sm-12">
                                         	<div class="row">
-                                        		<div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="banner_title" ><span>*</span> Select Service</label>
-                                              <select name="service_id" id="service_id" class="form-control" required>
-													<option value="">Select Service</option>
-													<?php
-													foreach($serviceList as $service){
-
-													?>
-<option value="<?php echo $service['service_id'] ?>"<?php if($PromocodeInfo[0]['service_id']==$service['service_id']){ echo 'selected="selected"';}?>><?php echo $service['service_name'] ?></option>
-													<?php } ?>
-
-												</select>
-												 <div id="err_service_id" class="error_msg"></div>
-                                            </div>
-                                        </div>
+                                        	
 											
 											<div class="col-md-6">
                                             <div class="form-group">
@@ -57,8 +42,7 @@
 												
                                             </div>
                                         </div>
-                                    </div>
-                                            <div class="row">
+                                   
                                            	<div class="col-md-6">
                                             <div class="form-group">
                                                 <label ><span>*</span> Promocode Description</label>
@@ -66,6 +50,9 @@
 												 <div id="err_promocode_description" class="error_msg"></div>
                                             </div>
                                         </div>
+                                    </div>
+
+                                    <div class="row">
                                         		<div class="col-md-6">
                                             <div class="form-group">
                                                 <label ><span>*</span> Promocode Discount</label>
@@ -73,9 +60,7 @@
 												 <div id="err_promocode_discount" class="error_msg"></div>
                                             </div>
                                         </div>
-                                    </div>
-											
-                                           <div class="row">
+                                    
                                            	<div class="col-md-6">
                                             <div class="form-group">
                                                 <label ><span>*</span> Promocode Type</label>
@@ -87,6 +72,10 @@
 												 <div id="err_promocode_type" class="error_msg"></div>
                                             </div>
                                         </div>
+
+                                        </div>
+											
+                                           <div class="row">
                                         		<div class="col-md-6">
                                             <div class="form-group">
                                                 <label ><span>*</span> Status</label>
