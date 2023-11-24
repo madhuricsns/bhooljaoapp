@@ -16,7 +16,7 @@ class Notifications extends CI_Controller {
 		$this->load->model('Common_Model');
 	}
 	
-	public function index()
+	public function manageNotifications()
 	{
 		$data['title']='Manage Notifications';
 		
@@ -60,14 +60,16 @@ class Notifications extends CI_Controller {
 		$this->load->view('admin/admin_footer');
 	}
 	
-	public function addNotification()
+	public function addnotification()
 	{
 		$data['title']='Add Notification';
 		$data['error_msg']='';
-		$data['userinfo']=$this->Notification_model->getAllUserlist(1);
-		/*echo "<pre>";
-		print_r($data['userinfo']);
-		exit();*/
+		//$data['User'] = $this->Notification_model->getAllUserlist();
+		
+		//	$data['userinfo']=$this->Notification_model->getAllUserlist(1);
+		// echo "<pre>";
+		// print_r($data);
+		// exit();
 
 		if(isset($_POST['btn_addnotification']))
 		{ 
@@ -148,5 +150,14 @@ class Notifications extends CI_Controller {
 		$this->load->view('admin/admin_footer');
 	}
 	
-	
+
+      public function fetch_user()
+ {
+  if($this->input->post('select_type'))
+  {
+   echo $this->Notification_model->getAllUserlist($this->input->post('select_type'));
+
+   }
+}
+
 }

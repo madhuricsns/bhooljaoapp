@@ -66,7 +66,7 @@ Class Booking_model extends CI_Model {
     public function getServiceproviderDetails($user_id)
 	{
 		$this->db->select('*');
-		$this->db->where('user_id',$user_id);
+		$this->db->where('user_id',$user_id );
 		$query = $this->db->get(TBLPREFIX."users");
 		//echo $this->db->last_query();exit;
 		

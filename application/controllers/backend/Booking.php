@@ -11,6 +11,7 @@ class Booking extends CI_Controller {
 		$this->load->helper('email');
 		$this->load->library('session');
 		$this->load->model('adminModel/Booking_model');
+		$this->load->model('adminModel/User_model');
 		$this->load->model('Common_Model');
 		
 	}
@@ -284,4 +285,23 @@ class Booking extends CI_Controller {
 			redirect(base_url().'backend/Material/manageMaterial');
 		}
 	}
+
+public function viewBookingDetails()
+	{
+		$data['title']='Booking Details';
+	
+		$booking_id=base64_decode($this->uri->segment(4));
+        
+		$data['orderInfo']=$this->Booking_model->getSingleBookingInfo($booking_id,1);
+		//echo $this->db->last_query();exit;
+		 $this->load->view('admin/admin_header',$data);
+		// $this->load->view('admin/addMaterial',$data);
+		$this->load->view('admin/viewBookingDetails',$data);
+		$this->load->view('admin/admin_footer');
+	}
+
+
+
+
+
 }

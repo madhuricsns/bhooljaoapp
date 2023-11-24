@@ -38,15 +38,15 @@ Class Promocode_model extends CI_Model {
 	public function getAllPromocode($res,$per_page,$page)
 	{
 		
-		$this->db->select('p.*,s.service_name');
-		$this->db->join(TBLPREFIX.'service as s','s.service_id=p.service_id','left');
+		$this->db->select('*');
+		//$this->db->join(TBLPREFIX.'service as s','s.service_id=p.service_id','left');
 		$this->db->order_by('promocode_id','DESC');
 		if($per_page!="")
 		{
 			$this->db->limit($per_page,$page);
 		}
 
-		$result = $this->db->get(TBLPREFIX.'promo_code as p');
+		$result = $this->db->get(TBLPREFIX.'promo_code');
 		if($res == 1)
 			return $result->result_array();
 		else

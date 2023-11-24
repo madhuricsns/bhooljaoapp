@@ -226,8 +226,29 @@ $('#addRow').on('click', function () {
   rowIdx--;
   });
 
+$(document).ready(function(){
 
+    $("#select_type").change(function () {                            
+       var category= $('select[name=select_type]').val() // Here we can get the value of selected item
+       //alert(category);
+       if (category) {
 
+        $.ajax({
+            type:'POST',
+            url:"<?php echo base_url(); ?>backend/Notifications/fetch_user",
+            data:'user_type='+category,
+            success:function(html){
+                $('#user').html(data);
+            }
+            
+        })
+       }
+        else
+  {
+   $('#user').html('<option value="">Select Users</option>');
+}
+    }); 
+});
 
 
 

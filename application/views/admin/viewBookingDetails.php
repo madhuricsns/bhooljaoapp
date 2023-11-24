@@ -70,11 +70,11 @@
 												echo $booking_date;?>
 												</p>
 												<p><i class="fa fa-clock-o"></i> <?php echo $orderInfo[0]['time_slot'];?></p>
-												<!-- <p> <i class="fa fa-map-marker"></i> Pickup : <?php echo $orderInfo[0]['pickup_location'];?> </p> -->
-												<!-- <p> <i class="fa fa-map-marker"></i> Drop : <?php echo $orderInfo[0]['drop_location'];?> </p> -->
+												<!-- <p> <i class="fa fa-map-marker"></i> Pickup : <?php //echo $orderInfo[0]['pickup_location'];?> </p> -->
+												<!-- <p> <i class="fa fa-map-marker"></i> Drop : <?php //echo $orderInfo[0]['drop_location'];?> </p> -->
 											</div>
 											<div class="col-sm-3" style="text-align: right;">
-												<label>Rs.<?php echo $orderInfo[0]['order_place_amt'];?></label>
+												<label>Rs.<?php echo $orderInfo[0]['total_booking_amount'];?></label>
 											</div>
                                             </div> 
                                             
@@ -108,11 +108,7 @@
 										}
 									}
 									// echo $orderInfo[0]['order_status'];
-									if($orderInfo[0]['order_status']=='pending')
-									{
-										echo "unpaid";
-									}
-									else if($orderInfo[0]['order_status']=='succeeded') { echo "paid"; }
+									
 									?></button>
 							</h5>
                             </div>
@@ -129,13 +125,19 @@
                                         <div class="booking_details row">
 										
 											<div class="col-sm-12 payment-dtl">
-												<p><strong>Service Charges</strong> <?php /* echo "(".$orderInfo[0]['no_of_hourse']."Hrs";?> X <?php echo "HK$".$orderInfo[0]['amount'].")"; */ ?>
-												<span>Rs.<?php echo $orderInfo[0]['total_order_amount'];?></span>	
+												<p><strong><b>Total Amount</b></strong>  <?php //echo "HK$".$orderInfo[0]['booking_amount'].")";  ?>
+												<span>Rs.<?php echo $orderInfo[0]['booking_amount'];?></span>	
 												</p>
 												<p><strong>Discount</strong>
 												<?php if(isset($orderInfo[0]['coupon_code']) && $orderInfo[0]['coupon_code']!="") echo "(Coupon Code : ".$orderInfo[0]['coupon_code'].")";?> 
 												 <span>Rs.<?php echo $orderInfo[0]['coupon_amount'];?></span><br></p>
-												<p><strong>Amount to pay</strong><span><strong>Rs.<?php echo $orderInfo[0]['order_place_amt'];?></strong></span></p>
+												 <p><strong>Service tax</strong>
+												<?php if(isset($orderInfo[0]['admin_commision']) && $orderInfo[0]['admin_commision']!="") //echo "(Coupon Code : ".$orderInfo[0]['coupon_code'].")";?> 
+												 <span>Rs.<?php echo $orderInfo[0]['admin_commision'];?></span><br></p>
+												  <p><strong>GST 18%</strong>
+												<?php if(isset($orderInfo[0]['gst_amount']) && $orderInfo[0]['gst_amount']!="")// echo "(Coupon Code : ".$orderInfo[0]['gst_amount'].")";?> 
+												 <span>Rs.<?php echo $orderInfo[0]['gst_amount'];?></span><br></p>
+												<p><strong><b>Paid Amount</b></strong><span><strong>Rs.<?php echo $orderInfo[0]['total_booking_amount'];?></strong></span></p>
 											</div>
 											
 										    </div>
@@ -202,7 +204,7 @@
 										
 											<div class="col-sm-12">
 												<?php
-												if($orderInfo[0]['service_provider_id']>0 && $orderInfo[0]['service_provider_id']=='waiting'){
+												if($orderInfo[0]['service_provider_id']>0 ){
 												$user=$this->Booking_model->getServiceproviderDetails($orderInfo[0]['service_provider_id'],1);
 												?>
 													<h4>
