@@ -124,7 +124,35 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<td><?php echo $booking['full_name'];?></td>
 												<td><?php echo $booking['booking_status'];?></td>
 												<td class="actions">
-													<a href="<?php echo base_url();?>backend/Booking/viewBookingDetails/<?php echo base64_encode($booking['booking_id']);?>"><i data-feather="eye"></i></a>
+							<?php
+												
+							// 					 if(isset($booking)&& count($booking)>0)
+							// { 
+							// 	if (array_search('waiting', array_column($booking, 'user-check')) !== FALSE) 
+							// 	{ 
+									
+							// 		echo 'style="display:none;"'; 
+							//     } 
+							// 	else 
+							// 	{ 
+							// 		echo 'style="display:block;"';
+							// 	}
+							// } service_provider_id
+							?>
+
+<?php   if ($booking['booking_status']='waiting' && $booking['service_provider_id']<1) {
+	?>
+										<a href="<?php echo base_url();?>backend/Booking/AssingServiceProvider/<?php echo base64_encode($booking['booking_id']);?>"><i data-feather="user-check"></i></a>
+<?php } else{}?>
+
+
+
+
+													<a href="<?php echo base_url();?>backend/Booking/viewBookingDetails/<?php echo base64_encode($booking['booking_id']);?>"><i data-feather="eye"></i>
+
+													</a>
+														
+
 											</td>				
 											</tr>											
 											<?php $i++; }?>
