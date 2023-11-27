@@ -300,6 +300,67 @@ $('#btn_addmaterial').click(function(){
 });
 /* end add material */
 
+$('#btn_addPromocode').click(function(){ 
+	alert();
+	// var service_id=$("#service_id").val();
+	var promocode_code=$("#promocode_code").val();
+	var promocode_description=$("#promocode_description").val();
+	var promocode_discount=$("#promocode_discount").val();
+	var promocode_type=$("#promocode_type").val();
+	var status=$("#status").val();
+	
+	
+	// $("#err_service_id").html('');
+	$("#err_promocode_code").html('');
+	$("#err_promocode_description").html('');
+	$("#err_promocode_discount").html('');
+	$("#err_promocode_type").html('');
+	$("#err_status").html('');
+	
+	var flag=1;
+	
+	// if(service_id=="")
+	// {
+	// 	$("#err_service_id").html('Select Service.');
+	// 	flag=0;
+	// }
+	if(promocode_code=="")
+	{
+		$("#err_promocode_code").html('Enter Promocode.');
+		flag=0;
+	}
+	if(promocode_description=="")
+	{
+		$("#err_promocode_description").html('Enter Promocode Description.');
+		flag=0;
+	}
+	if(promocode_discount=="")
+	{
+		$("#err_promocode_discount").html('Enter Discount.');
+		flag=0;
+	}
+	if(promocode_type=="")
+	{
+		$("#err_promocode_type").html('Select Promocode Type.');
+		flag=0;
+	}
+	if(status=="")
+	{
+		$("#err_status").html('Please select status.');
+		flag=0;
+	}
+	
+	if(flag==1)
+	{	
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+});
+
+/* end of code for adding promocode */
 
 /* valdiation for add  city*/
 $('#btn_addcity').click(function(){
