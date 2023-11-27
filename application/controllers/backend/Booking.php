@@ -149,6 +149,68 @@ class Booking extends CI_Controller {
 		$this->load->view('admin/admin_footer');
 	}
 	
+	public function AssingServiceProvider()
+	{
+		$data['title']='Assing Service Provider';
+		$data['error_msg']='';
+		$data['usersList']=$this->Booking_model->getAllUsers(1,"","");
+			$booking_id=base64_decode($this->uri->segment(4));
+			if ($booking_id) {
+				$bokingInfo=$this->Booking_model->getSingleBookingInfo($booking_id,0);
+			
+			if($bokingInfo>0)
+			{
+				$data['bokingInfo'] = $this->Booking_model->getSingleBookingInfo($booking_id,1);
+				if(isset($_POST['btn_upAssing']))
+				{
+				
+			        $this->form_validation->set_rules('service_provider','Service Provider ','required');
+					if($this->form_validation->run())
+					{
+						$servicepro=$this->input->post('service_provider');
+						// $status=$this->input->post('status');
+							
+						$input_data = array(
+                            'service_provider_id'=>$servicepro
+                         );
+					// echo"<pre>";
+					// print_r($input_data);
+					// exit();
+						$updatedata = $this->Booking_model->uptdateAssingServiceprovider($input_data,$booking_id);
+                       
+                       // echo $this->db->last_query();exit;
+						if($updatedata)
+						{	
+							$this->session->set_flashdata('success','Assing Service Provider successfully.');
+							redirect(base_url().'backend/Booking/manageBooking');	
+						}
+						else
+						{
+							$this->session->set_flashdata('error','Error while updating Zone.');
+							redirect(base_url().'backend/Booking/AssingServiceProvider/'.base64_encode($user_id));
+						}	
+					}
+					else
+					{
+						$this->session->set_flashdata('error',$this->form_validation->error_string());
+						redirect(base_url().'backend/Booking/AssingServiceProvider/'.base64_encode($user_id));
+					}
+				}
+			}
+			else
+			{
+				$data['error_msg'] = 'Not found.';
+			}
+		}
+		
+		$this->load->view('admin/admin_header',$data);
+		$this->load->view('admin/update_AssingServicepro',$data);
+		$this->load->view('admin/admin_footer');
+					// echo"<pre>";
+					// print_r($bokingidInfo);
+					// exit();
+			}
+
 	public function updateMaterial()
 	{
 		$data['title']='Update Material';
