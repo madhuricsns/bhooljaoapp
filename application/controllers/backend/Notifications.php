@@ -64,25 +64,24 @@ class Notifications extends CI_Controller {
 	{
 		$data['title']='Add Notification';
 		$data['error_msg']='';
-		//$data['User'] = $this->Notification_model->getAllUserlist();
-		
-		//	$data['userinfo']=$this->Notification_model->getAllUserlist(1);
+		$data['UserList'] = $this->Notification_model->getAllUserlist(1,'Customer');
+		$data['ServiceProviderList']=$this->Notification_model->getAllUserlist(1,'Service Provider');
 		// echo "<pre>";
 		// print_r($data);
 		// exit();
 
 		if(isset($_POST['btn_addnotification']))
 		{ 
-			$this->form_validation->set_rules('notification_name','Notification Name','required');
-			$this->form_validation->set_rules('notification_description','Notification Description','required');
+			$this->form_validation->set_rules('title','Notification Name','required');
+			$this->form_validation->set_rules('message','Notification Description','required');
 			
-			$this->form_validation->set_rules('notification_type','Notification Type','required');
+			$this->form_validation->set_rules('select_type','Notification Type','required');
 			if($this->form_validation->run())
 			{
-				$notification_name=$this->input->post('notification_name');
-				$notification_description=$this->input->post('notification_description');
-				$type=$this->input->post('notification_type');
-				//$description=$this->input->post('description');
+				$notification_name=$this->input->post('title');
+				$notification_description=$this->input->post('message');
+				$type=$this->input->post('select_type');
+				$user_ids=$this->input->post('user_ids');
 				if($type==0){
 					$dbType = "All";
 					$dbUserId = 0;
@@ -90,57 +89,73 @@ class Notifications extends CI_Controller {
 					$dbType = "User";
 					$dbUserId = $type;
 				}
-				
-					$input_data = array(
-						'notification_name'=>trim($notification_name),
-						'notification_description'=>trim($notification_description),
-						'type'=>$dbType,
-						'userid'=>$dbUserId,
-						'dateupdated' => date('Y-m-d H:i:s'),
-						'dateadded' => date('Y-m-d H:i:s')
-						);
-					/*echo"<pre>";
-					print_r($input_data);
-					exit();*/
 
-					$notification_id = $this->Notification_model->insert_notification($input_data);
-					
-					if($notification_id)
-					{	
-						if($dbType == 'All')
-						{
-							$usersToNotifications = $this->User_model->getAllUsersFcmToken();
-							if(!empty($usersToNotifications))
-							{
-								foreach($usersToNotifications as $userFcm)
-								{
-									if($userFcm['fcm_token'] != '')
-									{
-										$arrGcmID[] .= $userFcm['fcm_token'];
-									}
-								}
-							}
-							$this->Common_Model->sendexponotification($notification_name, $notification_description, $arrGcmID);
-						}
-						else if($dbType == 'User') 
-						{
-							$userFcm = $this->User_model->getUserFcmToken($dbUserId);
-							
-							$arrGcmID[] = $userFcm->fcm_token;
-							
-							$this->Common_Model->sendexponotification($notification_name, $notification_description, $arrGcmID);
-						}
-						
-						$this->session->set_flashdata('success','Notification added successfully.');
-				
-						redirect(base_url().'backend/Notifications/index');	
-					}
-					else
+				if(!empty($user_ids))
+				{
+					foreach($user_ids as $user_id)
 					{
-						$this->session->set_flashdata('error','Error while adding Notification.');
+						$user=$this->Notification_model->getUserDetails(1,$user_id);
 
-						redirect(base_url().'backend/Notifications/addNotification/');
+						$input_data = array(
+							'noti_title'=>trim($notification_name),
+							'noti_message'=>trim($notification_description),
+							'noti_user_type'=>$type,
+							'noti_user_id'=>$user_id,
+							'noti_gcmID'=>$user->user_fcm,
+							'dateadded' => date('Y-m-d H:i:s')
+							);
+						
+						$notification_id = $this->Notification_model->insert_notification($input_data);
+						// echo $this->db->last_query();
+						// $this->Common_Model->SendNotification($notification_name, $notification_description, $user->user_fcm);
 					}
+					// exit;
+				}
+					$this->session->set_flashdata('success','Notification added successfully.');
+			
+					redirect(base_url().'backend/Notifications/manageNotifications');	
+
+					// if($notification_id)
+					// {	
+					// 	if($dbType == 'All')
+					// 	{
+					// 		$usersToNotifications = $this->User_model->getAllUsersFcmToken();
+					// 		if(!empty($usersToNotifications))
+					// 		{
+					// 			foreach($usersToNotifications as $userFcm)
+					// 			{
+					// 				if($userFcm['fcm_token'] != '')
+					// 				{
+					// 					$arrGcmID[] .= $userFcm['fcm_token'];
+					// 				}
+					// 			}
+					// 		}
+					// 		$this->Common_Model->sendexponotification($notification_name, $notification_description, $arrGcmID);
+					// 	}
+					// 	else if($dbType == 'User') 
+					// 	{
+					// 		$userFcm = $this->User_model->getUserFcmToken($dbUserId);
+							
+					// 		$arrGcmID[] = $userFcm->fcm_token;
+							
+					// 		$this->Common_Model->sendexponotification($notification_name, $notification_description, $arrGcmID);
+					// 	}
+						
+					// 	$this->session->set_flashdata('success','Notification added successfully.');
+				
+					// 	redirect(base_url().'backend/Notifications/index');	
+					// }
+					// else
+					// {
+					// 	$this->session->set_flashdata('error','Error while adding Notification.');
+
+					// 	redirect(base_url().'backend/Notifications/addNotification/');
+					// }
+			}
+			else
+			{
+				$this->session->set_flashdata('error','Error while adding Notification.');
+				redirect(base_url().'backend/Notifications/addNotification/');
 			}
 
 		}

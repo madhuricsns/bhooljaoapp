@@ -63,7 +63,12 @@
 													<option value="Inactive">Inactive</option>
 												</select>
                                             </div>
-											</div>
+
+											
+
+										</div>
+
+										
                                             <div class="pull-right">
 						                            <button type="submit" class="btn btn-primary" name="btn_addcategory" id="btn_addcategory">Add</button>
 													<a href="<?php echo base_url();?>backend/Category/manageCategory" class="btn btn-primary" >Cancel</a>

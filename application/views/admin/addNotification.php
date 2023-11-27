@@ -26,7 +26,7 @@
 							<?php echo $this->session->flashdata('error_msg');?>
 						</div>
 						<?php }?>
-						<form class="needs-validation" name="frm_addmaterial" id="frm_addmaterial" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/Material/addMaterial">
+						<form class="needs-validation" name="frm_addmaterial" id="frm_addmaterial" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/Notifications/addnotification">
                         <div class="tab-content" >
                             <div class="tab-pane fade active show">
                                    
@@ -56,7 +56,7 @@
                                         	 <div class="row">
                                         	 	
 											<div class="col-md-6" >
-                                            <div class="form-group">
+                                            <div class="form-group1">
                                                 <label ><span>*</span>Select Type</label>
 												<select name="select_type" id="select_type" class="form-control" required >
 													<option value="">Select Type</option>
@@ -66,21 +66,42 @@
                                                 <div id="err_status" class="error_msg"></div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6" >
-                                            <div class="form-group">
-                                                <label ><span>*</span>Users</label>
-												<select name="usertype" id="user" class="form-control" required >
-													<option value="">Select Users</option>
-													
+
+                                        <div class="form-group col-md-6" id="customerDiv" style="display:none">
+                                                <label ><span>*</span>Customer</label><br>
+												<select name="user_ids[]" id="user" class="form-control js-example-basic-multiple"  data-placeholder="Select Customers"  multiple="multiple">
+													<option value="">Select Customer</option>
+													<?php
+													// print_r($UserList);
+														foreach($UserList as $user)
+														{
+													?>
+													<option value="<?php echo $user['user_id']?>"><?php echo $user['full_name']?></option>
+													<?php	}
+													?>
 												</select>
                                                 <div id="err_status" class="error_msg"></div>
-                                            </div>
+                                        </div>
+
+										<div class="form-group col-md-6" style="display:none" id="serviceproviderDiv" >
+                                                <label ><span>*</span>Service Provider</label><br>
+												<select name="user_ids[]" id="user1" class="form-control js-example-basic-multiple" data-placeholder="Select Service Providers" multiple="multiple">
+													<option value="">Select Service Provider</option>
+													<?php
+													// print_r($UserList);
+													foreach($ServiceProviderList as $sp)
+													{
+													?>
+													<option value="<?php echo $sp['user_id']?>"><?php echo $sp['full_name']?></option>
+													<?php	} ?>
+												</select>
+                                                <div id="err_status" class="error_msg"></div>
                                         </div>
                               
                                     </div>
 											<div class="pull-right">
-						                            <button type="submit" class="btn btn-primary" name="btn_addmaterial" id="btn_addmaterial">Add</button>
-													<a href="<?php echo base_url();?>backend/Material/manageMaterial" class="btn btn-primary" >Cancel</a>
+						                            <button type="submit" class="btn btn-primary" name="btn_addnotification" id="btn_addnotification">Add</button>
+													<a href="<?php echo base_url();?>backend/Notifications/manageNotifications" class="btn btn-primary" >Cancel</a>
                                             </div>
                                         </div>
                                     </div>

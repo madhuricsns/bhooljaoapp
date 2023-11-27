@@ -57,10 +57,10 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 									<thead>
 										<tr>
 											<th>Sr.No</th>	
+											<th>Date</th>
 											<th>Title</th>
 										    <th>Description</th> 
 											<th>Customer/Service Provider</th>
-											<th>Date</th>
 											<th>Actions</th>	
 										</tr>
 									</thead>	
@@ -73,10 +73,10 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 										?>		
 										<tr>
 												<td><?php echo $i;?></td>
+												<td><?php echo $noti['dateadded'];?></td>
 												<td><?php echo $noti['noti_title'];?></td>
 												 <td><?php echo $noti['noti_message'];?></td> 
-												<td><?php echo $noti['noti_user_type'];?></td>
-												<td><?php echo $noti['dateadded'];?></td>
+												<td><?php echo $noti['full_name'];?></td>
 												<td class="actions">                     
 													<!-- <a href="<?php //echo base_url();?>backend/Material/updateMaterial/<?php //echo base64_encode($material['material_id']);?>"><i data-feather="edit"></i></a> -->
 													<a href="<?php echo base_url();?>backend/Notification/deletenotification/<?php echo base64_encode($noti['noti_id']);?>" onclick="javascript:return chk_isDeleteComnfirm();">

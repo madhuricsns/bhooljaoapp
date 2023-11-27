@@ -35,6 +35,7 @@ Class Service_model extends CI_Model {
 		$this->db->select('s.*,c.category_name');
 		$this->db->join(TBLPREFIX.'category as c','c.category_id=s.category_id','left');
 
+		$this->db->where('s.parent_service_id','0');
 		$this->db->order_by('s.service_id','DESC');
 		if($per_page!="")
 		{
@@ -42,7 +43,7 @@ Class Service_model extends CI_Model {
 		}
 
 		$result = $this->db->get(TBLPREFIX.'service as s');
-		//echo $this->db->last_query();exit;
+		// echo $this->db->last_query();exit;
 		if($res == 1){
 			$response= $result->result_array();
 			foreach($response as $key=>$row)

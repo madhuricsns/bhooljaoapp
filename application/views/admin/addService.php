@@ -56,23 +56,38 @@
                                             </div>
 											
 											<div class="form-group row">
-                                                <label for="email_address" class="col-xl-3 col-md-4"><span>*</span> Description</label>
+                                                <label for="description" class="col-xl-3 col-md-4"><span>*</span> Description</label>
                                                <textarea name="description" id="description" class="form-control  col-md-6" required></textarea>
                                             </div>
                                            
                                             <div class="form-group row">
-                                                <label for="mobile_number" class="col-xl-3 col-md-4"><span>*</span> Min-Price</label>
-                                                <input type="text" name="minprice" id="minprice" class="form-control  col-md-6"required >
+                                                <label for="mobile_pricenumber" class="col-xl-3 col-md-4"><span>*</span> Price</label>
+                                                <input type="text" name="price" id="price" class="form-control  col-md-6" required >
                                             </div>
-                                             <div class="form-group row">
-                                                <label for="mobile_number" class="col-xl-3 col-md-4"><span>*</span> Max-Price</label>
-                                                <input type="text" name="maxprice" id="maxprice" class="form-control  col-md-6"required >
+											<div class="form-group row">
+                                                <label for="discount_price" class="col-xl-3 col-md-4"><span>*</span> Discount Price</label>
+                                                <input type="text" name="discount_price" id="discount_price" class="form-control  col-md-6"required >
                                             </div>
 
-                                            <div class="form-group row">
+											<div class="form-group row">
+                                                <label for="offer_percentage" class="col-xl-3 col-md-4"><span>*</span> Offer Percentage</label>
+                                                <input type="text" name="offer_percentage" id="offer_percentage" class="form-control  col-md-6"required >
+                                            </div>
+
+											<div class="form-group row">
+                                                <label for="demo_price" class="col-xl-3 col-md-4"><span>*</span> Demo Price</label>
+                                                <input type="text" name="demo_price" id="demo_price" class="form-control  col-md-6" required >
+                                            </div>
+											<div class="form-group row">
+                                                <label for="demo_discount_price" class="col-xl-3 col-md-4"><span>*</span> Demo Discount Price</label>
+                                                <input type="text" name="demo_discount_price" id="demo_discount_price" class="form-control  col-md-6"required >
+                                            </div>
+
+
+                                            <!-- <div class="form-group row">
                                                 <label for="option_label" class="col-xl-3 col-md-4"><span>*</span> Option Label Name</label>
                                                 <input type="text" name="option_label" id="option_label" class="form-control  col-md-6"required >
-                                            </div>
+                                            </div> -->
                                             
                                             <div class="form-group row" id="show-div">
 												<label class="col-xl-3 col-md-4"><span>*</span> Enter Options</label>
@@ -80,6 +95,24 @@
 												<table class="table1 col-md-6 " style="width:100%;max-width: 100%;border-collapse: collapse;    display: table;">
 												
 													<tbody id="tbody">
+
+														<tr>
+															<td> <input type="text" class="form-control option_label" id="option_label" name="option_label[]" placeholder="Enter Label Name"  >
+																<div id="err_option_label" class="error_msg err_option_label"></div>
+															</td>
+                                                            <td> <select class="form-control " id="option_type" name="option_type" required>
+																 <option value="">Select Option Type</option>
+																 <option value="Dropdown">Dropdown</option>
+																 <option value="Input">Input</option>
+																 <option value="Radio">Radio</option>
+																</select>
+																<div id="err_option_type" class="error_msg err_option_type"></div>
+															</td>
+															<td  class="text-center"><!--<button class="btn btn-md btn-success addLabel" id="addLabel" type="button">
+															 <i class="fa fa-plus"></i>Add Label
+															</button> --> </td>
+														</tr>
+
 														<tr>
 															<!-- <td  class="row-index text-center"></td> -->
 															<td> <input type="text" class="form-control optionsArr" id="optionsArr" name="optionsArr[]" placeholder="Enter Option"  >
@@ -88,23 +121,22 @@
                                                             <td> <input type="text" class="form-control amountArr" id="amountArr" name="amountArr[]" placeholder="Enter Amount"  >
 																<div id="err_amountArr" class="error_msg err_amountArr"></div>
 															</td>
-															<td  class="text-center"><button class="btn btn-md btn-success" id="addBtn" type="button">
-															<i class="fa fa-plus"></i>
-															</button></td>
+															 <td  class="text-center"><button class="btn btn-md btn-success" id="addBtn" type="button">
+															<i class="fa fa-plus"></i> 
+															</button> </td>
 														</tr>
 													</tbody>
 													
 												</table>
 											</div>
 
-                                            <div class="form-group row" id="show-div">
+                                            <!-- <div class="form-group row" id="show-div">
 												<label class="col-xl-3 col-md-4"><span>*</span> Add More option</label>
                                                 
 												<table class="table1 col-md-6 " style="width:100%;max-width: 100%;border-collapse: collapse;    display: table;">
 												
 													<tbody id="tbodyLabel">
 														<tr>
-															<!-- <td  class="row-index text-center"></td> -->
 															<td> <input type="text" class="form-control labelArr" id="labelArr" name="labelArr[]" placeholder="Enter Label"  >
 																<div id="err_labelArr" class="error_msg err_labelArr"></div>
 															</td>
@@ -118,7 +150,7 @@
 													</tbody>
 													
 												</table>
-											</div>
+											</div> -->
                                            
                                             <div class="form-group row">
                                             	<div class="offset-xl-3 offset-sm-4">

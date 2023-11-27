@@ -23,7 +23,6 @@ class Service extends CI_Controller {
 	{
 		$data['title']='Manage Sub Category';
 
-		
 		$data['usercnt']=$this->Service_model->getAllService(0,"","");
 		
 		$config = array();
@@ -74,8 +73,8 @@ class Service extends CI_Controller {
 			$this->form_validation->set_rules('service_name', 'Service Name', 'required');
 			//$this->form_validation->set_rules('email_address', 'Email Address', 'required');
 			$this->form_validation->set_rules('description','Description','required');
-			$this->form_validation->set_rules('minprice', 'Price ', 'required'); //{10} for 10 digits number
-			$this->form_validation->set_rules('maxprice', 'Max Price ', 'required'); //{10} for 10 digits number
+			$this->form_validation->set_rules('price', 'Price ', 'required'); //{10} for 10 digits number
+			$this->form_validation->set_rules('discount_price', 'Max Price ', 'required'); //{10} for 10 digits number
 
 			if($this->form_validation->run())
 			{
@@ -83,9 +82,12 @@ class Service extends CI_Controller {
 			
 				$category_id=$this->input->post('category');
 				$Service_name=$this->input->post('service_name');
-				$minprice=$this->input->post('minprice');
-				$maxprice=$this->input->post('maxprice');
-				$option_label=$this->input->post('option_label');
+				$price=$this->input->post('price');
+				$discount_price=$this->input->post('discount_price');
+				$offer_percentage=$this->input->post('offer_percentage');
+				$demo_price=$this->input->post('demo_price');
+				$demo_discount_price=$this->input->post('demo_discount_price');
+				$option_labelArr=$this->input->post('option_label');
 				$optionsArr=$this->input->post('optionsArr');
 				$amountArr=$this->input->post('amountArr');
 				$labelArr=$this->input->post('labelArr');
@@ -107,11 +109,13 @@ class Service extends CI_Controller {
 						'category_id'=>$category_id,
 						'service_name'=>trim($Service_name),
 						'service_description'=>$description,
-						'min_price'=>$minprice,
-						'max_price'=>$maxprice,
+						'service_price'=>$price,
+						'service_discount_price'=>$discount_price,
+						'offer_percentage'=>$offer_percentage,
+						'service_demo_price'=>$demo_price,
+						'service_demo_discount_price'=>$demo_discount_price,
 						'service_image'=>$service_image,
 						'service_status'=>$status,
-						'service_option_name'=>$option_label,
 						'dateadded' => date('Y-m-d H:i:s'),
 						'dateupdated' => date('Y-m-d H:i:s')
 						);
@@ -124,41 +128,48 @@ class Service extends CI_Controller {
 					
 					if($Service_id>0)
 					{	
-						// print_r($optionsArr);
-						if(!empty($optionsArr))
+						if(!empty($option_labelArr))
 						{
-							foreach($optionsArr as $key=>$option)
+							foreach($option_labelArr as $key=>$option_label)
 							{
-								$amount=$amountArr[$key];
-								$insert_data=array(
-									'service_id'=>$Service_id,
-									'option_name'=>$option,
-									'option_amount'=>$amount,
-									'dateadded' => date('Y-m-d H:i:s'),
-									'dateupdated' => date('Y-m-d H:i:s')
-								);
-								if($option!="" && $amount!=""){
-									$this->Common_Model->insert_data('service_details',$insert_data);
+								// print_r($optionsArr);
+								if(!empty($optionsArr))
+								{
+									foreach($optionsArr as $key=>$option)
+									{
+										$amount=$amountArr[$key];
+										$insert_data=array(
+											'service_id'=>$Service_id,
+											'option_label'=>$option_label,
+											'option_name'=>$option,
+											'option_amount'=>$amount,
+											'dateadded' => date('Y-m-d H:i:s'),
+											'dateupdated' => date('Y-m-d H:i:s')
+										);
+										if($option!="" && $amount!=""){
+											$this->Common_Model->insert_data('service_details',$insert_data);
+											}
+										echo $this->db->last_query();
 									}
-								// echo $this->db->last_query();
+								}
 							}
 						}
 
-						foreach($labelArr as $key=>$label)
-						{
-							$labelvalue=$labelvalueArr[$key];
-							$insert_data=array(
-								'service_id'=>$Service_id,
-								'option_name'=>$label,
-								'option_value'=>$labelvalue,
-								'option_type'=>'Label',
-								'dateadded' => date('Y-m-d H:i:s'),
-								'dateupdated' => date('Y-m-d H:i:s')
-							);
-							if($label!="" && $labelvalue!=""){
-								$this->Common_Model->insert_data('service_details',$insert_data);
-								}
-						}
+						// foreach($labelArr as $key=>$label)
+						// {
+						// 	$labelvalue=$labelvalueArr[$key];
+						// 	$insert_data=array(
+						// 		'service_id'=>$Service_id,
+						// 		'option_name'=>$label,
+						// 		'option_value'=>$labelvalue,
+						// 		'option_type'=>'Label',
+						// 		'dateadded' => date('Y-m-d H:i:s'),
+						// 		'dateupdated' => date('Y-m-d H:i:s')
+						// 	);
+						// 	if($label!="" && $labelvalue!=""){
+						// 		$this->Common_Model->insert_data('service_details',$insert_data);
+						// 		}
+						// }
 						$this->session->set_flashdata('success','Service added successfully.');
 
 						redirect(base_url().'backend/Service/manageService');	

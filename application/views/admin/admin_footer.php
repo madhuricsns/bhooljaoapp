@@ -134,10 +134,81 @@ document.getElementById("doPrintinvoice").addEventListener("click", function() {
 <script src="<?php echo base_url('template/admin/');?>assets/datatables/extras/TableTools/pdfmake-0.1.32/vfs_fonts.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
 
-<script type="text/javascript">
-$(document).ready(function(){
 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.js-example-basic-multiple').select2();
+});
+$(document).ready(function(){
+    // $(".select2").select2();
   var rowIdx = 1;
+    //Add Label
+    $('.addLabel').on('click', function () {
+  
+    // Adding a row inside the tbody.
+    $('#tbody').append(`<tr id="R${++rowIdx}">
+           <td>
+           <input type="text" class="form-control option_label" id="option_label" name="option_label[]" placeholder="Enter Label Name"  >
+            <div id="err_option_label" class="error_msg err_option_label"></div>
+            </td>
+            <td>
+            <select class="form-control " id="option_type" name="option_type" required>
+                <option value="">Select Option Type</option>
+                <option value="Dropdown">Dropdown</option>
+                <option value="Input">Input</option>
+                <option value="Radio">Radio</option>
+            </select>
+            <div id="err_option_type" class="error_msg err_option_type"></div>
+            </td>
+            <td class="text-center">
+            <button class="btn btn-danger remove" 
+                type="button"><i class="fa fa-remove"></i></button>
+            </td>
+            </tr>
+            <tr>
+                <!-- <td  class="row-index text-center"></td> -->
+                <td> <input type="text" class="form-control optionsArr" id="optionsArr" name="optionsArr[]" placeholder="Enter Option"  >
+                    <div id="err_optionsArr" class="error_msg err_optionsArr"></div>
+                </td>
+                <td> <input type="text" class="form-control amountArr" id="amountArr" name="amountArr[]" placeholder="Enter Amount"  >
+                    <div id="err_amountArr" class="error_msg err_amountArr"></div>
+                </td>
+                    <td  class="text-center"><button class="btn btn-md btn-success" id="addBtn" type="button">
+                <!-- <i class="fa fa-plus"></i> --> Add Option
+                </button> </td>
+            </tr>`);
+    });
+
+    // Remove opion row
+    // jQuery button click event to remove a row
+    $('#tbody').on('click', '.remove', function () {
+  
+    // Getting all the rows next to the 
+    var child = $(this).closest('tr').nextAll();
+
+    child.each(function () {
+        var id = $(this).attr('id');
+        // Getting the <p> inside the .row-index class.
+        var idx = $(this).children('.row-index').children('p');
+        // Gets the row number from <tr> id.
+        var dig = parseInt(id.substring(1));
+        // Modifying row index.
+        idx.html(`${dig - 1}`);
+        // Modifying row id.
+        $(this).attr('id', `R${dig - 1}`);
+    });
+    // Removing the current row.
+    $(this).closest('tr').remove();
+    // Decreasing the total number of rows by 1.
+    rowIdx--;
+    });
+
+    var rowIdx = 1;
     //Add Option row
     $('#addBtn').on('click', function () {
   
@@ -228,25 +299,25 @@ $('#addRow').on('click', function () {
 
 $(document).ready(function(){
 
-    $("#select_type").change(function () {                            
-       var category= $('select[name=select_type]').val() // Here we can get the value of selected item
-       //alert(category);
-       if (category) {
-
-        $.ajax({
-            type:'POST',
-            url:"<?php echo base_url(); ?>backend/Notifications/fetch_user",
-            data:'user_type='+category,
-            success:function(html){
-                $('#user').html(data);
-            }
-            
-        })
-       }
+    $("#select_type").change(function () { 
+        // alert();                           
+       var select_type= $('select[name=select_type]').val() // Here we can get the value of selected item
+    //    alert(select_type);
+        if(select_type=="Service Provider") 
+        {
+            $("#serviceproviderDiv").show();
+            $("#customerDiv").hide();
+        }
+        else if(select_type=="Customer") 
+        {
+            $("#serviceproviderDiv").hide();
+            $("#customerDiv").show();
+        }
         else
-  {
-   $('#user').html('<option value="">Select Users</option>');
-}
+        {
+            $("#serviceproviderDiv").hide();
+            $("#customerDiv").hide();
+        }
     }); 
 });
 

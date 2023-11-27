@@ -7,9 +7,6 @@ Class Booking_model extends CI_Model {
 		parent::__construct();
 	}
 	
-
-
-
 	public function getAllBooking($res,$per_page,$page,$filter=array())
 	//public function getAllBooking($res,$per_page,$page,$filter=array())
 	{
@@ -78,32 +75,6 @@ Class Booking_model extends CI_Model {
 	}
 
 
-   public function getAllUsers($res,$per_page,$page)
-	{
-		/*echo "PerPage--".$per_page;
-		echo "page--".$page;exit();*/
-		//$this->db->select('*');
-		$this->db->select('u.*,z.zone_name');
-		$this->db->join(TBLPREFIX.'zone as z','z.zone_id=u.zone_id','left');
-		$this->db->where('user_type',$user_type = "Service Provider");
-
-		$this->db->order_by('u.user_id','DESC');
-		if($per_page!="")
-		{
-			$this->db->limit($per_page,$page);
-		}
-
-		$result = $this->db->get(TBLPREFIX.'users as u');
-		//echo $this->db->last_query();exit;
-		if($res == 1)
-			return $result->result_array();
-		else
-			return $result->num_rows();
-
-	}
-	
-
-
  public function getBookingBystatus($booking_status) {
         // Query to fetch products by category
         $this->db->where('booking_status', $booking_status);
@@ -114,25 +85,6 @@ Class Booking_model extends CI_Model {
         
         return $query->result();
     }
-
-
-
-public function uptdateAssingServiceprovider($input_data,$booking_id)
-	{
-		$this->db->where('booking_id',$booking_id);
-		$query=$this->db->update(TBLPREFIX."booking",$input_data);
-              //echo $this->db->last_query();exit;
-		if($query==1)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}	
-	}
-
-
 
  
 }

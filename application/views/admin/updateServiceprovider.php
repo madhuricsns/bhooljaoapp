@@ -33,36 +33,42 @@
                                     <!-- <div class="row"> -->
                                         <div class="col-sm-12">
                                         	<div class="row">
-                                        
-                                           	 <div class="form-group col-md-6">
+                                           <div class="col-md-6">
+                                           	 <div class="form-group ">
                                            
                                                 <label for="full_name" ><span>*</span>Full Name</label>
                                                 <input type="text" class="form-control " id="full_name" name="full_name"  required value="<?php echo $userInfo[0]['full_name'];?>">
 												 <div id="err_full_name" class="error_msg"></div>
                                             </div>
-                                           
+                                            
+                                        </div>
+
                                       
-                                           
-                                            <div class="form-group col-md-6">
+                                           <div class="col-md-6">
+                                            <div class="form-group ">
                                                 <label for="email_address"><span>*</span> Email Address</label>
                                                <input type="email" name="email_address" id="email_address" class="form-control" value="<?php echo $userInfo[0]['email'];?>">
                                             </div>
                                         </div>
-                                   
+                                    </div>
+
 
                                            <div class="row">
-                                          
-                                           	 <div class="form-group col-md-6">
+                                           <div class="col-md-6">
+                                           	 <div class="form-group">
                                                 <label for="mobile_number"><span>*</span>Mobile Number</label>
                                                 <input type="text" class="form-control" id="mobile_number" name="mobile_number"  required value="<?php echo $userInfo[0]['mobile'];?>">
 												 <div id="err_mobile_number" class="error_msg"></div>
                                             </div>
-           				
-                                          
-                                           	
-                                            <div class="form-group col-md-6">
-                                                <label for="mobile_number" ><span>*</span> Gender</label>
-                                               <div>
+                                           
+                                        </div>
+                                            
+                                            
+											
+                                           <div class="col-md-6">
+                                           	 <label for="mobile_number" ><span>*</span> Gender</label>
+                                            <div class="form-group">
+                                               
                                                <label class="col-md-3" > <input type="radio" name="gender" class="gender"value="Male" required <?php if($userInfo[0]['gender']=="Male"){ echo 'checked="checked"';}?>> Male</label>
                                                <label class="col-md-3" > <input type="radio" name="gender" class="gender"  value="Female" required <?php if($userInfo[0]['gender']=="Female"){ echo 'checked="checked"';}?>> Female</label>
                                                <label class="col-md-2" > <input type="radio" name="gender" class="gender"  value="Other" required <?php if($userInfo[0]['gender']=="Other"){ echo 'checked="checked"';}?>> Other</label>
@@ -72,8 +78,8 @@
                                     </div>
 
                                            <div class="row">
-                                          
-                                           	<div class="form-group col-md-6">
+                                           <div class="col-md-6">
+                                           	<div class="form-group ">
                                                 <label ><span>*</span> Category</label>
 												<select name="category_id" id="category_id" class="form-control" required onchange="showDiv(this)">
 
@@ -88,9 +94,12 @@
 												</select>
 												 <div id="err_state_id" class="error_msg"></div>
                                             </div>
-                               
-                                          
-                                           	 <div class="form-group col-md-6">
+                                        </div>
+                                           	
+                                       
+                                           
+                                           <div class="col-md-6">
+                                           	 <div class="form-group">
                                                 <label><span>*</span> Zone</label>
 												<select name="zone_id" id="zone_id" class="form-control" required onchange="showDiv(this)">
 
@@ -105,19 +114,23 @@
 												</select>
 												 <div id="err_state_id" class="error_msg"></div>
                                             </div>
+                                            
+                                    </div>
                                 </div>
 
 
                                              <div class="row">
-                                           
-                                           	<div class="form-group col-md-6">
+                                           <div class="col-md-6">
+                                           	<div class="form-group">
                                                 <label><span>*</span>Address</label>
                                                 <textarea name="address" id="address" class="form-control " required><?php echo $userInfo[0]['address'];?></textarea>
 												
                                             </div>
-                                      
-                                         
-                                            <div class="form-group col-md-6">
+                                           
+                                        </div>
+                                            
+                                           <div class="col-md-6">
+                                            <div class="form-group">
                                                 <label ><span></span>Status</label>
 												<select name="status" id="status" class="form-control  " required>
 													<option value="">Select Status</option>
@@ -126,33 +139,32 @@
 												</select>
                                             </div>
                                         </div>
-                                    
-                                      <div class="row">
-                                           	<div class="form-group col-md-4">
-                                                <label for="profile_image" ><span>*</span> Profile</label>
-                                                <input class="form-control " id="servicefile" type="file"  name="servicefile" />
-												<div class="err_msg" id="err_category_image"></div>
-												
-												<span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span><br/>
-                                            </div>
-                                            <div class="form-group col-md-2">
-												<?php 
+                                    </div>
+                                     <div class="row">
+                                           <div class="col-md-6">
+                                           	<div class="form-group ">
+                                                <label for="banner_image"><span>*</span> Profile</label>
+                                               
+                                                <?php 
                                                    if($userInfo[0]['profile_pic']!="")
 												{
 	
-												$str_images='<img src="'.base_url().'uploads/service_provider/'.$userInfo[0]['profile_pic'].'" style="width:110px;height:110px">';
+												$str_images='<img src="'.base_url().'uploads/service_provider/'.$userInfo[0]['profile_pic'].'" style="width:80px;height:80px">';
 												}
 												else
 												{
-												$str_images='<img src="'.base_url().'uploads/service_provider/default.png" style="width:110px;height:110px">';
+												$str_images='<img src="'.base_url().'uploads/service_provider/default.png" style="width:80px;height:80px">';
 												}
 												?>
-												<span><?php echo $str_images;?></span><br/>
-											</div>
-                                          
-                                            	
-                                           
-                                        
+                                                <?php echo $str_images;?> 
+												
+												<span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span><br/>
+												<div class="err_msg" id="err_banner_image"></div>
+												
+												 <input class="form-control col-xl-6 col-md-6" id="servicefile" type="file"  name="servicefile" />
+                                            </div>
+                                            
+                                        </div>
                                     </div>
 
                                             <!-- <div class="form-group"> -->

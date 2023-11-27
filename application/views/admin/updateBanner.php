@@ -33,20 +33,20 @@
                                    
                                         <div class="col-sm-12">
                                         	  <div class="row">
-                                        	  	
-                                            <div class="form-group col-md-6">
+                                        	  	<div class="col-md-6">
+                                            <div class="form-group ">
                                                 <label for="banner_title" ><span>*</span> Banner</label>
                                                 <input type="text" class="form-control" id="banner_title" name="banner_title"  required value="<?php echo $BannerInfo[0]['banner_title'];?>">
 												 <div id="err_brand_name" class="error_msg"></div>
                                             </div>
-                                       
+                                        </div>
 											<!--<div class="form-group row">
                                                 <label for="description" class="col-xl-3 col-md-4"><span>*</span> Description</label>
                                                <textarea name="description" id="description" class="form-control  col-md-6"><?php //echo $BrandInfo[0]['description'];?></textarea>
                                             </div>-->
                                            
-                                        	 
-                                            <div class="form-group col-md-6">
+                                        	  	<div class="col-md-6">
+                                            <div class="form-group">
                                             	<label ><span>*</span> Status</label>
 												<select name="status" id="status" class="form-control  " required>
 													<option value="">Select Status</option>
@@ -55,11 +55,11 @@
 												</select>
                                                 
                                             </div>
-                                       
+                                        </div>
                                     </div>
 											  <div class="row">
-											  	
-                                            <div class="form-group col-md-6">
+											  	 <div class="col-md-6">
+                                            <div class="form-group">
                                                 <label ><span>*</span>Banner Type</label>
 												<select name="banner_type" id="banner_type" class="form-control  " required>
 													<option value="">Select Status</option>
@@ -67,32 +67,31 @@
 													<option value="Inactive" <?php if($BannerInfo[0]['banner_type']=="Service Provider"){ echo 'selected="selected"';}?>>Service Provider</option>
 												</select>
                                             </div>
-                                       
-                                        	  
-                                            <div class="form-group col-md-4">
+                                        </div>
+                                        	  	<div class="col-md-6">
+                                            <div class="form-group ">
                                             	<label for="banner_image"><span>*</span> Banner Image</label>
-                                                <input class="form-control " id="banner_image" type="file" required="" name="banner_image" />
-												<div class="err_msg" id="err_banner_image"></div>
-												<span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span><br/>
-											</div>
-											 <div class="form-group col-md-2">
+                                                
+
 												<?php 
                                                    if($BannerInfo[0]['banner_image']!="")
 												{
 	
-												$str_images='<img src="'.base_url().'uploads/banner_images/'.$BannerInfo[0]['banner_image'].'" style="width:110px;height:110px">';
+												$str_images='<img src="'.base_url().'uploads/banner_images/'.$BannerInfo[0]['banner_image'].'" style="width:80px;height:80px">';
 												}
 												else
 												{
-												$str_images='<img src="'.base_url().'uploads/banner_images/default.png" style="width:110px;height:110px">';
+												$str_images='<img src="'.base_url().'uploads/banner_images/default.png" style="width:80px;height:80px">';
 												}
 												?>
-												<span><?php echo $str_images;?></span><br/>
-												
-												
+												<?php echo $str_images;?>
+
+												<span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span><br/>
+												<input class="form-control " id="banner_image" type="file" required="" name="banner_image" />
+												<div class="err_msg" id="err_banner_image"></div>
                                                 
                                             </div>
-                                       
+                                        </div>
                                     </div>
                                             
                                             	<div class="pull-right">
