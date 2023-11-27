@@ -128,6 +128,19 @@ class Service extends CI_Controller {
 					
 					if($Service_id>0)
 					{	
+						if($service_image!="")
+						{
+						// Upload Service Image
+							$image_data = array(
+								'service_id'=>$service_id,
+								'service_image'=>$service_image,
+								'dateadded' => date('Y-m-d H:i:s'),
+								'dateupdated' => date('Y-m-d H:i:s')
+								);
+		
+							$this->Common_Model->insert_data('service_images',$image_data);
+						}
+
 						if(!empty($option_labelArr))
 						{
 							foreach($option_labelArr as $key=>$option_label)
@@ -146,9 +159,9 @@ class Service extends CI_Controller {
 											'dateadded' => date('Y-m-d H:i:s'),
 											'dateupdated' => date('Y-m-d H:i:s')
 										);
-										if($option!="" && $amount!=""){
+										// if($option!="" && $amount!=""){
 											$this->Common_Model->insert_data('service_details',$insert_data);
-											}
+										// }
 										echo $this->db->last_query();
 									}
 								}
