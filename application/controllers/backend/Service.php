@@ -445,4 +445,192 @@ class Service extends CI_Controller {
 			redirect(base_url().'backend/Service/managesservice');
 		}
 	}
+	
+	public function manageAddonServices()
+	{
+		$data['title']='Manage Sub Category';
+		
+		$id = base64_decode($this->uri->segment(4));
+		
+		$data['servicecnt']=$this->Service_model->getAllAddonService(0,"","",$id);
+		
+		$config = array();
+		$config["base_url"] = base_url().'backend/Service/manageAddonServices/';
+		$config['per_page'] = 10;
+		$config["uri_segment"] = 4;
+		$config['full_tag_open'] = '<ul class="pagination">'; 
+		$config['full_tag_close'] = '</ul>';
+		$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
+		$config['first_tag_close'] = "</li>"; 
+		$config['prev_tag_open'] =	"<li class='paginate_button  page-item'>"; 
+		$config['prev_tag_close'] = "</li>";
+		$config['next_tag_open'] = "<li class='paginate_button  page-item'>";
+		$config['next_tag_close'] = "</li>"; 
+		$config['last_tag_open'] = "<li class='paginate_button  page-item'>"; 
+		$config['last_tag_close'] = "</li>";
+		$config['cur_tag_open'] = "<li class='paginate_button  page-item active'><a class='page-link active' href=''>"; 
+		$config['cur_tag_close'] = "</a></li>";
+		$config['num_tag_open'] = "<li class='paginate_button  page-item'>";
+		$config['num_tag_close'] = "</li>"; 
+		$config['attributes'] =array('class' => 'page-link');
+		$config["total_rows"] =$data['servicecnt'];
+		#echo "<pre>"; print_r($config); exit;
+		$this->pagination->initialize($config);
+				
+		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		$data["total_rows"] = $config["total_rows"]; 
+		$data["links"] = $this->pagination->create_links();
+		//echo "ConttPerPage--".$config["per_page"];
+		//echo "Conttpage--".$page;
+		//exit();
+		$data['serviceList']=$this->Service_model->getAllAddonService(1,$config["per_page"],$page,$id);
+		//echo $this->db->last_query();exit;
+		$this->load->view('admin/admin_header',$data);
+		$this->load->view('admin/manageAddonService',$data);
+		$this->load->view('admin/admin_footer');
+	}
+	
+	public function addOnService()
+	{
+		$data['title']='Add Sub Category';
+		$data['error_msg']='';
+		$data['categoryList']=$this->Service_model->getAllCategory(1);		
+		if(isset($_POST['btn_addService']))
+		{
+			// print_r($_POST);//exit;
+			$this->form_validation->set_rules('category','Category','required');
+			$this->form_validation->set_rules('service_name', 'Service Name', 'required');
+			//$this->form_validation->set_rules('email_address', 'Email Address', 'required');
+			$this->form_validation->set_rules('description','Description','required');
+			$this->form_validation->set_rules('price', 'Price ', 'required'); //{10} for 10 digits number
+			$this->form_validation->set_rules('discount_price', 'Max Price ', 'required'); //{10} for 10 digits number
+
+			if($this->form_validation->run())
+			{
+				//echo "successfully validated";exit();
+			
+				$category_id=$this->input->post('category');
+				$Service_name=$this->input->post('service_name');
+				$price=$this->input->post('price');
+				$discount_price=$this->input->post('discount_price');
+				$offer_percentage=$this->input->post('offer_percentage');
+				$demo_price=$this->input->post('demo_price');
+				$demo_discount_price=$this->input->post('demo_discount_price');
+				$option_labelArr=$this->input->post('option_label');
+				$optionsArr=$this->input->post('optionsArr');
+				$amountArr=$this->input->post('amountArr');
+				$labelArr=$this->input->post('labelArr');
+				$labelvalueArr=$this->input->post('labelvalueArr');
+
+				//$daily_report=$this->input->post('daily_report');
+				$status="Active";
+				$description=$this->input->post('description');
+				
+					//Image Upload Code 
+					if(count($_FILES) > 0) 
+					{
+						$ImageName = "servicefile";
+						$target_dir = "uploads/service_images/";
+						$service_image= $this->Common_Model->ImageUpload($ImageName,$target_dir);
+					}
+
+					$input_data = array(
+						'category_id'=>$category_id,
+						'service_name'=>trim($Service_name),
+						'service_description'=>$description,
+						'service_price'=>$price,
+						'service_discount_price'=>$discount_price,
+						'offer_percentage'=>$offer_percentage,
+						'service_demo_price'=>$demo_price,
+						'service_demo_discount_price'=>$demo_discount_price,
+						'service_image'=>$service_image,
+						'service_status'=>$status,
+						'dateadded' => date('Y-m-d H:i:s'),
+						'dateupdated' => date('Y-m-d H:i:s')
+						);
+
+					// echo"<pre>";
+					// print_r($input_data);
+					// exit();
+					
+					$Service_id = $this->Service_model->insert_Service($input_data);
+					
+					if($Service_id>0)
+					{	
+						if($service_image!="")
+						{
+						// Upload Service Image
+							$image_data = array(
+								'service_id'=>$service_id,
+								'service_image'=>$service_image,
+								'dateadded' => date('Y-m-d H:i:s'),
+								'dateupdated' => date('Y-m-d H:i:s')
+								);
+		
+							$this->Common_Model->insert_data('service_images',$image_data);
+						}
+
+						if(!empty($option_labelArr))
+						{
+							foreach($option_labelArr as $key=>$option_label)
+							{
+								// print_r($optionsArr);
+								if(!empty($optionsArr))
+								{
+									foreach($optionsArr as $key=>$option)
+									{
+										$amount=$amountArr[$key];
+										$insert_data=array(
+											'service_id'=>$Service_id,
+											'option_label'=>$option_label,
+											'option_name'=>$option,
+											'option_amount'=>$amount,
+											'dateadded' => date('Y-m-d H:i:s'),
+											'dateupdated' => date('Y-m-d H:i:s')
+										);
+										// if($option!="" && $amount!=""){
+											$this->Common_Model->insert_data('service_details',$insert_data);
+										// }
+										echo $this->db->last_query();
+									}
+								}
+							}
+						}
+
+						// foreach($labelArr as $key=>$label)
+						// {
+						// 	$labelvalue=$labelvalueArr[$key];
+						// 	$insert_data=array(
+						// 		'service_id'=>$Service_id,
+						// 		'option_name'=>$label,
+						// 		'option_value'=>$labelvalue,
+						// 		'option_type'=>'Label',
+						// 		'dateadded' => date('Y-m-d H:i:s'),
+						// 		'dateupdated' => date('Y-m-d H:i:s')
+						// 	);
+						// 	if($label!="" && $labelvalue!=""){
+						// 		$this->Common_Model->insert_data('service_details',$insert_data);
+						// 		}
+						// }
+						$this->session->set_flashdata('success','Service added successfully.');
+
+						redirect(base_url().'backend/Service/manageService');	
+					}
+					else
+					{
+						$this->session->set_flashdata('error','Error while adding Service.');
+
+						redirect(base_url().'backend/Service/addService');
+					}	
+				
+			}else{
+				$this->session->set_flashdata('success','Validation failed. Please enter valid Text.');
+				redirect(base_url().'backend/Service/addService');
+			}
+		}
+
+		$this->load->view('admin/admin_header',$data);
+		$this->load->view('admin/addService',$data);
+		$this->load->view('admin/admin_footer');
+	}
 }

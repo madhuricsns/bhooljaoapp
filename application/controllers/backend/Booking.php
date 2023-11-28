@@ -357,6 +357,9 @@ public function viewBookingDetails()
 		$data['orderInfo']=$this->Booking_model->getSingleBookingInfo($booking_id,1);
 		
 		$data['serviceDetails'] = $this->Booking_model->getServiceDetails($booking_id);
+		
+		$data['servicePricing'] = $this->Booking_model->getServiceDetailsWOPricing($booking_id);
+		
 		$data['addressDetails'] = $this->Booking_model->getBookingAddressDetails($data['orderInfo'][0]['address_id']);
 		
 		//echo $this->db->last_query();exit;

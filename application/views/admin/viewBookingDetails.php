@@ -123,9 +123,20 @@
 							<br/>
 							Service Duration: <?php 
 							echo $orderInfo[0]['duration']." Months"; ?>
-							<?php
-						
-							
+							<br/><br/>
+<?php  echo $orderInfo[0]['category_name'];?>
+						<?php
+							if(isset($servicePricing) && count($servicePricing) > 0) {
+								foreach($servicePricing as $service) 
+								{ ?>
+								<p><?php echo $service['service_name'].' <br/>';
+								
+								echo $service['option_label'].': '.$service['option_value']; ?> 
+								</p>
+							<?php }
+							}
+							?>
+						<?php
 							if(isset($serviceDetails) && count($serviceDetails) > 0) {
 								foreach($serviceDetails as $service) 
 								{ ?>

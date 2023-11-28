@@ -134,7 +134,20 @@ Class Booking_model extends CI_Model {
 		$result= $query->result_array();
 		return $result;
 	}
-
+	
+	public function getServiceDetailsWOPricing($booking_id) 
+	{
+		$this->db->select('s.service_name,bd.option_label,bd.option_value');
+		$this->db->from(TBLPREFIX.'booking as b');
+		$this->db->where('b.booking_id',$booking_id);
+		$this->db->join(TBLPREFIX.'booking_details as bd','bd.booking_id = b.booking_id','left');
+		$this->db->where('bd.option_amount =',0);
+		$this->db->join(TBLPREFIX.'service as s','s.service_id = bd.service_id','left');
+		$query = $this->db->get();
+		$result= $query->result_array();
+		return $result;
+	}
+		
 	public function getBookingAddressDetails($address_id)
 	{
 		$this->db->select('*');

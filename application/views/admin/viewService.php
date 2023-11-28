@@ -1,5 +1,5 @@
 <div class="page-body">
-
+<?php //print_r($serviceinfo); exit; ?>
 	<!-- Container-fluid starts-->
 	<div class="container-fluid">
                 <div class="card tab2-card">
@@ -66,15 +66,15 @@
                                             </div>
                                            
                                             <div class="form-group row">
-                                                <label for="mobile_number" class="col-xl-3 col-md-4">  Min-Price</label>
+                                                <label for="mobile_number" class="col-xl-3 col-md-4">  Price</label>
                                                 <div class="col-md-6">
-													: <?php echo $serviceinfo[0]['min_price']?>
+													: <?php echo $serviceinfo[0]['service_price']?>
 												</div>
                                             </div>
                                              <div class="form-group row">
-                                                <label for="mobile_number" class="col-xl-3 col-md-4">  Max-Price</label>
+                                                <label for="mobile_number" class="col-xl-3 col-md-4">  Discount Price</label>
 												<div class="col-md-6">
-													: <?php echo $serviceinfo[0]['max_price']?>
+													: <?php echo $serviceinfo[0]['service_discount_price']?>
 												</div>
                                             </div>
 

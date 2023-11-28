@@ -196,4 +196,35 @@ public function uptdateService($input_data,$id)
 		$query = $this->db->get("users");
 		return $query->row();
 	}
+	
+	public function getAllAddonService($res,$per_page,$page,$id)
+	{
+		/*echo "PerPage--".$per_page;
+		echo "page--".$page;exit();*/
+		$this->db->select('s.*,c.category_name');
+		$this->db->join(TBLPREFIX.'category as c','c.category_id=s.category_id','left');
+		$this->db->where('s.parent_service_id',$id);
+		$this->db->order_by('s.service_id','DESC');
+		if($per_page!="")
+		{
+			$this->db->limit($per_page,$page);
+		}
+
+		$result = $this->db->get(TBLPREFIX.'service as s');
+		// echo $this->db->last_query();exit;
+		if($res == 1){
+			$response= $result->result_array();
+			foreach($response as $key=>$row)
+			{
+				if(isset($row['service_image']) && $row['service_image']!="")
+				{
+					$row['service_image']=base_url()."uploads/service_images/".$row['service_image'];
+				}
+				$response[$key]=$row;
+			}
+		}else{
+			$response= $result->num_rows();
+		}
+			return $response;
+	}
 }

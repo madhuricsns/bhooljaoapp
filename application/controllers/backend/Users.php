@@ -572,6 +572,17 @@ class Users extends CI_Controller {
 				{
 					$profile_id = "BJS".$this->Common_Model->randomCode();
 					
+					$latitude = $longitude = '';
+					if($address != '')
+					{
+						$latlngarr = $this->Common_Model->get_lat_long($address);
+						if(isset($latlngarr))
+						{
+						  $latitude=$latlngarr['latitude'];
+						  $longitude=$latlngarr['longitude'];
+						}
+					}
+					
 					$input_data = array(
 							'profile_id'=>$profile_id,
 							'profile_pic'=>$servicefile,
@@ -581,6 +592,8 @@ class Users extends CI_Controller {
 							'gender'=>$gender,
 							'mobile'=>$mobile_number,
 							'address'=>$address,
+							'user_lat'=>$latitude,
+							'user_long'=>$longitude,
 							'status'=>$status,
 							'category_id'=>$category_id,
 							'zone_id'=>$zone_id,
@@ -696,6 +709,17 @@ class Users extends CI_Controller {
 						}
 					}
 				}
+				
+						$latitude = $longitude = '';
+						if($address != '')
+						{
+							$latlngarr = $this->Common_Model->get_lat_long($address);
+							if(isset($latlngarr))
+							{
+							  $latitude=$latlngarr['latitude'];
+							  $longitude=$latlngarr['longitude'];
+							}
+						}
 							
 						$input_data = array(
 							'profile_pic'=>$servicefile,
@@ -705,6 +729,8 @@ class Users extends CI_Controller {
 							'gender'=>$gender,
 							'mobile'=>$mobile_number,
 							'address'=>$address,
+							'user_lat'=>$latitude,
+							'user_long'=>$longitude,
 							'status'=>$status,
 							'category_id'=>$category_id,
 							'zone_id'=>$zone_id,
@@ -713,7 +739,7 @@ class Users extends CI_Controller {
 								);
 					
 						$userdata = $this->User_model->uptdateUser($input_data,$user_id);
-
+						
 						if($userdata)
 						{	
 							$this->session->set_flashdata('success','Service provider updated successfully.');
