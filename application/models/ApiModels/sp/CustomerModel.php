@@ -14,7 +14,7 @@
 			$this->db->select('*');
 			$this->db->from(TBLPREFIX.'users');
 			$this->db->where('mobile',$mobile_number);
-			$this->db->where('user_type','Customer');
+			$this->db->where('user_type','Service Provider');
 			return $this->db->get()->num_rows();			
 		}
 
@@ -52,7 +52,7 @@
 				$this->db->select('*');
 				$this->db->from(TBLPREFIX.'users');
 				$this->db->where('user_id',$user_id);
-				$this->db->where('user_type','Customer');
+				$this->db->where('user_type','Service Provider');
 				$this->db->limit(1);
 				$query = $this->db->get();
 				//echo $this->db->last_query();exit;
@@ -61,29 +61,6 @@
 			}
 		}
 		
-		## CHECK  MPIN 
-		public function chk_mpin($data,$qty) 
-		{
-			if(!empty ($data))
-			{
-				$this->db->select('*');
-				$this->db->from(TBLPREFIX.'users');
-				$this->db->where('user_id',$data['user_id']);
-				$this->db->where('mobile_otp',$data['mpin']);
-				$this->db->where('user_type','Customer');
-				$this->db->limit(1);
-				$query = $this->db->get();
-				//echo $this->db->last_query();exit;
-				if ($qty==0) 
-				{
-					return $query->num_rows();
-				} 
-				else 
-				{
-					return $query->row();
-				}
-			}
-		}
 		
 		public function getUserDetails($user_id) 
         {
@@ -91,28 +68,6 @@
             {
                 $this->db->select('*');
                 $this->db->from(TBLPREFIX.'users');
-                $this->db->where('user_id',$user_id);
-                $this->db->where('user_type','Customer');
-                $this->db->limit(1);
-                $query = $this->db->get();
-                $user= $query->row();
-                if(isset($user->profile_pic) && $user->profile_pic!="")
-                {
-                    $user->profile_pic=base_url()."uploads/user_profile/".$user->profile_pic;;
-                }
-                
-				$user->mpin=$user->otp;
-                
-                return $user;
-            }
-        }
-
-		public function getServiceProviderDetails($user_id) 
-        {
-            if(!empty ($user_id))
-            {
-                $this->db->select('*,user_id as service_provider_id');
-                $this->db->from(TBLPREFIX.'users as u');
                 $this->db->where('user_id',$user_id);
                 $this->db->where('user_type','Service Provider');
                 $this->db->limit(1);
@@ -123,12 +78,25 @@
                     $user->profile_pic=base_url()."uploads/user_profile/".$user->profile_pic;;
                 }
                 
-				// $user->mpin=$user->otp;
-                
                 return $user;
             }
         }
-		
+
+		public function getCategoryDetails($category_id) 
+        {
+            if(!empty ($category_id))
+            {
+                $this->db->select('*');
+                $this->db->from(TBLPREFIX.'category');
+                $this->db->where('category_id',$category_id);
+                $this->db->limit(1);
+                $query = $this->db->get();
+                $result= $query->row();
+                return $result;
+            }
+        }
+
+	
 		function getProfile($user_id)
 		{				
 			$this->db->select("userid,firstname,lastname,mobile_number,email_address,otp_verified,status,profile_pic,(DATE_FORMAT(DATE(dateadded),'%d/%m/%Y')) as dateadded");
@@ -316,115 +284,5 @@
                 $result[$key]=$row;
             }
             return $result;
-        }
-
-		public function getCategory($category_id) 
-        {
-            if(!empty ($category_id))
-            {
-                $this->db->select('*');
-                $this->db->from(TBLPREFIX.'category');
-                $this->db->where('category_id',$category_id);
-                $query = $this->db->get();
-                $result= $query->row();
-                // if(isset($user->profile_pic) && $user->profile_pic!="")
-                // {
-                //     $user->profile_pic=base_url()."uploads/user_profile/".$user->profile_pic;;
-                // }
-                
-				// $user->mpin=$user->otp;
-                
-                return $result;
-            }
-        }
-
-		public function getAllBanners() 
-        {
-            $this->db->select('*');
-            $this->db->from(TBLPREFIX.'banner');
-            $this->db->where('banner_status	','Active');
-            $this->db->where('banner_type','Customer');
-            $query = $this->db->get();
-            $result= $query->result_array();
-            foreach($result as $key=>$row)
-            {
-                if(isset($row['banner_image']) && $row['banner_image']!="")
-                {
-                    $row['banner_image']=base_url()."uploads/banner_images/".$row['banner_image'];
-                }
-                $result[$key]=$row;
-            }
-            return $result;
-        }
-
-		function getNearByServiceGivers($limit,$userLat,$userLong,$pagination='',$pageid=0,$Offset=0)
-		{
-			//$distance_customer='10';
-			// $distance_parameter="";
-			$distance_parameter = '(
-				6371 * acos(
-				  cos(radians('.'u.user_lat)) * cos(radians('.$userLat.')) * cos(
-					radians('.$userLong.') - radians('.'u.user_long)
-				  ) + sin(radians('.$userLat.')) * sin(radians('.'u.user_lat))
-				)
-			  ) AS distance';
-									  
-			$this->db->select($distance_parameter.','.'u.user_id as service_provider_id,u.full_name,u.address,u.profile_id,u.profile_pic,u.category_id,c.category_name');
-			$this->db->from(TBLPREFIX.'users as u');
-			$this->db->join(TBLPREFIX.'category as c','c.category_id=u.category_id','left');
-			$this->db->where('u.user_type','Service Provider');
-			$this->db->where('u.status','Active');
-			$this->db->order_by('user_id', 'desc');
-			// $this->db->having("distance <=" ,NEARDISTANCE);
-			if(isset($limit) && $limit!='')
-			{
-				$this->db->limit($limit);
-			}
-			if($pagination=='true')
-			{
-				if($pageid>0)
-				{
-					$this->db->limit(POSTLIMIT,$Offset);
-				}
-				else
-				{
-					$this->db->limit(POSTLIMIT,$Offset);
-				}
-			}
-			$result = $this->db->get()->result_array();
-			if(!empty ($result) )
-			{
-				foreach($result as $key=>$row)
-				{
-					if(isset($row['category_image']) && $row['category_image']!="")
-					{
-						$row['category_image']=base_url()."uploads/category_images/".$row['category_image'];
-					}
-					$result[$key]=$row;
-				}
-			}
-			return $result;
-		}
-
-		public function checkIsFavourite($user_id,$service_provider_id) 
-        {
-            $this->db->select('*');
-            $this->db->from(TBLPREFIX.'sp_favourite_verify');
-            $this->db->where('user_id',$user_id);
-            $this->db->where('service_provider_id',$service_provider_id);
-            $query = $this->db->get();
-            $result= $query->row();
-            return $result;
-        }
-
-		public function getReviews($user_id)
-        {
-            $this->db->select('r.*,u.user_id,u.full_name,u.profile_pic');
-            $this->db->from(TBLPREFIX.'review r');
-            $this->db->where('r.service_provider_id',$user_id);
-            $this->db->join(TBLPREFIX.'users as u','u.user_id =r.user_id','left');
-            $this->db->order_by('r.review_id','desc');
-            $this->db->limit(2);
-            return $this->db->get()->result_array();			
         }
 	}

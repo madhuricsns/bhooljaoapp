@@ -35,7 +35,6 @@ Class Service_model extends CI_Model {
 		$this->db->select('s.*,c.category_name');
 		$this->db->join(TBLPREFIX.'category as c','c.category_id=s.category_id','left');
 
-		$this->db->where('s.parent_service_id','0');
 		$this->db->order_by('s.service_id','DESC');
 		if($per_page!="")
 		{
@@ -43,7 +42,7 @@ Class Service_model extends CI_Model {
 		}
 
 		$result = $this->db->get(TBLPREFIX.'service as s');
-		// echo $this->db->last_query();exit;
+		//echo $this->db->last_query();exit;
 		if($res == 1){
 			$response= $result->result_array();
 			foreach($response as $key=>$row)
@@ -196,6 +195,7 @@ public function uptdateService($input_data,$id)
 		$query = $this->db->get("users");
 		return $query->row();
 	}
+
 	
 	public function getAllAddonService($res,$per_page,$page,$id)
 	{
@@ -226,5 +226,17 @@ public function uptdateService($input_data,$id)
 			$response= $result->num_rows();
 		}
 			return $response;
+
+
+	public function uptdateStatus($input_data,$service_id) 
+	{
+		$this->db->where('service_id',$service_id);
+		$res = $this->db->update(TBLPREFIX.'service',$input_data);
+		if($res)
+		{
+			return true;
+		}
+		else
+			return false;
 	}
 }

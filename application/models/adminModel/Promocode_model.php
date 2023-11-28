@@ -118,4 +118,15 @@ Class Promocode_model extends CI_Model {
 		else
 			return false;
 	}
+	public function uptdateStatus($input_data,$promocode_id) 
+	{
+		$this->db->where('promocode_id',$promocode_id);
+		$res = $this->db->update(TBLPREFIX.'promo_code',$input_data);
+		if($res)
+		{
+			return true;
+		}
+		else
+			return false;
+	}
 }

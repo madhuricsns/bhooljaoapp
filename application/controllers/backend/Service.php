@@ -23,6 +23,7 @@ class Service extends CI_Controller {
 	{
 		$data['title']='Manage Sub Category';
 
+		
 		$data['usercnt']=$this->Service_model->getAllService(0,"","");
 		
 		$config = array();
@@ -73,8 +74,8 @@ class Service extends CI_Controller {
 			$this->form_validation->set_rules('service_name', 'Service Name', 'required');
 			//$this->form_validation->set_rules('email_address', 'Email Address', 'required');
 			$this->form_validation->set_rules('description','Description','required');
-			$this->form_validation->set_rules('price', 'Price ', 'required'); //{10} for 10 digits number
-			$this->form_validation->set_rules('discount_price', 'Max Price ', 'required'); //{10} for 10 digits number
+			$this->form_validation->set_rules('minprice', 'Price ', 'required'); //{10} for 10 digits number
+			$this->form_validation->set_rules('maxprice', 'Max Price ', 'required'); //{10} for 10 digits number
 
 			if($this->form_validation->run())
 			{
@@ -82,12 +83,9 @@ class Service extends CI_Controller {
 			
 				$category_id=$this->input->post('category');
 				$Service_name=$this->input->post('service_name');
-				$price=$this->input->post('price');
-				$discount_price=$this->input->post('discount_price');
-				$offer_percentage=$this->input->post('offer_percentage');
-				$demo_price=$this->input->post('demo_price');
-				$demo_discount_price=$this->input->post('demo_discount_price');
-				$option_labelArr=$this->input->post('option_label');
+				$minprice=$this->input->post('minprice');
+				$maxprice=$this->input->post('maxprice');
+				$option_label=$this->input->post('option_label');
 				$optionsArr=$this->input->post('optionsArr');
 				$amountArr=$this->input->post('amountArr');
 				$labelArr=$this->input->post('labelArr');
@@ -109,13 +107,11 @@ class Service extends CI_Controller {
 						'category_id'=>$category_id,
 						'service_name'=>trim($Service_name),
 						'service_description'=>$description,
-						'service_price'=>$price,
-						'service_discount_price'=>$discount_price,
-						'offer_percentage'=>$offer_percentage,
-						'service_demo_price'=>$demo_price,
-						'service_demo_discount_price'=>$demo_discount_price,
+						'min_price'=>$minprice,
+						'max_price'=>$maxprice,
 						'service_image'=>$service_image,
 						'service_status'=>$status,
+						'service_option_name'=>$option_label,
 						'dateadded' => date('Y-m-d H:i:s'),
 						'dateupdated' => date('Y-m-d H:i:s')
 						);
@@ -128,61 +124,41 @@ class Service extends CI_Controller {
 					
 					if($Service_id>0)
 					{	
-						if($service_image!="")
+						// print_r($optionsArr);
+						if(!empty($optionsArr))
 						{
-						// Upload Service Image
-							$image_data = array(
-								'service_id'=>$service_id,
-								'service_image'=>$service_image,
-								'dateadded' => date('Y-m-d H:i:s'),
-								'dateupdated' => date('Y-m-d H:i:s')
-								);
-		
-							$this->Common_Model->insert_data('service_images',$image_data);
-						}
-
-						if(!empty($option_labelArr))
-						{
-							foreach($option_labelArr as $key=>$option_label)
+							foreach($optionsArr as $key=>$option)
 							{
-								// print_r($optionsArr);
-								if(!empty($optionsArr))
-								{
-									foreach($optionsArr as $key=>$option)
-									{
-										$amount=$amountArr[$key];
-										$insert_data=array(
-											'service_id'=>$Service_id,
-											'option_label'=>$option_label,
-											'option_name'=>$option,
-											'option_amount'=>$amount,
-											'dateadded' => date('Y-m-d H:i:s'),
-											'dateupdated' => date('Y-m-d H:i:s')
-										);
-										// if($option!="" && $amount!=""){
-											$this->Common_Model->insert_data('service_details',$insert_data);
-										// }
-										echo $this->db->last_query();
+								$amount=$amountArr[$key];
+								$insert_data=array(
+									'service_id'=>$Service_id,
+									'option_name'=>$option,
+									'option_amount'=>$amount,
+									'dateadded' => date('Y-m-d H:i:s'),
+									'dateupdated' => date('Y-m-d H:i:s')
+								);
+								if($option!="" && $amount!=""){
+									$this->Common_Model->insert_data('service_details',$insert_data);
 									}
-								}
+								// echo $this->db->last_query();
 							}
 						}
 
-						// foreach($labelArr as $key=>$label)
-						// {
-						// 	$labelvalue=$labelvalueArr[$key];
-						// 	$insert_data=array(
-						// 		'service_id'=>$Service_id,
-						// 		'option_name'=>$label,
-						// 		'option_value'=>$labelvalue,
-						// 		'option_type'=>'Label',
-						// 		'dateadded' => date('Y-m-d H:i:s'),
-						// 		'dateupdated' => date('Y-m-d H:i:s')
-						// 	);
-						// 	if($label!="" && $labelvalue!=""){
-						// 		$this->Common_Model->insert_data('service_details',$insert_data);
-						// 		}
-						// }
+						foreach($labelArr as $key=>$label)
+						{
+							$labelvalue=$labelvalueArr[$key];
+							$insert_data=array(
+								'service_id'=>$Service_id,
+								'option_name'=>$label,
+								'option_value'=>$labelvalue,
+								'option_type'=>'Label',
+								'dateadded' => date('Y-m-d H:i:s'),
+								'dateupdated' => date('Y-m-d H:i:s')
+							);
+							if($label!="" && $labelvalue!=""){
+								$this->Common_Model->insert_data('service_details',$insert_data);
+								}
+						}
 						$this->session->set_flashdata('success','Service added successfully.');
 
 						redirect(base_url().'backend/Service/manageService');	
@@ -445,6 +421,7 @@ class Service extends CI_Controller {
 			redirect(base_url().'backend/Service/managesservice');
 		}
 	}
+
 	
 	public function manageAddonServices()
 	{
@@ -634,3 +611,28 @@ class Service extends CI_Controller {
 		$this->load->view('admin/admin_footer');
 	}
 }
+
+
+public function change_status()
+	{
+		$data['title']='Change Status';
+		$data['error_msg']='';
+		
+		$service_id=base64_decode($this->uri->segment(4));
+
+		$statusTobeUpdated=base64_decode($this->uri->segment(5));
+		//echo "user_id--".$user_id;exit();
+		if($service_id)
+		{
+			$input_data = array(
+								'service_status'=> $statusTobeUpdated
+								);
+			$userdata = $this->Service_model->uptdateStatus($input_data,$service_id);
+			if($userdata){
+				$this->session->set_flashdata('success','Status updated successfully.');
+				redirect(base_url().'backend/Service/manageService/');
+				}
+		}
+	}
+}
+

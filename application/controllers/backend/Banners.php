@@ -280,4 +280,25 @@ class Banners extends CI_Controller {
 			redirect(base_url().'backend/Banners/index');
 		}
 	}
+	public function change_status()
+	{
+		$data['title']='Change Status';
+		$data['error_msg']='';
+		
+		$banner_id=base64_decode($this->uri->segment(4));
+
+		$statusTobeUpdated=base64_decode($this->uri->segment(5));
+		//echo "user_id--".$user_id;exit();
+		if($banner_id)
+		{
+			$input_data = array(
+								'banner_status'=> $statusTobeUpdated
+								);
+			$userdata = $this->Banner_model->uptdateStatus($input_data,$banner_id);
+			if($userdata){
+				$this->session->set_flashdata('success','Status updated successfully.');
+				redirect(base_url().'backend/Banners/manageBanner/');
+				}
+		}
+	}
 }

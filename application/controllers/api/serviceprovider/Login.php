@@ -6,8 +6,7 @@ class Login extends REST_Controller {
 	public function __construct()
     {
         parent::__construct();
-		$this->load->model('ApiModels/customer/LoginModel');
-		$this->load->model('ApiModels/customer/CustomerModel');
+		$this->load->model('ApiModels/sp/LoginModel');
 		$this->load->model('ApiModels/UserModel');
 		$this->load->model('Common_Model');
 	}
@@ -15,13 +14,12 @@ class Login extends REST_Controller {
 	public function login_post()
 	{
 		$token 		  = $this->input->post("token");
-		$username	  = $this->input->post('username');
-		$password	  = $this->input->post('password');
+		$username	  = $this->input->post('mobile');
 		$fcm		  = $this->input->post('fcm');
 		
 		if($token == TOKEN)
 		{
-			$data = array('username' => $this->input->post('username'), 'password' => $this->input->post('password'));
+			$data = array('username' => $this->input->post('username'));
 		
 			$isLogin = $this->LoginModel->check_login($data);
 		
@@ -33,7 +31,7 @@ class Login extends REST_Controller {
 
 				//*** FCM Update */
 				// $fcmdata=array('fcm'=> $fcm);
-				// $q=$this->Common_Model->update_data('users','userid',$result->userid,$fcmdata);
+				// $q=$this->Common_Model->update_data('user','userid',$result->userid,$fcmdata);
 				//*********** */
 				
 				if($status == 'Active')
@@ -47,10 +45,8 @@ class Login extends REST_Controller {
 
 					// Send OTP
 					$otp_code = $this->Common_Model->otp();
-
 					$strMessage=urlencode("$otp_code is your OTP. Please do not share it with anybody.");
 					$output=$this->Common_Model->SendSms($strMessage, $result->mobile);	
-
 					$response_array['OTP'] = $otp_code;
 
 					//Send Email
@@ -81,7 +77,7 @@ class Login extends REST_Controller {
 			else
 			{
 				$response_array['responsecode'] = "402";
-				$response_array['responsemessage'] = 'Invalid Username or Password';
+				$response_array['responsemessage'] = 'Invalid Mobile No';
 				
 			}
 		}
@@ -155,7 +151,7 @@ class Login extends REST_Controller {
 	{
 		//date_default_timezone_set(DEFAULT_TIME_ZONE);	
 		$token 		= $this->input->post("token");
-		$username	= $this->input->post("username");
+		$username	= $this->input->post("mobile");
 		
 		if($token == TOKEN)
 		{
@@ -174,17 +170,13 @@ class Login extends REST_Controller {
 				else
 				{
 					$users_username = $this->LoginModel->getuserDetails($username);
-					//print_r($users_username);
+					// print_r($users_username);
 					
 					if(!empty($users_username))
 					{
 						$user_id 		= $users_username->user_id;
 						//$rnd = "12345"; //default SMS
 						$otp_code = $this->Common_Model->otp();
-						if($this->input->post("print") == 1)
-						{
-							//print_r($users_username); exit;
-						}		
 						
 						$updateData['otp'] 	= $otp_code;
 						$this->Common_Model->update_Data('users','user_id',$user_id,$updateData);
@@ -193,7 +185,7 @@ class Login extends REST_Controller {
 						$output=$this->Common_Model->SendSms($strMessage, $username);	
 						
 						$datas = array(
-								'mobile_number'   	=> $username,
+								'mobile'   	=> $username,
 								'user_id' => $users_username->user_id,
 								'otp' 	=> $updateData['otp'],
 									);

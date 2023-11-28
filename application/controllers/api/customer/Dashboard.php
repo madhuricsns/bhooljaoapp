@@ -63,12 +63,28 @@ class Dashboard extends REST_Controller {
 					$banners[$key]=$banner;
 				}
 				$categories = $this->DashboardModel->getCategory($limit=6);
-				
+
 				$arrOngoingServices = $this->DashboardModel->ongoingServices($user_id);
 				foreach($arrOngoingServices as $key=>$booking)
 				{
-					$booking['expiry_date']="Oct 16,2023";
-					$booking['expiry_day']="8 days left";
+					
+					// Calculate Days
+					$date1 = new DateTime($booking['booking_date']);
+					$date1 = $date1->format('Y-m-d');
+					
+					$date2 = new DateTime($booking['expiry_date']);
+					$date2 = $date2->format('Y-m-d');
+
+					$date1=date_create($date1);
+					$date2=date_create($date2);
+					
+					$interval = date_diff($date1, $date2); 
+					$days  = $interval->format('%a days left'); 
+					
+					$booking['booking_date']=$date1->format('M d,Y');
+					$booking['expiry_date']=$date2->format('M d,Y');
+
+					$booking['expiry_day']=$days;
 					if(!isset($booking['full_name']))
 					{
 						$booking['full_name']="";
