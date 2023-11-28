@@ -113,6 +113,28 @@
 							</h5>
                             </div>
                             <div class="card-body">
+							
+							Payment Method: <?php 
+							echo $orderInfo[0]['payment_type']; ?>
+							<br/>
+							Location: <?php 
+							echo $addressDetails->address1;
+							?>
+							<br/>
+							Service Duration: <?php 
+							echo $orderInfo[0]['duration']." Months"; ?>
+							<?php
+						
+							
+							if(isset($serviceDetails) && count($serviceDetails) > 0) {
+								foreach($serviceDetails as $service) 
+								{ ?>
+								<p><?php echo $service['service_name'].' '.$service['option_amount'].'*'.$service['duration']; ?> 
+								<?php echo $service['option_amount'] * $service['duration']; ?></p>
+							<?php }
+							}
+							?>
+							
 							<?php
 							 if(isset($orderInfo) && count($orderInfo)>0 && isset($orderInfo) && count($orderInfo)>0)									
 							{

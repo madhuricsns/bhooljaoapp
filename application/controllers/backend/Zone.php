@@ -300,5 +300,26 @@ public function get_lat_long($address)
 
 /* End lat & long function*/
 
+public function change_status()
+	{
+		$data['title']='Change Status';
+		$data['error_msg']='';
+		
+		$zone_id=base64_decode($this->uri->segment(4));
+
+		$statusTobeUpdated=base64_decode($this->uri->segment(5));
+		//echo "user_id--".$user_id;exit();
+		if($zone_id)
+		{
+			$input_data = array(
+								'zone_status'=> $statusTobeUpdated
+								);
+			$userdata = $this->Zone_model->uptdateStatus($input_data,$zone_id);
+			if($userdata){
+				$this->session->set_flashdata('success','Status updated successfully.');
+				redirect(base_url().'backend/Zone/manageZones/');
+				}
+		}
+	}
 
 }

@@ -553,7 +553,7 @@ class Users extends CI_Controller {
 						{
 							$errorMsg = $this->upload->display_errors();
 							$this->session->set_flashdata('error',$errorMsg);
-							redirect(base_url().'backend/Users/addServiceprovider/');
+							redirect(base_url().'backend/Service_provider/addservice_provider/');
 
 						}
 						if($_FILES['servicefile']['error']==0)

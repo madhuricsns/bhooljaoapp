@@ -61,6 +61,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 											<th>Banner Image</th>
 											<th>Banner Type</th>
 											<th>Status</th>
+											<th>Change Status</th>
 											<th>Actions</th>	
 										</tr>
 									</thead>	
@@ -83,6 +84,13 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<?php } ?>
 												<td><?php echo $banner['banner_type'];?></td>
 												<td><?php echo $banner['banner_status'];?></td>
+												<td>
+													<?php if($banner['banner_status']!='Active') { ?>
+														<a href="<?php echo base_url();?>backend/Banners/change_status/<?php echo base64_encode($banner['banner_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-success">Active</a>
+														<?php } else { ?>
+														<a href="<?php echo base_url();?>backend/Banners/change_status/<?php echo base64_encode($banner['banner_id']);?>/<?php echo base64_encode('Inactive');?>" class="btn-sm btn-danger">Inactive</a>
+													<?php } ?>
+												</td>
 												<td class="actions" <?php
 												
 												/* if(isset($modulesId)&& count($modulesId)>0)

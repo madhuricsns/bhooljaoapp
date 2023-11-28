@@ -98,4 +98,16 @@ Class Banner_model extends CI_Model {
 		else
 			return false;
 	}
+
+	public function uptdateStatus($input_data,$banner_id) 
+	{
+		$this->db->where('banner_id',$banner_id);
+		$res = $this->db->update(TBLPREFIX.'banner',$input_data);
+		if($res)
+		{
+			return true;
+		}
+		else
+			return false;
+	}
 }

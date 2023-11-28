@@ -60,6 +60,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 											<th style="width:60%;">Material Name</th>
 											<!-- <th style="width:10%;">Qty</th> -->
 											<th style="width:10%;">Status</th>
+											<th style="width:10%">Change Status</th>
 											<th style="width:10%;">Actions</th>	
 										</tr>
 									</thead>	
@@ -73,6 +74,13 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<td><?php echo $material['material_name'];?></td>
 												<!-- <td><?php echo $material['material_qty'];?></td> -->
 												<td><?php echo $material['material_status'];?></td>
+												<td>
+													<?php if($material['material_status']!='Active') { ?>
+														<a href="<?php echo base_url();?>backend/Material/change_status/<?php echo base64_encode($material['material_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-success">Active</a>
+														<?php } else { ?>
+														<a href="<?php echo base_url();?>backend/Material/change_status/<?php echo base64_encode($material['material_id']);?>/<?php echo base64_encode('Inactive');?>" class="btn-sm btn-danger">Inactive</a>
+													<?php } ?>
+												</td>
 												<td class="actions">                     
 													<a href="<?php echo base_url();?>backend/Material/updateMaterial/<?php echo base64_encode($material['material_id']);?>"><i data-feather="edit"></i></a>
 													<a href="<?php echo base_url();?>backend/Material/deleteMaterial/<?php echo base64_encode($material['material_id']);?>" onclick="javascript:return chk_isDeleteComnfirm();">

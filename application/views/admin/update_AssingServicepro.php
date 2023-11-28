@@ -4,7 +4,7 @@
 	<div class="container-fluid">
                 <div class="card tab2-card">
                     <div class="card-header">
-                        <h5>ASSING SERVICE PROVIDER</h5>
+                        <h5>ASSIGN SERVICE PROVIDER</h5>
                     </div>
                     <div class="card-body">
                       <?php if($this->session->flashdata('success')!=""){?>
@@ -55,7 +55,7 @@
 
                                             <div class="form-group row">
                                             	<div class="offset-xl-3 offset-sm-4">
-						                            <button type="submit" class="btn btn-primary" name="btn_upAssing" id="btn_uptcity">Assing</button>
+						                            <button type="submit" class="btn btn-primary" name="btn_upAssing" id="btn_uptcity">Assign</button>
 													<a href="<?php echo base_url();?>backend/City/managescity" class="btn btn-primary" >Cancel</a>
 						                        </div>
                                             </div>

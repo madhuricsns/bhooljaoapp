@@ -149,7 +149,7 @@
                                                    if($userInfo[0]['profile_pic']!="")
 												{
 	
-												$str_images='<img src="'.base_url().'uploads/service_provider/'.$userInfo[0]['profile_pic'].'" style="width:80px;height:80px">';
+												$str_images='<img src="'.base_url().'uploads/user_profile/'.$userInfo[0]['profile_pic'].'" style="width:80px;height:80px">';
 												}
 												else
 												{

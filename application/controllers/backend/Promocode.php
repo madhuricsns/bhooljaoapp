@@ -134,7 +134,7 @@ class Promocode extends CI_Controller {
 	{
 		$data['title']='Update Promocode';
 		$data['error_msg']='';
-		$data['serviceList']=$this->Promocode_model->getAllservice(1,"","");
+		//$data['serviceList']=$this->Promocode_model->getAllservice(1,"","");
 		//echo "segment--".$this->uri->segment(4);exit();
 		$promocode_id=base64_decode($this->uri->segment(4));
 		$promocode_id_base64 = base64_encode($promocode_id);
@@ -147,7 +147,7 @@ class Promocode extends CI_Controller {
 				$data['PromocodeInfo'] = $this->Promocode_model->getSinglepromocodeInfo($promocode_id,1);
 				if(isset($_POST['btn_uptpromocode']))
 				{
-					$this->form_validation->set_rules('service_id','Service Id','required');
+					//$this->form_validation->set_rules('service_id','Service Id','required');
 			$this->form_validation->set_rules('promocode_code','Promocode Code ','required');
 			$this->form_validation->set_rules('promocode_description','Promocode Description','required');
 			$this->form_validation->set_rules('promocode_discount','Promocode Discount','required');
@@ -157,7 +157,7 @@ class Promocode extends CI_Controller {
 			if($this->form_validation->run())
 					{
 						
-				$service_id=$this->input->post('service_id');
+				//$service_id=$this->input->post('service_id');
 				$promocode_code=$this->input->post('promocode_code');
 				$promocode_description=$this->input->post('promocode_description');
 				$promocode_discount=$this->input->post('promocode_discount');
@@ -166,7 +166,7 @@ class Promocode extends CI_Controller {
 						//$description = $this->input->post('description');
 									
 						$input_data = array(
-								'service_id'=>$service_id,
+								
 								'promocode_code'=>$promocode_code,
 								'promocode_description'=>$promocode_description,
 								'promocode_type'=>$promocode_type,
@@ -195,7 +195,7 @@ class Promocode extends CI_Controller {
 					{
 						$this->session->set_flashdata('error',$this->form_validation->error_string());
 
-						redirect(base_url().'backend/Service_provider/updateservice/'.base64_encode($user_id));
+						redirect(base_url().'backend/Promocode/updatePromocode/'.base64_encode($user_id));
 					}
 				}
 			}
@@ -240,6 +240,28 @@ class Promocode extends CI_Controller {
 		{
 			$this->session->set_flashdata('error','Promocode not found.');
 			redirect(base_url().'backend/Promocode/index');
+		}
+	}
+
+	public function change_status()
+	{
+		$data['title']='Change Status';
+		$data['error_msg']='';
+		
+		$promocode_id=base64_decode($this->uri->segment(4));
+
+		$statusTobeUpdated=base64_decode($this->uri->segment(5));
+		//echo "user_id--".$user_id;exit();
+		if($promocode_id)
+		{
+			$input_data = array(
+								'promocode_status'=> $statusTobeUpdated
+								);
+			$userdata = $this->Promocode_model->uptdateStatus($input_data,$promocode_id);
+			if($userdata){
+				$this->session->set_flashdata('success','Status updated successfully.');
+				redirect(base_url().'backend/Promocode/managePromocode/');
+				}
 		}
 	}
 }

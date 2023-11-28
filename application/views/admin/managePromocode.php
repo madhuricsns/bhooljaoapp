@@ -63,6 +63,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 											<th>Promocode Type</th>
 											<th>Promocode Discount</th>
 											<th>Status</th>
+											<th>Change Status</th>
 											<th>Actions</th>	
 										</tr>
 									</thead>	
@@ -82,6 +83,13 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												
 												<td><?php echo $promocode['promocode_discount'];?></td>
 												<td><?php echo $promocode['promocode_status'];?></td>
+												<td>
+													<?php if($promocode['promocode_status']!='Active') { ?>
+														<a href="<?php echo base_url();?>backend/Promocode/change_status/<?php echo base64_encode($promocode['promocode_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-success">Active</a>
+														<?php } else { ?>
+														<a href="<?php echo base_url();?>backend/Promocode/change_status/<?php echo base64_encode($promocode['promocode_id']);?>/<?php echo base64_encode('Inactive');?>" class="btn-sm btn-danger">Inactive</a>
+													<?php } ?>
+												</td>
 												<td class="actions" <?php
 												
 												/* if(isset($modulesId)&& count($modulesId)>0)
