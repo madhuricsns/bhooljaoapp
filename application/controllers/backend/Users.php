@@ -11,6 +11,7 @@ class Users extends CI_Controller {
 		$this->load->helper('email');
 		$this->load->library('session');
 		$this->load->model('adminModel/User_model');
+		$this->load->model('Common_Model');
 		
 	}
 	public function index()
@@ -124,8 +125,11 @@ class Users extends CI_Controller {
 
 				if($usertitle==0)
 				{
+					$profile_id = "BJC".$this->Common_Model->randomCode();
+					
 					$input_data = array(
-						'profile_pic'=>$servicefile,
+							'profile_id' => $profile_id,
+							'profile_pic'=>$servicefile,
 							'full_name'=>trim($full_name),
 							'email'=>$email_address,
 							'password'=>md5($password),
@@ -539,7 +543,7 @@ class Users extends CI_Controller {
 						$photo_imagename='';
 						$new_image_name = rand(1, 99999).$_FILES['servicefile']['name'];
 						$config = array(
-									'upload_path' => "uploads/service_provider/",
+									'upload_path' => "uploads/user_profile/",
 									'allowed_types' => "gif|jpg|png|bmp|jpeg",
 									'max_size' => "0", 
 									'file_name' =>$new_image_name
@@ -566,8 +570,11 @@ class Users extends CI_Controller {
 
 				if($usertitle==0)
 				{
+					$profile_id = "BJS".$this->Common_Model->randomCode();
+					
 					$input_data = array(
-						'profile_pic'=>$servicefile,
+							'profile_id'=>$profile_id,
+							'profile_pic'=>$servicefile,
 							'full_name'=>trim($full_name),
 							'email'=>$email_address,
 							'password'=>md5($password),
@@ -666,7 +673,7 @@ class Users extends CI_Controller {
 						$photo_imagename='';
 						$new_image_name = rand(1, 99999).$_FILES['servicefile']['name'];
 						$config = array(
-									'upload_path' => "uploads/service_provider/",
+									'upload_path' => "uploads/user_profile/",
 									'allowed_types' => "gif|jpg|png|bmp|jpeg",
 									'max_size' => "0", 
 									'file_name' =>$new_image_name

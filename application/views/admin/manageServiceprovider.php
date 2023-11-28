@@ -81,7 +81,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
                  <?php if(!empty ($user['profile_pic']) == NULL):?>
                   <img class="img-circle" src="<?php echo base_url().'./uploads/service_provider/default.png';?>" width="50px" >
                  <?php else:?>
-                  <img class="img-circle" src="<?php echo base_url().'./uploads/service_provider/'.$user['profile_pic'];?>" width="50px">
+                  <img class="img-circle" src="<?php echo base_url().'./uploads/user_profile/'.$user['profile_pic'];?>" width="50px">
                  <?php endif;?>
 
 												</td>

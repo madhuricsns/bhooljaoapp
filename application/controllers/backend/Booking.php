@@ -355,6 +355,10 @@ public function viewBookingDetails()
 		$booking_id=base64_decode($this->uri->segment(4));
         
 		$data['orderInfo']=$this->Booking_model->getSingleBookingInfo($booking_id,1);
+		
+		$data['serviceDetails'] = $this->Booking_model->getServiceDetails($booking_id);
+		$data['addressDetails'] = $this->Booking_model->getBookingAddressDetails($data['orderInfo'][0]['address_id']);
+		
 		//echo $this->db->last_query();exit;
 		 $this->load->view('admin/admin_header',$data);
 		// $this->load->view('admin/addMaterial',$data);

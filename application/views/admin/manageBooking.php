@@ -142,7 +142,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 
 <?php   if ($booking['booking_status']='waiting' && $booking['service_provider_id']<1) {
 	?>
-										<a href="<?php echo base_url();?>backend/Booking/AssingServiceProvider/<?php echo base64_encode($booking['booking_id']);?>"><i data-feather="user-check"></i></a>
+										<a href="<?php echo base_url();?>backend/Booking/AssingServiceProvider/<?php echo base64_encode($booking['booking_id']);?>" title="Assign Service Provider"><i data-feather="user-check"></i></a>
 <?php } else{}?>
 
 
