@@ -43,7 +43,7 @@
 			for ($i = 0; $i < $length; $i++) {
 				$randomString .= $characters[random_int(0, $charactersLength - 1)];
 			}
-			//$randomString='1234';
+			// $randomString='1234';
 			return $randomString;
 		}
         function ImageUpload($imageName,$target_dir)
@@ -169,7 +169,8 @@
 			//http://sms.messageindia.in/v2/sendSMS?username=shramapi&message=Dear%20user%20your%20CSNS%20Login%20OTP%20for%20MSMED%20is%201234&sendername=CSNSIN&smstype=TRANS&numbers=9527482493&apikey=32cce567-656c-40bd-80e6-9319e7128f1b&peid=1201162246168290922&templateid=1207162288297684013
 			//$strUrl = "http://sms.messageindia.in/v2/sendSMS?username=$strUserName&message=$strMessage&sendername=CSNSIN&smstype=TRANS&numbers=$strMobile&apikey=32cce567-656c-40bd-80e6-9319e7128f1b&peid=$entityid&templateid=$templateid";
 			// echo $strUrl;
-			$strUrl="http://sms.messageindia.in/v2/sendSMS?username=shramapi&message=$strMessage&sendername=CSNSIN&smstype=TRANS&numbers=$strMobile&apikey=32cce567-656c-40bd-80e6-9319e7128f1b&peid=1201162246168290922&templateid=1207162288297684013";
+			
+			$strUrl="http://sms.messageindia.in/v2/sendSMS?username=cyborgapi&message=$strMessage&sendername=MIRICR&smstype=TRANS&numbers=$strMobile&apikey=949776f6-b95e-4d74-944b-03d5bfc051da&peid=1201161527747662237&templateid=1207161760669839695";
 			$curl 		 = curl_init() or die("Error"); 	
 			//echo $strUrl;exit;	
 			curl_setopt($curl, CURLOPT_URL, $strUrl);  // Web service for OTP sending 
@@ -362,7 +363,52 @@
 			  	$this->db->update(TBLPREFIX.$tablename,$data); 
 		  	}
 		} 
-		
+		function get_lat_long($address)
+		{
+			$arrReturn = array();
+			if ($address != "")
+			{	
+				$address = str_replace(" ", "+", $address);
+				$str="https://maps.google.com/maps/api/geocode/json?address=$address&sensor=false&key=AIzaSyB0-m0BRbw8AtbMAawt7YPC4hFKmAO2hBI"; 
+				$json = file_get_contents($str);
+				$json = json_decode($json);
+				// echo "<pre>";
+				// print_r($json);
+				// exit;
+
+				$lat = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
+				$long = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
+				$city = "";
+				$state = "";
+				$country = "";
+				if(isset($json->{'results'}[0]->{'address_components'}[3]->{'long_name'}))
+				{
+					$city = $json->{'results'}[0]->{'address_components'}[3]->{'long_name'};
+				}
+
+				if(isset($json->{'results'}[0]->{'address_components'}[4]->{'long_name'}))
+				{
+					$state = $json->{'results'}[0]->{'address_components'}[3]->{'long_name'};
+				}
+
+				if(isset($json->{'results'}[0]->{'address_components'}[5]->{'long_name'}))
+				{
+					$country = $json->{'results'}[0]->{'address_components'}[3]->{'long_name'};
+				}
+				
+				//$zipcode = $json->{'results'}[0]->{'address_components'}[6]->{'long_name'};
+				
+				
+				$arrReturn['latitude'] = $lat;
+				$arrReturn['longitude'] = $long;
+				$arrReturn['city'] = $city;
+				$arrReturn['state'] = $state;
+				$arrReturn['country'] = $country;
+				//$arrReturn['zipcode'] = $zipcode; //exit;
+				//return $lat.','.$long;	
+			}
+			return $arrReturn;
+		}
 		
     }
 ?>
