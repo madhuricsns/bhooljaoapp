@@ -61,7 +61,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 											<th style="width:10%">Category</th>
 											<th style="width:15%">Service Name</th>
 											<th style="width:25%">Description</th>
-											<th style="width:10%">Price</th>
+											<!--<th style="width:10%">Price</th>-->
 											<th style="width:10%">Status</th>
 											<th style="width:10%">Change Status</th>
 											<th style="width:10%">Actions</th>	
@@ -79,11 +79,9 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<td><?php echo $service['category_name'];?></td>
 												<td><?php echo $service['service_name'];?></td>
 												<td><?php echo $service['service_description'];?></td>
-												<td><?php// echo "₹".$service['min_price']."- ₹".$service['max_price'];?></td>
+												<!--<td><?php// echo "₹".$service['min_price']."- ₹".$service['max_price'];?></td>-->
 												<td><?php echo $service['service_status'];?></td>
-
-												<td class="actions">  
-<a href="<?php echo base_url();?>backend/Service/manageAddonServices/<?php echo base64_encode($service['service_id']);?>" title="Addon Services"><i data-feather="eye"></i></a>												
+												
 												
 
 												<td>
@@ -94,7 +92,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 													<?php } ?>
 												</td>
 												<td class="actions">                     
-
+<a href="<?php echo base_url();?>backend/Service/manageAddonServices/<?php echo base64_encode($service['service_id']);?>" title="Addon Services"><i data-feather="eye"></i></a>
 													<a href="<?php echo base_url();?>backend/Service/updateService/<?php echo base64_encode($service['service_id']);?>"><i data-feather="edit"></i></a>
 													
 													<a href="<?php echo base_url();?>backend/Service/deleteService/<?php echo base64_encode($service['service_id']);?>" onclick="javascript:return chk_isDeleteComnfirm();">

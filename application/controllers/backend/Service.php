@@ -610,10 +610,8 @@ class Service extends CI_Controller {
 		$this->load->view('admin/addService',$data);
 		$this->load->view('admin/admin_footer');
 	}
-}
-
-
-public function change_status()
+	
+	public function change_status()
 	{
 		$data['title']='Change Status';
 		$data['error_msg']='';
@@ -634,5 +632,6 @@ public function change_status()
 				}
 		}
 	}
+
 }
 

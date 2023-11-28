@@ -1,4 +1,3 @@
-
 <?php
 Class Service_model extends CI_Model {
 	function __construct()
@@ -34,7 +33,7 @@ Class Service_model extends CI_Model {
 		echo "page--".$page;exit();*/
 		$this->db->select('s.*,c.category_name');
 		$this->db->join(TBLPREFIX.'category as c','c.category_id=s.category_id','left');
-
+		$this->db->where('s.parent_service_id','0');
 		$this->db->order_by('s.service_id','DESC');
 		if($per_page!="")
 		{
@@ -226,7 +225,7 @@ public function uptdateService($input_data,$id)
 			$response= $result->num_rows();
 		}
 			return $response;
-
+	}
 
 	public function uptdateStatus($input_data,$service_id) 
 	{
