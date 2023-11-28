@@ -84,5 +84,16 @@ Class Zone_model extends CI_Model {
 			return false;
 		}	
 	}
+	public function uptdateStatus($input_data,$zone_id) 
+	{
+		$this->db->where('zone_id',$zone_id);
+		$res = $this->db->update(TBLPREFIX.'zone',$input_data);
+		if($res)
+		{
+			return true;
+		}
+		else
+			return false;
+	}
 	
 }

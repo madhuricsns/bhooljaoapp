@@ -148,23 +148,28 @@ class Booking extends CI_Controller {
 		$this->load->view('admin/addMaterial',$data);
 		$this->load->view('admin/admin_footer');
 	}
-	
+
+
 	public function AssingServiceProvider()
 	{
 		$data['title']='Assing Service Provider';
 		$data['error_msg']='';
 		$data['usersList']=$this->Booking_model->getAllUsers(1,"","");
+
 			$booking_id=base64_decode($this->uri->segment(4));
+
 			if ($booking_id) {
 				$bokingInfo=$this->Booking_model->getSingleBookingInfo($booking_id,0);
 			
 			if($bokingInfo>0)
 			{
 				$data['bokingInfo'] = $this->Booking_model->getSingleBookingInfo($booking_id,1);
+
 				if(isset($_POST['btn_upAssing']))
 				{
 				
 			        $this->form_validation->set_rules('service_provider','Service Provider ','required');
+
 					if($this->form_validation->run())
 					{
 						$servicepro=$this->input->post('service_provider');
@@ -182,17 +187,20 @@ class Booking extends CI_Controller {
 						if($updatedata)
 						{	
 							$this->session->set_flashdata('success','Assing Service Provider successfully.');
+
 							redirect(base_url().'backend/Booking/manageBooking');	
 						}
 						else
 						{
 							$this->session->set_flashdata('error','Error while updating Zone.');
+
 							redirect(base_url().'backend/Booking/AssingServiceProvider/'.base64_encode($user_id));
 						}	
 					}
 					else
 					{
 						$this->session->set_flashdata('error',$this->form_validation->error_string());
+
 						redirect(base_url().'backend/Booking/AssingServiceProvider/'.base64_encode($user_id));
 					}
 				}
@@ -210,7 +218,8 @@ class Booking extends CI_Controller {
 					// print_r($bokingidInfo);
 					// exit();
 			}
-
+	
+	
 	public function updateMaterial()
 	{
 		$data['title']='Update Material';
@@ -355,10 +364,6 @@ public function viewBookingDetails()
 		$booking_id=base64_decode($this->uri->segment(4));
         
 		$data['orderInfo']=$this->Booking_model->getSingleBookingInfo($booking_id,1);
-		
-		$data['serviceDetails'] = $this->Booking_model->getServiceDetails($booking_id);
-		$data['addressDetails'] = $this->Booking_model->getBookingAddressDetails($data['orderInfo'][0]['address_id']);
-		
 		//echo $this->db->last_query();exit;
 		 $this->load->view('admin/admin_header',$data);
 		// $this->load->view('admin/addMaterial',$data);

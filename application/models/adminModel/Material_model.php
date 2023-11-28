@@ -59,5 +59,16 @@ Class Material_model extends CI_Model {
 			return $query->num_rows();
 		}	
 	}
+	public function uptdateStatus($input_data,$material_id) 
+	{
+		$this->db->where('material_id',$material_id);
+		$res = $this->db->update(TBLPREFIX.'material',$input_data);
+		if($res)
+		{
+			return true;
+		}
+		else
+			return false;
+	}
 	
 }

@@ -261,4 +261,26 @@ class Material extends CI_Controller {
 			redirect(base_url().'backend/Material/manageMaterial');
 		}
 	}
+
+	public function change_status()
+	{
+		$data['title']='Change Status';
+		$data['error_msg']='';
+		
+		$material_id=base64_decode($this->uri->segment(4));
+
+		$statusTobeUpdated=base64_decode($this->uri->segment(5));
+		//echo "user_id--".$user_id;exit();
+		if($material_id)
+		{
+			$input_data = array(
+								'material_status'=> $statusTobeUpdated
+								);
+			$userdata = $this->Material_model->uptdateStatus($input_data,$material_id);
+			if($userdata){
+				$this->session->set_flashdata('success','Status updated successfully.');
+				redirect(base_url().'backend/Material/manageMaterial/');
+				}
+		}
+	}
 }

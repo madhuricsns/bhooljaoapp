@@ -152,7 +152,9 @@ $session_subroles="";
 						<img src="<?php echo base_url()."/uploads/flaticon/categories.png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
 						<span>MATERIAL MANAGEMENT </span></a>                        
 					</li>
-					<li  <?php if($this->router->fetch_class()=='Banners'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='managePromocode'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
+					
+
+					<li  <?php if($this->router->fetch_class()=='Promocode'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='managePromocode'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
 							{ 
 								if ($modulesId[1]['view'] == 'Yes') 
 								{ 
@@ -165,10 +167,10 @@ $session_subroles="";
 							}
 							?>>
 						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Promocode/managePromocode"><!-- <i data-feather="home"></i> -->
-						<img src="<?php echo base_url()."/uploads/flaticon/promo-code.png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
+						<img src="<?php echo base_url()."/uploads/flaticon/Banners .png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
 						<span>PROMOCODE</span></a>                        
 					</li>
-					<li  <?php if($this->router->fetch_class()=='Banners'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageNotifications'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
+					<li  <?php if($this->router->fetch_class()=='Notifications'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageNotifications'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
 							{ 
 								if ($modulesId[1]['view'] == 'Yes') 
 								{ 
@@ -181,7 +183,7 @@ $session_subroles="";
 							}
 							?>>
 						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Notifications/manageNotifications"><!-- <i data-feather="home"></i> -->
-						<img src="<?php echo base_url()."/uploads/flaticon/notification.png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
+						<img src="<?php echo base_url()."/uploads/flaticon/Banners .png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
 						<span>NOTIFICATION</span></a>                        
 					</li>
 					<li  <?php if($this->router->fetch_class()=='Banners'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageBanner'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
@@ -197,7 +199,7 @@ $session_subroles="";
 							}
 							?>>
 						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Banners/manageBanner"><!-- <i data-feather="home"></i> -->
-						<img src="<?php echo base_url()."/uploads/flaticon/banners.png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
+						<img src="<?php echo base_url()."/uploads/flaticon/Banners .png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
 						<span>BANNERS</span></a>                        
 					</li>
 					

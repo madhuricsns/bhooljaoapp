@@ -138,7 +138,7 @@ Class User_model extends CI_Model {
 		/*echo "PerPage--".$per_page;
 		echo "page--".$page;exit();*/
 		$this->db->select('b.*,u.full_name,bd.*,c.category_name');
-		$this->db->join(TBLPREFIX.'category as c','c.category_id=b.service_category_id','left');
+		$this->db->join(TBLPREFIX.'category as c','c.category_id=b.category_id','left');
 		$this->db->join(TBLPREFIX.'users as u','u.user_id=b.user_id','left');
 		$this->db->join(TBLPREFIX.'booking_details as bd','bd.booking_id=b.booking_id','left');
 		$this->db->where('b.user_id',$user_id);
@@ -161,7 +161,7 @@ Class User_model extends CI_Model {
 		/*echo "PerPage--".$per_page;
 		echo "page--".$page;exit();*/
 		$this->db->select('b.*,u.full_name,bd.*,c.category_name');
-		$this->db->join(TBLPREFIX.'category as c','c.category_id=b.service_category_id','left');
+		$this->db->join(TBLPREFIX.'category as c','c.category_id=b.category_id','left');
 		$this->db->join(TBLPREFIX.'users as u','u.user_id=b.user_id','left');
 		$this->db->join(TBLPREFIX.'booking_details as bd','bd.booking_id=b.booking_id','left');
 
