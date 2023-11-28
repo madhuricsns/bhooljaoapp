@@ -12,12 +12,14 @@
 		public function getMyBookings($user_id,$status)
 		{
             //(DATE_FORMAT(DATE(b.booking_date),'%M/%d/,%Y')) as booking_date
-			$this->db->select("b.booking_id,b.order_no,c.category_name,c.category_image,u.profile_id,u.profile_pic,u.full_name,b.booking_date,b.time_slot,b.expiry_date,b.booking_status,b.service_provider_id");
+			$this->db->select("b.booking_id,b.order_no,c.category_name,c.category_image,u.profile_id,u.profile_pic,u.full_name,b.booking_date,b.time_slot,b.expiry_date,b.booking_status,b.service_provider_id
+            ,a.address1 as address");
             $this->db->from(TBLPREFIX.'booking b');
-            $this->db->where('b.user_id',$user_id);
+            $this->db->where('b.service_provider_id',$user_id);
             $this->db->where('b.booking_status',$status);
             $this->db->join(TBLPREFIX.'users as u','u.user_id =b.user_id','left');
             $this->db->join(TBLPREFIX.'category as c','c.category_id = b.category_id','left');
+            $this->db->join(TBLPREFIX.'addresses as a','a.address_id = b.address_id','left');
 			$query = $this->db->get();
             $result= $query->result_array();
 			if(!empty ($result) )
@@ -40,7 +42,7 @@
 		
 		public function getBookingData($booking_id)
 		{
-			$this->db->select('b.order_no,b.booking_status,c.category_name,c.category_description,c.category_image,ad.address1 as address,b.booking_date,b.time_slot,b.expiry_date,b.duration,b.service_provider_id,b.payment_type');
+			$this->db->select('b.order_no,b.booking_status,b.user_id,c.category_name,c.category_description,c.category_image,ad.address1 as address,b.booking_date,b.time_slot,b.expiry_date,b.duration,b.service_provider_id,b.payment_type');
 			$this->db->from(TBLPREFIX.'booking as b');
 			$this->db->where('b.booking_id',$booking_id);
 			$this->db->join(TBLPREFIX.'category as c','c.category_id = b.category_id','left');
@@ -73,6 +75,19 @@
 			$this->db->where('b.booking_id',$booking_id);
 			$this->db->join(TBLPREFIX.'booking_details as bd','bd.booking_id = b.booking_id','left');
 			$this->db->where('bd.option_amount =',0);
+			$this->db->join(TBLPREFIX.'service as s','s.service_id = bd.service_id','left');
+			$query = $this->db->get();
+			$result= $query->result_array();
+			return $result;
+		}
+
+        public function getServiceDetailsInformation($booking_id) 
+		{
+			$this->db->select('s.service_name,bd.option_label,bd.option_value');
+			$this->db->from(TBLPREFIX.'booking as b');
+			$this->db->where('b.booking_id',$booking_id);
+			$this->db->join(TBLPREFIX.'booking_details as bd','bd.booking_id = b.booking_id','left');
+			$this->db->where('bd.option_amount >',0);
 			$this->db->join(TBLPREFIX.'service as s','s.service_id = bd.service_id','left');
 			$query = $this->db->get();
 			$result= $query->result_array();
@@ -113,6 +128,27 @@
             }
 					
 			return $result;
+		}
+
+        public function checkTodayWorkHistory($booking_id)
+		{
+            $history_date=date('Y-m-d');
+			$this->db->select('booking_id,history_date,history_time,work_photo1,work_photo2');
+			$this->db->from(TBLPREFIX.'booking_history');
+			$this->db->where('booking_id',$booking_id);
+			$this->db->where('history_date>=',$history_date);
+			$this->db->where('history_date<=',$history_date." 23:59:59");
+			$query = $this->db->get();
+			$result= $query->num_rows();
+			if($result>0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+			
 		}
     
 		public function getPromocode() 
@@ -528,7 +564,7 @@
             $this->db->select('*');
             $this->db->from(TBLPREFIX.'notification');
             $this->db->where('noti_user_id',$user_id);
-            $this->db->where('noti_user_type','User');
+            // $this->db->where('noti_user_type','Customer');
             $this->db->order_by('noti_id','desc');
             $this->db->limit('50');
             return $result = $this->db->get()->result_array();
@@ -570,22 +606,70 @@
             // 	return null;
         }
 
-        public function checkFeedbackExist($res,$booking_id,$user_id,$service_provider_id)
+        public function getFeedbacks($user_id)
         {
-            $this->db->select('*');
+            $this->db->select('f.*,u.user_id,u.full_name,u.profile_pic,b.order_no');
             $this->db->from(TBLPREFIX.'feedback as f');
-            $this->db->where('f.booking_id',$booking_id);
-            $this->db->where('f.user_id',$user_id);
-            $this->db->where('f.service_provider_id',$service_provider_id);
-            if($res==1)
-            {
-                $result=$this->db->get()->row();
-            }
-            else
-            {
-                $result=$this->db->get()->num_rows();
-            }
-            return  $result;
+            $this->db->where('f.service_provider_id',$user_id);
+            $this->db->join(TBLPREFIX.'users as u','u.user_id =f.user_id','left');
+            $this->db->join(TBLPREFIX.'booking as b','b.booking_id =f.booking_id','left');
+            $query = $this->db->get();
+            $result= $query->result_array();
+			if(!empty ($result) )
+			{
+				foreach($result as $key=>$row)
+				{
+					if(isset($row['profile_pic']) && $row['profile_pic']!="")
+					{
+						$row['profile_pic']=base_url()."uploads/user_profile/".$row['profile_pic'];
+					}
+                    
+					$result[$key]=$row;
+				}
+			}
+			return $result;		
         }
+
+        public function getNewBookings($userLat,$userLong)
+		{
+            $distance_parameter=0;
+            $distance_parameter = '(
+				6371 * acos(
+				  cos(radians('.'a.address_lat)) * cos(radians('.$userLat.')) * cos(
+					radians('.$userLong.') - radians('.'a.address_lng)
+				  ) + sin(radians('.$userLat.')) * sin(radians('.'a.address_lat))
+				)
+			  ) AS distance';
+                
+            //(DATE_FORMAT(DATE(b.booking_date),'%M/%d/,%Y')) as booking_date
+			$this->db->select($distance_parameter.','.'b.booking_id,b.order_no,c.category_name,c.category_image,u.profile_id,u.profile_pic,u.full_name,b.booking_date,b.time_slot,b.expiry_date,b.booking_status,b.service_provider_id
+            ,a.address1 as address,a.address_id,a.address_lat,a.address_lng');
+            $this->db->from(TBLPREFIX.'booking b');
+            $this->db->where('b.service_provider_id','0');
+            $this->db->where('b.booking_status','waiting');
+            $this->db->join(TBLPREFIX.'users as u','u.user_id =b.user_id','left');
+            $this->db->join(TBLPREFIX.'category as c','c.category_id = b.category_id','left');
+            $this->db->join(TBLPREFIX.'addresses as a','a.address_id = b.address_id','left');
+			// $this->db->having("distance <=" ,'100');
+			$query = $this->db->get();
+            $result= $query->result_array();
+            // echo $this->db->last_query();
+			if(!empty ($result) )
+			{
+				foreach($result as $key=>$row)
+				{
+					if(isset($row['profile_pic']) && $row['profile_pic']!="")
+					{
+						$row['profile_pic']=base_url()."uploads/user_profile/".$row['profile_pic'];
+					}
+                    if(isset($row['category_image']) && $row['category_image']!="")
+					{
+						$row['category_image']=base_url()."uploads/category_images/".$row['category_image'];
+					}
+					$result[$key]=$row;
+				}
+			}
+			return $result;
+		}
         
 	}

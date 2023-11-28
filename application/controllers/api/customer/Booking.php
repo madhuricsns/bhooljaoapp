@@ -17,6 +17,8 @@ class Booking extends REST_Controller {
 		$user_id	= $this->input->post("user_id");
 		$status		= $this->input->post("status");
 		
+		// $invID = str_pad($invID, 4, '0', STR_PAD_LEFT);
+
 		if($token == TOKEN)
 		{
             if($user_id=="")
@@ -52,6 +54,30 @@ class Booking extends REST_Controller {
 						{
 							$booking['booking_status']="Cancelled";
 						}
+						// Calculate Days
+						$date1 = new DateTime($booking['booking_date']);
+						$date1 = $date1->format('Y-m-d');
+						
+						$date2 = new DateTime($booking['expiry_date']);
+						$date2 = $date2->format('Y-m-d');
+
+						$date1=date_create($date1);
+						$date2=date_create($date2);
+						
+						$interval = date_diff($date1, $date2); 
+						$days  = $interval->format('%a days left'); 
+						
+						$booking['left_days']=$days;
+						if($booking['booking_status']!='waiting' && $booking['service_provider_id']>0)
+						{
+							$sp = $this->BookingModel->getUserDetails($booking['service_provider_id']);
+							$booking['sp_name']=$sp->full_name;
+							$booking['sp_profile_pic']=$sp->profile_pic;
+							$booking['sp_profile_id']=$sp->profile_id;
+						}
+						$booking['booking_date']=$date1->format('M d,Y');
+						$arrBookings[$key]=$booking;
+
 					}
 				}
 				
@@ -102,6 +128,7 @@ class Booking extends REST_Controller {
 	{
 		$token 		    = $this->input->post("token");
 		$user_id	    = $this->input->post("user_id");
+		$address_id	    = $this->input->post("address_id");
 		$type		    = $this->input->post("type");
 		$address	    = $this->input->post("address");
 		$city	        = $this->input->post("city");
@@ -129,11 +156,19 @@ class Booking extends REST_Controller {
 						'address_status'=>'Active',
                         'dateadded'=>date('Y-m-d H:i:s')
 					    );
-                                
-                $address_id   = $this->Common_Model->insert_data('addresses',$arrUserData);
+
+				$data['responsecode'] = "200";		
+                if($address_id>0)    
+				{
+					$update   = $this->Common_Model->update_data('addresses','address_id',$address_id,$arrUserData);
+					$data['responsemessage'] = 'Address updated successfully';
+				}      
+				else
+				{      
+                	$address_id   = $this->Common_Model->insert_data('addresses',$arrUserData);
+					$data['responsemessage'] = 'Address added successfully';
+				}
                 
-                $data['responsecode'] = "200";
-				$data['responsemessage'] = 'Address added successfully';
 				$data['data'] = $arrUserData;
 			}
 		}
@@ -206,8 +241,11 @@ class Booking extends REST_Controller {
 					foreach($arrServiceDetailsPricing as $key=>$serviceDetails)
 					{
 						//print_r($serviceDetails);exit;
-						$serviceDetails['SubTotal'] = $serviceDetails['option_amount'] * $serviceDetails['duration'];
-						
+						//print_r($serviceDetails);exit;
+						$duration=str_split($serviceDetails['duration']);
+
+						$serviceDetails['SubTotal'] = $serviceDetails['option_amount'] * $duration[0];
+						$serviceDetails['duration']=$duration[0];
 						$arrServiceDetailsPricing[$key] = $serviceDetails;
 						
 						$admin_commision = $serviceDetails['admin_commision'];
@@ -234,24 +272,115 @@ class Booking extends REST_Controller {
 						$total = $total - $coupon_amount;
 					}
 					
-					$arrServiceDetailsPricing['total'] = $total;
-					$arrServiceDetailsPricing['admin_commision'] = $admin_commision;
-					
-					$arrServiceDetailsPricing['gst_percentage'] = $gst_percentage;
-					$arrServiceDetailsPricing['gst_amount'] = $gst_amount;
-					$arrServiceDetailsPricing['coupon_amount'] = $coupon_amount;
-					$arrServiceDetailsPricing['coupon_percentage'] = $coupon_percentage;
-					
-					
-					$arrServiceDetailsPricing['PayAmount'] = $total + $gst_amount + $admin_commision;
 					
 				}
-				
+					
+					$paymentDetails=array();
+					$paymentDetails['total'] = $total;
+					$paymentDetails['admin_commision'] = $admin_commision;
+					
+					$paymentDetails['gst_percentage'] = $gst_percentage;
+					$paymentDetails['gst_amount'] = $gst_amount;
+					$paymentDetails['coupon_amount'] = $coupon_amount;
+					$paymentDetails['coupon_percentage'] = $coupon_percentage;
+					
+					
+					$paymentDetails['PayAmount'] = $payamount=$total + $gst_amount + $admin_commision;
+					
                 $data['responsecode'] = "200";
                 $data['data'] = $arrBookingData;
                 $data['ServiceDetails'] = $arrServiceDetails;
 				$data['ServiceDetailsPricing'] = $arrServiceDetailsPricing;
+				$data['paymentDetails'] = $paymentDetails;
                 
+			}
+		}
+		else
+		{
+			$data['responsecode'] = "201";
+			$data['responsemessage'] = 'Token did not match';
+		}	
+		$obj = (object)$data;//Creating Object from array
+		$response = json_encode($obj);
+		print_r($response);
+	}
+
+	public function Paymentcheckout_post()
+	{
+		$token 		= $this->input->post("token");
+		$booking_id = $this->input->post("booking_id");
+		
+		if($token == TOKEN)
+		{
+            if($booking_id =="")
+            {
+                $data['responsemessage'] = 'Please provide valid data ';
+                $data['responsecode'] = "400"; //create an array
+            }
+            else
+            {
+				$arrBookingData = $this->BookingModel->getBookingData($booking_id);
+				
+				$arrServiceDetails = $this->BookingModel->getServiceDetailsWOPricing($booking_id);
+				
+				$arrServiceDetailsPricing = $this->BookingModel->getServiceDetails($booking_id);
+				
+				$total = $admin_commision = $gst_percentage = $gst_amount = $coupon_amount = $coupon_percentage = 0;
+				
+				if(!empty($arrServiceDetailsPricing))
+				{
+					foreach($arrServiceDetailsPricing as $key=>$serviceDetails)
+					{
+						//print_r($serviceDetails);exit;
+						//print_r($serviceDetails);exit;
+						$duration=str_split($serviceDetails['duration']);
+
+						$serviceDetails['SubTotal'] = $serviceDetails['option_amount'] * $duration[0];
+						$serviceDetails['duration']=$duration[0];
+						$arrServiceDetailsPricing[$key] = $serviceDetails;
+						
+						$admin_commision = $serviceDetails['admin_commision'];
+						
+						$gst_percentage = $serviceDetails['gst_percentage'];
+						
+						$gst_amount = $serviceDetails['gst_amount'];
+						
+						$total += $serviceDetails['SubTotal'];
+						
+						$coupon_amount = $serviceDetails['coupon_amount'];
+						
+						$coupon_percentage = $serviceDetails['coupon_percentage'];
+						unset($arrServiceDetailsPricing[$key]['admin_commision']);
+						unset($arrServiceDetailsPricing[$key]['gst_percentage']);
+						unset($arrServiceDetailsPricing[$key]['gst_amount']);
+						unset($arrServiceDetailsPricing[$key]['coupon_code']);
+						unset($arrServiceDetailsPricing[$key]['coupon_amount']);
+						unset($arrServiceDetailsPricing[$key]['coupon_percentage']);
+					}
+					
+					if(isset($coupon_amount) && $coupon_amount != 0)
+					{
+						$total = $total - $coupon_amount;
+					}
+					
+				}
+					
+					$paymentDetails=array();
+					// $paymentDetails['total'] = $total;
+					// $paymentDetails['admin_commision'] = $admin_commision;
+					
+					// $paymentDetails['gst_percentage'] = $gst_percentage;
+					// $paymentDetails['gst_amount'] = $gst_amount;
+					// $paymentDetails['coupon_amount'] = $coupon_amount;
+					// $paymentDetails['coupon_percentage'] = $coupon_percentage;
+					
+					$paymentDetails['PayFullAmount'] = $PayFullAmount=$total + $gst_amount + $admin_commision;
+					$paymentDetails['PayOneMonthAmount'] = $PayOneMonthAmount=$total/$duration[0];
+					$paymentDetails['TotalAmount'] = $PayFullAmount;
+					$paymentDetails['PendingAmount'] = $PayOneMonthAmount=$PayFullAmount-$PayOneMonthAmount;
+					
+                $data['responsecode'] = "200";
+				$data['data'] = $paymentDetails;
 			}
 		}
 		else
@@ -281,6 +410,42 @@ class Booking extends REST_Controller {
             {
 				$arrBookingData = $this->BookingModel->getBookingData($booking_id);
 				
+					// Calculate Days
+					$date1 = new DateTime($arrBookingData->booking_date);
+					$date1 = $date1->format('Y-m-d');
+					
+					$date2 = new DateTime($arrBookingData->expiry_date);
+					$date2 = $date2->format('Y-m-d');
+
+					$date1=date_create($date1);
+					$date2=date_create($date2);
+					
+					$interval = date_diff($date1, $date2); 
+					$days  = $interval->format('%a'); 
+					$arrBookingData->booking_date=$date1->format('M d,Y');
+					$arrBookingData->expiry_date=$date2->format('M d,Y');
+					$arrBookingData->left_days=$days." days left";
+				
+				// Service expire Before payment alert message
+				if($days<=5)
+				{
+					$beforePaynow="Your service subscription is set to expire in ".$days." days. To continue enjoying the benefits of service complete your payment for the remeaning period.";	
+				}
+				else
+				{
+					$beforePaynow="";
+				}
+
+				// Service provider details
+				$sp="";
+				if($arrBookingData->service_provider_id>0)
+				{
+					$sp=$this->BookingModel->getSPDetails($arrBookingData->service_provider_id);
+					
+					$sp->rating_avg="4.5";
+				}
+
+
 				$arrServiceDetails = $this->BookingModel->getServiceDetailsWOPricing($booking_id);
 				
 				$arrServiceDetailsPricing = $this->BookingModel->getServiceDetails($booking_id);
@@ -292,8 +457,14 @@ class Booking extends REST_Controller {
 					foreach($arrServiceDetailsPricing as $key=>$serviceDetails)
 					{
 						//print_r($serviceDetails);exit;
-						$serviceDetails['SubTotal'] = $serviceDetails['option_amount'] * $serviceDetails['duration'];
-						
+						$duration=str_split($serviceDetails['duration']);
+
+						$serviceDetails['SubTotal'] = $serviceDetails['option_amount'] * $duration[0];
+						$serviceDetails['duration']=$duration[0];
+						$split = explode(" ", $serviceDetails['option_label']);
+
+						// echo $split[count($split)-1];
+						$serviceDetails['optionLabel'] =$serviceDetails['option_value']." ".$split[count($split)-1];
 						$arrServiceDetailsPricing[$key] = $serviceDetails;
 						
 						$admin_commision = $serviceDetails['admin_commision'];
@@ -320,23 +491,33 @@ class Booking extends REST_Controller {
 						$total = $total - $coupon_amount;
 					}
 					
-					$arrServiceDetailsPricing['total'] = $total;
-					$arrServiceDetailsPricing['admin_commision'] = $admin_commision;
-					
-					$arrServiceDetailsPricing['gst_percentage'] = $gst_percentage;
-					$arrServiceDetailsPricing['gst_amount'] = $gst_amount;
-					$arrServiceDetailsPricing['coupon_amount'] = $coupon_amount;
-					$arrServiceDetailsPricing['coupon_percentage'] = $coupon_percentage;
-					
-					
-					$arrServiceDetailsPricing['PayAmount'] = $total + $gst_amount + $admin_commision;
-					
 				}
+					$paymentDetails=array();
+					$paymentDetails['total'] = $total;
+					$paymentDetails['admin_commision'] = $admin_commision;
+					
+					$paymentDetails['gst_percentage'] = $gst_percentage;
+					$paymentDetails['gst_amount'] = $gst_amount;
+					$paymentDetails['coupon_amount'] = $coupon_amount;
+					$paymentDetails['coupon_percentage'] = $coupon_percentage;
+					
+					
+					$paymentDetails['PayAmount'] = $payamount=$total + $gst_amount + $admin_commision;
+					$paymentDetails['PaidAmount'] = $paidamount="1000";
+					$paymentDetails['PendingAmount'] = $payamount-$paidamount;
+					
+				$arrPaymentHistory=array();
+				$arrPaymentHistory[]=array("payment_date"=>"10-11-2023","payment_amount"=>"1000","reference_id"=>"BJS123","payment_status"=>"paid");
+				$arrPaymentHistory[]=array("payment_date"=>"10-11-2023","payment_amount"=>"1000","reference_id"=>"BJS123","payment_status"=>"failed");
 				
                 $data['responsecode'] = "200";
                 $data['data'] = $arrBookingData;
+                $data['ExpiryDaysBeforePaynow'] = $beforePaynow;
+                $data['ServiceProviderDetails'] = $sp;
                 $data['ServiceDetails'] = $arrServiceDetails;
 				$data['ServiceDetailsPricing'] = $arrServiceDetailsPricing;
+				$data['paymentDetails'] = $paymentDetails;
+				$data['PaymentHistory'] = $arrPaymentHistory;
                 
 			}
 		}
@@ -355,12 +536,28 @@ class Booking extends REST_Controller {
 		$token 		= $this->input->post("token");
 		$user_id	= $this->input->post("user_id");
 		$category_id	= $this->input->post("category_id");
-		$serviceData	= $this->input->post("serviceData");
 		$address_id = $this->input->post("address_id");
 		$booking_date = $this->input->post("booking_date");
 		$time_slot = $this->input->post("time_slot");
 		$duration = $this->input->post("duration");
 		$is_demo = $this->input->post("is_demo");
+
+		$category_service = $this->input->post("category_service");
+		$vehichle_details = $this->input->post("vehichle_details");
+		$addon_service = $this->input->post("addon_service");
+
+
+		$categoryArr=json_decode($category_service);
+		$vehichledetailsArr=json_decode($vehichle_details);
+		$serviceData=json_decode($addon_service);
+
+		// print_r($_POST);
+		// print_r($category_service);
+		// print_r($vehichle_details);
+		// print_r($addon_service);
+
+		// exit;
+		$expiryDate=date('Y-m-d', strtotime('+'.$duration, strtotime($booking_date)) );
 		
 		if($token == TOKEN)
 		{
@@ -379,33 +576,93 @@ class Booking extends REST_Controller {
 								'booking_date' => $booking_date,
 								'time_slot' => $time_slot,
 								'duration' => $duration,
-								'booking_status' => 'Booked',
+								'expiry_date' => $expiryDate,
+								'booking_status' => 'waiting',
 								'dateadded' => date('Y-m-d H:i:s'),
 								);
 				$booking_id = $this->Common_Model->insert_data('booking',$arrBookingData);
-				$bookingDetails = array();
-				if(!empty($serviceData)) 
-				{
-					foreach($serviceData as $service)
+				if($booking_id>0)
+				{ 
+					$order_no= sprintf("%05d", $booking_id);
+					$updateData=array(
+						'order_no'=>"BJO".$order_no
+					);
+					$update=$this->Common_Model->update_data('booking','booking_id',$booking_id,$updateData);
+					// echo $this->db->last_query();
+
+					// Service Details data add
+					if(!empty($categoryArr)) 
 					{
-						$arrBookingDetails = array(
-							'booking_id' => $booking_id,
-							'service_id' => $service['service_id'],
-							'option_label' => $service['option_label'],
-							'option_value' => $service['option_value'],
-							'option_amount' => $service['option_amount'],
-							'dateadded' => date('Y-m-d H:i:s')
-						);
-						$bookingDetails[] = $arrBookingDetails;
-						
-						$this->Common_Model->insert_data('booking_details',$arrBookingDetails);
+						foreach($categoryArr as $serviceDetails)
+						{
+							// print_r($serviceDetails);
+							$arrServiceDetails = array(
+								'booking_id' => $booking_id,
+								'service_id' => $serviceDetails->service_id,
+								'option_label' => $serviceDetails->option_label,
+								'option_value' => $serviceDetails->option_value,
+								'option_amount' => "0",//$serviceDetails->option_amount,
+								'dateadded' => date('Y-m-d H:i:s')
+							);
+							$this->Common_Model->insert_data('booking_details',$arrServiceDetails);
+						}
 					}
-				}
+
+					//Vehicle Details data add
+					// print_r($vehichledetailsArr);
+					if(isset($vehichledetailsArr->service_id) && !empty($vehichledetailsArr) ) 
+					{
+						// echo "ok";
+						// foreach($vehichledetailsArr as $vehichle)
+						// {
+							$arrVehicleDetails1 = array(
+								'booking_id' => $booking_id,
+								'service_id' => $vehichledetailsArr->service_id,
+								'option_label' => "Car Wash",
+								'option_value' => $vehichledetailsArr->option_name,
+								'option_amount' => $vehichledetailsArr->option_amount,
+								'dateadded' => date('Y-m-d H:i:s')
+							);
+							$this->Common_Model->insert_data('booking_details',$arrVehicleDetails1);
+
+							$arrVehicleDetails = array(
+								'booking_id' => $booking_id,
+								'option_label' => "Vehicle Type",
+								'option_value' => $vehichledetailsArr->option_name,
+								'option_amount' => "0",//$vehichledetailsArr->option_amount,
+								'service_id' => $vehichledetailsArr->service_id,
+								'dateadded' => date('Y-m-d H:i:s')
+							);
+							$this->Common_Model->insert_data('booking_details',$arrVehicleDetails);
+						// }
+					}
+
+					// Addon service data add
+					$bookingDetails = array();
+					if(!empty($serviceData)) 
+					{
+						foreach($serviceData as $service)
+						{
+							$arrBookingDetails = array(
+								'booking_id' => $booking_id,
+								'service_id' => $service->service_id,
+								'option_label' => $service->option_label,
+								'option_value' => $service->option_value,
+								'option_amount' => $service->option_amount,
+								'dateadded' => date('Y-m-d H:i:s')
+							);
+							$bookingDetails[] = $arrBookingDetails;
+							
+							$this->Common_Model->insert_data('booking_details',$arrBookingDetails);
+						}
+					}
+			}
 				$bookingData = $this->BookingModel->getBookingDetails($booking_id);
                 $data['responsecode'] = "200";
-                $data['Booking'] = $bookingData;
+                $data['responsemessage'] = "Booking added successfully";
+                $data['data'] = $bookingData;
 				
-				$data['BookingDetails'] = $bookingDetails;
+				// $data['BookingDetails'] = $bookingDetails;
             }
 		}
 		else
@@ -417,26 +674,69 @@ class Booking extends REST_Controller {
 		$response = json_encode($obj);
 		print_r($response);
 	}	
-	
-	/* ------------------------------------------- */ 	
-	public function promocodeList_post()
+
+	public function bookingCanceled_post()
 	{
 		$token 		= $this->input->post("token");
-		$service_id	= $this->input->post("service_id");
-				
+		$booking_id = $this->input->post("booking_id");
+		
 		if($token == TOKEN)
 		{
-            if($service_id=="")
+            if($booking_id =="")
             {
                 $data['responsemessage'] = 'Please provide valid data ';
                 $data['responsecode'] = "400"; //create an array
             }
             else
             {
-                $arrPromocode = $this->BookingModel->getPromocode($service_id);
-               
+				$inputData=array(
+					'booking_status'=>'canceled',
+					'dateupdated'=>date('Y-m-d H:i:s')
+				);
+				 $this->Common_Model->update_data('booking','booking_id',$booking_id,$inputData);
+				
                 $data['responsecode'] = "200";
-                $data['data'] = $arrPromocode;
+				$data['responsemessage'] = 'Your Booking canceled successfully';
+			}
+		}
+		else
+		{
+			$data['responsecode'] = "201";
+			$data['responsemessage'] = 'Token did not match';
+		}	
+		$obj = (object)$data;//Creating Object from array
+		$response = json_encode($obj);
+		print_r($response);
+	}
+
+	public function workHistory_post()
+	{
+		$token 		= $this->input->post("token");
+		$booking_id	= $this->input->post("booking_id");
+				
+		if($token == TOKEN)
+		{
+            if($booking_id=="")
+            {
+                $data['responsemessage'] = 'Please provide valid data ';
+                $data['responsecode'] = "400"; //create an array
+            }
+            else
+            {
+				
+				$bookingData = $this->BookingModel->getBookingDetails($booking_id);
+
+                $arrWorkhistory = $this->BookingModel->getBookingWorkHistory($booking_id);
+				foreach($arrWorkhistory as $key=>$history)
+				{
+					$history['history_date']=new DateTime($history['history_date']);
+					$history['history_date']=$history['history_date']->format('d-m-Y');
+					$arrWorkhistory[$key]=$history;
+				}
+                $data['responsecode'] = "200";
+                $data['order_no'] = $bookingData->order_no;
+                $data['booking_status'] = $bookingData->booking_status;
+                $data['data'] = $arrWorkhistory;
             }
 		}
 		else
@@ -448,6 +748,135 @@ class Booking extends REST_Controller {
 		$response = json_encode($obj);
 		print_r($response);
 	}
+
+	public function promocodeList_post()
+	{
+		$token 		= $this->input->post("token");
+				
+		if($token == TOKEN)
+		{
+			$arrPromocode = $this->BookingModel->getPromocode();
+			
+			$data['responsecode'] = "200";
+			$data['data'] = $arrPromocode;
+		}
+		else
+		{
+			$data['responsecode'] = "201";
+			$data['responsemessage'] = 'Token did not match';
+		}	
+		$obj = (object)$data;//Creating Object from array
+		$response = json_encode($obj);
+		print_r($response);
+	}
+
+	public function addFeedback_post()
+	{
+		$token 					= $this->input->post("token");
+		$user_id 				= $this->input->post("user_id");
+		$booking_id 			= $this->input->post("booking_id");
+	    $service_provider_id 	= $this->input->post("service_provider_id");
+		$feedback 				= $this->input->post("feedback");
+				
+		if($token == TOKEN)
+		{
+			if($booking_id=="" || $user_id=="" || $service_provider_id=="" || $feedback=="")
+            {
+                $data['responsemessage'] = 'Please provide valid data ';
+                $data['responsecode'] = "400"; //create an array
+            }
+            else
+            {
+				$inputData=array(
+					'booking_id'=>$booking_id,
+					'user_id'=>$user_id,
+					'service_provider_id'=>$service_provider_id,
+					'feedback_message'=>$feedback,
+					'dateadded'=>date('Y-m-d H:i:s')
+				);
+
+				$feedbackExist=$this->BookingModel->checkFeedbackExist(0,$booking_id,$user_id,$service_provider_id);
+				if($feedbackExist>0)
+				{
+					$feedback=$this->BookingModel->checkFeedbackExist(1,$booking_id,$user_id,$service_provider_id);
+					$feedback_id=$feedback->feedback_id;
+					$this->Common_Model->update_data('feedback','feedback_id',$feedback_id,$inputData);
+				}
+				else 
+				{	
+					$feedback_id=$this->Common_Model->insert_data('feedback',$inputData);
+				}
+
+				$arrFeedback = $this->BookingModel->getFeedback($feedback_id);
+				
+				$data['responsecode'] = "200";
+				$data['data'] = $arrFeedback;
+			}
+		}
+		else
+		{
+			$data['responsecode'] = "201";
+			$data['responsemessage'] = 'Token did not match';
+		}	
+		$obj = (object)$data;//Creating Object from array
+		$response = json_encode($obj);
+		print_r($response);
+	}
+
+	public function addReview_post()
+	{
+		// ini_set('display_errors', 1);
+		// ini_set('display_startup_errors', 1);
+		// error_reporting(E_ALL);
+		$token 			     = $this->input->post("token");
+		$user_id 		     = $this->input->post("user_id");
+		$service_provider_id = $this->input->post("service_provider_id");
+		$review	             = $this->input->post("review");
+		$rating	             = $this->input->post("rating");
+		$booking_id	         = $this->input->post("booking_id");
+		
+		if($token == TOKEN)
+		{
+			if($user_id =="" || $service_provider_id=="" || $review==""  || $booking_id=="")
+			{
+				$data['responsemessage'] = 'Please provide valid data';
+				$data['responsecode'] = "400";
+			}	
+			else
+			{
+				$arrUserData = array(
+					'user_id' => $user_id,
+					'service_provider_id' => $service_provider_id,
+					'rating' => $rating,
+					'review' => $review,
+					'dateadded' => date('Y-m-d H:i:s')
+					);
+
+				$checkReview=$this->BookingModel->checkreviewExist($user_id,$service_provider_id,$booking_id);		
+				if($checkReview>0)
+				{
+					$this->Common_Model->update_data('review','service_provider_id',$service_provider_id,$arrUserData);
+				}  
+				else
+				{
+					$result   = $this->Common_Model->insert_data('review',$arrUserData);
+				}
+				$data['responsemessage'] = 'Rating added successfully';
+				$data['responsecode'] = "200";
+			}
+		}
+		else
+		{
+			$data['responsemessage'] = 'Token not match';
+			$data['responsecode'] =  "201";
+		}	
+		$obj = (object)$data;//Creating Object from array
+		$response = json_encode($obj);
+		print_r($response);
+	}
+	
+	/* ------------------------------------------- */ 	
+	
 
     public function cardList_post()
 	{
@@ -1948,63 +2377,12 @@ class Booking extends REST_Controller {
 		print_r($response);
 	}
 
-	public function addReview_post()
-	{
-		ini_set('display_errors', 1);
-		ini_set('display_startup_errors', 1);
-		error_reporting(E_ALL);
-		$token 			     = $this->input->post("token");
-		$user_id 		     = $this->input->post("user_id");
-		$service_provider_id = $this->input->post("service_provider_id");
-		$review	             = $this->input->post("review");
-		$rating	             = $this->input->post("rating");
-		$booking_id	         = $this->input->post("booking_id");
-		
-		if($token == TOKEN)
-		{
-			if($user_id =="" || $service_provider_id=="" || $review==""  || $booking_id=="")
-			{
-				$data['responsemessage'] = 'Please provide valid data';
-				$data['responsecode'] = "400";
-			}	
-			else
-			{
-				$arrUserData = array(
-					'booking_id' => $booking_id,
-					'user_id' => $user_id,
-					'service_provider_id' => $service_provider_id,
-					'rating' => $rating,
-					'review' => $review,
-					'dateadded' => date('Y-m-d H:i:s')
-					);
-
-				$checkReview=$this->BookingModel->checkreviewExist($user_id,$service_provider_id,$booking_id);		
-				if($checkReview>0)
-				{
-					$this->Common_Model->update_data('sp_reviews','booking_id',$booking_id,$arrUserData);
-				}  
-				else
-				{
-					$result   = $this->Common_Model->insert_data('sp_reviews',$arrUserData);
-				}
-				$data['responsemessage'] = 'Rating added successfully';
-				$data['responsecode'] = "200";
-			}
-		}
-		else
-		{
-			$data['responsemessage'] = 'Token not match';
-			$data['responsecode'] =  "201";
-		}	
-		$obj = (object)$data;//Creating Object from array
-		$response = json_encode($obj);
-		print_r($response);
-	}
+	
 
 	public function Reviews_post()
 	{
 		$token 		= $this->input->post("token");
-		$user_id 	    = $this->input->post("sp_id");
+		$user_id 	    = $this->input->post("service_provider_id");
 		
 		if($token == TOKEN)
 		{
@@ -2071,7 +2449,7 @@ class Booking extends REST_Controller {
 				{
 					if(isset($review['profile_pic']) && $review['profile_pic']!="")
 					{
-						$review['profile_pic']=base_url()."uploads/user/profile_photo/".$review['profile_pic'];
+						$review['profile_pic']=base_url()."uploads/user_profile/".$review['profile_pic'];
 					} 
 					
 					$arrReviews[$key]=$review;
@@ -2583,13 +2961,12 @@ class Booking extends REST_Controller {
 				
 					$inputData=array(
 						'booking_status' => $status,
-						'booking_sub_status' => $substatus,
 						'service_provider_id'=>5
 					);
 					$this->Common_Model->update_data('booking','booking_id',$booking_id,$inputData);
 					// echo $this->db->last_query();
 					$response_array['responsecode'] = "200";
-					$response_array['responsemessage'] = 'Please Provide valid data';
+					$response_array['responsemessage'] = 'Status updated successfully';
 			}
 		}
 		else
