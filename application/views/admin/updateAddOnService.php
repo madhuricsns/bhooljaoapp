@@ -4,7 +4,7 @@
 	<div class="container-fluid">
                 <div class="card tab2-card">
                     <div class="card-header">
-                        <h5>UPDATE SERVICE</h5>
+                        <h5>UPDATE ADDON SERVICE</h5>
                     </div>
                     <div class="card-body">
                       <?php if($this->session->flashdata('success')!=""){?>
@@ -27,20 +27,20 @@
 						</div>
 						<?php }?>
 						<?php $encodedValueId=base64_encode($serviceInfo[0]['service_id']); ?>
-						<form class="needs-validation" name="frm_updateuser" id="frm_updateuser" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/Service/updateService/<?php echo $encodedValueId;?>">
+						<form class="needs-validation" name="frm_updateuser" id="frm_updateuser" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/Service/updateAddOnService/<?php echo $encodedValueId;?>">
                         <div class="tab-content" >
                             <div class="tab-pane fade active show">
                                     <div class="row">
                                         <div class="col-sm-12">
                                         	 <div class="form-group row">
-                                                <label class="col-xl-3 col-md-4"><span>*</span> Category</label>
-												<select name="category" id="category" class="form-control  col-md-6" required onchange="showDiv(this)">
+                                                <label class="col-xl-3 col-md-4"><span>*</span>Parent Service</label>
+												<select name="parent_service_id" id="parent_service_id" class="form-control  col-md-6" required onchange="showDiv(this)">
 
-                                                    <option value="">Select Subcategory</option>
+                                                    <option value="">Parent Service</option>
 													<?php
-                                                    foreach($categoryList as $category){
+                                                    foreach($ServiceList as $service){
                                                     ?>
-                                                    <option value="<?php echo $category['category_id']?>" <?php if($serviceInfo[0]['category_id']==$category['category_id']){ echo 'selected="selected"';}?>><?php echo $category['category_name']?></option>
+                                                    <option value="<?php echo $service['service_id']?>" <?php if($serviceInfo[0]['parent_service_id']==$service['service_id']){ echo 'selected="selected"';}?>><?php echo $service['service_name']?></option>
 													<?php } ?>
                                                     
 												</select>
@@ -50,7 +50,9 @@
                                                 <label for="servicefile" class="col-xl-3 col-md-4"><span>*</span> Service Image</label>
                                                 <input class="form-control col-xl-4 col-md-4" id="servicefile" type="file" name="servicefile" />
 												<div class="err_msg" id="err_banner_image"></div>
-												<?php if($serviceInfo[0]['service_image']!="")
+												<?php 
+												$str_images = '';
+												if($serviceInfo[0]['service_image']!="")
 												{
 												$str_images='<img src="'.$serviceInfo[0]['service_image'].'" style="width:50px;height:50px">';
 												}?>
@@ -95,11 +97,6 @@
 													<option value="Active" <?php if($serviceInfo[0]['service_status']=="Active"){ echo 'selected="selected"';}?>>Active</option>
 													<option value="Inactive" <?php if($serviceInfo[0]['service_status']=="Inactive"){ echo 'selected="selected"';}?>>Inactive</option>
 												</select>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <label for="option_label" class="col-xl-3 col-md-4"><span>*</span> Option Label Name</label>
-                                                <input type="text" name="option_label" id="option_label" class="form-control  col-md-6" required value="<?php echo $serviceInfo[0]['service_option_name'];?>">
                                             </div>
 
                                             <div class="form-group row" id="show-div">

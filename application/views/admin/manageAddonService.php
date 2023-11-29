@@ -10,7 +10,7 @@
 						<div class="card-header-right">
 						<div class="row">
 							<div class="col-lg-12">
-								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Service/addService" style="float:right;"><i class="fa fa-plus-circle"></i>Add service</a>
+								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Service/addOnService" style="float:right;"><i class="fa fa-plus-circle"></i>Add Addon Service</a>
 							</div>
 							</div>
 						</div>	 
@@ -43,7 +43,7 @@
 										<tr>
 											<th style="width:5%">Sr.No</th>
 											<th style="width:10%"> Image</th>	
-											<th style="width:10%">Category</th>
+											<th style="width:10%">Parent Service</th>
 											<th style="width:15%">Service Name</th>
 											<th style="width:25%">Description</th>
 											<th style="width:10%">Status</th>
@@ -59,12 +59,12 @@
 										<tr>
 												<td><?php echo $i;?></td>
 												<td><img src="<?php echo $service['service_image'];?>" width="50px"></td>
-												<td><?php echo $service['category_name'];?></td>
+												<td><?php echo $service['parent_service'];?></td>
 												<td><?php echo $service['service_name'];?></td>
 												<td><?php echo $service['service_description'];?></td>
 												<td><?php echo $service['service_status'];?></td>
 												<td class="actions">  
-													<a href="<?php echo base_url();?>backend/Service/updateService/<?php echo base64_encode($service['service_id']);?>"><i data-feather="edit"></i></a>
+													<a href="<?php echo base_url();?>backend/Service/updateAddOnService/<?php echo base64_encode($service['service_id']);?>"><i data-feather="edit"></i></a>
 													
 													<a href="<?php echo base_url();?>backend/Service/deleteService/<?php echo base64_encode($service['service_id']);?>" onclick="javascript:return chk_isDeleteComnfirm();">
 													<i data-feather="trash-2"></i>

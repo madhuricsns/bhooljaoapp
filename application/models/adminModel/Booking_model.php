@@ -124,7 +124,7 @@ Class Booking_model extends CI_Model {
 	
 	public function getServiceDetails($booking_id) 
 	{
-		$this->db->select('s.service_name,bd.option_amount,b.duration,b.admin_commision,b.gst_amount,b.gst_percentage,b.coupon_code,b.coupon_amount,b.coupon_percentage');
+		$this->db->select('s.service_name,bd.option_label,bd.option_value,bd.option_amount,b.duration,b.admin_commision,b.gst_amount,b.gst_percentage,b.coupon_code,b.coupon_amount,b.coupon_percentage');
 		$this->db->from(TBLPREFIX.'booking as b');
 		$this->db->where('b.booking_id',$booking_id);
 		$this->db->join(TBLPREFIX.'booking_details as bd','bd.booking_id = b.booking_id','left');

@@ -77,7 +77,30 @@
 													: <?php echo $serviceinfo[0]['service_discount_price']?>
 												</div>
                                             </div>
-
+											<div class="form-group row">
+                                                <label for="mobile_number" class="col-xl-3 col-md-4">  Offer Percentage</label>
+												<div class="col-md-6">
+													: <?php echo $serviceinfo[0]['offer_percentage']?>
+												</div>
+                                            </div>
+											<div class="form-group row">
+                                                <label for="mobile_number" class="col-xl-3 col-md-4">  Demo Price</label>
+                                                <div class="col-md-6">
+													: <?php echo $serviceinfo[0]['service_demo_price']?>
+												</div>
+                                            </div>
+                                             <div class="form-group row">
+                                                <label for="mobile_number" class="col-xl-3 col-md-4">  Demo Discount Price</label>
+												<div class="col-md-6">
+													: <?php echo $serviceinfo[0]['service_demo_discount_price']?>
+												</div>
+                                            </div>
+											<div class="form-group row">
+                                                <label for="mobile_number" class="col-xl-3 col-md-4">Status</label>
+												<div class="col-md-6">
+													: <?php echo $serviceinfo[0]['service_status']?>
+												</div>
+                                            </div>
 											<div class="form-group row">
                                                 <label for="mobile_number" class="col-xl-3 col-md-4">  Option Label Name</label>
 												<div class="col-md-6">

@@ -204,16 +204,19 @@ class Service extends CI_Controller {
 		     	$this->form_validation->set_rules('service_name', 'Service Name', 'required');
 			   //$this->form_validation->set_rules('email_address', 'Email Address', 'required');
 			   $this->form_validation->set_rules('description','Description','required');
-			   $this->form_validation->set_rules('minprice', 'Min Price ', 'required'); //{10} for 10 digits number
+			   /*$this->form_validation->set_rules('minprice', 'Min Price ', 'required'); //{10} for 10 digits number
 			   $this->form_validation->set_rules('maxprice', 'Max Price ', 'required'); //{10} for 10 digits number
-			   $this->form_validation->set_rules('status','Service Status','required');
+			  */
+			  $this->form_validation->set_rules('status','Service Status','required');
 
 				if($this->form_validation->run())
 				{ 
 					$category_id=$this->input->post('category');
 					$service_name=$this->input->post('service_name');
-					$minprice=$this->input->post('minprice');
-					$maxprice=$this->input->post('maxprice');
+					$service_price=$this->input->post('service_price');
+					$service_discount_price=$this->input->post('service_discount_price');
+					$service_demo_price=$this->input->post('service_demo_price');
+					$service_demo_discount_price=$this->input->post('service_demo_discount_price');
 					$optionsArr=$this->input->post('optionsArr');
 					$amountArr=$this->input->post('amountArr');
 					$labelArr=$this->input->post('labelArr');
@@ -236,8 +239,10 @@ class Service extends CI_Controller {
 						'category_id'=>$category_id,
 						'service_name'=>$service_name,
 						'service_description'=>$description,
-						'min_price'=>$minprice,
-						'max_price'=>$maxprice,
+						'service_price'=>$service_price,
+						'service_discount_price'=>$service_discount_price,
+						'service_demo_price'=>$service_demo_price,
+						'service_demo_discount_price'=>$service_demo_discount_price,
 						'service_image'=>$service_image,
 						'service_status'=>$status,
 						'dateupdated' => date('Y-m-d H:i:s'),
@@ -249,8 +254,10 @@ class Service extends CI_Controller {
 							'category_id'=>$category_id,
 							'service_name'=>$service_name,
 							'service_description'=>$description,
-							'min_price'=>$minprice,
-							'max_price'=>$maxprice,
+							'service_price'=>$service_price,
+							'service_discount_price'=>$service_discount_price,
+							'service_demo_price'=>$service_demo_price,
+							'service_demo_discount_price'=>$service_demo_discount_price,
 							'service_status'=>$status,
 							'dateupdated' => date('Y-m-d H:i:s'),
 							);
@@ -472,21 +479,21 @@ class Service extends CI_Controller {
 		$data['title']='Add Sub Category';
 		$data['error_msg']='';
 		$data['categoryList']=$this->Service_model->getAllCategory(1);		
+		$data['ServiceList']=$this->Service_model->getAllServiceList(1);
 		if(isset($_POST['btn_addService']))
 		{
 			// print_r($_POST);//exit;
-			$this->form_validation->set_rules('category','Category','required');
+			$this->form_validation->set_rules('parent_service_id','Parent Service','required');
 			$this->form_validation->set_rules('service_name', 'Service Name', 'required');
-			//$this->form_validation->set_rules('email_address', 'Email Address', 'required');
 			$this->form_validation->set_rules('description','Description','required');
-			$this->form_validation->set_rules('price', 'Price ', 'required'); //{10} for 10 digits number
-			$this->form_validation->set_rules('discount_price', 'Max Price ', 'required'); //{10} for 10 digits number
-
+			$this->form_validation->set_rules('price', 'Price', 'required'); //{10} for 10 digits number
+			$this->form_validation->set_rules('discount_price', 'Discount Price ', 'required'); //{10} for 10 digits number
+			
 			if($this->form_validation->run())
 			{
 				//echo "successfully validated";exit();
 			
-				$category_id=$this->input->post('category');
+				$parent_service_id=$this->input->post('parent_service_id');
 				$Service_name=$this->input->post('service_name');
 				$price=$this->input->post('price');
 				$discount_price=$this->input->post('discount_price');
@@ -512,7 +519,7 @@ class Service extends CI_Controller {
 					}
 
 					$input_data = array(
-						'category_id'=>$category_id,
+						'parent_service_id'=>$parent_service_id,
 						'service_name'=>trim($Service_name),
 						'service_description'=>$description,
 						'service_price'=>$price,
@@ -591,23 +598,176 @@ class Service extends CI_Controller {
 						// }
 						$this->session->set_flashdata('success','Service added successfully.');
 
-						redirect(base_url().'backend/Service/manageService');	
+						redirect(base_url().'backend/Service/manageAddonServices/'.base64_encode($parent_service_id));
 					}
 					else
 					{
 						$this->session->set_flashdata('error','Error while adding Service.');
 
-						redirect(base_url().'backend/Service/addService');
+						redirect(base_url().'backend/Service/addOnService');
 					}	
 				
 			}else{
 				$this->session->set_flashdata('success','Validation failed. Please enter valid Text.');
-				redirect(base_url().'backend/Service/addService');
+				redirect(base_url().'backend/Service/addOnService');
 			}
 		}
 
 		$this->load->view('admin/admin_header',$data);
-		$this->load->view('admin/addService',$data);
+		$this->load->view('admin/addOnService',$data);
+		$this->load->view('admin/admin_footer');
+	}
+	
+	public function updateAddOnService()
+	{
+		$data['title']='Update Service';
+		$data['error_msg']='';
+		//echo "segment--".$this->uri->segment(4);exit();
+		$id=base64_decode($this->uri->segment(4));
+		$data['categoryList']=$this->Service_model->getAllCategory(1);	
+		$data['ServiceList']=$this->Service_model->getAllServiceList(1);
+		//echo "Brand_id--".$brand_id;exit();
+		if($id)
+		{
+			$serviceInfo=$this->Service_model->getSingleServiceInfo($id,0);
+			if($serviceInfo>0)
+			{
+				$data['serviceInfo'] = $this->Service_model->getSingleServiceInfo($id,1);
+				$data['optionList']=$this->Service_model->getAllServiceDetailOptions($id,1);	
+				$data['labelList']=$this->Service_model->getAllServiceDetailLabels($id,1);	
+				if(isset($_POST['btn_uptuser']))
+				{
+					$this->form_validation->set_rules('parent_service_id','Parent Service','required');
+			
+		     	$this->form_validation->set_rules('service_name', 'Service Name', 'required');
+			   //$this->form_validation->set_rules('email_address', 'Email Address', 'required');
+			   $this->form_validation->set_rules('description','Description','required');
+			   /*$this->form_validation->set_rules('minprice', 'Min Price ', 'required'); //{10} for 10 digits number
+			   $this->form_validation->set_rules('maxprice', 'Max Price ', 'required'); //{10} for 10 digits number
+			  */
+			  $this->form_validation->set_rules('status','Service Status','required');
+
+				if($this->form_validation->run())
+				{ 
+					$parent_service_id=$this->input->post('parent_service_id');
+					$service_name=$this->input->post('service_name');
+					$service_price=$this->input->post('service_price');
+					$service_discount_price=$this->input->post('service_discount_price');
+					$service_demo_price=$this->input->post('service_demo_price');
+					$service_demo_discount_price=$this->input->post('service_demo_discount_price');
+					$optionsArr=$this->input->post('optionsArr');
+					$amountArr=$this->input->post('amountArr');
+					$labelArr=$this->input->post('labelArr');
+					$labelvalueArr=$this->input->post('labelvalueArr');
+
+					$status=$this->input->post('status');
+					//$status="active";
+					$description=$this->input->post('description');
+				
+					//Image Upload Code 
+					if(count($_FILES) > 0) 
+					{
+						$ImageName = "servicefile";
+						$target_dir = "uploads/service_images/";
+						$service_image= $this->Common_Model->ImageUpload($ImageName,$target_dir);
+					}
+					if($_FILES['servicefile']['name']!="")		
+					{
+						$input_data = array(
+						'parent_service_id'=>$parent_service_id,
+						'service_name'=>$service_name,
+						'service_description'=>$description,
+						'service_price'=>$service_price,
+						'service_discount_price'=>$service_discount_price,
+						'service_demo_price'=>$service_demo_price,
+						'service_demo_discount_price'=>$service_demo_discount_price,
+						'service_image'=>$service_image,
+						'service_status'=>$status,
+						'dateupdated' => date('Y-m-d H:i:s'),
+						);
+					}
+					else
+					{
+						$input_data = array(
+							'parent_service_id'=>$parent_service_id,
+							'service_name'=>$service_name,
+							'service_description'=>$description,
+							'service_price'=>$service_price,
+							'service_discount_price'=>$service_discount_price,
+							'service_demo_price'=>$service_demo_price,
+							'service_demo_discount_price'=>$service_demo_discount_price,
+							'service_status'=>$status,
+							'dateupdated' => date('Y-m-d H:i:s'),
+							);
+					}
+					
+						$Service_data = $this->Service_model->uptdateService($input_data,$id);
+// echo"<pre>";
+// 					print_r($Service_data);
+// 					exit();
+						if($Service_data)
+						{	
+							$delOption=$this->Service_model->deleteoption($id);
+							// print_r($optionsArr);
+							if(!empty($optionsArr))
+							{
+								foreach($optionsArr as $key=>$option)
+								{
+									$amount=$amountArr[$key];
+									$insert_data=array(
+										'service_id'=>$id,
+										'option_name'=>$option,
+										'option_amount'=>$amount,
+										'dateadded' => date('Y-m-d H:i:s'),
+										'dateupdated' => date('Y-m-d H:i:s')
+									);
+									if($option!="" && $amount!=""){
+									$this->Common_Model->insert_data('service_details',$insert_data);
+									}
+									// echo $this->db->last_query();
+								}
+							}
+							foreach($labelArr as $key=>$label)
+							{
+								$labelvalue=$labelvalueArr[$key];
+								$insert_data=array(
+									'service_id'=>$id,
+									'option_name'=>$label,
+									'option_value'=>$labelvalue,
+									'option_type'=>'Label',
+									'dateadded' => date('Y-m-d H:i:s'),
+									'dateupdated' => date('Y-m-d H:i:s')
+								);
+								if($label!="" && $labelvalue!=""){
+									$this->Common_Model->insert_data('service_details',$insert_data);
+									}
+							}
+							$this->session->set_flashdata('success','Service updated successfully.');
+							redirect(base_url().'backend/Service/manageAddonServices/'.base64_encode($parent_service_id));	
+						}
+						else
+						{
+							$this->session->set_flashdata('error','Error while updating Service.');
+
+							redirect(base_url().'backend/Service/updateAddOnService/'.base64_encode($id));
+						}	
+					}
+					else
+					{
+						$this->session->set_flashdata('error',$this->form_validation->error_string());
+
+						redirect(base_url().'backend/Service/updateAddOnService/'.base64_encode($id));
+					}
+				}
+			}
+			else
+			{
+				$data['error_msg'] = 'Service not found.';
+			}
+		}
+		
+		$this->load->view('admin/admin_header',$data);
+		$this->load->view('admin/updateAddOnService',$data);
 		$this->load->view('admin/admin_footer');
 	}
 	
