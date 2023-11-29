@@ -39,8 +39,10 @@
 											<div class="form-group col-md-6">
                                                 <label for="description"><span>*</span> FAQ Answer</label>
                                                <textarea name="faq_answer" id="faq_answer" class="form-control "><?php echo $FAQInfo[0]['faq_answer'];?></textarea>
+                                               	 <div id="err_faq_answer" class="error_msg"></div>
+
                                             </div>
-                                            <div id="err_faq_answer" class="error_msg"></div>
+                                           
                                            </div>
 
 											 <div class="row">
@@ -52,7 +54,7 @@
 													<option value="Customer" <?php if($FAQInfo[0]['faq_type']=="Customer"){ echo 'selected="selected"';}?>>Customer</option>
 													<option value="Service Provider" <?php if($FAQInfo[0]['faq_type']=="Service Provider"){ echo 'selected="selected"';}?>>Service Provider</option>
 												</select>
-												</select>
+												
 												 <div id="err_faq_type" class="error_msg"></div>
                                             </div>
 											
@@ -63,10 +65,11 @@
 													<option value="Active" <?php if($FAQInfo[0]['faq_status']=="Active"){ echo 'selected="selected"';}?>>Active</option>
 													<option value="Inactive" <?php if($FAQInfo[0]['faq_status']=="Inactive"){ echo 'selected="selected"';}?>>Inactive</option>
 												</select>
+												<div id="err_status" class="error_msg"></div>
                                             </div>
 										</div>
                                             <div class="pull-right">
-						                            <button type="submit" class="btn btn-primary" name="btn_uptFAQ" id="btn_uptcategory">Update</button>
+						                            <button type="submit" class="btn btn-primary" name="btn_uptFAQ" id="btn_uptFAQ">Update</button>
 													<a href="<?php echo base_url();?>backend/FAQ/manageFAQ" class="btn btn-primary" >Cancel</a>
                                             </div>
 

@@ -39,8 +39,9 @@
 											<div class="form-group col-md-6">
                                                 <label for="faq_answer" ><span>*</span> FAQ Answer</label>
                                                <textarea name="faq_answer" id="faq_answer" class="form-control" required></textarea>
+                                               <div id="err_faq_answer" class="error_msg"></div>
                                             </div>
-                                            <div id="err_faq_answer" class="error_msg"></div>
+                                            
                                         </div>
                                             <div class="row">
                                             <div class="form-group col-md-6">
