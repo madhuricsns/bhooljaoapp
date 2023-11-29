@@ -231,6 +231,50 @@ $(document).ready(function($)
 
 	});
 
+/* valdiation for add  FAQ  */
+$('#btn_addFAQ').click(function(){
+	var faq_question=$("#faq_question").val();
+	var faq_answer=$("#faq_answer").val(); 
+	var faq_type=$("#faq_type").val();
+	var status=$("#status").val();
+
+	$("#err_zone_name").html('');
+	$("#err_zone_pincode").html('');
+	$("#err_status").html('');
+	var flag=1;
+	
+	if(faq_question=="")
+	{
+		$("#err_faq_question").html('Enter FAQ Question.');
+		flag=0;
+	}
+	if(faq_answer=="")
+	{
+		$("#err_faq_answer").html('Enter FAQ Answer.');
+		flag=0;
+	}
+	if(faq_type=="")
+	{
+		$("#err_faq_type").html('Please select FAQ Type.');
+		flag=0;
+	}
+	if(status=="")
+	{
+		$("#err_status").html('Please select status.');
+		flag=0;
+	}
+	
+	if(flag==1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+});
+/* end add FAQ */
+
 
 /* valdiation for add  zone*/
 $('#btn_addzone').click(function(){
