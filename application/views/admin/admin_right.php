@@ -183,7 +183,7 @@ $session_subroles="";
 							}
 							?>>
 						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Notifications/manageNotifications"><!-- <i data-feather="home"></i> -->
-						<img src="<?php echo base_url()."/uploads/flaticon/Banners .png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
+						<img src="<?php echo base_url()."/uploads/flaticon/notification.png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
 						<span>NOTIFICATION</span></a>                        
 					</li>
 					<li  <?php if($this->router->fetch_class()=='Banners'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageBanner'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
@@ -202,7 +202,22 @@ $session_subroles="";
 						<img src="<?php echo base_url()."/uploads/flaticon/Banners .png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
 						<span>BANNERS</span></a>                        
 					</li>
-					
+					<li  <?php if($this->router->fetch_class()=='FAQ'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageFAQ'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
+							{ 
+								if ($modulesId[1]['view'] == 'Yes') 
+								{ 
+									echo 'style="display:block;"';
+							    } 
+								else 
+								{ 
+									echo 'style="display:none;"'; 
+								}
+							}
+							?>>
+						<a class="sidebar-header" href="<?php echo base_url("backend/");?>FAQ/manageFAQ"><!-- <i data-feather="home"></i> -->
+						<img src="<?php echo base_url()."/uploads/flaticon/Banners .png"?>" style="max-height: 30px;max-width: 30px;">  &nbsp;&nbsp;
+						<span>FAQ</span></a>                        
+					</li>
 					<li><a class="sidebar-header" href="<?php echo base_url();?>backend/Login/logout"><!-- <i data-feather="home"></i> --><img src="<?php echo base_url()."/uploads/flaticon/exit.png"?>" style="max-height: 25px;max-width: 25px;">  &nbsp;&nbsp;<span>LOGOUT</span></a>
                     </li>	
                  </ul>

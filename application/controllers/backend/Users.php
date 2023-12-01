@@ -96,7 +96,7 @@ class Users extends CI_Controller {
 						$photo_imagename='';
 						$new_image_name = rand(1, 99999).$_FILES['servicefile']['name'];
 						$config = array(
-									'upload_path' => "uploads/service_provider/",
+									'upload_path' => "uploads/user_profile/",
 									'allowed_types' => "gif|jpg|png|bmp|jpeg",
 									'max_size' => "0", 
 									'file_name' =>$new_image_name
@@ -110,7 +110,7 @@ class Users extends CI_Controller {
 						{
 							$errorMsg = $this->upload->display_errors();
 							$this->session->set_flashdata('error',$errorMsg);
-							redirect(base_url().'backend/Service_provider/addservice_provider/');
+							redirect(base_url().'backend/Users/addUser');
 
 						}
 						if($_FILES['servicefile']['error']==0)
@@ -220,7 +220,7 @@ class Users extends CI_Controller {
 						$photo_imagename='';
 						$new_image_name = rand(1, 99999).$_FILES['servicefile']['name'];
 						$config = array(
-									'upload_path' => "uploads/service_provider/",
+									'upload_path' => "uploads/user_profile/",
 									'allowed_types' => "gif|jpg|png|bmp|jpeg",
 									'max_size' => "0", 
 									'file_name' =>$new_image_name
@@ -234,7 +234,7 @@ class Users extends CI_Controller {
 						{
 							$errorMsg = $this->upload->display_errors();
 							$this->session->set_flashdata('error',$errorMsg);
-							redirect(base_url().'backend/Service_provider/addservice_provider/');
+							redirect(base_url().'backend/Users/manageUsers');
 
 						}
 						if($_FILES['servicefile']['error']==0)
@@ -539,7 +539,7 @@ class Users extends CI_Controller {
 						$photo_imagename='';
 						$new_image_name = rand(1, 99999).$_FILES['servicefile']['name'];
 						$config = array(
-									'upload_path' => "uploads/service_provider/",
+									'upload_path' => "uploads/user_profile/",
 									'allowed_types' => "gif|jpg|png|bmp|jpeg",
 									'max_size' => "0", 
 									'file_name' =>$new_image_name
@@ -553,7 +553,7 @@ class Users extends CI_Controller {
 						{
 							$errorMsg = $this->upload->display_errors();
 							$this->session->set_flashdata('error',$errorMsg);
-							redirect(base_url().'backend/Service_provider/addservice_provider/');
+							redirect(base_url().'backend/Users/addServiceprovider');
 
 						}
 						if($_FILES['servicefile']['error']==0)
@@ -683,7 +683,7 @@ class Users extends CI_Controller {
 						$photo_imagename='';
 						$new_image_name = rand(1, 99999).$_FILES['servicefile']['name'];
 						$config = array(
-									'upload_path' => "uploads/service_provider/",
+									'upload_path' => "uploads/user_profile/",
 									'allowed_types' => "gif|jpg|png|bmp|jpeg",
 									'max_size' => "0", 
 									'file_name' =>$new_image_name
@@ -697,7 +697,7 @@ class Users extends CI_Controller {
 						{
 							$errorMsg = $this->upload->display_errors();
 							$this->session->set_flashdata('error',$errorMsg);
-							redirect(base_url().'backend/Service_provider/addservice_provider/');
+							redirect(base_url().'backend/Users/manageServiceProvider');
 
 						}
 						if($_FILES['servicefile']['error']==0)
