@@ -32,6 +32,9 @@ class Dashboard extends REST_Controller {
 				$completedBooking = $this->DashboardModel->getAllBookings($user_id,'completed',0);
 				$demoBooking = $this->DashboardModel->getAllDemoBookings($user_id,0);
 
+				// $input=array('booking_status'=>'ongoing');
+				// $this->Common_Model->update_data('booking','booking_id','202',$input);
+
 				$todayschedule = $this->DashboardModel->getAllBookings($user_id,'waiting',1);
 				foreach($todayschedule as $key=>$booking)
 				{
@@ -39,8 +42,16 @@ class Dashboard extends REST_Controller {
 					$date1 = new DateTime($booking['booking_date']);
 					$date1 = $date1->format('Y-m-d');
 					
-					$date2 = new DateTime($booking['expiry_date']);
-					$date2 = $date2->format('Y-m-d');
+					if($booking['expiry_date']!="" || $booking['expiry_date']!=null)
+					{
+						$date2 = new DateTime($booking['expiry_date']);
+						$date2 = $date2->format('Y-m-d');
+					}
+					else
+					{
+						$date2="";
+					}
+					
 
 					$today=date('Y-m-d');
 					$date1=date_create($today);
@@ -69,6 +80,14 @@ class Dashboard extends REST_Controller {
 				}
 
 				$demoschedule = $this->DashboardModel->getAllDemoBookings($user_id,1);
+				foreach($demoschedule as $k=>$demo)
+				{
+
+					$checkReport=$this->DashboardModel->checkTodayWorkHistory($demo['booking_id']);
+					$demo['reportAvailable']=$checkReport;
+					
+					$demoschedule[$k]=$demo;
+				}
 
                 $data['responsecode'] = "200";
                 // $data['UserData'] = $userdetails;

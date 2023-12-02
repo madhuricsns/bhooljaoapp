@@ -14,7 +14,7 @@ class Login extends REST_Controller {
 	public function login_post()
 	{
 		$token 		  = $this->input->post("token");
-		$username	  = $this->input->post('mobile');
+		$username	  = $this->input->post('username');
 		$fcm		  = $this->input->post('fcm');
 		
 		if($token == TOKEN)
@@ -59,6 +59,12 @@ class Login extends REST_Controller {
 					$q=$this->Common_Model->update_data('users','user_id',$result->user_id,$updatedata);
 					//*********** */
 					//$this->session->set_userdata('logged_in', $session_data);
+
+					$title="Login OTP";
+					$message="OTP for your login is $otp_code . Do not share it with anyone.";
+					$output=$this->Common_Model->sendexponotification($title,$message,$result->user_fcm);
+
+
 					$response_array['data'] = $session_data;
 					$response_array['responsecode'] = "200";
 					$response_array['responsemessage'] = 'OTP send successfully.';

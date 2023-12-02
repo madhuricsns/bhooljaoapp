@@ -37,8 +37,18 @@ class Booking extends REST_Controller {
 					$date1 = new DateTime($booking['booking_date']);
 					$date1 = $date1->format('Y-m-d');
 					
-					$date2 = new DateTime($booking['expiry_date']);
-					$date2 = $date2->format('Y-m-d');
+					// $date2 = new DateTime($booking['expiry_date']);
+					// $date2 = $date2->format('Y-m-d');
+
+					if($booking['expiry_date']!="" || $booking['expiry_date']!=null)
+					{
+						$date2 = new DateTime($booking['expiry_date']);
+						$date2 = $date2->format('Y-m-d');
+					}
+					else
+					{
+						$date2="";
+					}
 
 					$today=date('Y-m-d');
 					$date1=date_create($today);
@@ -86,7 +96,12 @@ class Booking extends REST_Controller {
 	{
 		$token 		= $this->input->post("token");
 		$booking_id = $this->input->post("booking_id");
-		
+		$userLat = $this->input->post("userLat");
+		$userLong = $this->input->post("userLong");
+		if(!isset($userLat) && !isset($userLong))
+		{
+			$userLat=$userLong='';
+		}
 		if($token == TOKEN)
 		{
             if($booking_id =="")
@@ -101,14 +116,22 @@ class Booking extends REST_Controller {
 				// );
 				//  $this->Common_Model->update_data('booking','booking_id',$booking_id,$inputData);
 
-				$arrBookingData = $this->BookingModel->getBookingData($booking_id);
+				$arrBookingData = $this->BookingModel->getBookingData($booking_id,$userLat,$userLong);
 				
 					// Calculate Days
 					$date1 = new DateTime($arrBookingData->booking_date);
 					$date1 = $date1->format('Y-m-d');
 					
-					$date2 = new DateTime($arrBookingData->expiry_date);
-					$date2 = $date2->format('Y-m-d');
+					
+					if($arrBookingData->expiry_date!="" || $arrBookingData->expiry_date!=null)
+					{
+						$date2 = new DateTime($arrBookingData->expiry_date);
+						$date2 = $date2->format('Y-m-d');
+					}
+					else
+					{
+						$date2="";
+					}
 
 					$date1=date_create($date1);
 					$date2=date_create($date2);
@@ -118,9 +141,11 @@ class Booking extends REST_Controller {
 					$arrBookingData->booking_date=$date1->format('M d,Y');
 					$arrBookingData->expiry_date=$date2->format('M d,Y');
 					$arrBookingData->left_days=$days." days left";
-				
-				
 
+					$checkReport=$this->BookingModel->checkTodayWorkHistory($booking_id);
+					$arrBookingData->reportAvailable=$checkReport;
+
+				
 				// User details
 				
                 $sp=$this->BookingModel->getSPDetails($arrBookingData->user_id);
@@ -231,7 +256,7 @@ class Booking extends REST_Controller {
 				
 		if($token == TOKEN)
 		{
-            if($booking_id=="" || $user_id=="" || $_FILES['workphoto1']['name']=="")
+            if($booking_id=="" || $user_id=="" )
             {
                 $data['responsemessage'] = 'Please provide valid data ';
                 $data['responsecode'] = "400"; //create an array
@@ -422,7 +447,85 @@ class Booking extends REST_Controller {
             }
             else
             { 
-				$arrBooking = $this->BookingModel->getNewBookings($userLat,$userLong);
+				// $inputData=array(
+				// 	'address_id'=>'33'
+				// );
+				//  $this->Common_Model->update_data('booking','booking_id','171',$inputData);
+
+				$arrBooking = $this->BookingModel->getNewBookings($user_id,$userLat,$userLong);
+				
+                $data['responsecode'] = "200";
+                $data['data'] = $arrBooking;
+             }
+		}
+		else
+		{
+			$data['responsecode'] = "201";
+			$data['responsemessage'] = 'Token did not match';
+		}	
+		$obj = (object)$data;//Creating Object from array
+		$response = json_encode($obj);
+		print_r($response);
+	}
+
+	public function acceptBooking_post()
+	{
+		$token 					= $this->input->post("token");
+		$user_id 				= $this->input->post("user_id");
+		$booking_id 			= $this->input->post("booking_id");
+				
+		if($token == TOKEN)
+		{
+			if($booking_id=="" || $user_id=="")
+            {
+                $data['responsemessage'] = 'Please provide valid data ';
+                $data['responsecode'] = "400"; //create an array
+            }
+            else
+            {
+				$inputData=array(
+					'booking_id'=>$booking_id,
+					'service_provider_id'=>$user_id,
+					'dateadded'=>date('Y-m-d H:i:s')
+				);
+
+				$bookingExist=$this->BookingModel->checkAlreadyExist(0,$user_id,$booking_id);
+				if($bookingExist==0)
+				{
+					$accepted_id=$this->Common_Model->insert_data('booking_accepted',$inputData);
+				}
+				// $arrFeedback = $this->BookingModel->getFeedback($feedback_id);
+				
+				$data['responsecode'] = "200";
+				$data['responsemessage'] = 'New service accepted successfully';
+			}
+		}
+		else
+		{
+			$data['responsecode'] = "201";
+			$data['responsemessage'] = 'Token did not match';
+		}	
+		$obj = (object)$data;//Creating Object from array
+		$response = json_encode($obj);
+		print_r($response);
+	}
+
+	public function historyBooking_post()
+	{
+		$token 			= $this->input->post("token");
+		$user_id		= $this->input->post("user_id");
+		
+		
+		if($token == TOKEN)
+		{
+            if($user_id=="")
+            {
+                $data['responsemessage'] = 'Please provide valid data ';
+                $data['responsecode'] = "400"; //create an array
+            }
+            else
+            { 
+				$arrBooking = $this->BookingModel->getacceptedBookings($user_id);
 				
                 $data['responsecode'] = "200";
                 $data['data'] = $arrBooking;
