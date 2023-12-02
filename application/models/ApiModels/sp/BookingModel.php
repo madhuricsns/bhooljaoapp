@@ -40,13 +40,30 @@
 			return $result;
 		}
 		
-		public function getBookingData($booking_id)
+		public function getBookingData($booking_id,$userLat='',$userLong='')
 		{
-			$this->db->select('b.order_no,b.booking_status,b.user_id,c.category_name,c.category_description,c.category_image,ad.address1 as address,b.booking_date,b.time_slot,b.expiry_date,b.duration,b.service_provider_id,b.payment_type');
+            if($userLat!='' && $userLong!='')
+            {
+                $distance_parameter = '(
+                    6371 * acos(
+                    cos(radians('.'u.user_lat)) * cos(radians('.$userLat.')) * cos(
+                        radians('.$userLong.') - radians('.'u.user_long)
+                    ) + sin(radians('.$userLat.')) * sin(radians('.'u.user_lat))
+                    )
+                ) AS distance';
+            }
+            else
+            {
+                $distance_parameter ='(0 ) AS distance';
+            }
+
+			$this->db->select($distance_parameter.','.'b.order_no,b.booking_status,b.user_id,c.category_name,c.category_description,c.category_image,ad.address1 as address,b.booking_date,b.time_slot,b.expiry_date,b.duration,b.service_provider_id,b.payment_type
+            ,ad.address_lat,ad.address_lng');
 			$this->db->from(TBLPREFIX.'booking as b');
 			$this->db->where('b.booking_id',$booking_id);
 			$this->db->join(TBLPREFIX.'category as c','c.category_id = b.category_id','left');
 			$this->db->join(TBLPREFIX.'addresses as ad','ad.address_id = b.address_id','left');
+            $this->db->join(TBLPREFIX.'users as u','u.user_id =b.user_id','left');
 			$query = $this->db->get();
 			$result= $query->row();
 			
@@ -468,7 +485,7 @@
                 $result= $query->row();
                 if(isset($result->profile_pic) && $result->profile_pic!="")
                 {
-                    $result->profile_pic=base_url()."uploads/user/profile_photo/".$result->profile_pic;
+                    $result->profile_pic=base_url()."uploads/user_profile/".$result->profile_pic;
                 }
                 return $result;
             }
@@ -486,7 +503,7 @@
                 $result= $query->row();
                 if(isset($result->profile_pic) && $result->profile_pic!="")
                 {
-                    $result->profile_pic=base_url()."uploads/user/profile_photo/".$result->profile_pic;
+                    $result->profile_pic=base_url()."uploads/user_profile/".$result->profile_pic;
                 }
                 return $result;
             }
@@ -505,7 +522,7 @@
             {
                 if(isset($user->profile_pic) && $user->profile_pic!="")
                 {
-                    $user->profile_pic=base_url()."uploads/user/profile_photo/".$user->profile_pic;
+                    $user->profile_pic=base_url()."uploads/user_profile/".$user->profile_pic;
                 }
                 $result[$key]=$user;
             }
@@ -630,8 +647,18 @@
 			return $result;		
         }
 
-        public function getNewBookings($userLat,$userLong)
+        public function getNewBookings($user_id,$userLat,$userLong)
 		{
+
+           $accepted =$this->getacceptedBookings($user_id);
+           $booking_ids="(-1";
+            foreach($accepted as $acceptBooking)
+            {
+                $booking_ids.=",".$acceptBooking['booking_id'];
+            }
+            $booking_ids.=")";
+            // echo $booking_ids;
+            $condition="b.booking_id NOT IN ".$booking_ids;
             $distance_parameter=0;
             $distance_parameter = '(
 				6371 * acos(
@@ -642,15 +669,16 @@
 			  ) AS distance';
                 
             //(DATE_FORMAT(DATE(b.booking_date),'%M/%d/,%Y')) as booking_date
-			$this->db->select($distance_parameter.','.'b.booking_id,b.order_no,c.category_name,c.category_image,u.profile_id,u.profile_pic,u.full_name,b.booking_date,b.time_slot,b.expiry_date,b.booking_status,b.service_provider_id
+			$this->db->select($distance_parameter.','.'b.booking_id,b.order_no,b.duration,c.category_name,c.category_image,u.profile_id,u.profile_pic,u.full_name,b.booking_date,b.time_slot,b.expiry_date,b.booking_status,b.service_provider_id
             ,a.address1 as address,a.address_id,a.address_lat,a.address_lng');
             $this->db->from(TBLPREFIX.'booking b');
+            $this->db->where($condition);
             $this->db->where('b.service_provider_id','0');
             $this->db->where('b.booking_status','waiting');
             $this->db->join(TBLPREFIX.'users as u','u.user_id =b.user_id','left');
             $this->db->join(TBLPREFIX.'category as c','c.category_id = b.category_id','left');
             $this->db->join(TBLPREFIX.'addresses as a','a.address_id = b.address_id','left');
-			// $this->db->having("distance <=" ,'100');
+			$this->db->having("distance <=" ,'10');
 			$query = $this->db->get();
             $result= $query->result_array();
             // echo $this->db->last_query();
@@ -671,5 +699,46 @@
 			}
 			return $result;
 		}
+
+        public function checkAlreadyExist($res,$user_id,$booking_id)
+        {
+            $this->db->select('*');
+            $this->db->from(TBLPREFIX.'booking_accepted');
+            $this->db->where('service_provider_id',$user_id);
+            $this->db->where('booking_id',$booking_id);
+            if($res==1)
+            {
+                $result=$this->db->get()->row();	
+            }
+            else
+            {
+                $result=$this->db->get()->num_rows();
+            }
+            return  $result;
+        }
+
+        public function getacceptedBookings($user_id)
+        {
+            $this->db->select('ab.*,b.user_id,b.category_id,b.order_no,c.category_name,c.category_image,u.profile_id,u.profile_pic,u.full_name');
+            $this->db->from(TBLPREFIX.'booking_accepted as ab');
+            $this->db->where('ab.service_provider_id',$user_id);
+            $this->db->join(TBLPREFIX.'booking as b','b.booking_id = ab.booking_id','left');
+            $this->db->join(TBLPREFIX.'users as u','u.user_id =b.user_id','left');
+            $this->db->join(TBLPREFIX.'category as c','c.category_id = b.category_id','left');
+            $result=$this->db->get()->result_array();
+            foreach($result as $key=>$row)
+            {
+                if(isset($row['profile_pic']) && $row['profile_pic']!="")
+                {
+                    $row['profile_pic']=base_url()."uploads/user_profile/".$row['profile_pic'];
+                }
+                if(isset($row['category_image']) && $row['category_image']!="")
+                {
+                    $row['category_image']=base_url()."uploads/category_images/".$row['category_image'];
+                }
+                $result[$key]=$row;
+            }	
+            return  $result;
+        }
         
 	}

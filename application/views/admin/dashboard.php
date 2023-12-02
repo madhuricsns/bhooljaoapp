@@ -311,7 +311,7 @@ $session_user_type=$sessiondata['user_type'];*/
 									<div class="media-body1 col-12 de-icon1">
 										<div>
 											<h5 class="m-0" style="color: #000;">All Income</h5>
-											<h2 style="font-size: 25px;">HK$<span class="counter totalincome">0</span></h2>
+											<h2 style="font-size: 25px;">₹<span class="counter totalincome">0</span></h2>
 										</div>
 									</div>
 									</a>
@@ -328,7 +328,7 @@ $session_user_type=$sessiondata['user_type'];*/
 									<div class="media-body1 col-12 de-icon1">
 										<div>
 											<h5 class="m-0" style="color: #000;"> Paid</h5>
-											<h2 style="font-size: 25px;">HK$<span class="counter totalpaid">0</span></h2>
+											<h2 style="font-size: 25px;">₹<span class="counter totalpaid">0</span></h2>
 										</div>
 									</div>
 									</a>
@@ -345,7 +345,7 @@ $session_user_type=$sessiondata['user_type'];*/
 									<div class="media-body1 col-12 de-icon1">
 										<div>
 											<h5 class="m-0" style="color: #000;"> Unpaid</h5>
-											<h2 style="font-size: 25px;">HK$<span class="counter totalunpaid">0</span></h2>
+											<h2 style="font-size: 25px;">₹<span class="counter totalunpaid">0</span></h2>
 										</div>
 									</div>
 									</a>

@@ -18,6 +18,9 @@ class Profile extends REST_Controller {
 		$mobile_number	= $this->input->post("mobile");
 		$email_address	= $this->input->post("email");
 		$address		= $this->input->post("address");
+		$about		    = $this->input->post("about");
+		$whatwedo		= $this->input->post("whatwedo");
+
 		
 		if($token == TOKEN)
 		{
@@ -33,13 +36,82 @@ class Profile extends REST_Controller {
 					'mobile' => $mobile_number,
 					'email' => $email_address,
 					'address' => $address,
+					'about' => $about,
 					'dateupdated' => date('Y-m-d H:i:s')
 					);
 						  
 				$result   = $this->Common_Model->update_data('users','user_id',$user_id,$arrUserData);
 				
-				$arrData = $this->CustomerModel->getUserDetails($user_id);
+				// $whatwedoArr=explode("+",$whatwedo);
+				// print_r($whatwedo);
+				$delete   = $this->CustomerModel->deleteWhatWeDo($user_id);
+				foreach($whatwedo as $description)
+				{
+					$arrInputData = array(
+						'service_provider_id' => $user_id,
+						'description' => $description,
+						'dateadded' => date('Y-m-d H:i:s')
+						);
+					$this->Common_Model->insert_data('sp_whatwedo',$arrInputData);	
+				}
+				$arrwhatweDoData = $this->CustomerModel->getUserWhatWeDo($user_id);
+				// print_r($arrwhatweDoData);
 				
+					// Upload  Photos
+					if(!empty($_FILES['photo_arr']) )
+					{
+						$deletephoto   = $this->CustomerModel->deletephoto($user_id);
+					// echo "Image Upload";
+						$imgCount=count($_FILES['photo_arr']['name']);
+						for($i=0;$i<$imgCount;$i++)
+						{
+							$strDocName = "photo_arr";
+							$_FILES['file']['name']     = $_FILES[$strDocName]['name'][$i]; 
+							$_FILES['file']['type']     = $_FILES[$strDocName]['type'][$i]; 
+							$_FILES['file']['tmp_name'] = $_FILES[$strDocName]['tmp_name'][$i]; 
+							$_FILES['file']['error']    = $_FILES[$strDocName]['error'][$i]; 
+							$_FILES['file']['size']     = $_FILES[$strDocName]['size'][$i]; 
+							
+							$photo='';
+							$new_doc_name = "";
+							$new_doc_name = date('YmdHis').$this->Common_Model->randomImageName();
+							$target_dir="uploads/sp_photos/";
+				
+							$config = array(
+									'upload_path' => $target_dir,
+									'allowed_types' => "jpg|png|jpeg|pdf",
+									'max_size' => "0", 
+									'file_name' =>$new_doc_name
+									);
+							$this->load->library('upload', $config);
+							$this->upload->initialize($config); 
+							if($this->upload->do_upload('file'))
+							{ 
+								$docDetailArray = $this->upload->data();
+								$photo =  $docDetailArray['file_name'];
+							}
+							else
+							{
+								echo $this->upload->display_errors();
+							}
+							if($_FILES[$strDocName]['error'][$i]==0)
+							{ 
+								$photo=$photo;
+							}
+							//echo $photo;
+							$arrphotos = array(
+								'service_provider_id' => $user_id,
+								'photo' => $photo
+								);    
+	
+							$this->Common_Model->insert_data('sp_photos',$arrphotos);
+						}
+						// $agencyphotos = true;
+					}
+
+				$arrData = $this->CustomerModel->getUserDetails($user_id);
+				$arrData->WhatWeDo=$arrwhatweDoData;
+
 				$data['data'] = $arrData;
 				$data['responsemessage'] = 'Profile updated successfully';
 				$data['responsecode'] = "200";
@@ -111,11 +183,29 @@ class Profile extends REST_Controller {
 			else
 			{
 				$arrData = $this->CustomerModel->getUserDetails($user_id);
+				$arrPhotos = $this->CustomerModel->getPhotos($user_id);
+				$photoArr=array();
+				foreach($arrPhotos as $photo)
+				{
+					$photoArr[]=$photo['photo'];
+				}
+
+				$arrwhatweDoData = $this->CustomerModel->getUserWhatWeDo($user_id);
+				$whatwedoArr=array();
+				foreach($arrwhatweDoData as $description)
+				{
+					$whatwedoArr[]=$description['description'];
+				}
+
 				if($arrData->category_id>0)
 				{
 					$category = $this->CustomerModel->getCategoryDetails($arrData->category_id);
 					$arrData->service_name=$category->category_name;
 				}
+
+				$arrData->WhatWeDo=$whatwedoArr;
+				$arrData->photo=$photoArr;
+
                 $data['data'] = $arrData;
 				$data['responsecode'] = "200";		
             }		

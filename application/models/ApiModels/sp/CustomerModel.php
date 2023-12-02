@@ -82,6 +82,58 @@
             }
         }
 
+		public function getUserWhatWeDo($user_id) 
+        {
+            if(!empty ($user_id))
+            {
+                $this->db->select('description');
+                $this->db->from(TBLPREFIX.'sp_whatwedo');
+                $this->db->where('service_provider_id',$user_id);
+                $query = $this->db->get();
+                $result= $query->result_array();
+                return $result;
+            }
+        }
+
+		public function getPhotos($user_id) 
+        {
+            if(!empty ($user_id))
+            {
+                $this->db->select('photo');
+                $this->db->from(TBLPREFIX.'sp_photos');
+                $this->db->where('service_provider_id',$user_id);
+                $query = $this->db->get();
+                $result= $query->result_array();
+				foreach($result as $key=>$row)
+				{
+					if(isset($row['photo']) && $row['photo']!="")
+					{
+						$row['photo']=base_url()."uploads/sp_photos/".$row['photo'];
+					}
+					$result[$key]=$row;
+				}
+                return $result;
+            }
+        }
+
+		public function deletephoto($user_id) 
+        {
+            if(!empty ($user_id))
+            {
+				$this->db->where('service_provider_id',$user_id);
+				$this->db->delete(TBLPREFIX.'sp_photos'); 
+            }
+        }
+
+		public function deleteWhatWeDo($user_id) 
+        {
+            if(!empty ($user_id))
+            {
+				$this->db->where('service_provider_id',$user_id);
+				$this->db->delete(TBLPREFIX.'sp_whatwedo'); 
+            }
+        }
+
 		public function getCategoryDetails($category_id) 
         {
             if(!empty ($category_id))
@@ -171,6 +223,8 @@
 			$this->db->where('faq_type',$type);
 			return $this->db->get()->result_array();			
 		}
+
+		
 
 		public function getMedicalrecords($user_id) 
         {
