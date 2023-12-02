@@ -115,7 +115,8 @@
 													<tbody id="tbody">
 														<tr>
 															<th> Option</th>
-                                                            <th>Amount</th>
+<th> Option Type</th>
+<th> Amount</th>
 														</tr>
 														<?php
                                                          $i=1;
@@ -124,7 +125,8 @@
 														<tr  id="<?php echo "R".$i?>">
 															<!-- <td  class="row-index text-center"></td> -->
 															<td> <?php echo $option['option_name']?></td>
-                                                            <td><?php echo "₹".$option['option_amount']?></td>
+<td> <?php echo $option['option_type']?></td>
+<td><?php echo "₹".$option['option_amount']?></td>
 														</tr>
                                                         <?php $i++; }  ?>
 													</tbody>

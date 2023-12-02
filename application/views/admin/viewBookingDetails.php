@@ -122,7 +122,7 @@
 							?>
 							<br/>
 							Service Duration: <?php 
-							echo $orderInfo[0]['duration']." Months"; ?>
+							echo $orderInfo[0]['duration']; ?>
 							<br/><br/>
 <?php  echo $orderInfo[0]['category_name'];?>
 						<?php
@@ -139,9 +139,11 @@
 						<?php
 							if(isset($serviceDetails) && count($serviceDetails) > 0) {
 								foreach($serviceDetails as $service) 
-								{ ?>
-								<p><?php echo $service['service_name'].' '.$service['option_amount'].'*'.$service['duration']; ?> 
-								<?php echo $service['option_amount'] * $service['duration']; ?></p>
+								{ 
+								$duration=str_split($service['duration']);
+								?>
+								<p><?php echo $service['service_name'].' '.$service['option_amount'].'*'.$duration[0]; ?> 
+								<?php echo $service['option_amount'] * $duration[0]; ?></p>
 							<?php }
 							}
 							?>
