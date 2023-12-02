@@ -26,6 +26,8 @@ class Dashboard extends REST_Controller {
             else
             { 
                 // $userdetails = $this->DashboardModel->getUserDetails($user_id);
+				// Update booking status
+				$this->DashboardModel->updateBookingStatus($user_id);
 				
 				$assignedBooking = $this->DashboardModel->getAllBookings($user_id,'waiting',0);
 				$ongoingBooking = $this->DashboardModel->getAllBookings($user_id,'ongoing',0);
@@ -35,7 +37,7 @@ class Dashboard extends REST_Controller {
 				// $input=array('booking_status'=>'ongoing');
 				// $this->Common_Model->update_data('booking','booking_id','202',$input);
 
-				$todayschedule = $this->DashboardModel->getAllBookings($user_id,'waiting',1);
+				$todayschedule = $this->DashboardModel->getAllBookings($user_id,'ongoing',1);
 				foreach($todayschedule as $key=>$booking)
 				{
 					// Calculate Days

@@ -75,15 +75,27 @@
 			$this->db->select("b.booking_id,b.order_no,c.category_name,c.category_image,u.profile_id,u.profile_pic,u.full_name,u.mobile,u.email,b.booking_date,b.time_slot,b.expiry_date,b.duration,b.booking_status,b.service_provider_id
 			,a.address1 as address");
             $this->db->from(TBLPREFIX.'booking b');
-			if($status != '')
+			/*if($status != '')
 			{
 				$this->db->where('b.booking_status',$status);
-			}
+			}*/
 			$this->db->where('b.service_provider_id',$user_id);
 			$this->db->where('b.is_demo','No');
             $this->db->join(TBLPREFIX.'users as u','u.user_id =b.user_id','left');
             $this->db->join(TBLPREFIX.'category as c','c.category_id = b.category_id','left');
             $this->db->join(TBLPREFIX.'addresses as a','a.address_id = b.address_id','left');
+			if($status == 'ongoing')
+			{
+				$this->db->where('CURDATE() BETWEEN DATE(b.booking_date) AND b.expiry_date');
+			}
+			else if($status == 'completed')
+			{
+				$this->db->where('CURDATE() > expiry_date');
+			}
+			else
+			{
+				$this->db->where('CURDATE() < DATE(b.booking_date)');
+			}
 			$query = $this->db->get();
 			if($res=='1')
 			{
@@ -257,6 +269,26 @@
 			{
 				return false;
 			}
+			
+		}
+		
+		
+		public function updateBookingStatus($user_id)
+		{
+			// Ongoing 
+			$update_data = array('booking_status' => 'ongoing');
+			$this->db->where('service_provider_id',$user_id);
+			$this->db->where('is_demo','No');
+			$this->db->where('CURDATE() BETWEEN DATE(booking_date) AND expiry_date');
+			$this->db->update(TBLPREFIX.'booking',$update_data);
+			
+			// Completed
+			$update_data = array('booking_status' => 'completed');
+			
+			$this->db->where('service_provider_id',$user_id);
+			$this->db->where('is_demo','No');
+			$this->db->where('CURDATE() > expiry_date');
+			$this->db->update(TBLPREFIX.'booking',$update_data);
 			
 		}
 	}
