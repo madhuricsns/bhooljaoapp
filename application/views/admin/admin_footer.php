@@ -229,6 +229,27 @@ $(document).ready(function(){
             </tr>`);
     });
 
+
+//Add Option row
+    $('#addimagesBtn').on('click', function () {
+  
+    // Adding a row inside the tbody.
+    $('#tbody').append(`<tr id="R${++rowIdx}">
+           <td>
+           <input type="file" class="form-control optionsArr" id="service_image" name="service_image[]">
+            <div id="err_optionsArr" class="error_msg err_optionsArr"></div>
+            </td>
+            
+            <td class="text-center">
+            <button class="btn btn-danger remove" 
+                type="button"><i class="fa fa-remove"></i></button>
+            </td>
+            </tr>`);
+    });
+
+
+
+
     // Remove opion row
     // jQuery button click event to remove a row
     $('#tbody').on('click', '.remove', function () {

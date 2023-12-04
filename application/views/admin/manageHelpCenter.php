@@ -15,17 +15,17 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 ?>
 <div class="page-body">
 	
-		<!-- Container-fluid starts-->
+	<!-- Container-fluid starts-->
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="card">
 					<div class="card-header">
-						<h5>SERVICES</h5>			
+						<h5>HELP CENTER </h5>			
 						<div class="card-header-right">
 						<div class="row">
 							<div class="col-lg-12">
-								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Service/addService" style="float:right;"><i class="fa fa-plus-circle"></i>Add service</a>
+								 <a class="btn btn-default"  href="<?php echo base_url();?>backend/HelpCenter/addHelpCenter" style="float:right"><i class="fa fa-plus-circle"></i>Add HelpCenter</a>
 							</div>
 							</div>
 						</div>	 
@@ -52,58 +52,57 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 						<?php }?>										
 						<div class="table-responsive">
 							<div id="basicScenario" class="product-physical"></div>
-							<?php if($usercnt > 0)	{ ?>
+							<?php if($Helpcentercnt > 0)	{ ?>
 								<table class="table table-bordered table-striped mb-0" id="datatable-default">
 									<thead>
 										<tr>
-											<th style="width:5%">Sr.No</th>
-											<th style="width:10%"> Image</th>	
-											<th style="width:10%">Category</th>
-											<th style="width:15%">Service Name</th>
-											<th style="width:25%">Description</th>
-											<!--<th style="width:10%">Price</th>-->
-											<th style="width:10%">Status</th>
-											<th style="width:10%">Change Status</th>
+											<th>Sr.No </th>
+											<th>Help Image</th>	
+											<th>Help Name</th>
+											<th>Help Value</th>
 											<th style="width:10%">Actions</th>	
+											
+											
 										</tr>
 									</thead>	
 									<tbody>			
 										<?php $i=1;
-										// print_r($serviceList);
-										foreach($serviceList as $service)
+										foreach($HelpCenter as $help)
 										{
-										?>		
+											//   $feedback['dateadded']= new DateTime($feedback['dateadded']);
+                                            // $feedback['dateadded']=$feedback['dateadded']->format('d-M-Y');
+                                            $str_images='';										
+											if($help['help_image']!="")
+											{
+												$str_images='<img src="'.base_url().'uploads/helpcenter/'.$help['help_image'].'" style="width:80px;height:80px">';
+											}	
+											?>		
+											
+												
 										<tr>
-												<td><?php echo $i;?></td>
-												<td><img src="<?php echo $service['service_image'];?>" width="50px"></td>
-												<td><?php echo $service['category_name'];?></td>
-												<td><?php echo $service['service_name'];?></td>
-												<td><?php echo $service['service_description'];?></td>
-												<!--<td><?php// echo "₹".$service['min_price']."- ₹".$service['max_price'];?></td>-->
-												<td><?php echo $service['service_status'];?></td>
+											<td><?php echo $i;?></td>
+											
+												<?php if($str_images!="") {?>
+												<td> <?php echo $str_images;?></td>
+												<?php } else {?>
+												<td> <img src="<?php echo base_url();?>template/admin/assets/images/lookbook.jpg" alt="No image Found"style="width:80px;height:80px" /></td>
+												<?php } ?>
+											
+												<td><?php echo $help['help_name'];?></td>
 												
 												
-
-												<td>
-													<?php if($service['service_status']!='Active') { ?>
-														<a href="<?php echo base_url();?>backend/Service/change_status/<?php echo base64_encode($service['service_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-success">Active</a>
-														<?php } else { ?>
-														<a href="<?php echo base_url();?>backend/Service/change_status/<?php echo base64_encode($service['service_id']);?>/<?php echo base64_encode('Inactive');?>" class="btn-sm btn-danger">Inactive</a>
-													<?php } ?>
-												</td>
-												<td class="actions">                     
-<a href="<?php echo base_url();?>backend/Service/manageAddonServices/<?php echo base64_encode($service['service_id']);?>" title="Addon Services"><i data-feather="eye"></i></a>
-													<a href="<?php echo base_url();?>backend/Service/updateService/<?php echo base64_encode($service['service_id']);?>"><i data-feather="edit"></i></a>
+												<td><?php echo $help['help_value'];?></td>
+											<td class="actions">  
+													<a href="<?php echo base_url();?>backend/HelpCenter/updateHelpCenter/<?php echo base64_encode($help['help_id']);?>"><i data-feather="edit"></i></a>
 													
-													<a href="<?php echo base_url();?>backend/Service/deleteService/<?php echo base64_encode($service['service_id']);?>" onclick="javascript:return chk_isDeleteComnfirm();">
+													<a href="<?php echo base_url();?>backend/HelpCenter/deleteHelpCenter/<?php echo base64_encode($help['help_id']);?>" onclick="javascript:return chk_isDeleteComnfirm();">
 													<i data-feather="trash-2"></i>
 													</a>
 
-													<a href="<?php echo base_url();?>backend/Service/viewService/<?php echo base64_encode($service['service_id']);?>"><i data-feather="eye"></i></a>
-
-													<a href="<?php echo base_url();?>backend/Service/addmultiple_images/<?php echo base64_encode($service['service_id']);?>" title="Add Images"><i data-feather="image"></i></a>
-
-											</td>				
+													<!-- <a href="<?php //echo base_url();?>backend/Service/viewService/<?php //echo base64_encode($service['service_id']);?>"><i data-feather="eye"></i></a> -->
+											</td>
+												
+												
 											</tr>											
 											<?php $i++; }?>
 									</tbody>									
@@ -124,5 +123,6 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 		</div>
 	</div>
 	<!-- Container-fluid Ends-->
+	 
 	
 </div>

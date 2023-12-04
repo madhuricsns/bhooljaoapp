@@ -793,5 +793,129 @@ class Service extends CI_Controller {
 		}
 	}
 
+public function addmultiple_images()
+	{
+		$data['title']='Update User';
+		$data['error_msg']='';
+		//echo "segment--".$this->uri->segment(4);exit();
+		$service_id=base64_decode($this->uri->segment(4));
+		//echo "Brand_id--".$service_id;exit();
+		if($service_id)
+		{
+			$data['service_id']=$service_id;
+			$serviceInfo=$this->Service_model->getSingleServiceInfo($service_id,0);
+
+			if($serviceInfo>0)
+			{
+			 $data['serviceInfo'] =$this->Service_model->getSingleServiceInfo($service_id,1);
+			// echo $serviceInfo;
+				if(isset($_POST['btn_addmultipleimages']))
+				{
+	// 				print_r($_POST);
+	// 				print_r($_FILES);
+	// exit;
+			      // $this->form_validation->set_rules('service_image[]','Service Image','required');
+					// if($this->form_validation->run())
+					// {
+				 	$full_name=$this->input->post('service_id');
+		
+				
+$service_image='';
+
+if(!empty($_FILES['service_image']['name']) && count(array_filter($_FILES['service_image']['name'])) > 0){ 
+            
+    $dataInfo = array();
+    $files = $_FILES;
+    $cpt = count($_FILES['service_image']['name']);
+    for($i=0; $i<$cpt; $i++)
+    {           
+        $_FILES['service_image']['name']= $files['service_image']['name'][$i];
+        $_FILES['service_image']['type']= $files['service_image']['type'][$i];
+        $_FILES['service_image']['tmp_name']= $files['service_image']['tmp_name'][$i];
+        $_FILES['service_image']['error']= $files['service_image']['error'][$i];
+        $_FILES['service_image']['size']= $files['service_image']['size'][$i];    
+        $this->load->library('upload');
+        $this->upload->initialize($this->set_upload_options());
+      //  $this->upload->do_upload('service_image');
+        if($this->upload->do_upload('service_image'))
+						{ 
+						 $dataInfo[] = $this->upload->data();								
+							$photo_imagename =  $dataInfo;
+				  
+						}else
+						{
+							$errorMsg = $this->upload->display_errors();
+							$this->session->set_flashdata('error',$errorMsg);
+							redirect(base_url().'backend/Service/manageService');
+
+						}
+        
+    }
+ 	
+					}
+						if($_FILES['service_image']['error']==0)
+						{ 
+							$servicefile=$photo_imagename;
+						}
+					
+					
+							
+						$input_data = array(
+							
+							'service_id'=>trim($full_name),
+							 'service_image'=>implode($servicefile),
+							'dateupdated' => date('Y-m-d H:i:s'),
+						'dateadded' => date('Y-m-d H:i:s')
+								);
+					// echo"<pre>";
+					// print_r($input_data);
+					// exit();
+					
+						$service_image = $this->Service_model->insert_MultiImage_Service($input_data);
+						if($service_image)
+						{	
+							$this->session->set_flashdata('success','User updated successfully.');
+
+							redirect(base_url().'backend/Service/manageService');	
+						}
+						else
+						{
+							$this->session->set_flashdata('error','Error while updating User.');
+
+							redirect(base_url().'backend/Service/addmultiple_images/'.base64_encode($service_id));
+						}	
+					// }
+					// else
+					// {
+					// 	$this->session->set_flashdata('error',$this->form_validation->error_string());
+
+					// 	redirect(base_url().'backend/Service/addmultiple_images/'.base64_encode($service_id));
+					// }
+				}
+			}
+			else
+			{
+				$data['error_msg'] = 'User not found.';
+			}
+		}
+
+		$this->load->view('admin/admin_header',$data);
+		$this->load->view('admin/addmultiple_images',$data);
+		$this->load->view('admin/admin_footer');
+
+
+}
+private function set_upload_options()
+{   
+    //upload an image options
+    $config = array();
+    $config['upload_path'] = 'uploads/service_images/';
+    $config['allowed_types'] = 'gif|jpg|png|bmp|jpeg';
+    $config['max_size']      = '0';
+    $config['overwrite']     = FALSE;
+
+    return $config;
+}
+
 }
 

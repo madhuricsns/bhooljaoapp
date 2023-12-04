@@ -98,7 +98,7 @@ $session_user_type=$sessiondata['user_type'];*/
 			</div>
 		</div>
 		</div>
-
+        <!-- </div> -->
 	 	
 		<div class="col-md-12">
 		<div class="card">
@@ -363,11 +363,13 @@ $session_user_type=$sessiondata['user_type'];*/
 			</div>
 		</div>
 	</div>
+</div>
+</div>
 	<!-- Container-fluid Ends-->
 
 	<!-- Container-fluid starts-->
-	
+
 	
 	
 
-</div>
+</div> 

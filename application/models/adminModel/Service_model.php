@@ -153,8 +153,16 @@ public function uptdateService($input_data,$id)
 		}	
 	}
 
+public function insert_MultiImage_Service($input_data){
 
-	
+	$res = $this->db->insert(TBLPREFIX.'service_images',$input_data);
+		if($res)
+		{
+			return $this->db->insert_id();
+		}
+		else
+			return false;
+}
 	
 	
 	
