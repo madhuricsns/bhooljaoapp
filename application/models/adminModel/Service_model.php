@@ -203,6 +203,29 @@ public function insert_MultiImage_Service($input_data){
 		return $query->row();
 	}
 
+	public function getAllServiceImages($service_id)
+	{
+		
+		$this->db->select('s.*');
+		$this->db->where('s.service_id',$service_id);
+		
+		$result = $this->db->get(TBLPREFIX.'service_images as s');
+		// echo $this->db->last_query();exit;
+		
+			$response= $result->result_array();
+			foreach($response as $key=>$row)
+			{
+				if(isset($row['service_image']) && $row['service_image']!="")
+				{
+					$row['service_image']=base_url()."uploads/service_images/".$row['service_image'];
+				}
+				
+				
+				$response[$key]=$row;
+			}
+		
+			return $response;
+	}
 	
 	public function getAllAddonService($res,$per_page,$page,$id)
 	{

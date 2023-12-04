@@ -4,7 +4,7 @@
 	<div class="container-fluid">
                 <div class="card tab2-card">
                     <div class="card-header">
-                        <h5>Add Multi Service Images</h5>
+                        <h5>Add More Service Images</h5>
                     </div>
                     <div class="card-body">
                       <?php if($this->session->flashdata('success')!=""){?>
@@ -37,18 +37,7 @@
                                              
                                            <input type="hidden" class="form-control  col-md-6" id="service_id" name="service_id"  value="<?php echo $service_id;?>">
 												
-                                           <!-- <div class="row">
-											
-											<div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="service_image" ><span>*</span> Service Multi Images</label>
-                                        <input class="form-control " id="service_image" type="file"  name="service_image[]"  multiple="multiple"/>
-                                                <div class="error_msg" id="err_service_image"></div>
-												<span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span>
-												
-                                            </div>
-                                        </div>
-                                    </div> -->
+                                          
                                            
                                      <div class="form-group row" id="show-div">
 												<label class="col-xl-3 col-md-4"><span>*</span> Service Multi Images</label>
@@ -92,6 +81,30 @@
 						</form>
                     </div>
                 </div>
+
+
+			<!-- Service Images -->
+				 <div class="card">
+				 	<div class="card-header"><h5>Service Images</h5></div>
+					 <div class="card-body">
+					 	 	<div class="row">
+								<?php
+								// print_r($service_iamgesData);
+								 foreach($service_iamgesData as $image){
+								?>
+									<div class="col-md-2">
+	                                <img src="<?php echo $image['service_image'];?>" class="img-fluid"><br>
+	                                <a href="" class="btn btn-sm btn-warning" title="Remove this image">Remove</a>
+	                            	</div>
+
+                            	<?php } ?>
+                        	</div> 
+					 </div><!-- card-body -->
+				</div><!-- Card -->
+				<!-- End -->
+
+
+
             </div>
 	<!-- Container-fluid Ends-->
 </div>
