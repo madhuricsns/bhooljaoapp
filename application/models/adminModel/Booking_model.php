@@ -29,6 +29,7 @@ Class Booking_model extends CI_Model {
 				$this->db->where('b.booking_date<=',$datesearch." 23:59:59");
 			}
 		}
+		$this->db->where('b.is_demo','No');
 		$this->db->order_by('b.booking_id','DESC');
 		if($per_page!="")
 		{

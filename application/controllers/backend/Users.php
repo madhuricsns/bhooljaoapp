@@ -11,6 +11,7 @@ class Users extends CI_Controller {
 		$this->load->helper('email');
 		$this->load->library('session');
 		$this->load->model('adminModel/User_model');
+		$this->load->model('Common_Model');
 		
 	}
 	public function index()
