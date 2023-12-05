@@ -34,10 +34,12 @@
                                         <div class="col-sm-12">
 
                                        <div class="row">
-                                           <div class="col-md-6">
+                                       	
+                                           <div class=" col-md-8 ">
+                                           	 <div class="offset-xl-4 offset-sm-3">
                                            	<label><span></span>Select Service Provider</label><br>
                                             <div class="form-group ">
-                                                
+                                               
 												<select name="service_provider" id="service_provider" class="form-control" required>
 													<option value="">Select Service Provider </option>
 													<?php
@@ -47,16 +49,20 @@
 													<option value="<?php echo $users['user_id'] ?>"><?php echo $users['full_name'] ?></option>
 												<?php } ?>
 												</select>
+												
                                             </div>
                                         </div>
-                                    </div>
 
+                                            </div>
+                                        </div>
+                                    <!-- </div> -->
+                                    
 
 
                                             <div class="form-group row">
-                                            	<div class="offset-xl-3 offset-sm-4">
+                                            	<div class="offset-xl-12 offset-sm-9">
 						                            <button type="submit" class="btn btn-primary" name="btn_upAssing" id="btn_uptcity">Assign</button>
-													<a href="<?php echo base_url();?>backend/City/managescity" class="btn btn-primary" >Cancel</a>
+													<a href="<?php echo base_url();?>backend/Booking/manageBooking" class="btn btn-primary" >Cancel</a>
 						                        </div>
                                             </div>
                                         </div>
