@@ -113,26 +113,41 @@
 							</h5>
                             </div>
                             <div class="card-body">
-							
-							Payment Method: <?php 
-							echo $orderInfo[0]['payment_type']; ?>
-							<br/>
-							Location: <?php 
+							<table width="100%">
+							<tr>
+							<td colspan="2">
+							<strong>Payment Method:</strong> </td>
+							<td style="text-align:right"><?php 
+							echo $orderInfo[0]['payment_type']; ?></td>
+							</tr>
+							<tr>
+							<td colspan="2">
+							<strong>Location: </strong></td>
+							<td style="text-align:right"> <?php 
 							echo $addressDetails->address1;
-							?>
-							<br/>
-							Service Duration: <?php 
-							echo $orderInfo[0]['duration']; ?>
-							<br/><br/>
+							?></td>
+							</tr>
+							<tr>
+							<td colspan="2">
+							<strong>Service Duration: </strong></td>
+							<td style="text-align:right"><?php 
+							echo $orderInfo[0]['duration']; ?></td>
+							</tr>
+							<tr><td>&nbsp;</td></tr>
+							<tr>
+							<td>
 <?php  echo $orderInfo[0]['category_name'];?>
+							</td>
+							</tr>
 						<?php
 							if(isset($servicePricing) && count($servicePricing) > 0) {
 								foreach($servicePricing as $service) 
 								{ ?>
-								<p><?php echo $service['service_name'].' <br/>';
+								<tr>
+								<td><?php echo $service['service_name'].' </td>';
 								
-								echo $service['option_label'].': '.$service['option_value']; ?> 
-								</p>
+								echo '<td>'.$service['option_label'].':</td><td> '.$service['option_value'].'</td>'; ?> 
+								</tr>
 							<?php }
 							}
 							?>
@@ -142,12 +157,18 @@
 								{ 
 								$duration=str_split($service['duration']);
 								?>
-								<p><?php echo $service['service_name'].' '.$service['option_amount'].'*'.$duration[0]; ?> 
-								<?php echo $service['option_amount'] * $duration[0]; ?></p>
+								<tr><td>
+								<?php echo $service['service_name'];?>
+								</td><td style="text-align:center;"> 
+								<?php echo $service['option_amount'].' * '.$duration[0]; ?> 
+								</td><td style="text-align:right">
+								<?php echo $service['option_amount'] * $duration[0]; ?></td></tr>
 							<?php }
 							}
 							?>
-							
+							</tr>
+							<tr><td>&nbsp;</td></tr>
+							</table>
 							<?php
 							 if(isset($orderInfo) && count($orderInfo)>0 && isset($orderInfo) && count($orderInfo)>0)									
 							{
@@ -269,8 +290,8 @@
                         </div>
                         <div class="row">
                         	<div class="col-sm-12">
-                        		<a class="btn btn-primary custom-btn btn-block" target="_blank" href="<?php echo site_url('backend/Booking/generatepdf/'.base64_encode($orderInfo[0]['booking_id']));?>">
-									View Invoice</a>
+                        		<!--<a class="btn btn-primary custom-btn btn-block" target="_blank" href="<?php //echo site_url('backend/Booking/generatepdf/'.base64_encode($orderInfo[0]['booking_id']));?>">
+									View Invoice</a>-->
                         	</div>
                         </div>
                     </div>

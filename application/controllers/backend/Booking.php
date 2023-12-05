@@ -154,17 +154,18 @@ class Booking extends CI_Controller {
 	{
 		$data['title']='Assing Service Provider';
 		$data['error_msg']='';
-		$data['usersList']=$this->Booking_model->getAllUsers(1,"","");
-
 			$booking_id=base64_decode($this->uri->segment(4));
 
 			if ($booking_id) {
 				$bokingInfo=$this->Booking_model->getSingleBookingInfo($booking_id,0);
-			
+				
 			if($bokingInfo>0)
 			{
 				$data['bokingInfo'] = $this->Booking_model->getSingleBookingInfo($booking_id,1);
-
+				
+				
+			$category_id = $data['bokingInfo'][0]['category_id'];
+			$data['usersList']=$this->Booking_model->getAllUsers(1,"","",$category_id);
 				if(isset($_POST['btn_upAssing']))
 				{
 				
