@@ -24,7 +24,7 @@ $session_user_type=$sessiondata['user_type'];*/
 						<div class="card-body overviwe-icon total-booking" >
 							<div class="media1 static-top-widget row">
 							
-								<a href="https://lobabooking.csnsindia.com/backend/Doctors/manageDoctor"  >
+								<a href="#"  >
 								<div class="media-body1 col-12 de-icon1">
 									<div>
 										<h5 class="m-0" style="color: #000;">Total Bookings</h5>
@@ -43,7 +43,7 @@ $session_user_type=$sessiondata['user_type'];*/
 						<div class="card-body overviwe-icon service-pro-icon" >
 							<div class="media1 static-top-widget row">
 							
-								<a href="https://lobabooking.csnsindia.com/backend/Serviceprovider/manageServiceproviders"  >
+								<a href="#"  >
 								<div class="media-body1 col-12 de-icon1">
 									<div>
 										<h5 class="m-0" style="color: #000;">Total Service Providers</h5>
@@ -79,7 +79,7 @@ $session_user_type=$sessiondata['user_type'];*/
 						<div class="card-body overviwe-icon user-icon" >
 							<div class="media1 static-top-widget row">
 							
-								<a href="https://lobabooking.csnsindia.com/backend/User/manageUser"  >
+								<a href="#"  >
 								<div class="media-body1 col-12 de-icon1">
 									<div>
 										<h5 class="m-0" style="color: #000;">Total Users</h5>
@@ -98,7 +98,7 @@ $session_user_type=$sessiondata['user_type'];*/
 			</div>
 		</div>
 		</div>
-        <!-- </div> -->
+
 	 	
 		<div class="col-md-12">
 		<div class="card">
@@ -120,7 +120,7 @@ $session_user_type=$sessiondata['user_type'];*/
 							<div class="card-body overviwe-icon total-booking" >
 								<div class="media1 static-top-widget row">
 								
-									<a href="https://lobabooking.csnsindia.com/backend/Booking/manageBooking"  >
+									<a href="#"  >
 									<div class="media-body1 col-12 de-icon1">
 										<div>
 											<h5 class="m-0" style="color: #000;">Total Bookings</h5>
@@ -138,7 +138,7 @@ $session_user_type=$sessiondata['user_type'];*/
 							<div class="card-body overviwe-icon pending-icon" >
 								<div class="media1 static-top-widget row">
 								
-									<a href="https://lobabooking.csnsindia.com/backend/Booking/manageBooking?status=d2FpdGluZ19mb3JfYWNjZXB0"  >
+									<a href="#"  >
 									<div class="media-body1 col-12 de-icon1">
 										<div>
 											<h5 class="m-0" style="color: #000;">Pending Bookings</h5>
@@ -156,7 +156,7 @@ $session_user_type=$sessiondata['user_type'];*/
 							<div class="card-body overviwe-icon accepted-icon" >
 								<div class="media1 static-top-widget row">
 								
-									<a href="https://lobabooking.csnsindia.com/backend/Booking/manageBooking?status=YWNjZXB0ZWQ="  >
+									<a href="#"  >
 									<div class="media-body1 col-12 de-icon1">
 										<div>
 											<h5 class="m-0" style="color: #000;">Accepted Bookings</h5>
@@ -174,7 +174,7 @@ $session_user_type=$sessiondata['user_type'];*/
 							<div class="card-body overviwe-icon ongoing-icon" >
 								<div class="media1 static-top-widget row">
 								
-									<a href="https://lobabooking.csnsindia.com/backend/Booking/manageBooking?status=b25nb2luZw=="  >
+									<a href="#"  >
 									<div class="media-body1 col-12 de-icon1">
 										<div>
 											<h5 class="m-0" style="color: #000;">Ongoing Bookings</h5>
@@ -192,7 +192,7 @@ $session_user_type=$sessiondata['user_type'];*/
 							<div class="card-body overviwe-icon completed-icon" >
 								<div class="media1 static-top-widget row">
 								
-									<a href="https://lobabooking.csnsindia.com/backend/Booking/manageBooking?status=Y29tcGxldGVk"  >
+									<a href="#"  >
 									<div class="media-body1 col-12 de-icon1">
 										<div>
 											<h5 class="m-0" style="color: #000;">Completed Bookings</h5>
@@ -307,7 +307,7 @@ $session_user_type=$sessiondata['user_type'];*/
 						<div class="card card-border">
 							<div class="card-body  overviwe-icon income-icon" >
 								<div class="media1 static-top-widget row">
-									<a href="https://lobabooking.csnsindia.com/backend/Booking/manageBooking"  >
+									<a href="#"  >
 									<div class="media-body1 col-12 de-icon1">
 										<div>
 											<h5 class="m-0" style="color: #000;">All Income</h5>
@@ -324,7 +324,7 @@ $session_user_type=$sessiondata['user_type'];*/
 						<div class="card card-border">
 							<div class="card-body  overviwe-icon paid-icon" >
 								<div class="media1 static-top-widget row">
-									<a href="https://lobabooking.csnsindia.com/backend/Booking/manageBooking"  >
+									<a href="#"  >
 									<div class="media-body1 col-12 de-icon1">
 										<div>
 											<h5 class="m-0" style="color: #000;"> Paid</h5>
@@ -341,7 +341,7 @@ $session_user_type=$sessiondata['user_type'];*/
 						<div class="card card-border">
 							<div class="card-body  overviwe-icon unpaid-icon" >
 								<div class="media1 static-top-widget row">
-									<a href="https://lobabooking.csnsindia.com/backend/Booking/manageBooking"  >
+									<a href="#"  >
 									<div class="media-body1 col-12 de-icon1">
 										<div>
 											<h5 class="m-0" style="color: #000;"> Unpaid</h5>
@@ -363,13 +363,11 @@ $session_user_type=$sessiondata['user_type'];*/
 			</div>
 		</div>
 	</div>
-</div>
-</div>
 	<!-- Container-fluid Ends-->
 
 	<!-- Container-fluid starts-->
-
 	
 	
+	
 
-</div> 
+</div>

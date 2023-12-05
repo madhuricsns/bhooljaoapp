@@ -82,8 +82,6 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<!--<td><?php// echo "₹".$service['min_price']."- ₹".$service['max_price'];?></td>-->
 												<td><?php echo $service['service_status'];?></td>
 												
-												
-
 												<td>
 													<?php if($service['service_status']!='Active') { ?>
 														<a href="<?php echo base_url();?>backend/Service/change_status/<?php echo base64_encode($service['service_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-success">Active</a>
@@ -92,18 +90,16 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 													<?php } ?>
 												</td>
 												<td class="actions">                     
-<a href="<?php echo base_url();?>backend/Service/manageAddonServices/<?php echo base64_encode($service['service_id']);?>" title="Addon Services"><i data-feather="eye"></i></a>
-													<a href="<?php echo base_url();?>backend/Service/updateService/<?php echo base64_encode($service['service_id']);?>"><i data-feather="edit"></i></a>
+													<a href="<?php echo base_url();?>backend/Service/manageAddonServices/<?php echo base64_encode($service['service_id']);?>" title="Addon Services"><i data-feather="file-plus"></i></a>
+													<!-- <a href="<?php echo base_url();?>backend/Service/updateService/<?php echo base64_encode($service['service_id']);?>"><i data-feather="edit"></i></a> -->
 													
 													<a href="<?php echo base_url();?>backend/Service/deleteService/<?php echo base64_encode($service['service_id']);?>" onclick="javascript:return chk_isDeleteComnfirm();">
 													<i data-feather="trash-2"></i>
 													</a>
 
 													<a href="<?php echo base_url();?>backend/Service/viewService/<?php echo base64_encode($service['service_id']);?>"><i data-feather="eye"></i></a>
-
 													<a href="<?php echo base_url();?>backend/Service/addmultiple_images/<?php echo base64_encode($service['service_id']);?>" title="Add Images"><i data-feather="image"></i></a>
-
-											</td>				
+												</td>				
 											</tr>											
 											<?php $i++; }?>
 									</tbody>									

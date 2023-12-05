@@ -82,13 +82,13 @@
 											<?php echo $this->session->flashdata('error_msg');?>						</div>						
 										<?php }?>										
 										
+										<input type="hidden" name="user_type" id="user_type" value="Admin" />
+										<!-- <div class="form-group">	
 										
-										<div class="form-group">	
-										<!--<input type="hidden" name="user_type" id="user_type" value="Admin" />-->
 									 <select name="user_type" id="user_type" required class="form-control">	
 									<option value="Admin">Admin</option>	
 									</select>
-									</div>	
+									</div>	 -->
 									
 										<div class="form-group">
 											 <input required="" name="email_address" type="text" class="form-control" placeholder="Email Address" id="email_address">
