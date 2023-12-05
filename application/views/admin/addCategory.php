@@ -32,13 +32,14 @@
                                     <div class="row">
                                             <div class="form-group col-md-6">
                                                 <label for="category_name"><span>*</span> Category Name</label>
-                                                <input type="text" class="form-control" id="category_name" name="category_name"  required value="">
+                                                <input type="text" class="form-control" id="category_name" name="category_name"  required >
 												 <div id="err_category_name" class="error_msg"></div>
                                             </div>
 											
 											<div class="form-group col-md-6">
                                                 <label for="description" ><span>*</span> Description</label>
-                                               <textarea name="description" id="description" class="form-control"></textarea>
+                                               <textarea name="description" id="description" class="form-control" required ></textarea>
+                                               <div id="err_description" class="error_msg"></div>
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label for="category_image"><span>*</span> Category Image</label>
@@ -62,6 +63,7 @@
 													<option value="Active">Active</option>
 													<option value="Inactive">Inactive</option>
 												</select>
+												 <div id="err_status" class="error_msg"></div>
                                             </div>
 
 											

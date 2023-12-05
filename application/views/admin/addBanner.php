@@ -35,8 +35,8 @@
                                         		<div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="banner_title" ><span>*</span> Banner Title</label>
-                                                <input type="text" class="form-control" id="banner_title" name="banner_title" id="banner_title"  required value="">
-										 <div id="err_banner_title" class="error_msg"></div>
+                                                <input type="text" class="form-control" id="banner_title" name="banner_title" id="banner_title"  required >
+										  <div id="err_banner_title" class="error_msg"></div>
                                             </div>
                                         </div>
 											
@@ -99,6 +99,6 @@
 						</form>
                     </div>
                 </div>
-            </div>
+          
 	<!-- Container-fluid Ends-->
 </div>

@@ -39,6 +39,7 @@
 											<div class="form-group col-md-6">
                                                 <label for="description"><span>*</span> Description</label>
                                                <textarea name="description" id="description" class="form-control "><?php echo $categoryInfo[0]['category_description'];?></textarea>
+                                               <div id="err_description" class="error_msg"></div>
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label for="category_image" ><span>*</span> Category Image</label>
@@ -65,6 +66,7 @@
 													<option value="Active" <?php if($categoryInfo[0]['category_status']=="Active"){ echo 'selected="selected"';}?>>Active</option>
 													<option value="Inactive" <?php if($categoryInfo[0]['category_status']=="Inactive"){ echo 'selected="selected"';}?>>Inactive</option>
 												</select>
+												<div id="err_status" class="error_msg"></div>
                                             </div>
 										</div>
                                             <div class="pull-right">

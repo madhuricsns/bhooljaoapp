@@ -231,6 +231,76 @@ $(document).ready(function($)
 
 	});
 
+/* valdiation for add  HelpCenter  */
+$('#btn_addHelpCenter').click(function(){
+	var helpcenter_name=$("#helpcenter_name").val();
+	var helpcenter_value=$("#helpcenter_value").val(); 
+	
+
+	$("#err_helpcenter_name").html('');
+	$("#err_helpcenter_value").html('');
+	$("#err_status").html('');
+	var flag=1;
+	
+	if(helpcenter_name=="")
+	{
+		$("#err_helpcenter_name").html('Enter help name.');
+		flag=0;
+	}
+	if(helpcenter_value=="")
+	{
+		$("#err_helpcenter_value").html('Enter help value.');
+		flag=0;
+	}
+	
+	
+	if(flag==1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+});
+/* end add HelpCenter */
+
+
+/* valdiation for Updated  HelpCenter  */
+$('#btn_uptHelpCenter').click(function(){
+	var helpcenter_name=$("#helpcenter_name").val();
+	var helpcenter_value=$("#helpcenter_value").val(); 
+	
+
+	$("#err_helpcenter_name").html('');
+	$("#err_helpcenter_value").html('');
+	$("#err_status").html('');
+	var flag=1;
+	
+	if(helpcenter_name=="")
+	{
+		$("#err_helpcenter_name").html('Enter help name.');
+		flag=0;
+	}
+	if(helpcenter_value=="")
+	{
+		$("#err_helpcenter_value").html('Enter help value.');
+		flag=0;
+	}
+	
+	
+	if(flag==1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+});
+/* end Updated HelpCenter */
+
+
 /* valdiation for add  FAQ  */
 $('#btn_addFAQ').click(function(){
 	var faq_question=$("#faq_question").val();
@@ -238,24 +308,25 @@ $('#btn_addFAQ').click(function(){
 	var faq_type=$("#faq_type").val();
 	var status=$("#status").val();
 
-	$("#err_zone_name").html('');
-	$("#err_zone_pincode").html('');
+	$("#err_faq_question").html('');
+	$("#err_faq_answer").html('');
+	$("#err_faq_type").html('');
 	$("#err_status").html('');
 	var flag=1;
 	
 	if(faq_question=="")
 	{
-		$("#err_faq_question").html('Enter FAQ Question.');
+		$("#err_faq_question").html('Enter faq question.');
 		flag=0;
 	}
 	if(faq_answer=="")
 	{
-		$("#err_faq_answer").html('Enter FAQ Answer.');
+		$("#err_faq_answer").html('Enter faq answer.');
 		flag=0;
 	}
 	if(faq_type=="")
 	{
-		$("#err_faq_type").html('Please select FAQ Type.');
+		$("#err_faq_type").html('Please select faq type.');
 		flag=0;
 	}
 	if(status=="")
@@ -289,17 +360,17 @@ $('#btn_uptFAQ').click(function(){
 	
 	if(faq_question=="")
 	{
-		$("#err_faq_question").html('Enter FAQ Question.');
+		$("#err_faq_question").html('Enter faq question.');
 		flag=0;
 	}
 	if(faq_answer=="")
 	{
-		$("#err_faq_answer").html('Enter FAQ Answer.');
+		$("#err_faq_answer").html('Enter faq answer.');
 		flag=0;
 	}
 	if(faq_type=="")
 	{
-		$("#err_faq_type").html('Please select FAQ Type.');
+		$("#err_faq_type").html('Please select faq type.');
 		flag=0;
 	}
 	if(status=="")
@@ -318,9 +389,88 @@ $('#btn_uptFAQ').click(function(){
 	}
 });
 /* end Updated FAQ */
+btn_addnoti
+/* valdiation for add  Notification*/
+$('#btn_addnoti').click(function(){
+	var title=$("#title").val();
+	var massage=$("#massage").val();
+	var select_type=$("#select_type").val(); 
+	var user=$("#user").val();
 
+	$("#err_title").html('');
+	$("#err_massage").html('');
+	$("#err_select_type").html('');
+	$("#err_user").html('');
+	var flag=1;
+	
+	if(title=="")
+	{
+		$("#err_title").html('Enter your title.');
+		flag=0;
+	}
+	if(massage=="")
+	{
+		$("#err_massage").html('Enter massage.');
+		flag=0;
+	}
+	if(select_type=="")
+	{
+		$("#err_select_type").html('Please select type.');
+		flag=0;
+	}
+	if(user=="")
+	{
+		$("#err_user").html('Please select user.');
+		flag=0;
+	}
+	if(flag==1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+});
+/* end add zone */
 
+/* valdiation for add  zone*/
+$('#btn_updatezone').click(function(){
+	var zone_name=$("#zone_name").val();
+	var zone_pincode=$("#zone_pincode").val(); 
+	var status=$("#status").val();
 
+	$("#err_zone_name").html('');
+	$("#err_zone_pincode").html('');
+	$("#err_status").html('');
+	var flag=1;
+	
+	if(zone_name=="")
+	{
+		$("#err_zone_name").html('Enter zone name.');
+		flag=0;
+	}
+	if(zone_pincode=="")
+	{
+		$("#err_zone_pincode").html('Enter pincode.');
+		flag=0;
+	}
+	if(status=="")
+	{
+		$("#err_status").html('Please select status.');
+		flag=0;
+	}
+	
+	if(flag==1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+});
+/* end add zone */
 /* valdiation for add  zone*/
 $('#btn_addzone').click(function(){
 	var zone_name=$("#zone_name").val();
@@ -339,7 +489,7 @@ $('#btn_addzone').click(function(){
 	}
 	if(zone_pincode=="")
 	{
-		$("#err_zone_pincode").html('Enter Pincode.');
+		$("#err_zone_pincode").html('Enter pincode.');
 		flag=0;
 	}
 	if(status=="")
@@ -415,22 +565,22 @@ $('#btn_addPromocode').click(function(){
 	// }
 	if(promocode_code=="")
 	{
-		$("#err_promocode_code").html('Enter Promocode.');
+		$("#err_promocode_code").html('Enter promocode.');
 		flag=0;
 	}
 	if(promocode_description=="")
 	{
-		$("#err_promocode_description").html('Enter Promocode Description.');
+		$("#err_promocode_description").html('Enter promocode description.');
 		flag=0;
 	}
 	if(promocode_discount=="")
 	{
-		$("#err_promocode_discount").html('Enter Discount.');
+		$("#err_promocode_discount").html('Enter discount.');
 		flag=0;
 	}
 	if(promocode_type=="")
 	{
-		$("#err_promocode_type").html('Select Promocode Type.');
+		$("#err_promocode_type").html('Select promocode type.');
 		flag=0;
 	}
 	if(status=="")
@@ -464,7 +614,7 @@ $('#btn_addcity').click(function(){
 	
 	if(city_name=="")
 	{
-		$("#err_city_name").html('Enter City name.');
+		$("#err_city_name").html('Enter city name.');
 		flag=0;
 	}
 	if(state_id=="")
@@ -500,7 +650,7 @@ $('#btn_uptcity').click(function(){
 	
 	if(city_name=="")
 	{
-		$("#err_city_name").html('Enter City name.');
+		$("#err_city_name").html('Enter city name.');
 		flag=0;
 	}
 	if(state_id=="")
@@ -556,47 +706,47 @@ $('#btn_addsp').click(function(){
 	
 	if(servicefile=="")
 	{
-		$("#err_servicefile").html('Choose Your Profile.');
+		$("#err_servicefile").html('Choose your profile.');
 		flag=0;
 	}
 	if(full_name=="")
 	{
-		$("#err_full_name").html('Enter Full name.');
+		$("#err_full_name").html('Enter full name.');
 		flag=0;
 	}
 	if(email_address=="")
 	{
-		$("#err_email_address").html('Enter Email Id.');
+		$("#err_email_address").html('Enter email id.');
 		flag=0;
 	}
 	if(password=="")
 	{
-		$("#err_password").html('Enter Password.');
+		$("#err_password").html('Enter password.');
 		flag=0;
 	}
 	if(mobile_number=="")
 	{
-		$("#err_mobile_number").html('Enter Mobile number.');
+		$("#err_mobile_number").html('Enter mobile number.');
 		flag=0;
 	}
 	if(gender=="")
 	{
-		$("#err_gender").html('Select Gender.');
+		$("#err_gender").html('Select gender.');
 		flag=0;
 	}
 	if(zone_id=="")
 	{
-		$("#err_zone_id").html('Select Zone.');
+		$("#err_zone_id").html('Select zone.');
 		flag=0;
 	}
 	if(category_id=="")
 	{
-		$("#err_category_id").html('Select Category');
+		$("#err_category_id").html('Select category');
 		flag=0;
 	}
 	if(address=="")
 	{
-		$("#err_address").html('Enter Address.');
+		$("#err_address").html('Enter address.');
 		flag=0;
 	}
 	if(status=="")
@@ -644,42 +794,42 @@ $('#btn_adduser').click(function(){
 	
 	if(servicefile=="")
 	{
-		$("#err_servicefile").html('Choose Your Profile.');
+		$("#err_servicefile").html('Choose your profile.');
 		flag=0;
 	}
 	if(full_name=="")
 	{
-		$("#err_full_name").html('Enter Full name.');
+		$("#err_full_name").html('Enter full name.');
 		flag=0;
 	}
 	if(email_address=="")
 	{
-		$("#err_email_address").html('Enter Email Id.');
+		$("#err_email_address").html('Enter email id.');
 		flag=0;
 	}
 	if(password=="")
 	{
-		$("#err_password").html('Enter Password.');
+		$("#err_password").html('Enter password.');
 		flag=0;
 	}
 	if(mobile_number=="")
 	{
-		$("#err_mobile_number").html('Enter Mobile number.');
+		$("#err_mobile_number").html('Enter mobile number.');
 		flag=0;
 	}
 	if(gender=="")
 	{
-		$("#err_gender").html('Select Gender.');
+		$("#err_gender").html('Select gender.');
 		flag=0;
 	}
 	if(zone_id=="")
 	{
-		$("#err_zone_id").html('Select Zone.');
+		$("#err_zone_id").html('Select zone.');
 		flag=0;
 	}
 	if(address=="")
 	{
-		$("#err_address").html('Enter Address.');
+		$("#err_address").html('Enter address.');
 		flag=0;
 	}
 	if(status=="")
@@ -699,26 +849,268 @@ $('#btn_adduser').click(function(){
 });
 /* end add Users */
 
+/* valdiation for Add  Category */
+$('#btn_addcategory').click(function(){
+	var category_name=$("#category_name").val();
+	var description=$("#description").val();
+	var status=$("#status").val();
+
+	$("#err_category_name").html('');
+	$("#err_description").html('');
+	
+	$("#err_status").html('');
+	var flag=1;
+	
+	if(category_name=="")
+	{
+		$("#err_category_name").html('Enter category name.');
+		flag=0;
+	}
+	if(description=="")
+	{
+		$("#err_description").html('Enter description.');
+		flag=0;
+	}
+	
+	if(status=="")
+	{
+		$("#err_status").html('Please select status.');
+		flag=0;
+	}
+	
+	if(flag==1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+});
+/* end add Category */
+
+/* valdiation for update  Category */
+$('#btn_uptcategory').click(function(){
+	var category_name=$("#category_name").val();
+	var description=$("#description").val();
+	var status=$("#status").val();
+
+	$("#err_category_name").html('');
+	$("#err_description").html('');
+	
+	$("#err_status").html('');
+	var flag=1;
+	
+	if(category_name=="")
+	{
+		$("#err_category_name").html('Enter category name.');
+		flag=0;
+	}
+	if(description=="")
+	{
+		$("#err_description").html('Enter description.');
+		flag=0;
+	}
+	
+	if(status=="")
+	{
+		$("#err_status").html('Please select status.');
+		flag=0;
+	}
+	
+	if(flag==1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+});
+/* end update Category */
+
+/* valdiation for add Service */
+$('#btn_addService').click(function(){
+	var category=$("#category").val();
+	var service_name=$("#service_name").val();
+	var description=$("#description").val();
+	var price=$("#price").val();
+	var discount_price=$("#discount_price").val();
+	var offer_percentage=$("#offer_percentage").val();
+	var demo_price=$("#demo_price").val();
+	var demo_discount_price=$("#demo_discount_price").val();
+	var status=$("#status").val();
+
+	$("#err_category_name").html('');
+	$("#err_service_name").html('');
+	$("#err_description").html('');
+	$("#err_price").html('');
+	$("#err_discount_price").html('');
+	$("#err_offer_percentage").html('');
+	$("#err_demo_price").html('');
+	$("#err_demo_discount_price").html('');
+	$("#err_status").html('');
+	var flag=1;
+	
+	if(category=="")
+	{
+		$("#err_category").html('Please select category.');
+		flag=0;
+	}
+	if(service_name=="")
+	{
+		$("#err_service_name").html('Enter service name.');
+		flag=0;
+	}
+	if(description=="")
+	{
+		$("#err_description").html('Enter description.');
+		flag=0;
+	}
+	if(price=="")
+	{
+		$("#err_price").html('Enter price.');
+		flag=0;
+	}
+	if(discount_price=="")
+	{
+		$("#err_discount_price").html('Enter discount price.');
+		flag=0;
+	}
+	if(offer_percentage=="")
+	{
+		$("#err_offer_percentage").html('Enter offer percentage.');
+		flag=0;
+	}
+	if(demo_price=="")
+	{
+		$("#err_demo_price").html('Enter demo price.');
+		flag=0;
+	}
+	if(demo_discount_price=="")
+	{
+		$("#err_demo_discount_price").html('Enter demo discount price.');
+		flag=0;
+	}
+	if(status=="")
+	{
+		$("#err_status").html('Please select status.');
+		flag=0;
+	}
+	
+	if(flag==1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+});
+/* end add Service */
+
+/* valdiation for add Service */
+$('#btn_uptuser').click(function(){
+	var category=$("#category").val();
+	var service_name=$("#service_name").val();
+	var description=$("#description").val();
+	var price=$("#price").val();
+	var discount_price=$("#discount_price").val();
+	var offer_percentage=$("#offer_percentage").val();
+	var demo_price=$("#demo_price").val();
+	var demo_discount_price=$("#demo_discount_price").val();
+	var status=$("#status").val();
+
+	$("#err_category_name").html('');
+	$("#err_service_name").html('');
+	$("#err_description").html('');
+	$("#err_price").html('');
+	$("#err_discount_price").html('');
+	$("#err_offer_percentage").html('');
+	$("#err_demo_price").html('');
+	$("#err_demo_discount_price").html('');
+	$("#err_status").html('');
+	var flag=1;
+	
+	if(category=="")
+	{
+		$("#err_category").html('Please select category.');
+		flag=0;
+	}
+	if(service_name=="")
+	{
+		$("#err_service_name").html('Enter service name.');
+		flag=0;
+	}
+	if(description=="")
+	{
+		$("#err_description").html('Enter description.');
+		flag=0;
+	}
+	if(price=="")
+	{
+		$("#err_price").html('Enter price.');
+		flag=0;
+	}
+	if(discount_price=="")
+	{
+		$("#err_discount_price").html('Enter discount price.');
+		flag=0;
+	}
+	if(offer_percentage=="")
+	{
+		$("#err_offer_percentage").html('Enter offer percentage.');
+		flag=0;
+	}
+	if(demo_price=="")
+	{
+		$("#err_demo_price").html('Enter demo price.');
+		flag=0;
+	}
+	if(demo_discount_price=="")
+	{
+		$("#err_demo_discount_price").html('Enter demo discount price.');
+		flag=0;
+	}
+	if(status=="")
+	{
+		$("#err_status").html('Please select status.');
+		flag=0;
+	}
+	
+	if(flag==1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+});
+/* end add Service */
+
+
 /* valdiation for Add  Banner */
 $('#btn_addbanner').click(function(){
 	var banner_title=$("#banner_title").val();
-	var banner_image=$("#banner_image").val();
+	var bannertype=$("#bannertype").val();
 	var status=$("#status").val();
 
-	$("#err_servicefile").html('');
+	$("#err_bannertype").html('');
 	$("#err_banner_title").html('');
 	
 	$("#err_status").html('');
 	var flag=1;
 	
-	if(banner_image=="")
-	{
-		$("#err_banner_image").html('Choose Your Banner Image.');
-		flag=0;
-	}
+	
 	if(banner_title=="")
 	{
-		$("#err_banner_title").html('Enter Banner Title.');
+		$("#err_banner_title").html('Enter banner title.');
+		flag=0;
+	}
+	if(bannertype=="")
+	{
+		$("#err_bannertype").html('Please select banner type.');
 		flag=0;
 	}
 	
@@ -845,7 +1237,7 @@ var testEmail = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
 	}
 	if(rst_mobilenumber!="" && isNaN(rst_mobilenumber))
 	{
-		$("#err_rst_mobilenumber").html('Please enter valid contact number.');
+		$("#err_rst_mobilenumber").html('Elease enter valid contact number.');
 		flag=0;
 	}
 	if(rst_name=="")
@@ -941,12 +1333,12 @@ $('#btn_addslider').click(function(){
 
          if(sel_rest=="")
 		{
-			$("#err_rest").html('Select Restaurent.');
+			$("#err_rest").html('Select restaurent.');
 			flag=0;
 		}
 		if(sel_product=="")
 		{
-		$("#err_product").html('Select Product.');
+		$("#err_product").html('Select product.');
 			flag=0;
 		}
        
@@ -962,7 +1354,7 @@ $('#btn_addslider').click(function(){
 
          if(sel_rest=="")
 		{
-			$("#err_rest").html('Select Restaurent.');
+			$("#err_rest").html('Select restaurent.');
 			flag=0;
 		}
 		
@@ -1008,7 +1400,7 @@ $('#btn_addslider').click(function(){
 	}
 	if(banner_end_date=="")
 	{
-		$("#err_banner_end_date").html('select end date.');
+		$("#err_banner_end_date").html('Select end date.');
 		flag=0;
 	}
 

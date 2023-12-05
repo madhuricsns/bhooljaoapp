@@ -74,7 +74,7 @@
                                            <div class="col-md-6">
                                             <div class="form-group ">
                                                 <label for="mobile_number" ><span>*</span> Mobile Number</label>
-                                                <input type="tel" name="mobile_number" id="mobile_number" class="form-control"required pattern="[0-9]{10}">
+                                                <input type="tel" name="mobile_number" id="mobile_number" class="form-control"required pattern="[0-9]{10}" maxlength="10">
                                                 <div id="err_mobile_number" class="error_msg"></div>
                                             </div>
                                         </div>

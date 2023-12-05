@@ -47,7 +47,7 @@
                                             <div class="row">
                                            <div class="form-group col-md-6">
                                                 <label for="helpcenter_value" ><span>*</span>Help Center Value</label>
-                                              <input type="text" class="form-control" id="helpcenter_value" name="helpcenter_value"   required value="">
+                                              <input type="text" class="form-control" id="helpcenter_value" name="helpcenter_value"   required >
                                                <div id="err_helpcenter_value" class="error_msg"></div>
                                             </div>
 											

@@ -36,9 +36,9 @@
 											<div class="col-md-6" >
                                             <div class="form-group">
                                                 <label ><span>*</span>Title</label>
-                                                 <input type="text" name="title" id="title" class="form-control  "required >
+                                                 <input type="text" name="title" id="title" class="form-control"required >
 												
-                                                <div id="err_status" class="error_msg"></div>
+                                                <div id="err_title" class="error_msg"></div>
                                             </div>
                                         </div>
                               <div class="col-md-6" >
@@ -46,7 +46,7 @@
                                                 <label ><span>*</span>Notification Massage</label>
                                                 
 												<textarea name="message" id="massage" class="form-control" required ></textarea>
-                                                <div id="err_status" class="error_msg"></div>
+                                                <div id="err_massage" class="error_msg"></div>
                                             </div>
                                         </div>
 
@@ -63,7 +63,7 @@
 													<option value="Service Provider">Service Provider</option>
 													<option value="Customer">Customer</option>
 												</select>
-                                                <div id="err_status" class="error_msg"></div>
+                                                <div id="err_select_type" class="error_msg"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-6" >
@@ -73,14 +73,14 @@
 													<option value="">Select Users</option>
 													
 												</select>
-                                                <div id="err_status" class="error_msg"></div>
+                                                <div id="err_user" class="error_msg"></div>
                                             </div>
                                         </div>
                               
                                     </div>
 											<div class="pull-right">
-						                            <button type="submit" class="btn btn-primary" name="btn_addmaterial" id="btn_addmaterial">Add</button>
-													<a href="<?php echo base_url();?>backend/Material/manageMaterial" class="btn btn-primary" >Cancel</a>
+						                            <button type="submit" class="btn btn-primary" name="btn_addnoti" id="btn_addnoti">Add</button>
+													<a href="<?php echo base_url();?>backend/Notifications/manageNotifications" class="btn btn-primary" >Cancel</a>
                                             </div>
                                         </div>
                                     </div>

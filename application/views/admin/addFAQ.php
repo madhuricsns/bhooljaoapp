@@ -47,7 +47,7 @@
                                             <div class="form-group col-md-6">
                                                 <label for="faq_type"><span>*</span>FAQ Type</label>
 												<select name="faq_type" id="faq_type" class="form-control" required>
-													<option>Select FAQ Type</option>
+													<option value="">Select FAQ Type</option>
 													<option value="Customer">Customer</option>
 													<option value="Service Provider">Service Provider</option>
 												</select>

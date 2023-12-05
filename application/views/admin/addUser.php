@@ -77,7 +77,7 @@
                                            <div class="col-md-6">
                                             <div class="form-group ">
                                                 <label for="mobile_number" ><span>*</span> Mobile Number</label>
-                                                <input type="tel" name="mobile_number" id="mobile_number" class="form-control"required pattern="[0-9]{10}">
+                                                <input type="tel" name="mobile_number" id="mobile_number" class="form-control" pattern="[0-9]{10}"   maxlength="10" required >
                                                 <div id="err_mobile_number" class="error_msg"></div>
                                             </div>
                                         </div>
@@ -87,9 +87,9 @@
                                            <div class="form-group ">
                                            	<label for="gender" ><span>*</span> Gender</label>
                                              <br>
-                                               <label class="col-md-2"> <input type="radio" name="gender" class="gender"value="Male" required > Male</label>
-                                               <label class="col-md-3" > <input type="radio" name="gender" class="gender"  value="Female" required > Female</label>
-                                               <label class="col-md-3" > <input type="radio" name="gender" class="gender"  value="Other" required > Other</label>
+                                               <label class="col-md-2"> <input type="radio" name="gender" id="gender"class="gender"value="Male" required > Male</label>
+                                               <label class="col-md-3" > <input type="radio" name="gender" id="gender"class="gender"  value="Female" required > Female</label>
+                                               <label class="col-md-3" > <input type="radio" name="gender" id="gender"class="gender"  value="Other" required > Other</label>
                                                
                                                <div id="err_gender" class="error_msg"></div>
                                             </div>

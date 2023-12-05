@@ -44,6 +44,7 @@
 													<?php } ?>
                                                     
 												</select>
+												<div id="err_category" class="error_msg"></div>
                                             </div>
 
                                              <div class="form-group row">
@@ -68,24 +69,31 @@
 											<div class="form-group row">
                                                 <label for="email_address" class="col-xl-3 col-md-4"><span>*</span> Description</label>
                                                <input type="textarea" name="description" id="description" class="form-control  col-md-6" required value="<?php echo $serviceInfo[0]['service_description'];?>">
+                                               <div id="err_description" class="error_msg"></div>
                                             </div>
                                             
                                             <div class="form-group row">
                                                 <label for="service_price" class="col-xl-3 col-md-4"><span>*</span> Price</label>
-                                                <input type="text" name="service_price" id="service_price" class="form-control  col-md-6"required value="<?php echo $serviceInfo[0]['service_price'];?>">
+                                                <input type="text" name="service_price" id="price" class="form-control  col-md-6"required value="<?php echo $serviceInfo[0]['service_price'];?>">
+                                                 <div id="err_price" class="error_msg"></div>
                                             </div>
                                              <div class="form-group row">
                                                 <label for="service_discount_price" class="col-xl-3 col-md-4"><span>*</span> Discount Price</label>
-                                                <input type="text" name="service_discount_price" id="service_discount_price" class="form-control  col-md-6"required value="<?php echo $serviceInfo[0]['service_discount_price'];?>">
+                                                <input type="text" name="service_discount_price" id="discount_price" class="form-control  col-md-6"required value="<?php echo $serviceInfo[0]['service_discount_price'];?>">
+                                                 <div id="err_discount_price" class="error_msg"></div>
                                             </div>
                                             
 											<div class="form-group row">
                                                 <label for="service_demo_price" class="col-xl-3 col-md-4">Demo Price</label>
-                                                <input type="text" name="service_demo_price" id="service_demo_price" class="form-control  col-md-6"required value="<?php echo $serviceInfo[0]['service_demo_price'];?>">
+                                                <input type="text" name="service_demo_price" id="demo_price" class="form-control  col-md-6"required value="<?php echo $serviceInfo[0]['service_demo_price'];?>">
+
+                                                 <div id="err_demo_price" class="error_msg"></div>
                                             </div>
                                              <div class="form-group row">
                                                 <label for="service_demo_discount_price" class="col-xl-3 col-md-4">Demo Discount Price</label>
-                                                <input type="text" name="service_demo_discount_price" id="service_demo_discount_price" class="form-control  col-md-6"required value="<?php echo $serviceInfo[0]['service_demo_discount_price'];?>">
+                                                <input type="text" name="service_demo_discount_price" id="demo_discount_price" class="form-control  col-md-6"required value="<?php echo $serviceInfo[0]['service_demo_discount_price'];?>">
+
+                                                 <div id="err_demo_discount_price" class="error_msg"></div>
                                             </div>
 											
                                             <div class="form-group row">
@@ -95,6 +103,8 @@
 													<option value="Active" <?php if($serviceInfo[0]['service_status']=="Active"){ echo 'selected="selected"';}?>>Active</option>
 													<option value="Inactive" <?php if($serviceInfo[0]['service_status']=="Inactive"){ echo 'selected="selected"';}?>>Inactive</option>
 												</select>
+
+												 <div id="err_status" class="error_msg"></div>
                                             </div>
 
                                             <div class="form-group row">
@@ -213,7 +223,7 @@
                                             <div class="form-group row">
                                             	<div class="offset-xl-3 offset-sm-4">
 						                            <button type="submit" class="btn btn-primary" name="btn_uptuser" id="btn_uptuser">Update</button>
-													<a href="<?php echo base_url();?>backend/Users/index" class="btn btn-primary" >Cancel</a>
+													<a href="<?php echo base_url();?>backend/Service/manageService" class="btn btn-primary" >Cancel</a>
 						                        </div>
                                             </div>
                                         </div>
