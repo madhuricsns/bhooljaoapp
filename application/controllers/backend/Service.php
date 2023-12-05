@@ -869,7 +869,7 @@ public function addmultiple_images()
 				{	
 					$this->session->set_flashdata('success','Service Images uploaded successfully.');
 
-					redirect(base_url().'backend/Service/manageService');	
+					redirect(base_url().'backend/Service/addmultiple_images/'.base64_encode($service_id));	
 				}
 				else
 				{
@@ -903,6 +903,59 @@ public function addmultiple_images()
 
 //     return $config;
 // }
+
+
+
+public function deleteImage()
+{
+		$data['error_msg']='';
+		$service_image_id = base64_decode($this->uri->segment(4));
+		$service_id=base64_decode($this->uri->segment(5));
+		
+		if($service_image_id)
+		{
+
+
+				$data['service_id']=$service_id;
+				$serviceInfo=$this->Service_model->getSingleServiceInfo($service_id,0);
+				$serviceimage_id=$this->Service_model->getSingleServiceimageInfo($service_image_id,0);	
+				
+				
+
+			if($serviceInfo > 0)
+			 {   
+			// 	$data['serviceInfo'] =$this->Service_model->getSingleServiceInfo($service_id,1);
+	        //   $data['serviceimage_id'] = $this->Service_model->getSingleServiceimageInfo($service_image_id,1);
+
+				$deluser = $this->Service_model->deleteServiceimages($service_image_id);
+				// echo $this->db->last_query();
+				// exit;
+				if($deluser > 0)
+				{
+					$this->session->set_flashdata('success','Service Image deleted successfully.');
+					//redirect(base_url().'backend/Users/index');	
+			redirect(base_url().'backend/Service/addmultiple_images/'.base64_encode($service_id));
+					
+				}
+				else
+				{
+					$this->session->set_flashdata('error','Error while deleting user.');
+					redirect(base_url().'backend/Service/managesservice');
+				}
+			}
+			else
+			{
+				$data['error_msg'] = 'User not found.';
+			}
+		}
+		else
+		{
+			$this->session->set_flashdata('error','User not found.');
+			redirect(base_url().'backend/Service/managesservice');
+		}
+	}
+
+
 
 }
 

@@ -68,7 +68,7 @@
 
 									<div class="pull-right">
 										<button type="submit" class="btn btn-primary" name="btn_addmultipleimages" id="btn_addmultipleimages">Add</button>
-										<a href="<?php echo base_url();?>backend/Banners/manageBanner" class="btn btn-primary" >Cancel</a>
+										<a href="<?php echo base_url();?>backend/Service/manageService" class="btn btn-primary" >Cancel</a>
 									</div>
 
                                             
@@ -94,7 +94,7 @@
 								?>
 									<div class="col-md-2">
 	                                <img src="<?php echo $image['service_image'];?>" class="img-fluid"><br>
-	                                <a href="" class="btn btn-sm btn-warning" title="Remove this image">Remove</a>
+	                                <a href="<?php echo base_url();?>backend/Service/deleteImage/<?php echo base64_encode($image['service_image_id']) ?>/<?php echo base64_encode($service_id);?>" class="btn btn-sm btn-warning" title="Remove this image">Remove</a>
 	                            	</div>
 
                             	<?php } ?>

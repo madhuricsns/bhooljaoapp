@@ -292,4 +292,33 @@ public function insert_MultiImage_Service($input_data){
 			return $result->num_rows();
 
 	}
+
+public function deleteServiceimages($service_image_id)
+	{
+		$this->db->where('service_image_id',$service_image_id);
+		$res = $this->db->delete(TBLPREFIX.'service_images');
+		if($res)
+			return true;
+		else
+			return false;
+	}
+
+
+	public function getSingleServiceimageInfo($service_image_id,$res)
+	{
+		$this->db->select('*');		
+		$this->db->where('service_image_id',$service_image_id);
+		$query = $this->db->get(TBLPREFIX."service_images");
+		if($res == 1)
+		{
+			$result= $query->result_array();
+			
+		}
+		else
+		{
+			$result=$query->num_rows();
+		}	
+		return $result;
+	}
+	
 }
