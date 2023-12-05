@@ -33,27 +33,19 @@
                                     <div class="row">
                                         <div class="col-sm-12">
 
-                                       <div class="row">
-                                       	
-                                           <div class=" col-md-8 ">
-                                           	 <div class="offset-xl-4 offset-sm-3">
-                                           	<label><span></span>Select Service Provider</label><br>
-                                            <div class="form-group ">
+                                       <div class="form-group row">
+                                                <label class="col-xl-3 col-md-4"><span>*</span>Select Service Provider</label><br>
                                                
-												<select name="service_provider" id="service_provider" class="form-control" required>
-													<option value="">Select Service Provider </option>
-													<?php
-													foreach($usersList as $users){
+                        <select name="service_provider" id="service_provider" class="form-control col-md-6" required>
+                          <option value="">Select Service Provider </option>
+                          <?php
+                          foreach($usersList as $users){
 
-													?>
-													<option value="<?php echo $users['user_id'] ?>"><?php echo $users['full_name'] ?></option>
-												<?php } ?>
-												</select>
-												
-                                            </div>
-                                        </div>
-
-                                            </div>
+                          ?>
+                          <option value="<?php echo $users['user_id'] ?>"><?php echo $users['full_name'] ?></option>
+                        <?php } ?>
+                        </select>
+                        
                                         </div>
                                     <!-- </div> -->
                                     
