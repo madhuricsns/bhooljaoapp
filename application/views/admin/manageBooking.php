@@ -53,7 +53,20 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 
 
 
-						 <form method="get">
+						 <form method="POST" action="<?php echo base_url().'backend/Booking/search_list/'; ?><?php if($this->uri->segment(4)!=""){ echo $this->uri->segment(4);}?>/
+		<?php if($this->uri->segment(5)!=""){ echo $this->uri->segment(5);}?>/
+		<?php if($this->uri->segment(6)!=""){ echo $this->uri->segment(6);}?>/">
+		<?php 
+		$srchDateFormatted = $srchStatus = '';
+		
+		if($this->uri->segment(4) != 'Na') { $srchStatus = $this->uri->segment(4); } 
+		
+		if($this->uri->segment(5) != 'Na') { 
+		$srchDate = $this->uri->segment(5);
+		$date1 = new DateTime($srchDate);
+		$srchDateFormatted = $date1->format('d-m-Y');
+		}
+		?>
 						 		 <div class="tab-content" >
 						                            <div class="tab-pane fade active show">
 						                                    <!-- <div class="row"> -->
@@ -65,19 +78,20 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 
 								<select name="bookingstatus" id="bookingstatus"class="form-control col-sm-2">
 							            <option value="">All</option>
-							            <option value="waiting">Waiting</option>
-							            <option value="accepted">Accepted</option>
-							            <option value="ongoing">Ongoing</option>
-							            <option value="completed">Completed</option>
+							            <option value="waiting" <?php if($srchStatus == 'waiting') echo 'selected';?> >Waiting</option>
+							            <option value="accepted" <?php if($srchStatus == 'accepted') echo 'selected';?>>Accepted</option>
+							            <option value="ongoing" <?php if($srchStatus == 'ongoing') echo 'selected';?>>Ongoing</option>
+							            <option value="completed" <?php if($srchStatus == 'completed') echo 'selected';?>>Completed</option>
+										<option value="canceled" <?php if($srchStatus == 'canceled') echo 'selected';?>>Canceled</option>
 							           
 							        </select>&nbsp;&nbsp;
 
-							 <input type="date" name="datesearch"class="form-control col-sm-2" value="<?php if(isset($datesearch)) echo $datesearch; ?>"/>&nbsp;&nbsp;
+							 <input type="date" name="datesearch"class="form-control col-sm-2" value="<?php echo $srchDate ?>"/>&nbsp;&nbsp;
 							  
 							       
 							        	
 							        	
-							        <button type="submit" class="btn btn-outline-success" name="Search" id="Search"><span><i class="fa fa-search"></i><span></button>&nbsp;&nbsp;
+							        <button type="submit" class="btn btn-outline-success" name="Search" id="Search"value="search" /><span><i class="fa fa-search"></i><span></button>&nbsp;&nbsp;
 							        <a href="<?php echo base_url();?>backend/Booking/manageBooking" class="btn btn-outline-secondary" ><span><i class="fa fa-remove"></i></span></a>
 							    
 							    
@@ -102,14 +116,17 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 											<th>Order No</th>
 											<th>Booking Date</th>
 											<th>Time</th>
+											<th>Duration</th>
 											<th>Service Name</th>
 											<th>Customer</th>
+											<th>Service Provider</th>
 											<th>Status</th>
 											<th>Actions</th>	
 										</tr>
 									</thead>	
 									<tbody>			
-										<?php $i=1;
+										<?php 
+										$i=1;
 										foreach($bookingList as $booking)
 										{
                                              $booking['booking_date']= new DateTime($booking['booking_date']);
@@ -120,8 +137,17 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<td><?php echo $booking['order_no'];?></td> 
 												<td><?php echo $booking['booking_date'];?></td>
 												<td><?php echo $booking['time_slot'];?></td>
+												<td><?php echo $booking['duration'];?></td>
 												<td><?php echo $booking['category_name'];?></td>
 												<td><?php echo $booking['full_name'];?></td>
+												<td><?php if($booking['service_provider_id']>0 ){
+												$user=$this->Booking_model->getServiceproviderDetails($booking['service_provider_id'],1); 
+												
+												if(isset($user[0]['full_name'])) echo $user[0]['full_name'];
+												
+												} else { 
+												echo "---";
+												} ?></td>
 												<td><?php echo $booking['booking_status'];?></td>
 												<td class="actions">
 							<?php
