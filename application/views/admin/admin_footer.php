@@ -319,7 +319,9 @@ $('#addRow').on('click', function () {
   });
 
 $(document).ready(function(){
-
+	$("#serviceproviderDiv").hide();
+    $("#customerDiv").hide();
+	
     $("#select_type").change(function () { 
         // alert();                           
        var select_type= $('select[name=select_type]').val() // Here we can get the value of selected item
@@ -334,11 +336,7 @@ $(document).ready(function(){
             $("#serviceproviderDiv").hide();
             $("#customerDiv").show();
         }
-        else
-        {
-            $("#serviceproviderDiv").hide();
-            $("#customerDiv").hide();
-        }
+        
     }); 
 });
 

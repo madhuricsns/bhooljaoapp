@@ -64,10 +64,11 @@ class Notifications extends CI_Controller {
 	{
 		$data['title']='Add Notification';
 		$data['error_msg']='';
+		$session_data=$this->session->userdata('logged_in');
 		$data['UserList'] = $this->Notification_model->getAllUserlist(1,'Customer');
 		$data['ServiceProviderList']=$this->Notification_model->getAllUserlist(1,'Service Provider');
-		// echo "<pre>";
-		// print_r($data);
+		 //echo "<pre>";
+		 //print_r($_POST);
 		// exit();
 
 		if(isset($_POST['btn_addnotification']))
@@ -82,34 +83,79 @@ class Notifications extends CI_Controller {
 				$notification_description=$this->input->post('message');
 				$type=$this->input->post('select_type');
 				$user_ids=$this->input->post('user_ids');
-				if($type==0){
+				//print_r($user_ids);exit;
+				/*if($type==0){
 					$dbType = "All";
 					$dbUserId = 0;
 				}else{
 					$dbType = "User";
 					$dbUserId = $type;
-				}
+				}*/
 
 				if(!empty($user_ids))
 				{
-					foreach($user_ids as $user_id)
+					if($user_ids[0] == 'All')
 					{
-						$user=$this->Notification_model->getUserDetails(1,$user_id);
-
-						$input_data = array(
-							'noti_title'=>trim($notification_name),
-							'noti_message'=>trim($notification_description),
-							'noti_user_type'=>$type,
-							'noti_user_id'=>$user_id,
-							'noti_gcmID'=>$user->user_fcm,
-							'dateadded' => date('Y-m-d H:i:s')
-							);
+						if($type == 'Customer')
+						{
+							foreach($data['UserList'] as $users)
+							{
+								$input_data = array(
+								'noti_title'=>trim($notification_name),
+								'noti_message'=>trim($notification_description),
+								'noti_type'=>$type,
+								'noti_user_id'=>$users['user_id'],
+								'noti_gcmID'=>$users['user_fcm'],
+								'created_by' => $session_data['admin_id'],
+								'dateadded' => date('Y-m-d H:i:s')
+								);
+							
+								$notification_id = $this->Notification_model->insert_notification($input_data);
+								
+								$this->Common_Model->sendexponotification($notification_name,$notification_description,$users['user_fcm']);
+							}
+						}
+						else if($type == 'Service Provider')
+						{
+							foreach($data['ServiceProviderList'] as $users)
+							{
+								$input_data = array(
+								'noti_title'=>trim($notification_name),
+								'noti_message'=>trim($notification_description),
+								'noti_type'=>$type,
+								'noti_user_id'=>$users['user_id'],
+								'noti_gcmID'=>$users['user_fcm'],
+								'created_by' => $session_data['admin_id'],
+								'dateadded' => date('Y-m-d H:i:s')
+								);
+							
+								$notification_id = $this->Notification_model->insert_notification($input_data);
+								
+								$this->Common_Model->sendexponotification($notification_name,$notification_description,$users['user_fcm']);
+							}
+						}
 						
-						$notification_id = $this->Notification_model->insert_notification($input_data);
-						// echo $this->db->last_query();
-						// $this->Common_Model->SendNotification($notification_name, $notification_description, $user->user_fcm);
+					} else {
+						foreach($user_ids as $user_id)
+						{
+							$user=$this->Notification_model->getUserDetails(1,$user_id);
+	//print_r($user);exit;
+							$input_data = array(
+								'noti_title'=>trim($notification_name),
+								'noti_message'=>trim($notification_description),
+								'noti_type'=>$type,
+								'noti_user_id'=>$user_id,
+								'noti_gcmID'=>$user->user_fcm,
+								'created_by' => $session_data['admin_id'],
+								'dateadded' => date('Y-m-d H:i:s')
+								);
+							
+							$notification_id = $this->Notification_model->insert_notification($input_data);
+							
+							$this->Common_Model->sendexponotification($notification_name,$notification_description,$user->user_fcm);
+						}
 					}
-					// exit;
+					
 				}
 					$this->session->set_flashdata('success','Notification added successfully.');
 			
