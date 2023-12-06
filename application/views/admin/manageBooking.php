@@ -63,8 +63,8 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 		
 		if($this->uri->segment(5) != 'Na') { 
 		$srchDate = $this->uri->segment(5);
-		$date1 = new DateTime($srchDate);
-		$srchDateFormatted = $date1->format('d-m-Y');
+		//$date1 = new DateTime($srchDate);
+		//$srchDateFormatted = $date1->format('d-m-Y');
 		}
 		?>
 						 		 <div class="tab-content" >
