@@ -57,7 +57,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 		<?php if($this->uri->segment(5)!=""){ echo $this->uri->segment(5);}?>/
 		<?php if($this->uri->segment(6)!=""){ echo $this->uri->segment(6);}?>/">
 		<?php 
-		$srchDateFormatted = $srchStatus = '';
+		$srchDate = $srchStatus = '';
 		
 		if($this->uri->segment(4) != 'Na') { $srchStatus = $this->uri->segment(4); } 
 		
