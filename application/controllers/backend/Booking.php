@@ -12,6 +12,7 @@ class Booking extends CI_Controller {
 		$this->load->library('session');
 		$this->load->model('adminModel/Booking_model');
 		$this->load->model('adminModel/User_model');
+		$this->load->model('adminModel/Notification_model');
 		$this->load->model('Common_Model');
 		
 	}
@@ -188,6 +189,7 @@ class Booking extends CI_Controller {
 	{
 		$data['title']='Assing Service Provider';
 		$data['error_msg']='';
+		$session_data=$this->session->userdata('logged_in');
 			$booking_id=base64_decode($this->uri->segment(4));
 
 			if ($booking_id) {
@@ -221,6 +223,28 @@ class Booking extends CI_Controller {
                        // echo $this->db->last_query();exit;
 						if($updatedata)
 						{	
+							$orderno = $data['bokingInfo'][0]['order_no'];
+							
+							$user=$this->Notification_model->getUserDetails(1,$servicepro);
+							
+							$title="New Booking Assigned";
+							$message="Booking no $orderno has been assigned to you";
+		
+							$input_data = array(
+								'noti_title'=>trim($title),
+								'noti_message'=>trim($message),
+								'noti_type'=>'Service Provider',
+								'noti_user_id'=>$servicepro,
+								'noti_gcmID'=>$user->user_fcm,
+								'created_by' => $session_data['admin_id'],
+								'dateadded' => date('Y-m-d H:i:s')
+								);
+							
+							$notification_id = $this->Notification_model->insert_notification($input_data);
+								
+							$this->Common_Model->sendexponotification($notification_name,$notification_description,$users['user_fcm']);
+							
+							
 							$this->session->set_flashdata('success','Assing Service Provider successfully.');
 
 							redirect(base_url().'backend/Booking/manageBooking');	
