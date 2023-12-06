@@ -189,19 +189,19 @@ class Booking extends CI_Controller {
 	{
 		$data['title']='Assing Service Provider';
 		$data['error_msg']='';
+
 		$session_data=$this->session->userdata('logged_in');
+		$data['usersList']=$this->Booking_model->getAllUsers(1,"","");
+
 			$booking_id=base64_decode($this->uri->segment(4));
 
 			if ($booking_id) {
 				$bokingInfo=$this->Booking_model->getSingleBookingInfo($booking_id,0);
-				
+			
 			if($bokingInfo>0)
 			{
 				$data['bokingInfo'] = $this->Booking_model->getSingleBookingInfo($booking_id,1);
-				
-				
-			$category_id = $data['bokingInfo'][0]['category_id'];
-			$data['usersList']=$this->Booking_model->getAllUsers(1,"","",$category_id);
+
 				if(isset($_POST['btn_upAssing']))
 				{
 				
@@ -437,8 +437,146 @@ public function viewBookingDetails()
 		$this->load->view('admin/admin_footer');
 	}
 
+//<-----------------------------------####### Booking Demo ###### --------------------------->//
 
 
+public function manageBookingDemo()
+	{
+		$data['title']='Manage Booking Demo';
+
+		
+		$data['bookingdemocnt']=$this->Booking_model->getAllBookingDemo(0,"","");
+		
+		$config = array();
+		$config["base_url"] = base_url().'backend/Booking/manageBookingDemo/';
+		$config['per_page'] = 10;
+		$config["uri_segment"] = 4;
+		$config['full_tag_open'] = '<ul class="pagination">'; 
+		$config['full_tag_close'] = '</ul>';
+		$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
+		$config['first_tag_close'] = "</li>"; 
+		$config['prev_tag_open'] =	"<li class='paginate_button  page-item'>"; 
+		$config['prev_tag_close'] = "</li>";
+		$config['next_tag_open'] = "<li class='paginate_button  page-item'>";
+		$config['next_tag_close'] = "</li>"; 
+		$config['last_tag_open'] = "<li class='paginate_button  page-item'>"; 
+		$config['last_tag_close'] = "</li>";
+		$config['cur_tag_open'] = "<li class='paginate_button  page-item active'><a class='page-link active' href=''>"; 
+		$config['cur_tag_close'] = "</a></li>";
+		$config['num_tag_open'] = "<li class='paginate_button  page-item'>";
+		$config['num_tag_close'] = "</li>"; 
+		$config['attributes'] =array('class' => 'page-link');
+		$config["total_rows"] =$data['bookingdemocnt'];
+		#echo "<pre>"; print_r($config); exit;
+		$this->pagination->initialize($config);
+				
+		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		$data["total_rows"] = $config["total_rows"]; 
+		$data["links"] = $this->pagination->create_links();
+		//echo "ConttPerPage--".$config["per_page"];
+		//echo "Conttpage--".$page;
+		//exit();
+		//$data['bookingList']=$this->Booking_model->getAllBooking(1,$config["per_page"],$page);
+		// $data['Bookingstatus'] = $this->Booking_model->getBookingstatus();
+		$filter=array();
+		//$date_filter=array();
+		 $selectedBookingstatus = $this->input->get('bookingstatus');
+		
+		  $search_date = $this->input->get('datesearch');
+
+			if ($search_date) {
+	            // If a category is selected, filter the records by that Booking
+	            $filter['datesearch']=$search_date;
+	           //  $data['datesearch']=$search_date;
+	        } 
+
+		  if ($selectedBookingstatus) {
+            // If a category is selected, filter the records by that Booking
+            $filter['status']=$selectedBookingstatus;
+        } 
+
+           $data['bookingDemoList']=$this->Booking_model->getAllBookingDemo(1,$config["per_page"],$page,$filter);
+      //   echo $this->db->last_query();
+		// print_r($filter);
+		//  exit;
+		$this->load->view('admin/admin_header',$data);
+		$this->load->view('admin/manageBookingDemo',$data);
+		$this->load->view('admin/admin_footer');
+		
+		 
+	}
+
+public function AssingDateTime()
+	{
+		$data['title']='Assing Date Time';
+		$data['error_msg']='';
+		$data['usersList']=$this->Booking_model->getAllUsers(1,"","");
+
+			$booking_id=base64_decode($this->uri->segment(4));
+
+			if ($booking_id) {
+				$data['booking_id']=$booking_id;
+				$bokingInfo=$this->Booking_model->getSingleBookingInfo($booking_id,0);
+			
+			if($bokingInfo>0)
+			{
+				$data['bokingInfo'] = $this->Booking_model->getSingleBookingInfo($booking_id,1);
+
+				if(isset($_POST['btn_upAssing']))
+				{
+				
+			        $this->form_validation->set_rules('assingtime','Assing Time','required');
+
+					if($this->form_validation->run())
+					{
+						$assingtime=$this->input->post('assingtime');
+						
+						
+							
+						$input_data = array(
+                            'time_slot'=>$assingtime
+                         );
+					echo"<pre>";
+					print_r($input_data);
+					exit();
+						$updatedata = $this->Booking_model->uptdateAssingServiceprovider($input_data,$booking_id);
+                       
+                       // echo $this->db->last_query();exit;
+						if($updatedata)
+						{	
+							$this->session->set_flashdata('success','Assing Service Provider successfully.');
+
+							redirect(base_url().'backend/Booking/manageBooking');	
+						}
+						else
+						{
+							$this->session->set_flashdata('error','Error while updating Zone.');
+
+							redirect(base_url().'backend/Booking/AssingDateTime/'.base64_encode($booking_id));
+						}	
+					}
+					else
+					{
+						$this->session->set_flashdata('error',$this->form_validation->error_string());
+
+						redirect(base_url().'backend/Booking/AssingDateTime/'.base64_encode($booking_id));
+					}
+				}
+			}
+			else
+			{
+				$data['error_msg'] = 'Not found.';
+			}
+		}
+		
+		$this->load->view('admin/admin_header',$data);
+		$this->load->view('admin/update_AssingDateTime',$data);
+		$this->load->view('admin/admin_footer');
+					// echo"<pre>";
+					// print_r($bokingidInfo);
+					// exit();
+			}
+	
 
 
 }
