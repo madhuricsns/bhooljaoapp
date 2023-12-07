@@ -1,4 +1,4 @@
-<?php
+ <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Users extends CI_Controller {
@@ -12,7 +12,6 @@ class Users extends CI_Controller {
 		$this->load->library('session');
 		$this->load->model('adminModel/User_model');
 		$this->load->model('Common_Model');
-		
 	}
 	public function index()
 	{
@@ -515,7 +514,8 @@ class Users extends CI_Controller {
 			$this->form_validation->set_rules('category_id','Category Id','required');
 			$this->form_validation->set_rules('zone_id','Zone Id','required');
 			$this->form_validation->set_rules('password','Password','required');
-					$this->form_validation->set_rules('address', 'Address ', 'required');
+			$this->form_validation->set_rules('address', 'Address ', 'required');
+			$this->form_validation->set_rules('experience','Experience','required');
 			$this->form_validation->set_rules('mobile_number', 'Mobile Number ', 'required|numeric|min_length[7]|max_length[13]'); //{10} for 10 digits number
 			$this->form_validation->set_rules('gender','Gender','required');
 			$this->form_validation->set_rules('status','Status','required');
@@ -527,6 +527,7 @@ class Users extends CI_Controller {
 				$email_address=$this->input->post('email_address');
 				$password=$this->input->post('password');
 						$address=$this->input->post('address');
+						$experience=$this->input->post('experience');
 						$category_id=$this->input->post('category_id');
 						$zone_id=$this->input->post('zone_id');
 						$gender=$this->input->post('gender');
@@ -590,6 +591,7 @@ class Users extends CI_Controller {
 							'gender'=>$gender,
 							'mobile'=>$mobile_number,
 							'address'=>$address,
+							'experience'=>$experience,
 							'user_lat'=>$latitude,
 							'user_long'=>$longitude,
 							'status'=>$status,
