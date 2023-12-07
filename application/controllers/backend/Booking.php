@@ -191,8 +191,6 @@ class Booking extends CI_Controller {
 		$data['error_msg']='';
 
 		$session_data=$this->session->userdata('logged_in');
-		$data['usersList']=$this->Booking_model->getAllUsers(1,"","");
-
 			$booking_id=base64_decode($this->uri->segment(4));
 
 			if ($booking_id) {
@@ -201,7 +199,10 @@ class Booking extends CI_Controller {
 			if($bokingInfo>0)
 			{
 				$data['bokingInfo'] = $this->Booking_model->getSingleBookingInfo($booking_id,1);
-
+				
+				$category_id = $data['bokingInfo'][0]['category_id'];
+				$data['usersList']=$this->Booking_model->getAllUsers(1,"","",$category_id);
+			
 				if(isset($_POST['btn_upAssing']))
 				{
 				
