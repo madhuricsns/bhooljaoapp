@@ -511,7 +511,7 @@ public function viewBookingDetails()
 	{
 		$data['title']='Assing Date Time';
 		$data['error_msg']='';
-		$data['usersList']=$this->Booking_model->getAllUsers(1,"","");
+		$data['usersList']=$this->Booking_model->getAllUsers(1,"","","");
 
 			$booking_id=base64_decode($this->uri->segment(4));
 
