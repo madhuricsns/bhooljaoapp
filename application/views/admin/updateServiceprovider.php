@@ -128,7 +128,17 @@
                                             </div>
                                            
                                         </div>
-                                            
+                                         <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label ><span>*</span> Total Work Experience</label>
+												 <input type="text" class="form-control" id="experience" name="experience"  required>
+                                                 <div id="err_experience" class="error_msg"></div>
+                                            </div>
+                                        </div>
+                                           
+                                    </div>
+                                     <div class="row">
+
                                            <div class="col-md-6">
                                             <div class="form-group">
                                                 <label ><span></span>Status</label>
@@ -139,12 +149,14 @@
 												</select>
                                             </div>
                                         </div>
-                                    </div>
-                                     <div class="row">
-                                           <div class="col-md-6">
-                                           	<div class="form-group ">
+                                            <div class="form-group col-md-4">
                                                 <label for="banner_image"><span>*</span> Profile</label>
-                                               
+                                                <input class="form-control" id="servicefile" type="file"  name="servicefile" />
+                                                <div class="err_msg" id="err_banner_image"></div>
+                                                <span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span>
+                                               </div>
+
+											<div class="form-group col-md-2">
                                                 <?php 
                                                    if($userInfo[0]['profile_pic']!="")
 												{
@@ -158,10 +170,10 @@
 												?>
                                                 <?php echo $str_images;?> 
 												
-												<span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span><br/>
-												<div class="err_msg" id="err_banner_image"></div>
 												
-												 <input class="form-control col-xl-6 col-md-6" id="servicefile" type="file"  name="servicefile" />
+												
+												
+												
                                             </div>
                                             
                                         </div>

@@ -138,13 +138,22 @@
                                             
                                            <div class="col-md-6">
                                             <div class="form-group">
+                                                <label ><span>*</span> Total Work Experience</label>
+												 <input type="text" class="form-control" id="experience" name="experience"  required>
+                                                 <div id="err_experience" class="error_msg"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                    <div class="col-md-6">
+                                            <div class="form-group">
                                                 <label ><span>*</span> Status</label>
-												<select name="status" id="status" class="form-control " required>
-													<option value="">Select Status</option>
-													<option value="Active">Active</option>
-													<option value="Inactive">Inactive</option>
-												</select>
-												 <div id="err_status" class="error_msg"></div>
+                                                <select name="status" id="status" class="form-control " required>
+                                                    <option value="">Select Status</option>
+                                                    <option value="Active">Active</option>
+                                                    <option value="Inactive">Inactive</option>
+                                                </select>
+                                                 <div id="err_status" class="error_msg"></div>
                                             </div>
                                         </div>
                                     </div>
