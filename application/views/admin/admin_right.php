@@ -40,7 +40,7 @@ $session_subroles="";
 					<!--<li class=" <?php if($this->router->fetch_method()=='manageUsers'){?>nav-expanded nav-active <?php }?>">
 						<a class="sidebar-header" href="<?php //echo base_url("backend/");?>dashboard"><i data-feather="file-text"></i><span>ANALYTICS & REPORTS</span></a>                        
 					</li>-->
-					<li  <?php if($this->router->fetch_class()=='Booking'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageBooking'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
+					<li  <?php if($this->router->fetch_class()=='Booking' && $this->router->fetch_method()=='manageBooking'){ ?>class="nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
 							{ 
 								if ($modulesId[1]['view'] == 'Yes') 
 								{ 
@@ -55,6 +55,23 @@ $session_subroles="";
 						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Booking/manageBooking"><!-- <i data-feather="home"></i> -->
 						<img src="<?php echo base_url()."/uploads/flaticon/Orders.png"?>" style="max-height: 20px;max-width: 20px;">  &nbsp;&nbsp;
 						<span>BOOKINGS </span></a>                        
+					</li>
+					
+					<li  <?php if($this->router->fetch_class()=='Booking' && $this->router->fetch_method()=='manageBookingDemo'){?>style="background-color: rgb(68 114 196);" class=" nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
+							{ 
+								if ($modulesId[1]['view'] == 'Yes') 
+								{ 
+									echo 'style="display:block;"';
+							    } 
+								else 
+								{ 
+									echo 'style="display:none;"'; 
+								}
+							}
+							?>>
+						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Booking/manageBookingDemo"><!-- <i data-feather="home"></i> -->
+						<img src="<?php echo base_url()."/uploads/flaticon/Orders.png"?>" style="max-height: 20px;max-width: 20px;">  &nbsp;&nbsp;
+						<span>DEMO BOOKINGS </span></a>                        
 					</li>
 					
 					<li <?php if($this->router->fetch_class()=='Users/manageUsers' || $this->router->fetch_class()=='users/manageUsers'){?>style="background-color: rgb(68 114 196);"<?php }?> class=" <?php if($this->router->fetch_method()=='manageUsers' || $this->router->fetch_method()=='addUser' || $this->router->fetch_method()=='updateUser' || $this->router->fetch_method()=='viewUserDetails'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)

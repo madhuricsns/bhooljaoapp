@@ -159,11 +159,65 @@ Class Booking_model extends CI_Model {
 		return $query->row();
 	}
 	
+	public function getAllBookingDemo($res,$per_page,$page,$filter=array())
+	//public function getAllBooking($res,$per_page,$page,$filter=array())
+	{
+		/*echo "PerPage--".$per_page;
+		echo "page--".$page;exit();*/
+		$this->db->select('b.*,u.full_name,c.category_name');
+		$this->db->join(TBLPREFIX.'category as c','c.category_id=b.category_id','left');
+		$this->db->join(TBLPREFIX.'users as u','u.user_id=b.user_id','left');
+	
+		if(!empty($filter))
+		{
+			extract($filter);
+			if(isset($status) && $status!="")
+			{
+				$this->db->where('b.booking_status',$status);
+			}
+			if(isset($datesearch) && $datesearch!="")
+			{
+				$this->db->where('b.booking_date>=',$datesearch);
+				$this->db->where('b.booking_date<=',$datesearch." 23:59:59");
+			}
+		}
+		$this->db->where('b.is_demo','Yes');
+		$this->db->order_by('b.booking_id','DESC');
+		if($per_page!="")
+		{
+			$this->db->limit($per_page,$page);
+		}
+
+		$result = $this->db->get(TBLPREFIX."booking as b");
+		 //echo $this->db->last_query();exit;
+		if($res == 1)
+			return $result->result_array();
+		else
+			return $result->num_rows();
+
+	}
+	
 	public function getPromocodeDetails($promocode_id)
 	{
 		$this->db->select('*');
 		$this->db->where('promocode_id',$promocode_id );
 		$query = $this->db->get(TBLPREFIX."promo_code");
+		return $query->result_array();
+	}
+	
+	public function getBookingWorkHistory($booking_id)
+	{
+		$this->db->select('*');
+		$this->db->where('booking_id',$booking_id );
+		$query = $this->db->get(TBLPREFIX."booking_history");
+		return $query->result_array();
+	}
+	
+	public function getBookingTransactionHistory($booking_id)
+	{
+		$this->db->select('*');
+		$this->db->where('booking_id',$booking_id );
+		$query = $this->db->get(TBLPREFIX."booking_transaction");
 		return $query->result_array();
 	}
 }

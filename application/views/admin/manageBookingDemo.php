@@ -104,6 +104,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 											<th>Time</th>
 											<th>Service Name</th>
 											<th>Customer</th>
+											<th>Service Provider</th>
 											<th>Status</th>
 											<th>Actions</th>	
 										</tr>
@@ -122,6 +123,14 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<td><?php echo $booking['time_slot'];?></td>
 												<td><?php echo $booking['category_name'];?></td>
 												<td><?php echo $booking['full_name'];?></td>
+												<td><?php if($booking['service_provider_id']>0 ){
+												$user=$this->Booking_model->getServiceproviderDetails($booking['service_provider_id'],1); 
+												
+												if(isset($user[0]['full_name'])) echo $user[0]['full_name'];
+												
+												} else { 
+												echo "---";
+												} ?></td>
 												<td><?php echo $booking['booking_status'];?></td>
 												<td class="actions">
 							<?php

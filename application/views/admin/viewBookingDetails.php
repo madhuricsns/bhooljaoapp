@@ -70,6 +70,9 @@
 												echo $booking_date;?>
 												</p>
 												<p><i class="fa fa-clock-o"></i> <?php echo $orderInfo[0]['time_slot'];?></p>
+												<p>Expiry Date: <?php $orderInfo[0]['expiry_date']=new DateTime($orderInfo[0]['expiry_date']);
+												$expiry_date=$orderInfo[0]['expiry_date']=$orderInfo[0]['expiry_date']->format('M d,Y');
+												echo $expiry_date;?></p>
 												<!-- <p> <i class="fa fa-map-marker"></i> Pickup : <?php //echo $orderInfo[0]['pickup_location'];?> </p> -->
 												<!-- <p> <i class="fa fa-map-marker"></i> Drop : <?php //echo $orderInfo[0]['drop_location'];?> </p> -->
 											</div>
@@ -151,11 +154,14 @@
 							<?php }
 							}
 							?>
-						<?php
+						<?php //print_r($serviceDetails);exit;
 							if(isset($serviceDetails) && count($serviceDetails) > 0) {
 								foreach($serviceDetails as $service) 
 								{ 
-								$duration=str_split($service['duration']);
+								if($orderInfo[0]['is_demo'] == 'Yes') {
+									$duration[0] = 0;
+								} else {
+								$duration=str_split($service['duration']); }
 								?>
 								<tr><td>
 								<?php echo $service['service_name'];?>
@@ -203,8 +209,148 @@
 								 
                             </div>
                         </div>
+<?php if(count($workHistory) > 0) { ?>						
+						<div class="page-body">
+	
+	<!-- Container-fluid starts-->
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="card">
+					<div class="card-header">
+						<h5>Work History </h5>			
+						<div class="card-header-right">
+						<div class="row">
+							<div class="col-lg-12">
+								
+							</div>
+							</div>
+						</div>	 
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<div id="basicScenario" class="product-physical"></div>
+							
+								<table class="table table-bordered table-striped mb-0" id="datatable-default">
+									<thead>
+										<tr>
+											<th>Sr.No</th>
+											<th>Description</th>
+											<th>Date</th>
+											<th>Time</th>
+											<th>Status</th>
+											<th>Work Photo1</th>	
+											<th>Work Photo2</th>
+										</tr>
+									</thead>	
+									<tbody>			
+										<?php 
+										$i=1;
+										foreach($workHistory as $history)
+										{
+											
+											?>		
+										<tr>
+												<td><?php echo $i ;?></td>
+												
+												
+												<td><?php echo $history['history_description'];?></td>
+												<td><?php 
+if($history['history_date'] == 0) echo "---"; else {
+				
+				$history['history_date']=new DateTime($history['history_date']);
+										$historydate = $history['history_date']->format('d-m-Y');
+echo $historydate; }?></td>
+												<td><?php echo $history['history_time'];?></td>
+												<td><?php echo $history['booking_status'];?></td>												
+												<td><img src="<?php echo base_url().'/uploads/work_history/'.$history['work_photo1'];?>" style="width:80px;height:80px" /></td>												
+												<td><img src="<?php echo base_url().'/uploads/work_history/'.$history['work_photo2'];?>" style="width:80px;height:80px" /></td>												
+											</tr>											
+											<?php $i++; }?>
+									</tbody>									
+								</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Container-fluid Ends-->
+	 
+	
+</div>
+
+<?php } ?>
 
 
+<?php if(count($transactionHistory) > 0) { ?>						
+						<div class="page-body">
+	
+	<!-- Container-fluid starts-->
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="card">
+					<div class="card-header">
+						<h5>Transaction History </h5>			
+						<div class="card-header-right">
+						<div class="row">
+							<div class="col-lg-12">
+								
+							</div>
+							</div>
+						</div>	 
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<div id="basicScenario" class="product-physical"></div>
+							
+								<table class="table table-bordered table-striped mb-0" id="datatable-default">
+									<thead>
+										<tr>
+											<th>Sr.No</th>
+											<th>Date</th>
+											<th>Amount</th>
+											<th>Transaction Id</th>
+											<th>Status</th>
+										</tr>
+									</thead>	
+									<tbody>			
+										<?php 
+										$i=1;
+										foreach($transactionHistory as $transhistory)
+										{
+											
+											?>		
+										<tr>
+												<td><?php echo $i ;?></td>
+												
+												
+												<td><?php $transhistory['dateadded']=new DateTime($transhistory['dateadded']);
+										$transdate=$transhistory['dateadded']->format('d-m-Y');
+												
+												echo $transdate;
+												?></td>
+												<td><?php echo $transhistory['paid_amount'];?></td>
+												<td><?php echo $transhistory['transaction_id'];?></td>
+												<td><?php echo $transhistory['payment_status'];?></td>												
+											</tr>											
+											<?php $i++; }?>
+									</tbody>									
+								</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Container-fluid Ends-->
+	 
+	
+</div>
+
+<?php } ?>
+						
                     </div>
 
 					<div class="col-sm-4">
