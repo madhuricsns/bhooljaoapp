@@ -54,14 +54,15 @@
                             <!-- <h3>Welcome to BHOOLJAO</h3> -->
                         </div>
                         <div class="card-body">
-                            <ul class="nav nav-tabs nav-material" id="top-tab" role="tablist">
-                                <li class="nav-item">
+                            <!-- <ul class="nav nav-tabs nav-material" id="top-tab" role="tablist"> -->
+                                <!-- <li class="nav-item">
                                     <a class="nav-link active" id="top-profile-tab" data-toggle="tab" href="#top-profile" role="tab" aria-controls="top-profile" aria-selected="true"><span class="icon-user mr-2"></span>Login</a>
-                                </li>
+                                </li> -->
                                 <!--<li class="nav-item">
                                     <a class="nav-link" id="contact-top-tab" data-toggle="tab" href="#top-contact" role="tab" aria-controls="top-contact" aria-selected="false"><span class="icon-unlock mr-2"></span>Register</a>
                                 </li>-->
-                            </ul>
+                            <!-- </ul> -->
+                            <h3 class="title">Login</h3>
                             <div class="tab-content" id="top-tabContent">
                                 <div class="tab-pane fade show active" id="top-profile" role="tabpanel" aria-labelledby="top-profile-tab">
                                 <form name="frm_login" id="frm_login" method="post">																											
@@ -97,7 +98,7 @@
                                             <div class="custom-control custom-checkbox mr-sm-2">
                                                <!-- <input type="checkbox" class="custom-control-input" id="customControlAutosizing">
                                                 <label class="custom-control-label" for="customControlAutosizing">Remember me</label>-->
-                                                <a href="<?php echo base_url();?>backend/login/forgotpassword" class="btn btn-default forgot-pass">lost your password?</a>
+                                                <a href="<?php echo base_url();?>backend/login/forgotpassword" class=" forgot-pass">lost your password?</a>
                                             </div>
                                         </div>
                                         <div class="form-button text-center">
