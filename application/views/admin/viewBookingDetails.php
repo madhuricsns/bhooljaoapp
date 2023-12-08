@@ -70,8 +70,9 @@
 												echo $booking_date;?>
 												</p>
 												<p><i class="fa fa-clock-o"></i> <?php echo $orderInfo[0]['time_slot'];?></p>
-												<p>Expiry Date: <?php $orderInfo[0]['expiry_date']=new DateTime($orderInfo[0]['expiry_date']);
-												$expiry_date=$orderInfo[0]['expiry_date']=$orderInfo[0]['expiry_date']->format('M d,Y');
+												<p>Expiry Date: <?php $expiry_date = '';
+												if(isset($orderInfo[0]['expiry_date'])) { $orderInfo[0]['expiry_date']=new DateTime($orderInfo[0]['expiry_date']);
+												$expiry_date=$orderInfo[0]['expiry_date']=$orderInfo[0]['expiry_date']->format('M d,Y'); }
 												echo $expiry_date;?></p>
 												<!-- <p> <i class="fa fa-map-marker"></i> Pickup : <?php //echo $orderInfo[0]['pickup_location'];?> </p> -->
 												<!-- <p> <i class="fa fa-map-marker"></i> Drop : <?php //echo $orderInfo[0]['drop_location'];?> </p> -->

@@ -113,8 +113,12 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 										<?php $i=1;
 										foreach($bookingDemoList as $booking)
 										{
+											if($booking['booking_date'] != '0000-00-00') {
                                              $booking['booking_date']= new DateTime($booking['booking_date']);
-                                            $booking['booking_date']=$booking['booking_date']->format('d-M-Y');
+                                            $booking['booking_date']=$booking['booking_date']->format('d-M-Y'); }
+											else {
+												$booking['booking_date'] = '---';
+											}
 											?>		
 										<tr>
 												
