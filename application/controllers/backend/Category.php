@@ -63,7 +63,8 @@ class Category extends CI_Controller {
 	{
 		$data['title']='Add Category';
 		$data['error_msg']='';
-				
+		$data['categoryLists']=$this->Category_model->getAllCategorydropdown(1);	
+		 // echo $this->db->last_query();exit;	
 		if(isset($_POST['btn_addcategory']))
 		{
 			$this->form_validation->set_rules('category_name','Category Name','required');
@@ -72,6 +73,7 @@ class Category extends CI_Controller {
 			if($this->form_validation->run())
 			{
 				//echo "successfully validated";exit();
+				$category=$this->input->post('category');
 				$category_name=$this->input->post('category_name');
 				$category_description=$this->input->post('description');
 				$status=$this->input->post('status');
@@ -89,6 +91,7 @@ class Category extends CI_Controller {
 						$category_image= $this->Common_Model->ImageUpload($ImageName,$target_dir);
 					}
 					$input_data = array(
+						'category_parent_id'=>$category,
 						'category_name'=>trim($category_name),
 						'category_image'=>$category_image,
 						'category_description'=>$category_description,
@@ -140,7 +143,9 @@ class Category extends CI_Controller {
 		$data['error_msg']='';
 		//echo "segment--".$this->uri->segment(4);exit();
 		$category_id=base64_decode($this->uri->segment(4));
+		$data['categoryLists']=$this->Category_model->getAllCategorydropdown(1);
 		//echo "Brand_id--".$brand_id;exit();
+
 		if($category_id)
 		{
 			$categoryInfo=$this->Category_model->getSingleCategoryInfo($category_id,0);
@@ -155,6 +160,7 @@ class Category extends CI_Controller {
 
 					if($this->form_validation->run())
 					{
+						$category=$this->input->post('category');
 						$category_name=$this->input->post('category_name');
 						$category_description=$this->input->post('description');
 						$status=$this->input->post('status');
@@ -169,6 +175,7 @@ class Category extends CI_Controller {
 						if($_FILES['category_image']['name']!="")
 						{
 							$input_data = array(
+								'category_parent_id'=>$category,
 								'category_name'=>trim($category_name),
 								'category_image'=>$category_image,
 								'category_description'=>$category_description,
@@ -178,6 +185,7 @@ class Category extends CI_Controller {
 						}
 						else{
 							$input_data = array(
+								'category_parent_id'=>$category,
 								'category_name'=>trim($category_name),
 								'category_description'=>$category_description,
 								'category_status'=>$status,

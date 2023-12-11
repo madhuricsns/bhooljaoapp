@@ -96,7 +96,7 @@
                                             
                                             	<div class="pull-right">
 						                            <button type="submit" class="btn btn-primary" name="btn_uptbanner" id="btn_uptbanner">Update</button>
-													<a href="<?php echo base_url();?>backend/Brands/index" class="btn btn-primary" >Cancel</a>
+													<a href="<?php echo base_url();?>backend/Banners/manageBanner" class="btn btn-primary" >Cancel</a>
 						                        </div>
                                            
 

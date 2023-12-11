@@ -94,4 +94,27 @@ Class Category_model extends CI_Model {
 			return false;
 	}
 	
+
+public function getAllCategorydropdown($res,)
+	{
+		
+	
+		/*echo "PerPage--".$per_page;
+		echo "page--".$page;exit();*/
+		$this->db->select('*');
+		$this->db->where('`category_parent_id`="0"','category_status="Active"');
+		// $this->db->order_by('category_name','ASC');
+		
+		$result = $this->db->get(TBLPREFIX.'category');
+		//echo $this->db->last_query();exit;
+		if($res == 1)
+			return $result->result_array();
+		else
+			return $result->num_rows();
+
+	
+	}
+
+
+
 }
