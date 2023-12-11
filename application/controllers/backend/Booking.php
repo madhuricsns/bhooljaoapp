@@ -511,7 +511,7 @@ public function viewBookingDetails()
 	{
 		$data['title']='Assing Date Time';
 		$data['error_msg']='';
-		$data['usersList']=$this->Booking_model->getAllUsers(1,"","","");
+		//$data['usersList']=$this->Booking_model->getAllUsers(1,"","","");
 
 			$booking_id=base64_decode($this->uri->segment(4));
 
@@ -522,7 +522,10 @@ public function viewBookingDetails()
 			if($bokingInfo>0)
 			{
 				$data['bokingInfo'] = $this->Booking_model->getSingleBookingInfo($booking_id,1);
-
+				
+				$category_id = $data['bokingInfo'][0]['category_id'];
+				$data['usersList']=$this->Booking_model->getAllUsers(1,"","",$category_id);
+			
 				if(isset($_POST['btn_upAssing']))
 				{
 				
@@ -535,11 +538,12 @@ public function viewBookingDetails()
 						
 							
 						$input_data = array(
-                            'time_slot'=>$assingtime
+                            'time_slot'=>$assingtime,
+							'admin_demo_accept' => 'Yes'
                          );
-					echo"<pre>";
+					/*echo"<pre>";
 					print_r($input_data);
-					exit();
+					exit();*/
 						$updatedata = $this->Booking_model->uptdateAssingServiceprovider($input_data,$booking_id);
                        
                        // echo $this->db->last_query();exit;
@@ -547,7 +551,7 @@ public function viewBookingDetails()
 						{	
 							$this->session->set_flashdata('success','Assing Service Provider successfully.');
 
-							redirect(base_url().'backend/Booking/manageBooking');	
+							redirect(base_url().'backend/Booking/manageBookingDemo');	
 						}
 						else
 						{

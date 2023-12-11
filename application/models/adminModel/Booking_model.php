@@ -117,6 +117,15 @@ Class Booking_model extends CI_Model {
               //echo $this->db->last_query();exit;
 		if($query==1)
 		{
+			$this->db->where('booking_id',$booking_id);
+			$this->db->where('service_provider_id !=',$input_data['service_provider_id']);
+			$this->db->update(TBLPREFIX."booking_accepted",array('status'=>'Rejected'));
+			
+			$this->db->where('booking_id',$booking_id);
+			$this->db->where('service_provider_id',$input_data['service_provider_id']);
+			$this->db->update(TBLPREFIX."booking_accepted",array('status'=>'Accepted'));
+			
+			
 			return true;
 		}
 		else
