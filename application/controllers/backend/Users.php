@@ -243,7 +243,9 @@ class Users extends CI_Controller {
 						}
 					}
 				}	
-							
+						
+				if($servicefile!="")
+					{
 						$input_data = array(
 							'profile_pic'=>$servicefile,
 							'full_name'=>trim($full_name),
@@ -255,7 +257,39 @@ class Users extends CI_Controller {
 							'status'=>$status,
 							'user_type'=>'Customer',
 							'dateupdated' => date('Y-m-d H:i:s'),
-								);
+							);
+					}
+					else
+					{
+						$input_data = array(
+							'full_name'=>trim($full_name),
+							'email'=>$email_address,
+							//'password'=>md5($password),
+							'gender'=>$gender,
+							'mobile'=>$mobile_number,
+							'address'=>$address,
+							'status'=>$status,
+							'user_type'=>'Customer',
+							'dateupdated' => date('Y-m-d H:i:s'),
+							);
+					}
+
+
+
+
+
+						// $input_data = array(
+						// 	'profile_pic'=>$servicefile,
+						// 	'full_name'=>trim($full_name),
+						// 	'email'=>$email_address,
+						// 	//'password'=>md5($password),
+						// 	'gender'=>$gender,
+						// 	'mobile'=>$mobile_number,
+						// 	'address'=>$address,
+						// 	'status'=>$status,
+						// 	'user_type'=>'Customer',
+						// 	'dateupdated' => date('Y-m-d H:i:s'),
+						// 		);
 					
 						$userdata = $this->User_model->uptdateUser($input_data,$user_id);
 
@@ -664,6 +698,7 @@ class Users extends CI_Controller {
 					$this->form_validation->set_rules('gender','Gender','required');
 					$this->form_validation->set_rules('category_id','Category Id','required');
 					$this->form_validation->set_rules('zone_id','Zone Id','required');
+					$this->form_validation->set_rules('experience','Experience','required');
 			        $this->form_validation->set_rules('status','User Status','required');
 
 					if($this->form_validation->run())
@@ -676,6 +711,7 @@ class Users extends CI_Controller {
 						$category_id=$this->input->post('category_id');
 						$zone_id=$this->input->post('zone_id');
 						$gender=$this->input->post('gender');
+						$experience=$this->input->post('experience');
 						$status=$this->input->post('status');
 						//$description = $this->input->post('description');
 						$servicefile='';
@@ -720,7 +756,11 @@ class Users extends CI_Controller {
 							  $longitude=$latlngarr['longitude'];
 							}
 						}
-							
+
+
+
+						if($servicefile!="")
+					{
 						$input_data = array(
 							'profile_pic'=>$servicefile,
 							'full_name'=>trim($full_name),
@@ -734,9 +774,48 @@ class Users extends CI_Controller {
 							'status'=>$status,
 							'category_id'=>$category_id,
 							'zone_id'=>$zone_id,
+							'experience'=>$experience,
 							'user_type'=>'Service Provider',
 							'dateupdated' => date('Y-m-d H:i:s'),
-								);
+							);
+					}
+					else
+					{
+						$input_data = array(
+							'full_name'=>trim($full_name),
+							'email'=>$email_address,
+							//'password'=>md5($password),
+							'gender'=>$gender,
+							'mobile'=>$mobile_number,
+							'address'=>$address,
+							'user_lat'=>$latitude,
+							'user_long'=>$longitude,
+							'status'=>$status,
+							'category_id'=>$category_id,
+							'zone_id'=>$zone_id,
+							'experience'=>$experience,
+							'user_type'=>'Service Provider',
+							'dateupdated' => date('Y-m-d H:i:s'),
+							);
+					}
+
+							
+						// $input_data = array(
+						// 	'profile_pic'=>$servicefile,
+						// 	'full_name'=>trim($full_name),
+						// 	'email'=>$email_address,
+						// 	//'password'=>md5($password),
+						// 	'gender'=>$gender,
+						// 	'mobile'=>$mobile_number,
+						// 	'address'=>$address,
+						// 	'user_lat'=>$latitude,
+						// 	'user_long'=>$longitude,
+						// 	'status'=>$status,
+						// 	'category_id'=>$category_id,
+						// 	'zone_id'=>$zone_id,
+						// 	'user_type'=>'Service Provider',
+						// 	'dateupdated' => date('Y-m-d H:i:s'),
+						// 		);
 					
 						$userdata = $this->User_model->uptdateUser($input_data,$user_id);
 						

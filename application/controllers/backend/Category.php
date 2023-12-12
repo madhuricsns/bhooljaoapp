@@ -357,5 +357,54 @@ class Category extends CI_Controller {
 		  $data['success']= "download sample export data successfully!";
 	}
 
+//<---------------------------------<Sub Category>-------------------------------------------->
+
+
+public function manageSubCategory()
+	{
+		$data['title']='Manage Sub Category';
+		
+		$id = base64_decode($this->uri->segment(4));
+		
+		$data['subcategorycnt']=$this->Category_model->getAllSubcategory(0,"","",$id);
+		
+		$config = array();
+		$config["base_url"] = base_url().'backend/Service/manageSubCategory/';
+		$config['per_page'] = 10;
+		$config["uri_segment"] = 4;
+		$config['full_tag_open'] = '<ul class="pagination">'; 
+		$config['full_tag_close'] = '</ul>';
+		$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
+		$config['first_tag_close'] = "</li>"; 
+		$config['prev_tag_open'] =	"<li class='paginate_button  page-item'>"; 
+		$config['prev_tag_close'] = "</li>";
+		$config['next_tag_open'] = "<li class='paginate_button  page-item'>";
+		$config['next_tag_close'] = "</li>"; 
+		$config['last_tag_open'] = "<li class='paginate_button  page-item'>"; 
+		$config['last_tag_close'] = "</li>";
+		$config['cur_tag_open'] = "<li class='paginate_button  page-item active'><a class='page-link active' href=''>"; 
+		$config['cur_tag_close'] = "</a></li>";
+		$config['num_tag_open'] = "<li class='paginate_button  page-item'>";
+		$config['num_tag_close'] = "</li>"; 
+		$config['attributes'] =array('class' => 'page-link');
+		$config["total_rows"] =$data['subcategorycnt'];
+		#echo "<pre>"; print_r($config); exit;
+		$this->pagination->initialize($config);
+				
+		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		$data["total_rows"] = $config["total_rows"]; 
+		$data["links"] = $this->pagination->create_links();
+		//echo "ConttPerPage--".$config["per_page"];
+		//echo "Conttpage--".$page;
+		//exit();
+		$data['subcategoryList']=$this->Category_model->getAllSubcategory(1,$config["per_page"],$page,$id);
+		//echo $this->db->last_query();exit;
+		$this->load->view('admin/admin_header',$data);
+		$this->load->view('admin/SubCategorylising',$data);
+		$this->load->view('admin/admin_footer');
+	
+	}
+
+
 	
 }

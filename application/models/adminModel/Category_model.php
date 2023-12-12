@@ -114,7 +114,45 @@ public function getAllCategorydropdown($res,)
 
 	
 	}
+public function getAllSubcategory($res,$per_page,$page,$id)
+	{
+		/*echo "PerPage--".$per_page;
+		echo "page--".$page;exit();*/
+		$this->db->select('s.*');
+		//$this->db->join(TBLPREFIX.'category as c','c.category_id=s.category_id','left');
+		$this->db->where('s.category_parent_id',$id);
+		$this->db->order_by('s.category_id','DESC');
+		if($per_page!="")
+		{
+			$this->db->limit($per_page,$page);
+		}
 
+		$result = $this->db->get(TBLPREFIX.'category as s');
+		// echo $this->db->last_query();exit;
+		if($res == 1){
+			$response= $result->result_array();
+			foreach($response as $key=>$row)
+			{
+				if(isset($row['category_image']) && $row['category_image']!="")
+				{
+					$row['category_image']=base_url()."uploads/category_images/".$row['category_image'];
+				}
+				
+				if($row['category_parent_id'] != 0)
+				{
+					$this->db->select('category_name');
+					$this->db->where('category_id',$row['category_parent_id']);
+					$qryParent = $this->db->get(TBLPREFIX.'category');
+					$parentRes = $qryParent->row();
+					$row['parent_category'] = $parentRes->category_name;
+				}
+				$response[$key]=$row;
+			}
+		}else{
+			$response= $result->num_rows();
+		}
+			return $response;
+	}
 
 
 }

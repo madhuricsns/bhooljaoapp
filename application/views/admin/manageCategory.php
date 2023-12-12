@@ -84,7 +84,8 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 														<a href="<?php echo base_url();?>backend/Category/change_status/<?php echo base64_encode($category['category_id']);?>/<?php echo base64_encode('Inactive');?>" class="btn-sm btn-danger">Inactive</a>
 													<?php } ?>
 												</td>
-												<td class="actions">                     
+												<td class="actions">  
+												<a href="<?php echo base_url();?>backend/Category/manageSubCategory/<?php echo base64_encode($category['category_id']);?>" title="Sub-category"><i data-feather="file-plus"></i></a>                   
 													<a href="<?php echo base_url();?>backend/Category/updateCategory/<?php echo base64_encode($category['category_id']);?>"><i data-feather="edit"></i></a>
 													
 													<a href="<?php echo base_url();?>backend/Category/deleteCategory/<?php echo base64_encode($category['category_id']);?>" onclick="javascript:return chk_isDeleteComnfirm();">
