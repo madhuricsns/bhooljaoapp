@@ -63,8 +63,9 @@
                                         </div>
                                             
                                            <div class="col-md-6">
-                                           	<div class="form-group">
-                                                <label for="mobile_number" ><span>*</span> Gender</label>
+                                           <div class="form-group ">
+                                           	<label for="gender" ><span>*</span> Gender</label>
+                                             <br>
                                                <label class="col-md-2" > <input type="radio" name="gender" class="gender"value="Male" required <?php if($userInfo[0]['gender']=="Male"){ echo 'checked="checked"';}?>> Male</label>
                                                <label class="col-md-2" > <input type="radio" name="gender" class="gender"  value="Female" required <?php if($userInfo[0]['gender']=="Female"){ echo 'checked="checked"';}?>> Female</label>
                                                <label class="col-md-2" > <input type="radio" name="gender" class="gender"  value="Other" required <?php if($userInfo[0]['gender']=="Other"){ echo 'checked="checked"';}?>> Other</label>
@@ -104,11 +105,11 @@
                                                    if($userInfo[0]['profile_pic']!="")
 												{
 	
-												$str_images='<img src="'.base_url().'uploads/service_provider/'.$userInfo[0]['profile_pic'].'" style="width:80px;height:80px">';
+												$str_images='<img src="'.base_url().'./uploads/user_profile/default.png/'.$userInfo[0]['profile_pic'].'" style="width:80px;height:80px">';
 												}
 												else
 												{
-												$str_images='<img src="'.base_url().'uploads/service_provider/default.png" style="width:80px;height:80px">';
+												$str_images='<img src="'.base_url().'./uploads/user_profile/default.png" style="width:80px;height:80px">';
 												}
 												?>
 												<?php echo $str_images;?>
