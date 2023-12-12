@@ -106,7 +106,7 @@
                               
                                     </div>
 											<div class="pull-right">
-						                            <button type="submit" class="btn btn-primary" name="btn_addnotification" id="btn_addnotification">Add</button>
+						                            <button type="submit" class="btn btn-primary" name="btn_addnoti" id="btn_addnoti">Add</button>
 													<a href="<?php echo base_url();?>backend/Notifications/manageNotifications" class="btn btn-primary" >Cancel</a>
                                             </div>
                                         </div>
