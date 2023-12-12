@@ -131,7 +131,7 @@
                                          <div class="col-md-6">
                                             <div class="form-group">
                                                 <label ><span>*</span> Total Work Experience</label>
-												 <input type="text" class="form-control" id="experience" name="experience"  required>
+												 <input type="text" class="form-control" id="experience" name="experience"  required value="<?php echo $userInfo[0]['experience'];?>">
                                                  <div id="err_experience" class="error_msg"></div>
                                             </div>
                                         </div>
@@ -165,7 +165,7 @@
 												}
 												else
 												{
-												$str_images='<img src="'.base_url().'uploads/service_provider/default.png" style="width:80px;height:80px">';
+												$str_images='<img src="'.base_url().'uploads/user_profile/default.png" style="width:80px;height:80px">';
 												}
 												?>
                                                 <?php echo $str_images;?> 
