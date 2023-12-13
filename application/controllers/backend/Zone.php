@@ -76,7 +76,8 @@ class Zone extends CI_Controller {
                 		
 				$zonename=$this->Zone_model->chkZoneName($address,0);
 
-				$latlong=$this->get_lat_long($address);
+
+				$latlong=$this->get_lat_long($address.",".$zone_pincode);
 						$parts=explode(",",$latlong);
 						$zone_lat=$parts[0];
 						$zone_long=$parts[1];
@@ -97,7 +98,7 @@ class Zone extends CI_Controller {
 					// print_r($input_data);
 					// exit();
 					
-					$zone_id = $this->Zone_model->insert_zone(TBLPREFIX.'zone',$input_data);
+					$zone_id = $this->Common_Model->insert_data('zone',$input_data);
 					
 					if($zone_id)
 					{	
@@ -120,7 +121,7 @@ class Zone extends CI_Controller {
 				}
 
 			}else{
-				$this->session->set_flashdata('success','Validation failed. Please enter valid email or mobile number.');
+				$this->session->set_flashdata('success','Validation failed.');
 				redirect(base_url().'backend/Zone/addZone');
 			}
 		}

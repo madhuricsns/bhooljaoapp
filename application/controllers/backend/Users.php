@@ -124,15 +124,17 @@ class Users extends CI_Controller {
 
 				if($usertitle==0)
 				{
+					$profile_id = "BJC".$this->Common_Model->randomCode();
 					$input_data = array(
+						'profile_id'=>$profile_id,
 						'profile_pic'=>$servicefile,
-							'full_name'=>trim($full_name),
-							'email'=>$email_address,
-							'password'=>md5($password),
-							'gender'=>$gender,
-							'mobile'=>$mobile_number,
-							'address'=>$address,
-							'status'=>$status,
+						'full_name'=>trim($full_name),
+						'email'=>$email_address,
+						'password'=>md5($password),
+						'gender'=>$gender,
+						'mobile'=>$mobile_number,
+						'address'=>$address,
+						'status'=>$status,
 						'user_type'=>'Customer',
 						'dateupdated' => date('Y-m-d H:i:s'),
 						'dateadded' => date('Y-m-d H:i:s')
@@ -618,6 +620,7 @@ class Users extends CI_Controller {
 					
 
 					$input_data = array(
+						'profile_id'=>$profile_id,
 						'profile_pic'=>$servicefile,
 							'full_name'=>trim($full_name),
 							'email'=>$email_address,
