@@ -152,40 +152,18 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												} ?></td>
 												<td><?php echo $booking['booking_status'];?></td>
 												<td class="actions">
-							<?php
-												
-							// 					 if(isset($booking)&& count($booking)>0)
-							// { 
-							// 	if (array_search('waiting', array_column($booking, 'user-check')) !== FALSE) 
-							// 	{ 
-									
-							// 		echo 'style="display:none;"'; 
-							//     } 
-							// 	else 
-							// 	{ 
-							// 		echo 'style="display:block;"';
-							// 	}
-							// } service_provider_id
-							?>
-
-<?php   if ($booking['booking_status']='waiting' && $booking['service_provider_id']<1 && $booking['booking_status']!='canceled') {
-	?>
-										<a href="<?php echo base_url();?>backend/Booking/AssingServiceProvider/<?php echo base64_encode($booking['booking_id']);?>" title="Assign Service Provider"><i data-feather="user-check"></i></a>
-<?php } else{}?>
-
-
-
-
-													<a href="<?php echo base_url();?>backend/Booking/viewBookingDetails/<?php echo base64_encode($booking['booking_id']);?>"><i data-feather="eye"></i>
-
-													</a>
-														
-
-											</td>				
-											</tr>											
+							
+												<?php  if($booking['booking_status']=='waiting' &&  $booking['service_provider_id']=='0') {
+												?>
+													<a href="<?php echo base_url();?>backend/Booking/AssingServiceProvider/<?php echo base64_encode($booking['booking_id']);?>" title="Assign Service Provider"><i data-feather="user-check"></i></a>
+													<?php } else{}?>
+														<a href="<?php echo base_url();?>backend/Booking/viewBookingDetails/<?php echo base64_encode($booking['booking_id']);?>"><i data-feather="eye"></i>
+														</a>
+													</td>				
+										</tr>											
 											<?php $i++; }?>
-									</tbody>									
-								</table>
+											</tbody>									
+										</table>
 								<div class="dataTables_paginate paging_simple_numbers" id="datatable-default_paginate" style="margin-top:10px;">
 									<?php echo $links; ?>
 								</div>									
