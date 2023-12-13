@@ -608,16 +608,20 @@ public function exportBookingCSV()
 		{  	
 			foreach($bookingList as $g)
 			{    
-				 if($g['service_provider_id']>0 ){
-				$user=$this->Booking_model->getServiceproviderDetails($g['service_provider_id'],1); 
-												
-												if(isset($user[0]['full_name'])) ;
-												
-												} else { 
-											//	echo "---";
-												}
-				 $g['booking_date']= new DateTime($g['booking_date']);
-             $g['booking_date']=$g['booking_date']->format('d-M-Y');
+				$sp_name="";
+				if($g['service_provider_id']>0 )
+				{
+					$user=$this->Booking_model->getServiceproviderDetails($g['service_provider_id'],1); 
+					if(isset($user[0]['full_name']))
+					{
+						$sp_name=$user[0]['full_name'];
+					}
+				
+				} else { 
+			//	echo "---";
+				}
+				$g['booking_date']= new DateTime($g['booking_date']);
+             	$g['booking_date']=$g['booking_date']->format('d-M-Y');
 
 
 				$order_no =$g['order_no'];
@@ -626,7 +630,7 @@ public function exportBookingCSV()
 				$duration=$g['duration'];
 				$category_name=$g['category_name'];
 				$full_name=$g['full_name'];
-				$sp=$user[0]['full_name'];
+				$sp=$sp_name;
 				
 												
 												
