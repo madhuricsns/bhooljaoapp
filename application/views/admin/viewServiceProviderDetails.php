@@ -25,21 +25,45 @@
                                         <div class="booking_details row">
 										
 											<div class="col-sm-12">
-												<h4>
+												<div class="profile-details text-center" style="background-color:transparent;">
 												<?php if(isset($userinfo[0]['profile_pic']) && $userinfo[0]['profile_pic']!=""){ ?>
-													<img src="<?php echo base_url()."./uploads/service_provider/".$userinfo[0]['profile_pic']?>" width="30px" height="30px" style="border-radius:100%">
+													<img src="<?php echo base_url()."./uploads/user_profile/".$userinfo[0]['profile_pic']?>" class="img-fluid img-90 rounded-circle  lazyloaded">
 													<?php } else { ?>
-														<img src="<?php echo base_url()?>./uploads/service_provider/default.png" alt="" class="rounded-circle" width="32" height="32">
+														<img src="<?php echo base_url()?>./uploads/user_profile/default.png" alt="" class="img-fluid img-90 rounded-circle  lazyloaded">
 													<?php } ?>
-													<?php  echo $userinfo[0]['full_name'];?>
-												</h4>
+													<h5 class="f-w-600 mb-0"><?php  echo $userinfo[0]['full_name'];?></h5>
+												</div>
 
-												<p class="info"><i class="fa fa-envelope"></i> <?php echo $userinfo[0]['email'];?></p>
-												<p class="info"><i class="fa fa-phone"></i> <?php echo $userinfo[0]['mobile'];?></p>
-												<p class="info"><i class="fa fa-user"></i> <?php echo $userinfo[0]['gender'];?></p>
-												<p class="info"><i class="fa fa-map-marker"></i> <?php echo $userinfo[0]['address'];?></p>
-												<p class="info"><i class="fa fa-area-chart"> Zone :-</i> <?php echo $userinfo[0]['zone_name'];?></p>
-												<p class="info"><i class="fa fa-list-alt"> Category :-</i> <?php echo $userinfo[0]['category_name'];?></p>
+												<div class="table-responsive mt-3">
+				                                    <table class="table ">
+				                                        <tbody>
+				                                                                                           
+				                                            <tr>
+				                                                <td><i class="fa fa-id-card"></i> <?php echo $userinfo[0]['profile_id'];?></td>
+				                                            </tr>
+															<tr>
+				                                                <td><i class="fa fa-envelope"></i> <?php echo $userinfo[0]['email'];?></td>
+				                                            </tr>
+				                                            <tr>
+				                                                <td><i class="fa fa-phone"></i> <?php echo $userinfo[0]['mobile'];?></td>
+				                                            </tr>                                                
+				                                            
+				                                            <tr>
+				                                                <td><i class="fa fa-user"></i> <?php echo $userinfo[0]['gender'];?></td>
+				                                            </tr>
+				                                            <tr>
+				                                                <td><i class="fa fa-map-marker"></i> <?php echo $userinfo[0]['address'];?></td>
+				                                            </tr>
+				                                            <tr>
+				                                                <td><i class="fa fa-area-chart"> Zone :-</i> <?php echo $userinfo[0]['zone_name'];?></td>
+				                                            </tr>
+				                                            <tr>
+				                                                <td><i class="fa fa-list-alt"> Category :-</i> <?php echo $userinfo[0]['category_name'];?></td>
+				                                            </tr>
+
+				                                        </tbody>
+				                                    </table>
+				                                </div>
 											</div>
 										</div>
 									</div>
