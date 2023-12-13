@@ -83,10 +83,10 @@ class Users extends CI_Controller {
 				$mobile_number=$this->input->post('mobile_number');
 				$email_address=$this->input->post('email_address');
 				$password=$this->input->post('password');
-						$address=$this->input->post('address');
-						// $zone_id=$this->input->post('zone_id');
-						$gender=$this->input->post('gender');
-						$status=$this->input->post('status');
+				$address=$this->input->post('address');
+				// $zone_id=$this->input->post('zone_id');
+				$gender=$this->input->post('gender');
+				$status=$this->input->post('status');
 				//$description=$this->input->post('description');
 					$servicefile='';
 				if($_FILES['servicefile'])
@@ -148,26 +148,23 @@ class Users extends CI_Controller {
 					
 					if($user_id)
 					{	
-						$this->session->set_flashdata('success','User added successfully.');
-
+						$this->session->set_flashdata('success','Customer added successfully.');
 						redirect(base_url().'backend/Users/manageUsers');	
 					}
 					else
 					{
 						$this->session->set_flashdata('error','Error while adding user.');
-
 						redirect(base_url().'backend/Users/addUser/');
 					}	
 				}
 				else
 				{
-					$this->session->set_flashdata('success','Username  already exist.');
-
+					$this->session->set_flashdata('error','Customer Mobile and Email already exist.');
 					redirect(base_url().'backend/Users/addUser');	
 				}
 
 			}else{
-				$this->session->set_flashdata('success','Validation failed. Please enter valid email or mobile number.');
+				$this->session->set_flashdata('success','Validation failed.');
 				redirect(base_url().'backend/Users/addUser');
 			}
 		}
@@ -277,27 +274,11 @@ class Users extends CI_Controller {
 					}
 
 
-
-
-
-						// $input_data = array(
-						// 	'profile_pic'=>$servicefile,
-						// 	'full_name'=>trim($full_name),
-						// 	'email'=>$email_address,
-						// 	//'password'=>md5($password),
-						// 	'gender'=>$gender,
-						// 	'mobile'=>$mobile_number,
-						// 	'address'=>$address,
-						// 	'status'=>$status,
-						// 	'user_type'=>'Customer',
-						// 	'dateupdated' => date('Y-m-d H:i:s'),
-						// 		);
-					
 						$userdata = $this->User_model->uptdateUser($input_data,$user_id);
 
 						if($userdata)
 						{	
-							$this->session->set_flashdata('success','User updated successfully.');
+							$this->session->set_flashdata('success','Customer updated successfully.');
 
 							redirect(base_url().'backend/Users/manageUsers');	
 						}
@@ -555,6 +536,7 @@ class Users extends CI_Controller {
 			$this->form_validation->set_rules('mobile_number', 'Mobile Number ', 'required|numeric|min_length[7]|max_length[13]'); //{10} for 10 digits number
 			$this->form_validation->set_rules('gender','Gender','required');
 			$this->form_validation->set_rules('status','Status','required');
+			$this->form_validation->set_rules('is_verified','Is Verified','required');
 			if($this->form_validation->run())
 			{
 				//echo "successfully validated";exit();
@@ -562,14 +544,15 @@ class Users extends CI_Controller {
 				$mobile_number=$this->input->post('mobile_number');
 				$email_address=$this->input->post('email_address');
 				$password=$this->input->post('password');
-						$address=$this->input->post('address');
-						$experience=$this->input->post('experience');
-						$category_id=$this->input->post('category_id');
-						$zone_id=$this->input->post('zone_id');
-						$gender=$this->input->post('gender');
-						$status=$this->input->post('status');
+				$address=$this->input->post('address');
+				$experience=$this->input->post('experience');
+				$category_id=$this->input->post('category_id');
+				$zone_id=$this->input->post('zone_id');
+				$gender=$this->input->post('gender');
+				$status=$this->input->post('status');
+				$is_verified=$this->input->post('is_verified');
 				//$description=$this->input->post('description');
-					$servicefile='';
+				$servicefile='';
 				if($_FILES['servicefile'])
 				{
 					if($_FILES['servicefile']['name']!="")
@@ -600,13 +583,11 @@ class Users extends CI_Controller {
 						}
 					}
 				}	
-				$usertitle=$this->User_model->chkUserName($mobile_number,$email_address,0);
+				$checkexist=$this->User_model->chkSPName($mobile_number,$email_address,0);
 
-				if($usertitle==0)
+				if($checkexist==0)
 				{
-
 					$profile_id = "BJS".$this->Common_Model->randomCode();
-					
 					$latitude = $longitude = '';
 					if($address != '')
 					{
@@ -617,24 +598,23 @@ class Users extends CI_Controller {
 						  $longitude=$latlngarr['longitude'];
 						}
 					}
-					
 
 					$input_data = array(
 						'profile_id'=>$profile_id,
 						'profile_pic'=>$servicefile,
-							'full_name'=>trim($full_name),
-							'email'=>$email_address,
-							'password'=>md5($password),
-							'gender'=>$gender,
-							'mobile'=>$mobile_number,
-							'address'=>$address,
-							'experience'=>$experience,
-							'user_lat'=>$latitude,
-							'user_long'=>$longitude,
-							'status'=>$status,
-							'category_id'=>$category_id,
-							'zone_id'=>$zone_id,
-							'user_type'=>'Service Provider',
+						'full_name'=>trim($full_name),
+						'email'=>$email_address,
+						'password'=>md5($password),
+						'gender'=>$gender,
+						'mobile'=>$mobile_number,
+						'address'=>$address,
+						'experience'=>$experience,
+						'user_lat'=>$latitude,
+						'user_long'=>$longitude,
+						'status'=>$status,
+						'category_id'=>$category_id,
+						'zone_id'=>$zone_id,
+						'user_type'=>'Service Provider',
 						'dateupdated' => date('Y-m-d H:i:s'),
 						'dateadded' => date('Y-m-d H:i:s')
 						);
@@ -647,6 +627,11 @@ class Users extends CI_Controller {
 					
 					if($user_id)
 					{	
+						if($is_verified=='Yes')
+						{
+							$inputData=array('service_provider_id'=>$user_id,'is_verified'=>$is_verified,'dateadded'=>date('Y-m-d H:i:s'));
+							$this->Common_Model->insert_data('sp_favourite_verify',$inputData);
+						}
 						$this->session->set_flashdata('success','Service provider added successfully.');
 
 						redirect(base_url().'backend/Users/manageServiceProvider');	
@@ -660,13 +645,12 @@ class Users extends CI_Controller {
 				}
 				else
 				{
-					$this->session->set_flashdata('success','Username  already exist.');
-
+					$this->session->set_flashdata('error','Service Provider already exist.');
 					redirect(base_url().'backend/Users/addServiceprovider');	
 				}
 
 			}else{
-				$this->session->set_flashdata('success','Validation failed. Please enter valid email or mobile number.');
+				$this->session->set_flashdata('success','Validation failed.');
 				redirect(base_url().'backend/Users/addServiceprovider');
 			}
 		}
@@ -691,6 +675,18 @@ class Users extends CI_Controller {
 			if($userInfo>0)
 			{
 				$data['userInfo'] = $this->User_model->getSingleUserInfo($user_id,1);
+				$isVerifiedExist= $this->User_model->isVerified($user_id,0);
+				if($isVerifiedExist>0)
+				{
+					$isVerified= $this->User_model->isVerified($user_id,1);
+					$data['isVerified']=$isVerified->is_verified;
+					$data['favourite_id']=$isVerified->favourite_id;
+				}
+				else
+				{
+					$data['isVerified']="No";
+					$data['favourite_id']="0";
+				}
 				if(isset($_POST['btn_uptsp']))
 				{
 					$this->form_validation->set_rules('full_name','Full Name','required');
@@ -703,6 +699,7 @@ class Users extends CI_Controller {
 					$this->form_validation->set_rules('zone_id','Zone Id','required');
 					$this->form_validation->set_rules('experience','Experience','required');
 			        $this->form_validation->set_rules('status','User Status','required');
+			        $this->form_validation->set_rules('is_verified','is_verified','required');
 
 					if($this->form_validation->run())
 					{
@@ -716,38 +713,39 @@ class Users extends CI_Controller {
 						$gender=$this->input->post('gender');
 						$experience=$this->input->post('experience');
 						$status=$this->input->post('status');
-						//$description = $this->input->post('description');
+						$is_verified = $this->input->post('is_verified');
+						$favourite_id = $this->input->post('favourite_id');
 						$servicefile='';
-				if($_FILES['servicefile'])
-				{
-					if($_FILES['servicefile']['name']!="")
-					{
-						$photo_imagename='';
-						$new_image_name = rand(1, 99999).$_FILES['servicefile']['name'];
-						$config = array(
-									'upload_path' => "uploads/user_profile/",
-									'allowed_types' => "gif|jpg|png|bmp|jpeg",
-									'max_size' => "0", 
-									'file_name' =>$new_image_name
-						);
-						$this->load->library('upload', $config);
-						if($this->upload->do_upload('servicefile'))
-						{ 
-							$imageDetailArray = $this->upload->data();								
-							$photo_imagename =  $imageDetailArray['file_name'];
-						}else
+						if($_FILES['servicefile'])
 						{
-							$errorMsg = $this->upload->display_errors();
-							$this->session->set_flashdata('error',$errorMsg);
-							redirect(base_url().'backend/Users/manageServiceProvider');
+							if($_FILES['servicefile']['name']!="")
+							{
+								$photo_imagename='';
+								$new_image_name = rand(1, 99999).$_FILES['servicefile']['name'];
+								$config = array(
+											'upload_path' => "uploads/user_profile/",
+											'allowed_types' => "gif|jpg|png|bmp|jpeg",
+											'max_size' => "0", 
+											'file_name' =>$new_image_name
+								);
+								$this->load->library('upload', $config);
+								if($this->upload->do_upload('servicefile'))
+								{ 
+									$imageDetailArray = $this->upload->data();								
+									$photo_imagename =  $imageDetailArray['file_name'];
+								}else
+								{
+									$errorMsg = $this->upload->display_errors();
+									$this->session->set_flashdata('error',$errorMsg);
+									redirect(base_url().'backend/Users/manageServiceProvider');
 
+								}
+								if($_FILES['servicefile']['error']==0)
+								{ 
+									$servicefile=$photo_imagename;
+								}
+							}
 						}
-						if($_FILES['servicefile']['error']==0)
-						{ 
-							$servicefile=$photo_imagename;
-						}
-					}
-				}
 				
 						$latitude = $longitude = '';
 						if($address != '')
@@ -760,68 +758,58 @@ class Users extends CI_Controller {
 							}
 						}
 
-
-
 						if($servicefile!="")
-					{
-						$input_data = array(
-							'profile_pic'=>$servicefile,
-							'full_name'=>trim($full_name),
-							'email'=>$email_address,
-							//'password'=>md5($password),
-							'gender'=>$gender,
-							'mobile'=>$mobile_number,
-							'address'=>$address,
-							'user_lat'=>$latitude,
-							'user_long'=>$longitude,
-							'status'=>$status,
-							'category_id'=>$category_id,
-							'zone_id'=>$zone_id,
-							'experience'=>$experience,
-							'user_type'=>'Service Provider',
-							'dateupdated' => date('Y-m-d H:i:s'),
-							);
-					}
-					else
-					{
-						$input_data = array(
-							'full_name'=>trim($full_name),
-							'email'=>$email_address,
-							//'password'=>md5($password),
-							'gender'=>$gender,
-							'mobile'=>$mobile_number,
-							'address'=>$address,
-							'user_lat'=>$latitude,
-							'user_long'=>$longitude,
-							'status'=>$status,
-							'category_id'=>$category_id,
-							'zone_id'=>$zone_id,
-							'experience'=>$experience,
-							'user_type'=>'Service Provider',
-							'dateupdated' => date('Y-m-d H:i:s'),
-							);
-					}
+						{
+							$input_data = array(
+								'profile_pic'=>$servicefile,
+								'full_name'=>trim($full_name),
+								'email'=>$email_address,
+								'gender'=>$gender,
+								'mobile'=>$mobile_number,
+								'address'=>$address,
+								'user_lat'=>$latitude,
+								'user_long'=>$longitude,
+								'status'=>$status,
+								'category_id'=>$category_id,
+								'zone_id'=>$zone_id,
+								'experience'=>$experience,
+								'user_type'=>'Service Provider',
+								'dateupdated' => date('Y-m-d H:i:s'),
+								);
+						}
+						else
+						{
+							$input_data = array(
+								'full_name'=>trim($full_name),
+								'email'=>$email_address,
+								'gender'=>$gender,
+								'mobile'=>$mobile_number,
+								'address'=>$address,
+								'user_lat'=>$latitude,
+								'user_long'=>$longitude,
+								'status'=>$status,
+								'category_id'=>$category_id,
+								'zone_id'=>$zone_id,
+								'experience'=>$experience,
+								'user_type'=>'Service Provider',
+								'dateupdated' => date('Y-m-d H:i:s'),
+								);
+						}
 
-							
-						// $input_data = array(
-						// 	'profile_pic'=>$servicefile,
-						// 	'full_name'=>trim($full_name),
-						// 	'email'=>$email_address,
-						// 	//'password'=>md5($password),
-						// 	'gender'=>$gender,
-						// 	'mobile'=>$mobile_number,
-						// 	'address'=>$address,
-						// 	'user_lat'=>$latitude,
-						// 	'user_long'=>$longitude,
-						// 	'status'=>$status,
-						// 	'category_id'=>$category_id,
-						// 	'zone_id'=>$zone_id,
-						// 	'user_type'=>'Service Provider',
-						// 	'dateupdated' => date('Y-m-d H:i:s'),
-						// 		);
-					
 						$userdata = $this->User_model->uptdateUser($input_data,$user_id);
-						
+
+						if($favourite_id>0)
+						{
+							$inputData=array('service_provider_id'=>$user_id,'is_verified'=>$is_verified,'dateupdated'=>date('Y-m-d H:i:s'));
+							// print_r($inputData);
+							$this->Common_Model->update_data('sp_favourite_verify','favourite_id',$favourite_id,$inputData);
+							// echo $this->db->last_query();
+						}
+						else
+						{
+							$inputData=array('service_provider_id'=>$user_id,'is_verified'=>$is_verified,'dateadded'=>date('Y-m-d H:i:s'));
+							$this->Common_Model->insert_data('sp_favourite_verify',$inputData);
+						}
 						if($userdata)
 						{	
 							$this->session->set_flashdata('success','Service provider updated successfully.');

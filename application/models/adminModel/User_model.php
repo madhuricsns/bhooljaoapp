@@ -12,6 +12,7 @@ Class User_model extends CI_Model {
 		$this->db->select('b.*,z.zone_name,c.category_name');
 		$this->db->join(TBLPREFIX.'zone as z','z.zone_id=b.zone_id','left');
 		$this->db->join(TBLPREFIX.'category as c','c.category_id=b.category_id','left');
+		// $this->db->join(TBLPREFIX.'sp_favourite_verify as v','v.service_provider_id=b.user_id','left');
 		$this->db->where('user_id',$user_id);
 		$query = $this->db->get(TBLPREFIX."users as b");
 		if($res == 1)
@@ -23,11 +24,45 @@ Class User_model extends CI_Model {
 			return $query->num_rows();
 		}	
 	}
+	public function isVerified($user_id,$res)
+	{
+		$this->db->select('*');
+		// $this->db->join(TBLPREFIX.'sp_favourite_verify as v','v.service_provider_id=b.user_id','left');
+		$this->db->where('service_provider_id',$user_id);
+		$query = $this->db->get(TBLPREFIX."sp_favourite_verify");
+		if($res == 1)
+		{
+			return $query->row();
+		}
+		else
+		{
+			return $query->num_rows();
+		}	
+	}
 	public function chkUserName($mobile,$email_address,$res)
 	{
 		$this->db->select('*');
 		//$this->db->where('username',$username);
-		//$this->db->where('email_address',$email_address);
+		$this->db->where('user_type','Customer');
+		$where = '(mobile="'.$mobile.'" AND email = "'.$email_address.'")';
+       	$this->db->where($where);
+		$query=$this->db->get(TBLPREFIX."users");
+		//echo $this->db->last_query();exit;
+		if($res == 1)
+		{
+			return $query->result_array();
+		}
+		else
+		{
+			return $query->num_rows();
+		}	
+	}
+
+	public function chkSPName($mobile,$email_address,$res)
+	{
+		$this->db->select('*');
+		//$this->db->where('username',$username);
+		$this->db->where('user_type','Service Provider');
 		$where = '(mobile="'.$mobile.'" AND email = "'.$email_address.'")';
        	$this->db->where($where);
 		$query=$this->db->get(TBLPREFIX."users");
@@ -231,8 +266,9 @@ Class User_model extends CI_Model {
 		echo "page--".$page;exit();*/
 		$this->db->select('*');
 		$this->db->where('category_status',"Active");
+		$this->db->where('category_parent_id',"0");
 
-		$this->db->order_by('category_id','DESC');
+		$this->db->order_by('category_name','ASC');
 		if($per_page!="")
 		{
 			$this->db->limit($per_page,$page);

@@ -68,11 +68,12 @@ class Notifications extends CI_Controller {
 		$data['UserList'] = $this->Notification_model->getAllUserlist(1,'Customer');
 		$data['ServiceProviderList']=$this->Notification_model->getAllUserlist(1,'Service Provider');
 		 //echo "<pre>";
-		 //print_r($_POST);
+		 print_r($_POST);
 		// exit();
 
 		if(isset($_POST['btn_addnotification']))
 		{ 
+			// echo "OK";exit;
 			$this->form_validation->set_rules('title','Notification Name','required');
 			$this->form_validation->set_rules('message','Notification Description','required');
 			
@@ -135,11 +136,12 @@ class Notifications extends CI_Controller {
 							}
 						}
 						
-					} else {
+					} else 
+					{
 						foreach($user_ids as $user_id)
 						{
 							$user=$this->Notification_model->getUserDetails(1,$user_id);
-	//print_r($user);exit;
+						//print_r($user);exit;
 							$input_data = array(
 								'noti_title'=>trim($notification_name),
 								'noti_message'=>trim($notification_description),
@@ -151,14 +153,14 @@ class Notifications extends CI_Controller {
 								);
 							
 							$notification_id = $this->Notification_model->insert_notification($input_data);
-							
+
 							$this->Common_Model->sendexponotification($notification_name,$notification_description,$user->user_fcm);
 						}
+						// exit;
 					}
 					
 				}
 					$this->session->set_flashdata('success','Notification added successfully.');
-			
 					redirect(base_url().'backend/Notifications/manageNotifications');	
 
 					// if($notification_id)
@@ -200,6 +202,7 @@ class Notifications extends CI_Controller {
 			}
 			else
 			{
+				// exit;
 				$this->session->set_flashdata('error','Error while adding Notification.');
 				redirect(base_url().'backend/Notifications/addNotification/');
 			}
@@ -212,13 +215,40 @@ class Notifications extends CI_Controller {
 	}
 	
 
-      public function fetch_user()
- {
-  if($this->input->post('select_type'))
-  {
-   echo $this->Notification_model->getAllUserlist($this->input->post('select_type'));
+    public function fetch_user()
+	{
+		if($this->input->post('select_type'))
+		{
+		echo $this->Notification_model->getAllUserlist($this->input->post('select_type'));
+		}
+	}
 
-   }
-}
+	public function deletenotification()
+	{
+		$data['error_msg']='';
+		$noti_id = base64_decode($this->uri->segment(4));
+		if($noti_id)
+		{ 
+				
+				$this->db->where('noti_id',$noti_id);
+				$deluser = $this->db->delete('bhool_notification');
+				if($deluser > 0)
+				{
+					$this->session->set_flashdata('success','Notification deleted successfully.');
+					redirect(base_url().'backend/Notifications/manageNotifications');	
+				}
+				else
+				{
+					$this->session->set_flashdata('error','Error while deleting notification.');
+					redirect(base_url().'backend/Notifications/manageNotifications');
+				}
+			
+		}
+		else
+		{
+			$this->session->set_flashdata('error','Notification not found.');
+			redirect(base_url().'backend/Users/index');
+		}
+	}
 
 }

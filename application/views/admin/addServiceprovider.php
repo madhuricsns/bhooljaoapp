@@ -30,10 +30,10 @@
                         <div class="tab-content" >
                             <div class="tab-pane fade active show">
                                     <!-- <div class="row"> -->
-                                        <div class="col-sm-12">
+                                <div class="col-sm-12">
                                         	
-                                           <div class="row">
-                                           <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-6">
                                             <div class="form-group ">
                                                 <label for="full_name" ><span>*</span>Full Name</label>
                                                 <input type="text" class="form-control" id="full_name" name="full_name"  required>
@@ -41,11 +41,11 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="form-group ">
+                                            <div class="form-group file-upload">
 											<div class="form-group row">
-                                                <label for="full_name" ><span>*</span>Profile</label>
+                                                <label for="profile_photo" ><span>*</span>Profile</label>
                                                 <input type="file" class="form-control " id="servicefile" name="servicefile" >
-												
+												<div id="err_profile_photo" class="error_msg"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -83,9 +83,9 @@
                                            <div class="col-md-6">
                                            	<label for="gender" ><span>*</span> Gender</label>
                                             <div class="form-group ">
-                                               <label class="col-md-3" > <input type="radio" name="gender" id="gender" class="gender"value="Male" required > Male</label>
-                                               <label class="col-md-3" > <input type="radio" name="gender" id="gender" class="gender"  value="Female" required > Female</label>
-                                               <label class="col-md-2" > <input type="radio" name="gender" id="gender" class="gender"  value="Other" required > Other</label>
+                                               <label > <input type="radio" name="gender" id="gender" class="gender"value="Male" required > Male</label>
+                                               <label> <input type="radio" name="gender" id="gender" class="gender"  value="Female" required > Female</label>
+                                               <label> <input type="radio" name="gender" id="gender" class="gender"  value="Other" required > Other</label>
                                               
                                                 <div id="err_gender" class="error_msg"></div>
                                             </div>
@@ -145,7 +145,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                    <div class="col-md-6">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label ><span>*</span> Status</label>
                                                 <select name="status" id="status" class="form-control " required>
@@ -154,6 +154,17 @@
                                                     <option value="Inactive">Inactive</option>
                                                 </select>
                                                  <div id="err_status" class="error_msg"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label ><span>*</span> Is Verified</label>
+                                                <select name="is_verified" id="is_verified" class="form-control " required>
+                                                    <option value="">Select Verified</option>
+                                                    <option value="Yes">Yes</option>
+                                                    <option value="No">No</option>
+                                                </select>
+                                                 <div id="err_is_verified" class="error_msg"></div>
                                             </div>
                                         </div>
                                     </div>

@@ -74,13 +74,13 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 										{
 										?>		
 										<tr>
-												<td><?php echo $i;?></td>
-																								<td>
-                 <?php if(!empty ($user['profile_pic']) == NULL):?>
-                  <img class="img-circle" src="<?php echo base_url().'./uploads/user_profile/default.png';?>" width="50px" >
-                 <?php else:?>
-                  <img class="img-circle" src="<?php echo base_url().'./uploads/user_profile/'.$user['profile_pic'];?>" width="50px">
-                 <?php endif;?>
+												<td title="<?php echo $user['user_id'];?>"><?php echo $i;?></td>
+												<td>
+												<?php if(!empty ($user['profile_pic']) == NULL):?>
+												<img class="img-circle" src="<?php echo base_url().'./uploads/user_profile/default.png';?>" width="50px" >
+												<?php else:?>
+												<img class="img-circle" src="<?php echo base_url().'./uploads/user_profile/'.$user['profile_pic'];?>" width="50px">
+												<?php endif;?>
 
 												</td>
 												<td><?php echo $user['full_name'];?></td>

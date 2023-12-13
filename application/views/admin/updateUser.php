@@ -27,7 +27,7 @@
 						</div>
 						<?php }?>
 						<?php $encodedValueId=base64_encode($userInfo[0]['user_id']); ?>
-						<form class="needs-validation" name="frm_updateuser" id="frm_updateuser" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/users/updateUser/<?php echo $encodedValueId;?>">
+						<form class="needs-validation" name="frm_updateuser1" id="frm_updateuser1" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/users/updateUser/<?php echo $encodedValueId;?>">
                         <div class="tab-content" >
                             <div class="tab-pane fade active show">
                                     <!-- <div class="row"> -->
@@ -66,9 +66,9 @@
                                            <div class="form-group ">
                                            	<label for="gender" ><span>*</span> Gender</label>
                                              <br>
-                                               <label class="col-md-2" > <input type="radio" name="gender" class="gender"value="Male" required <?php if($userInfo[0]['gender']=="Male"){ echo 'checked="checked"';}?>> Male</label>
-                                               <label class="col-md-2" > <input type="radio" name="gender" class="gender"  value="Female" required <?php if($userInfo[0]['gender']=="Female"){ echo 'checked="checked"';}?>> Female</label>
-                                               <label class="col-md-2" > <input type="radio" name="gender" class="gender"  value="Other" required <?php if($userInfo[0]['gender']=="Other"){ echo 'checked="checked"';}?>> Other</label>
+                                               <label> <input type="radio" name="gender" class="gender"value="Male" required <?php if($userInfo[0]['gender']=="Male"){ echo 'checked="checked"';}?>> Male</label>
+                                               <label> <input type="radio" name="gender" class="gender"  value="Female" required <?php if($userInfo[0]['gender']=="Female"){ echo 'checked="checked"';}?>> Female</label>
+                                               <label> <input type="radio" name="gender" class="gender"  value="Other" required <?php if($userInfo[0]['gender']=="Other"){ echo 'checked="checked"';}?>> Other</label>
                                             </div>
                                             
                                         </div>
@@ -77,9 +77,9 @@
                                             <div class="row">
                                            <div class="col-md-6">
                                            	 <div class="form-group">
-                                                <label><span>*</span>Address</label>
+                                                <label for="address"><span>*</span>Address</label>
                                                 <textarea name="address" id="address" class="form-control" required><?php echo $userInfo[0]['address'];?></textarea>
-												
+                                                <div id="err_address" class="error_msg"></div>
                                             </div>
                                             
                                         </div>
@@ -95,13 +95,16 @@
                                            
                                         </div>
                                     </div>
-                                           <div class="row">
-                                            <div class="col-md-6">
-                                            	<div class="form-group ">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
                                                 <label for="banner_image" ><span>*</span> Profile</label>
-                                               
-												
-												<?php 
+                                                <input class="form-control " id="servicefile1" type="file"  name="servicefile" />
+                                                <span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span><br/>
+                                            </div>
+                                        </div>    
+                                        <div class="col-md-2">
+                                               <?php 
                                                    if($userInfo[0]['profile_pic']!="")
 												{
 	
@@ -113,17 +116,13 @@
 												}
 												?>
 												<?php echo $str_images;?>
-											<span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span><br/>
-											<div class="err_msg" id="err_banner_image"></div>
-											  <input class="form-control " id="servicefile" type="file"  name="servicefile" />
-                                            </div>
-                                           
                                         </div>
+                                           
                                     </div>
 
                                             <!-- <div class="form-group row"> -->
                                             	<div class="pull-right">
-						                            <button type="submit" class="btn btn-primary" name="btn_uptuser" id="btn_uptuser">Update</button>
+						                            <button type="submit" class="btn btn-primary" name="btn_uptuser" id="btn_adduser">Update</button>
 													<a href="<?php echo base_url();?>backend/Users/index" class="btn btn-primary" >Cancel</a>
 						                        </div>
                                             <!-- </div> -->

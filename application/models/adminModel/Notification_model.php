@@ -49,7 +49,7 @@ Class Notification_model extends CI_Model {
 		$this->db->join(TBLPREFIX.'users as u','u.user_id=n.noti_user_id','left');
 		//$this->db->where('users.userid',$user_id);
 
-		//$this->db->order_by('noti_id','ASC');
+		$this->db->order_by('noti_id','DESC');
 		if($per_page!="")
 		{
 			$this->db->limit($per_page,$page);

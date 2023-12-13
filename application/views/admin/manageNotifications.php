@@ -79,7 +79,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<td><?php echo $noti['full_name'];?></td>
 												<td class="actions">                     
 													<!-- <a href="<?php //echo base_url();?>backend/Material/updateMaterial/<?php //echo base64_encode($material['material_id']);?>"><i data-feather="edit"></i></a> -->
-													<a href="<?php echo base_url();?>backend/Notification/deletenotification/<?php echo base64_encode($noti['noti_id']);?>" onclick="javascript:return chk_isDeleteComnfirm();">
+													<a href="<?php echo base_url();?>backend/Notifications/deletenotification/<?php echo base64_encode($noti['noti_id']);?>" onclick="javascript:return chk_isDeleteComnfirm();">
 													<i data-feather="trash-2"></i>
 													</a>
 

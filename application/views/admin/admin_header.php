@@ -35,14 +35,19 @@
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('template/admin/');?>assets/css/chartist.css">
 	
 	<!-- Datepicker css-->
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url('template/admin/');?>assets/css/date-picker.css">
-	<!-- Timepicker css-->
+    <!-- <link rel="stylesheet" type="text/css" href="<?php echo base_url('template/admin/');?>assets/css/date-picker.css"> -->
+	
+    <!-- Timepicker css-->
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('template/admin/');?>assets/scss/bootstrap-timepicker/css/bootstrap-timepicker.css">
     <!-- Bootstrap css-->
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('template/admin/');?>assets/css/bootstrap.css">
 
     <!-- App css-->
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('template/admin/');?>assets/css/admin.css">
+
+
+
+    
 	<script type="text/javascript">var BASEPATH="<?php echo base_url('backend/');?>";</script>
 	<style>.error_msg{ color:red;}</style>
 </head>

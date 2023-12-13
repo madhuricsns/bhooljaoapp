@@ -23,7 +23,11 @@
 <script src="<?php echo base_url('template/admin/');?>assets/js/popper.min.js"></script>
 <script src="<?php echo base_url('template/admin/');?>assets/js/bootstrap.js"></script>
 
-	<script src="<?php echo base_url('template/admin/');?>assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<!-- <script src="<?php echo base_url('template/admin/');?>assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> -->
+
+<!-- Datepicker -->
+<!-- <link href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css' rel='stylesheet' type='text/css'> -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js' type='text/javascript'></script>
 
 <!-- feather icon js-->
 <script src="<?php echo base_url('template/admin/');?>assets/js/icons/feather-icon/feather.min.js"></script>
@@ -140,18 +144,47 @@ document.getElementById("doPrintinvoice").addEventListener("click", function() {
 <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 
+
 <script type="text/javascript">
+
+
+
 $(document).ready(function() {
     $('.js-example-basic-multiple').select2();
+    $('.select2').select2();
 });
+function insert_Row() {
+    // var input = document.getElementById("input").value;
+    // var number = Number(input);
+    for (i = 0; i < 10; i++) {
+    //   var j = 0; // First Cell
+    //   var k = 1; // Second Cell
+    //   var newTR = table.insertRow(i);
+    //   var newTD1 = newTR.insertCell(j);
+
+    //   newTD1.innerHTML = "Row " + i + " Cell " + j;
+      div = document.createElement('div');
+          $(div).addClass("inner").html("new inner div");
+          $("#myTable").append(div);
+    };
+  };
+$(function() {
+      $("#addLabel12").click(function() {
+        alert();
+          div = document.createElement('div');
+          $(div).addClass("inner").html("new inner div");
+          $("#myTable").append(div);
+        });
+    });
 $(document).ready(function(){
     // $(".select2").select2();
   var rowIdx = 1;
+  var LabelrowIdx = 1;
     //Add Label
     $('.addLabel').on('click', function () {
   
     // Adding a row inside the tbody.
-    $('#tbody').append(`<tr id="R${++rowIdx}">
+        $('#tbody').append(`<tr id="Row${++LabelrowIdx}">
            <td>
            <input type="text" class="form-control option_label" id="option_label" name="option_label[]" placeholder="Enter Label Name"  >
             <div id="err_option_label" class="error_msg err_option_label"></div>
@@ -166,8 +199,8 @@ $(document).ready(function(){
             <div id="err_option_type" class="error_msg err_option_type"></div>
             </td>
             <td class="text-center">
-            <button class="btn btn-danger remove" 
-                type="button"><i class="fa fa-remove"></i></button>
+            <button class="btn btn-danger labelRowremove" 
+                type="button" ><i class="fa fa-remove"></i>Label Row</button>
             </td>
             </tr>
             <tr>
@@ -182,31 +215,59 @@ $(document).ready(function(){
                 <!-- <i class="fa fa-plus"></i> --> Add Option
                 </button> </td>
             </tr>`);
-    });
+        });
 
     // Remove opion row
     // jQuery button click event to remove a row
     $('#tbody').on('click', '.remove', function () {
-  
-    // Getting all the rows next to the 
-    var child = $(this).closest('tr').nextAll();
+        // Getting all the rows next to the 
+        var child = $(this).closest('tr').nextAll();
 
-    child.each(function () {
-        var id = $(this).attr('id');
-        // Getting the <p> inside the .row-index class.
-        var idx = $(this).children('.row-index').children('p');
-        // Gets the row number from <tr> id.
-        var dig = parseInt(id.substring(1));
-        // Modifying row index.
-        idx.html(`${dig - 1}`);
-        // Modifying row id.
-        $(this).attr('id', `R${dig - 1}`);
+        child.each(function () {
+            var id = $(this).attr('id');
+            // Getting the <p> inside the .row-index class.
+            var idx = $(this).children('.row-index').children('p');
+            // Gets the row number from <tr> id.
+            var dig = parseInt(id.substring(1));
+            // Modifying row index.
+            idx.html(`${dig - 1}`);
+            // Modifying row id.
+            $(this).attr('id', `R${dig - 1}`);
+        });
+        // Removing the current row.
+        $(this).closest('tr').remove();
+        // Decreasing the total number of rows by 1.
+        rowIdx--;
     });
-    // Removing the current row.
-    $(this).closest('tr').remove();
-    // Decreasing the total number of rows by 1.
-    rowIdx--;
+
+     // RemoveLabel row
+    // jQuery button click event to remove a row
+    $('#tbody').on('click', '.labelRowremove', function () {
+        var data = $(this).find('tr').attr('id');
+    alert (data);
+        var child = $(this).closest('tr').nextAll();
+
+        child.each(function () {
+            var id = $(this).attr('id');
+            // alert(id);
+            // Getting the <p> inside the .row-index class.
+            var idx = $(this).children('.row-index').children('p');
+            // Gets the row number from <tr> id.
+            var dig = parseInt(id.substring(1));
+            // Modifying row index.
+            idx.html(`${dig - 1}`);
+            // Modifying row id.
+            var rowid=$(this).attr('id', `Row${dig - 1}`);
+            alert(rowid);
+        });
+        // Removing the current row.
+        $(this).closest('tr').remove();
+        // Decreasing the total number of rows by 1.
+        LabelrowIdx--;
     });
+
+
+
 
     var rowIdx = 1;
     //Add Option row
@@ -215,11 +276,32 @@ $(document).ready(function(){
     // Adding a row inside the tbody.
     $('#tbody').append(`<tr id="R${++rowIdx}">
            <td>
-            <input type="text" class="form-control optionsArr" id="optionsArr" name="optionsArr[]" placeholder="Enter Option" required >
+            <input type="text" class="form-control optionsArr" id="optionsArr" name="optionsArr_0[]" placeholder="Enter Option" required >
             <div id="err_optionsArr" class="error_msg err_optionsArr"></div>
             </td>
             <td>
-            <input type="text" class="form-control amountArr" id="amountArr" name="amountArr[]" placeholder="Enter Amount" required >
+            <input type="text" class="form-control amountArr" id="amountArr" name="amountArr_0[]" placeholder="Enter Amount" required >
+            <div id="err_optionsArr" class="error_msg err_optionsArr"></div>
+            </td>
+            <td class="text-center">
+            <button class="btn btn-danger remove" 
+                type="button"><i class="fa fa-remove"></i></button>
+            </td>
+            </tr>`);
+    });
+
+    var rowIdx = 0;
+    //Add Option row
+    $('#addBtn1').on('click', function () {
+  
+    // Adding a row inside the tbody.
+    $('#tbody1').append(`<tr id="R${++rowIdx}">
+           <td>
+            <input type="text" class="form-control optionsArr" id="optionsArr" name="optionsArr_0[]" placeholder="Enter Option" required >
+            <div id="err_optionsArr" class="error_msg err_optionsArr"></div>
+            </td>
+            <td>
+            <input type="text" class="form-control amountArr" id="amountArr" name="amountArr_0[]" placeholder="Enter Amount" required >
             <div id="err_optionsArr" class="error_msg err_optionsArr"></div>
             </td>
             <td class="text-center">
@@ -274,6 +356,9 @@ $(document).ready(function(){
     rowIdx--;
     });
 
+
+
+
 // Add More label row
 $('#addRow').on('click', function () {
   
@@ -318,6 +403,75 @@ $('#addRow').on('click', function () {
   rowIdx--;
   });
 
+
+  var whyrowIdx = 1;
+  // Add Why CHoose Us row
+$('#addwhychooswusRow').on('click', function () {
+  // Adding a row inside the tbody.
+  $('#tbodywhychooswus').append(`<tr id="L${++whyrowIdx}">
+         <td>
+          <input type="text" class="form-control whychooswusArr" id="whychooswusArr" name="whychooswusArr[]" placeholder="Enter why Choose Us" required >
+          <div id="err_whychooswusArr" class="error_msg err_whychooswusArr"></div>
+          </td>
+          <td class="text-center">
+          <button class="btn btn-danger WhyremoveRow" 
+              type="button"><i class="fa fa-remove"></i></button>
+          </td>
+          </tr>`);
+  });
+
+// Remove Why CHoose Us row
+    // jQuery button click event to remove a row
+    $('#tbodywhychooswus').on('click', '.WhyremoveRow', function () {
+    var child = $(this).closest('tr').nextAll();
+    child.each(function () {
+        var id = $(this).attr('id');
+        var idx = $(this).children('.row-index').children('p');
+        var dig = parseInt(id.substring(1));
+        idx.html(`${dig - 1}`);
+        $(this).attr('id', `L${dig - 1}`);
+    });
+        // Removing the current row.
+        $(this).closest('tr').remove();
+        whyrowIdx--;
+    });
+
+var vehiclerowIdx = 1;
+  // Add Vehicle row
+$('#addVehicleRow').on('click', function () {
+  // Adding a row inside the tbody.
+  $('#tbodyvehicle').append(`<tr id="L${++vehiclerowIdx}">
+         <td> <input type="text" class="form-control vehiclenameArr" id="vehiclenameArr" name="vehiclenameArr[]" placeholder="Enter Vehicle Name"  >
+            <div id="err_vehicleArr" class="error_msg err_vehicleArr"></div>
+        </td>
+        <td> <input type="text" class="form-control vehicleamountArr" id="vehicleamountArr" name="vehicleamountArr[]" placeholder="Enter amount"  >
+            <div id="err_vehicleamountArr" class="error_msg err_vehicleamountArr"></div>
+        </td>
+        <td> <input type="file" class="form-control vehicleimageArr" id="vehicleimageArr" name="vehicleimageArr[]"  >
+            <div id="err_vehicleimageArr" class="error_msg err_vehicleimageArr"></div>
+        </td>
+          <td class="text-center">
+          <button class="btn btn-danger VehicleremoveRow" type="button"><i class="fa fa-remove"></i></button>
+          </td>
+          </tr>`);
+  });
+
+// Remove Vehicle row
+    // jQuery button click event to remove a row
+    $('#tbodyvehicle').on('click', '.VehicleremoveRow', function () {
+    var child = $(this).closest('tr').nextAll();
+    child.each(function () {
+        var id = $(this).attr('id');
+        var idx = $(this).children('.row-index').children('p');
+        var dig = parseInt(id.substring(1));
+        idx.html(`${dig - 1}`);
+        $(this).attr('id', `L${dig - 1}`);
+    });
+        // Removing the current row.
+        $(this).closest('tr').remove();
+        vehiclerowIdx--;
+    });
+
 $(document).ready(function(){
 	$("#serviceproviderDiv").hide();
     $("#customerDiv").hide();
@@ -335,6 +489,11 @@ $(document).ready(function(){
         {
             $("#serviceproviderDiv").hide();
             $("#customerDiv").show();
+        }
+        else if(select_type=="") 
+        {
+            $("#serviceproviderDiv").hide();
+            $("#customerDiv").hide();
         }
         
     }); 
@@ -585,10 +744,10 @@ function getProductByRest()
 }
 </script>
 <!--Datepicker jquery-->
-<script src="<?php echo base_url('template/admin/');?>assets/js/datepicker/datepicker.js"></script>
+<!-- <script src="<?php echo base_url('template/admin/');?>assets/js/datepicker/datepicker.js"></script>
 <script src="<?php echo base_url('template/admin/');?>assets/js/datepicker/datepicker.en.js"></script>
 <script src="<?php echo base_url('template/admin/');?>assets/js/datepicker/datepicker.custom.js"></script>
-
+ -->
 
 </body>
 </html>

@@ -30,51 +30,48 @@
                         <div class="tab-content" >
                             <div class="tab-pane fade active show">
                                     <!-- <div class="row"> -->
-                                        <div class="col-md-12">
+                                <div class="col-md-12">
                                         	
-                                       <div class="row">
-                                           <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-6">
                                             <div class="form-group ">
                                               <label for="full_name" ><span>*</span>Full Name</label>
-                                              
                                                 <input type="text" class="form-control" id="full_name" name="full_name"  required>
 												 <div id="err_full_name" class="error_msg"></div>
-												
                                             </div>
-											 </div>
+                                        </div>
 
 
-											 <div class="col-md-6">
-
+                                        <div class="col-md-6">
                                         	<div class="form-group ">
 
                                                 <label for="full_name"><span>*</span>Profile</label>
                                                 <input type="file" class="form-control" id="servicefile" name="servicefile" >
-												
+                                                <div id="err_profile_photo" class="error_msg"></div>
                                             </div>
                                         </div>
                                     </div>
 											
-										 <div class="row">
-                                           <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-6">
                                             <div class="form-group ">
                                                 <label for="email_address" ><span>*</span> Email Address</label>
                                                <input type="email" name="email_address" id="email_address" class="form-control" required>
                                                <div id="err_email_address" class="error_msg"></div>
                                             </div>
                                         </div>
-                                               <div class="col-md-6">
+                                        <div class="col-md-6">
                                             <div class="form-group ">
                                                 <label for="password" ><span>*</span> Password</label>
                                                <input type="password" name="password" id="password" class="form-control" required>
                                                 <div id="err_password" class="error_msg"></div>
                                             </div>
                                         </div>
-                                        </div>
+                                    </div>
 
 
-                                            <div class="row">
-                                           <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-6">
                                             <div class="form-group ">
                                                 <label for="mobile_number" ><span>*</span> Mobile Number</label>
                                                 <input type="tel" name="mobile_number" id="mobile_number" class="form-control" pattern="[0-9]{10}"   maxlength="10" required >
@@ -83,20 +80,20 @@
                                         </div>
 
                                           
-                                           <div class="col-md-6">
+                                        <div class="col-md-6">
                                            <div class="form-group ">
                                            	<label for="gender" ><span>*</span> Gender</label>
                                              <br>
-                                               <label class="col-md-2"> <input type="radio" name="gender" id="gender"class="gender"value="Male" required > Male</label>
-                                               <label class="col-md-3" > <input type="radio" name="gender" id="gender"class="gender"  value="Female" required > Female</label>
-                                               <label class="col-md-3" > <input type="radio" name="gender" id="gender"class="gender"  value="Other" required > Other</label>
+                                               <label> <input type="radio" name="gender" id="gender"class="gender"value="Male" required > Male</label>
+                                               <label> <input type="radio" name="gender" id="gender"class="gender"  value="Female" required > Female</label>
+                                               <label> <input type="radio" name="gender" id="gender"class="gender"  value="Other" required > Other</label>
                                                
                                                <div id="err_gender" class="error_msg"></div>
                                             </div>
                                         </div>
                                     </div>
-                                             <div class="row">
-                                           <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-6">
                                             <div class="form-group ">
                                                 <label for="address"><span>*</span>Address</label>
                                                 <textarea name="address" id="address" class="form-control" required></textarea>
@@ -105,7 +102,7 @@
                                         </div>
                                             
                                             
-                                             <div class="col-md-6">
+                                        <div class="col-md-6">
                                             <div class="form-group ">
                                                 <label for="status"><span>*</span> Status</label>
 												<select name="status" id="status" class="form-control" required>
@@ -117,13 +114,13 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="pull-right">
                                         <button type="submit" class="btn btn-primary" name="btn_adduser" id="btn_adduser">Add</button>
                                         <a href="<?php echo base_url();?>backend/Users/manageUsers" class="btn btn-primary" >Cancel</a>
                                     </div>
-                                    </div>
-                                        
-                                
+                                </div>
+                                 
                             </div>
                         </div>
                         

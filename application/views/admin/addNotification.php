@@ -41,10 +41,9 @@
                                                 <div id="err_title" class="error_msg"></div>
                                             </div>
                                         </div>
-                              <div class="col-md-6" >
+                              			<div class="col-md-6" >
                                             <div class="form-group">
                                                 <label ><span>*</span>Notification Message</label>
-                                                
 												<textarea name="message" id="message" class="form-control" required ></textarea>
                                                 <div id="err_massage" class="error_msg"></div>
                                             </div>
@@ -71,15 +70,15 @@
                                             <div id="customerDiv">
 											<div class="form-group">
                                                 <label ><span>*</span>Customer</label>
-												<select name="user_ids[]" id="user_ids_cust" class="form-control" multiple>
+												<select name="user_ids[]" id="user_ids_cust" class="form-control select2" multiple>
 													<option value="">Select Users</option>
 													<option value="All">All</option>
 												<?php 
-										if(count($UserList) > 0) {
-												foreach($UserList as $user) { ?>
-										<option value="<?php echo $user['user_id']; ?>"><?php echo $user['full_name']; ?></option>		
-											<?php	}	
-											} ?>
+												if(count($UserList) > 0) {
+														foreach($UserList as $user) { ?>
+												<option value="<?php echo $user['user_id']; ?>"><?php echo $user['full_name']; ?></option>		
+												<?php	}	
+												} ?>
 												</select>
                                                 <div id="err_user" class="error_msg"></div>
                                             </div>
@@ -88,7 +87,7 @@
 											<div id="serviceproviderDiv">
 											<div class="form-group">
                                                 <label ><span>*</span>Service Provider</label>
-												<select name="user_ids[]" id="user_ids_sp" class="form-control" multiple>
+												<select name="user_ids[]" id="user_ids_sp" class="form-control select2" multiple>
 													<option value="">Select Users</option>
 													<option value="All">All</option>
 							<?php 
@@ -106,7 +105,7 @@
                               
                                     </div>
 											<div class="pull-right">
-						                            <button type="submit" class="btn btn-primary" name="btn_addnoti" id="btn_addnoti">Add</button>
+						                            <button type="submit" class="btn btn-primary" name="btn_addnotification" id="btn_addnoti">Add</button>
 													<a href="<?php echo base_url();?>backend/Notifications/manageNotifications" class="btn btn-primary" >Cancel</a>
                                             </div>
                                         </div>
