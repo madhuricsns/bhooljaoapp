@@ -25,7 +25,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 						<div class="card-header-right">
 						<div class="row">
 							<div class="col-lg-12">
-								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Booking/exportBookingCSV" style="float:right"><i class="fa fa-download"></i>Export CSV</a>
+								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Booking/exportBookingDemoCSV" style="float:right"><i class="fa fa-download"></i>Export CSV</a>
 							</div>
 							</div>
 						</div>	 
@@ -153,7 +153,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 							// } service_provider_id
 							?>
 
-<?php   if ($booking['booking_status']='waiting' && $booking['service_provider_id']<1) {
+<?php   if ($booking['booking_status']='waiting' && $booking['service_provider_id']<1  && $booking['booking_status']!='canceled') {
 	?>
 										<a href="<?php echo base_url();?>backend/Booking/AssingServiceProvider/<?php echo base64_encode($booking['booking_id']);?>" title="Assign Service Provider"><i data-feather="user-check"></i></a>
 <?php } else{}?>
@@ -164,7 +164,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 													<a href="<?php echo base_url();?>backend/Booking/viewBookingDetails/<?php echo base64_encode($booking['booking_id']);?>"><i data-feather="eye"></i>
 
 													</a>
-<?php   if ($booking['time_slot']<0) {
+<?php   if ($booking['time_slot']<0 && $booking['booking_status']!='canceled') {
 	?>
 										<a href="<?php echo base_url();?>backend/Booking/AssingDateTime/<?php echo base64_encode($booking['booking_id']);?>" title="Assign Time"><i data-feather="check-circle"></i></a>
 <?php } else{}?>														

@@ -86,7 +86,9 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 							           
 							        </select>&nbsp;&nbsp;
 
-							 <input type="date" name="datesearch"class="form-control col-sm-2" value="<?php echo $srchDate ?>"/>&nbsp;&nbsp;
+							        <!-- <input type="text" name="datesearch" class="date form-control col-sm-2 " minlength="4" maxlength="10" size="10" value="<?php echo $srchDate ?>"> -->
+					<input type="text" name="datesearch" id='minMaxExample' format="dd-mm-yyyy" class="date form-control col-sm-2 " placeholder="Search Date" value="<?php echo $srchDate ?>"/>
+					&nbsp;&nbsp;
 							  
 							       
 							        	
@@ -166,7 +168,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 							// } service_provider_id
 							?>
 
-<?php   if ($booking['booking_status']='waiting' && $booking['service_provider_id']<1) {
+<?php   if ($booking['booking_status']='waiting' && $booking['service_provider_id']<1 && $booking['booking_status']!='canceled') {
 	?>
 										<a href="<?php echo base_url();?>backend/Booking/AssingServiceProvider/<?php echo base64_encode($booking['booking_id']);?>" title="Assign Service Provider"><i data-feather="user-check"></i></a>
 <?php } else{}?>
@@ -203,3 +205,11 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 	 
 	
 </div>
+<script type="text/javascript">
+	<script> 
+        $(function() { 
+            $("#my_date_picker").datepicker({ 
+                defaultDate:"09/22/2019" 
+            }); 
+        }); 
+    </script> 

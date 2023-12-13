@@ -583,4 +583,208 @@ public function viewBookingDetails()
 	}
 
 
+public function exportBookingCSV()
+	{
+		$this->load->helper('download');
+      $data['error']=$data['success']="";
+		$todaysdate=date('d-M-YHi');
+		
+		// $data['session_from_date'] = $this->session->userdata('session_from_date');		
+		// $data['session_to_date'] = $this->session->userdata('session_to_date');		
+		// $input_data = array(
+		// 	'from_date'=> $data['session_from_date'] ?? ''	,
+		// 	'to_date'=>$data['session_to_date'] ?? '');
+		
+		$array[] = array('','','Bhooljao - Export CSV For Booking','','','');
+		
+		$i=1;
+
+		$data['bookingList']=$bookingList=$this->Booking_model->getAllBooking(1,"","");
+
+		$people = array('Sr.','Order No','Booking Date','Time','Duration','Service Name','Customer','Service Provider','Status');
+		$array[] =$people;
+
+	   	if(isset($bookingList) && count($bookingList)>0)
+		{  	
+			foreach($bookingList as $g)
+			{    
+				 if($g['service_provider_id']>0 ){
+				$user=$this->Booking_model->getServiceproviderDetails($g['service_provider_id'],1); 
+												
+												if(isset($user[0]['full_name'])) ;
+												
+												} else { 
+											//	echo "---";
+												}
+				 $g['booking_date']= new DateTime($g['booking_date']);
+             $g['booking_date']=$g['booking_date']->format('d-M-Y');
+
+
+				$order_no =$g['order_no'];
+				$booking_date=$g['booking_date'];
+				$time_slot=$g['time_slot'];
+				$duration=$g['duration'];
+				$category_name=$g['category_name'];
+				$full_name=$g['full_name'];
+				$sp=$user[0]['full_name'];
+				
+												
+												
+												
+				$status=$g['booking_status'];
+				
+				// echo "<pre>";print_r($sp); exit;
+				if(is_array($people) &&count($people)> 0){
+					foreach ($people as $key => $peopledtls) {
+						$strDtlVal = $peopledtls;
+						switch ($peopledtls) {
+							case 'Sr.':
+								$strDtlVal = $i;
+								break;
+							case 'Order No':
+								$strDtlVal = $order_no;
+								break;
+							case 'Booking Date':
+								$strDtlVal = $booking_date;
+								break;
+							case 'Time':
+								$strDtlVal = $time_slot;
+								break;
+							case 'Duration':
+								$strDtlVal = $duration;
+								break;
+							case 'Service Name':
+								$strDtlVal = $category_name;
+								break;
+							case 'Customer':
+								$strDtlVal = $full_name;
+								break;
+							case 'Service Provider':
+								$strDtlVal = $sp;
+								break;
+							case 'Status':
+								$strDtlVal = $status;
+								break;
+						}
+						
+						$arrayCSV[$peopledtls]=$strDtlVal;
+					}
+				}
+				$array[] = $arrayCSV;
+				$i++;
+			}
+			// echo"<pre>";
+			// 		print_r($array);
+			// 		exit();
+		}
+		  $this->load->helper('csv');
+		  $csvname = 'BookingListExport'.$todaysdate.'.csv';
+		  array_to_csv($array,$csvname);
+		  $data['success']= "download sample export data successfully!";
+	}
+
+//<--------------------------< exportBookingDemoCSV >------------------------------------------------->
+
+	public function exportBookingDemoCSV()
+	{
+		$this->load->helper('download');
+      $data['error']=$data['success']="";
+		$todaysdate=date('d-M-YHi');
+		
+		// $data['session_from_date'] = $this->session->userdata('session_from_date');		
+		// $data['session_to_date'] = $this->session->userdata('session_to_date');		
+		// $input_data = array(
+		// 	'from_date'=> $data['session_from_date'] ?? ''	,
+		// 	'to_date'=>$data['session_to_date'] ?? '');
+		
+		$array[] = array('','','Bhooljao - Export CSV For Booking-Demo','','','');
+		
+		$i=1;
+
+		$data['bookingdemoList']=$bookingdemoList=$this->Booking_model->getAllBookingDemo(1,"","");
+
+		$people = array('Sr.','Order No','Booking Date','Time','Duration','Service Name','Customer','Service Provider','Status');
+		$array[] =$people;
+
+	   	if(isset($bookingdemoList) && count($bookingdemoList)>0)
+		{  	
+			foreach($bookingdemoList as $g)
+			{    
+				 if($g['service_provider_id']>0 ){
+				$user=$this->Booking_model->getServiceproviderDetails($g['service_provider_id'],1); 
+												
+												if(isset($user[0]['full_name'])) ;
+												
+												} else { 
+											//	echo "---";
+												}
+				 $g['booking_date']= new DateTime($g['booking_date']);
+             $g['booking_date']=$g['booking_date']->format('d-M-Y');
+
+
+				$order_no =$g['order_no'];
+				$booking_date=$g['booking_date'];
+				$time_slot=$g['time_slot'];
+				$duration=$g['duration'];
+				$category_name=$g['category_name'];
+				$full_name=$g['full_name'];
+				$sp=$user[0]['full_name'];
+				
+												
+												
+												
+				$status=$g['booking_status'];
+				
+				// echo "<pre>";print_r($sp); exit;
+				if(is_array($people) &&count($people)> 0){
+					foreach ($people as $key => $peopledtls) {
+						$strDtlVal = $peopledtls;
+						switch ($peopledtls) {
+							case 'Sr.':
+								$strDtlVal = $i;
+								break;
+							case 'Order No':
+								$strDtlVal = $order_no;
+								break;
+							case 'Booking Date':
+								$strDtlVal = $booking_date;
+								break;
+							case 'Time':
+								$strDtlVal = $time_slot;
+								break;
+							case 'Duration':
+								$strDtlVal = $duration;
+								break;
+							case 'Service Name':
+								$strDtlVal = $category_name;
+								break;
+							case 'Customer':
+								$strDtlVal = $full_name;
+								break;
+							case 'Service Provider':
+								$strDtlVal = $sp;
+								break;
+							case 'Status':
+								$strDtlVal = $status;
+								break;
+						}
+						
+						$arrayCSV[$peopledtls]=$strDtlVal;
+					}
+				}
+				$array[] = $arrayCSV;
+				$i++;
+			}
+			// echo"<pre>";
+			// 		print_r($array);
+			// 		exit();
+		}
+		  $this->load->helper('csv');
+		  $csvname = 'BookingDemoListExport'.$todaysdate.'.csv';
+		  array_to_csv($array,$csvname);
+		  $data['success']= "download sample export data successfully!";
+	}
+
+
+
 }
