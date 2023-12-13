@@ -43,6 +43,7 @@ Class Category_model extends CI_Model {
 	public function getAllCategory($res,$per_page,$page)
 	{
 		$this->db->select('*');
+		$this->db->where('category_parent_id','0');
 		$this->db->order_by('category_id','DESC');
 		if($per_page!="")
 		{
