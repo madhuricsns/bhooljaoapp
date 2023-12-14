@@ -21,11 +21,11 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 			<div class="col-sm-12">
 				<div class="card">
 					<div class="card-header">
-						<h5>DEMO-BOOKINGS </h5>			
+						<h5>BOOKINGS </h5>			
 						<div class="card-header-right">
 						<div class="row">
 							<div class="col-lg-12">
-								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Booking/exportBookingDemoCSV" style="float:right"><i class="fa fa-download"></i>Export CSV</a>
+								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Booking/exportBookingCSV" style="float:right"><i class="fa fa-download"></i>Export CSV</a>
 							</div>
 							</div>
 						</div>	 
@@ -53,32 +53,44 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 
 
 
-						 <form method="get">
+						 <form method="POST" action="<?php echo base_url().'backend/Booking/search_list/'; ?><?php if($this->uri->segment(4)!=""){ echo $this->uri->segment(4);}?>/
+		<?php if($this->uri->segment(5)!=""){ echo $this->uri->segment(5);}?>/
+		<?php if($this->uri->segment(6)!=""){ echo $this->uri->segment(6);}?>/">
+		<?php 
+		$srchDate = $srchStatus = '';
+		
+		if($this->uri->segment(4) != 'Na') { $srchStatus = $this->uri->segment(4); } 
+		
+		if($this->uri->segment(5) != 'Na') { 
+		$srchDate = $this->uri->segment(5);
+		//$date1 = new DateTime($srchDate);
+		//$srchDateFormatted = $date1->format('d-m-Y');
+		}
+		?>
 						 		 <div class="tab-content" >
 						                            <div class="tab-pane fade active show">
 						                                    <!-- <div class="row"> -->
 						                                        <div class="col-sm-12">
-						                                        	<label>Search</label>
+						                                        	<label for="Search">Search</label>
 						         <div class="form-group row">
 						            
 						            	
 
 								<select name="bookingstatus" id="bookingstatus"class="form-control col-sm-2">
 							            <option value="">All</option>
-							            <option value="waiting">Waiting</option>
-							            <option value="accepted">Accepted</option>
-							            <option value="ongoing">Ongoing</option>
-							            <option value="completed">Completed</option>
+							            <option value="waiting" <?php if($srchStatus == 'waiting') echo 'selected';?> >Waiting</option>
+							            <option value="accepted" <?php if($srchStatus == 'accepted') echo 'selected';?>>Accepted</option>
+							            <option value="ongoing" <?php if($srchStatus == 'ongoing') echo 'selected';?>>Ongoing</option>
+							            <option value="completed" <?php if($srchStatus == 'completed') echo 'selected';?>>Completed</option>
+										<option value="canceled" <?php if($srchStatus == 'canceled') echo 'selected';?>>Canceled</option>
 							           
 							        </select>&nbsp;&nbsp;
 
-							 <input type="date" name="datesearch"class="form-control col-sm-2" value="<?php if(isset($datesearch)) echo $datesearch; ?>"/>&nbsp;&nbsp;
+							 <input type="date" onchange="maxLengthCheck(this)" name="datesearch" class="dateinput form-control col-sm-2" value="<?php echo $srchDate ?>"/>&nbsp;&nbsp;
 							  
-							       
-							        	
-							        	
-							        <button type="submit" class="btn btn-outline-success" name="Search" id="Search"><span><i class="fa fa-search"></i><span></button>&nbsp;&nbsp;
-							        <a href="<?php echo base_url();?>backend/Booking/manageBookingDemo" class="btn btn-outline-secondary" ><span><i class="fa fa-remove"></i></span></a>
+							
+							        <button type="submit" class="btn btn-outline-success" name="Search" id="Search"value="search" /><span><i class="fa fa-search"></i><span></button>&nbsp;&nbsp;
+							        <a href="<?php echo base_url();?>backend/Booking/manageBooking" class="btn btn-outline-secondary" ><span><i class="fa fa-remove"></i></span></a>
 							    
 							    
 							    </div>
@@ -94,7 +106,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 
 						<div class="table-responsive">
 							<div id="basicScenario" class="product-physical"></div>
-							<?php if($bookingdemocnt > 0)	{ ?>
+							<?php if($bookingcnt > 0)	{ ?>
 								<table class="table table-bordered table-striped mb-0" id="datatable-default">
 									<thead>
 										<tr>
@@ -102,6 +114,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 											<th>Order No</th>
 											<th>Booking Date</th>
 											<th>Time</th>
+											<th>Duration</th>
 											<th>Service Name</th>
 											<th>Customer</th>
 											<th>Service Provider</th>
@@ -110,21 +123,19 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 										</tr>
 									</thead>	
 									<tbody>			
-										<?php $i=1;
-										foreach($bookingDemoList as $booking)
+										<?php 
+										$i=1;
+										foreach($bookingList as $booking)
 										{
-											if($booking['booking_date'] != '0000-00-00') {
                                              $booking['booking_date']= new DateTime($booking['booking_date']);
-                                            $booking['booking_date']=$booking['booking_date']->format('d-M-Y'); }
-											else {
-												$booking['booking_date'] = '---';
-											}
+                                            $booking['booking_date']=$booking['booking_date']->format('d-M-Y');
 											?>		
 										<tr>
 												
 												<td><?php echo $booking['order_no'];?></td> 
 												<td><?php echo $booking['booking_date'];?></td>
 												<td><?php echo $booking['time_slot'];?></td>
+												<td><?php echo $booking['duration'];?></td>
 												<td><?php echo $booking['category_name'];?></td>
 												<td><?php echo $booking['full_name'];?></td>
 												<td><?php if($booking['service_provider_id']>0 ){
@@ -138,17 +149,12 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<td><?php echo $booking['booking_status'];?></td>
 												<td class="actions">
 							
-
-									<?php   if ($booking['booking_status']=='waiting' && $booking['service_provider_id']<1) {
-										?>
-										<a href="<?php echo base_url();?>backend/Booking/AssingServiceProvider/<?php echo base64_encode($booking['booking_id']);?>" title="Assign Service Provider"><i data-feather="user-check"></i></a>
-									<?php } else{}?>
-													<a href="<?php echo base_url();?>backend/Booking/viewBookingDetails/<?php echo base64_encode($booking['booking_id']);?>"><i data-feather="eye"></i>
-													</a>
-										<?php   if ($booking['time_slot']<0 && $booking['booking_status']!='canceled') {
-											?>
-										<a href="<?php echo base_url();?>backend/Booking/AssingDateTime/<?php echo base64_encode($booking['booking_id']);?>" title="Assign Time"><i data-feather="check-circle"></i></a>
-										<?php } else{}?>														
+												<?php if($booking['booking_status']=='waiting' &&  $booking['service_provider_id']=='0') {
+													?>
+													<a href="<?php echo base_url();?>backend/Booking/AssingServiceProvider/<?php echo base64_encode($booking['booking_id']);?>" title="Assign Service Provider"><i data-feather="user-check"></i></a>
+												<?php } else{}?>
+													<a href="<?php echo base_url();?>backend/Booking/viewBookingDetails/<?php echo base64_encode($booking['booking_id']);?>"><i data-feather="eye"></i></a>
+														
 
 											</td>				
 											</tr>											

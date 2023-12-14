@@ -282,4 +282,15 @@ Class User_model extends CI_Model {
 			return $result->num_rows();
 
 	}
+
+	public function getReviews($user_id)
+	{
+		$this->db->select('r.*,u.user_id,u.full_name,u.profile_pic');
+		$this->db->from(TBLPREFIX.'review r');
+		$this->db->where('r.service_provider_id',$user_id);
+		$this->db->join(TBLPREFIX.'users as u','u.user_id =r.user_id','left');
+		$this->db->order_by('r.review_id','desc');
+		$this->db->limit(2);
+		return $this->db->get()->result_array();			
+	}
 }

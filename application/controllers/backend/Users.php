@@ -890,7 +890,55 @@ public function viewServiceProviderDetails()
 		$data['bookingList']=$this->User_model->getAllServiceBooking($user_id,1,"","");
 		$data['zoneList']=$this->User_model->getAllzone(1,"","");
 		$data['categoryList']=$this->User_model->getAllCategory(1,"","");
+		//  Review
+		$arrReviews=$this->User_model->getReviews($user_id);
+		//echo $this->db->last_query();
+		$star1=$star2=$star3=$star4=$star5=$rowCount=$average=$percent=0;
+		foreach($arrReviews as $key=>$review)
+		{
+			$reviewdate = new DateTime($review['dateadded']);
+			$review['dateadded'] = $reviewdate->format('d M Y');
+
+			if($review['rating']=='1')
+			{
+				$star1+=$review['rating'];
+			}
+			if($review['rating']=='2')
+			{
+				$star2+=$review['rating'];
+			}
+			if($review['rating']=='3')
+			{
+				$star3+=$review['rating'];
+			}
+			if($review['rating']=='4')
+			{
+				$star4+=$review['rating'];
+			}
+			if($review['rating']=='5')
+			{
+				$star5+=$review['rating'];
+			}
+			$arrReviews[$key]=$review;
+		}
+		$data['star1']=$star1;
+		$data['star2']=$star2;
+		$data['star3']=$star3;
+		$data['star4']=$star4;
+		$data['star5']=$star5;
+		$tot_stars = $star1 + $star2 + $star3 + $star4 + $star5;
+		$reviewCount=count($arrReviews);
+		if($tot_stars>0)
+		{
+			$average = $tot_stars/$reviewCount;
+		}
+		$data['rating_avg']=$average;
+		$data['total_rating']=$reviewCount;
+		//End Review & Rating Count
 		
+
+
+
 		$this->load->view('admin/admin_header',$data);
 		$this->load->view('admin/viewServiceProviderDetails',$data);
 		$this->load->view('admin/admin_footer');

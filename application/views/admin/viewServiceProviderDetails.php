@@ -60,6 +60,55 @@
 				                                            <tr>
 				                                                <td><i class="fa fa-list-alt"> Category :-</i> <?php echo $userinfo[0]['category_name'];?></td>
 				                                            </tr>
+															<style>.checked {  color: orange;} .unchecked {  color: gray;}
+															/* The bar container */
+																.bar-container {
+																width: 100%;
+																/* background-color: #f1f1f1; */
+																/* text-align: center; */
+																/* color: white; */
+																}
+																.bar-container-label {
+																width: 20%;
+																float: left;
+																height: 15px ;
+																}
+																.bar-container-rating {
+																width: 80%;
+																background-color: #f1f1f1;
+																text-align: center;
+																color: white;
+																float: right;
+																height: 15px 
+																}
+															</style>
+															<tr>
+				                                                <td><span style="background-color: #1fed1f;padding: 3px;"><?php echo $rating_avg;?></span>
+																<?php if($rating_avg==0) { ?> 
+																<i class="fa fa-star unchecked"></i><i class="fa fa-star unchecked"></i><i class="fa fa-star unchecked"> </i><i class="fa fa-star unchecked"> </i><i class="fa fa-star unchecked"> </i>
+																<?php } if($rating_avg>=1 && $rating_avg<2) { ?> 
+																<i class="fa fa-star checked"></i> <i class="fa fa-star "></i><i class="fa fa-star unchecked"> </i><i class="fa fa-star unchecked"> </i><i class="fa fa-star unchecked"> </i>
+																<?php } if($rating_avg>=2 && $rating_avg<3) { ?>
+																	<i class="fa fa-star checked"> </i><i class="fa fa-star checked"> </i><i class="fa fa-star unchecked"> </i><i class="fa fa-star unchecked"> </i><i class="fa fa-star unchecked"> </i>
+																<?php } if($rating_avg>=3 && $rating_avg<4) {?>
+																	<i class="fa fa-star checked"> </i><i class="fa fa-star checked"> </i><i class="fa fa-star checked"> </i><i class="fa fa-star unchecked"> </i><i class="fa fa-star unchecked"> </i>
+																<?php } if($rating_avg>=4 && $rating_avg<5) {?>
+																	<i class="fa fa-star checked"> </i><i class="fa fa-star checked"> </i><i class="fa fa-star checked"> </i><i class="fa fa-star checked"> </i><i class="fa fa-star unchecked"></i>
+																<?php } if($rating_avg>=5 ) {?>
+																	<i class="fa fa-star checked"> </i><i class="fa fa-star checked"> </i><i class="fa fa-star checked"> </i><i class="fa fa-star checked"> </i><i class="fa fa-star checked"> </i>
+																<?php } ?>
+																<?php echo $total_rating;?> Rating
+																<br><br>
+																<div class="bar-container"><div class="bar-container-label">5 Star</div><div class="bar-container-rating"><div style="width:<?php echo $star5;?>%;height: 15px ; background-color: #04AA6D;">&nbsp;</div></div></div><br>
+																<div class="bar-container"><div class="bar-container-label">4 Star</div><div class="bar-container-rating"><div style="width:<?php echo $star4;?>%;height: 15px ; background-color: #2196F3;">&nbsp;</div></div></div><br>
+																<div class="bar-container"><div class="bar-container-label">3 Star</div><div class="bar-container-rating"><div style="width:<?php echo $star3;?>%;height: 15px ; background-color: #00bcd4;">&nbsp;</div></div></div><br>
+																<div class="bar-container"><div class="bar-container-label">2 Star</div><div class="bar-container-rating"><div style="width:<?php echo $star2;?>%;height: 15px ; background-color: #ff9800;">&nbsp;</div></div></div><br>
+																<div class="bar-container"><div class="bar-container-label">1 Star</div><div class="bar-container-rating"><div style="width:<?php echo $star1;?>%;height: 15px ; background-color: #f44336;">&nbsp;</div></div></div>
+															
+																</td>
+
+				                                            </tr>
+															
 
 				                                        </tbody>
 				                                    </table>
