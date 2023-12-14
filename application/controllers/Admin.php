@@ -6,6 +6,7 @@ class Admin extends CI_Controller {
 		 parent::__construct();
 		 $this->load->model('Admin_model');
 		 $this->load->library("pagination");
+		 $this->load->model('Common_Model');
 		 if(! $this->session->userdata('logged_in'))
 		 {
 			redirect('Login', 'refresh');
@@ -311,11 +312,20 @@ class Admin extends CI_Controller {
 					
 					
 					//$strUserType = "Admin";	
-					
-					$latlong=$this->get_lat_long($admin_address);
-						$parts=explode(",",$latlong);
-						$address_lat=$parts[0];
-						$address_long=$parts[1];
+					$latitude = $longitude = '';
+					if($address != '')
+					{
+						$latlngarr = $this->Common_Model->get_lat_long($address);
+						if(isset($latlngarr))
+						{
+						  $latitude=$latlngarr['latitude'];
+						  $longitude=$latlngarr['longitude'];
+						}
+					}
+					// $latlong=$this->Common_Model->get_lat_long($admin_address);
+					// 	$parts=explode(",",$latlong);
+					// 	$address_lat=$parts[0];
+					// 	$address_long=$parts[1];
 						
 					$input_data=array(
 										'admin_name'=>$admin_name,
@@ -325,8 +335,8 @@ class Admin extends CI_Controller {
 										'mobile_number'=>$mobile_number,
 										//'user_type'=>$strUserType,
 										'status'=>$status,
-										'address_lat'=>$address_lat,
-										'address_long'=>$address_long,
+										'address_lat'=>$latitude,
+										'address_long'=>$longitude,
 										'dateupdated'=>date('Y-m-d H:i:s')
 									);
 					if($_POST['admin_password']!= "")
@@ -340,20 +350,20 @@ class Admin extends CI_Controller {
 					if($retid)
 					{
 						$this->session->set_flashdata('success','Record updated successfully.');
-						redirect(base_url().'backend/Admin/updateprofile');
+						redirect(base_url().'Admin/updateprofile');
 					}
 					else
 					{
 						$data['adminInfo'] = $_POST;
 						$this->session->set_flashdata('error','Error while updating record.');
-						redirect(base_url().'backend/Admin/updateprofile');
+						redirect(base_url().'Admin/updateprofile');
 					}
 				}
 				else
 				{
 					$data['adminInfo'] = $_POST;
 					$this->session->set_flashdata('error',$this->form_validation->error_string());
-					redirect(base_url().'backend/Admin/updateprofile');
+					redirect(base_url().'Admin/updateprofile');
 				}
 			}
 			$this->load->view('admin/admin_header',$data);		
