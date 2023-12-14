@@ -87,7 +87,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 							        </select>&nbsp;&nbsp;
 
 							        <!-- <input type="text" name="datesearch" class="date form-control col-sm-2 " minlength="4" maxlength="10" size="10" value="<?php echo $srchDate ?>"> -->
-					<input type="date" name="datesearch" id='' format="dd-mm-yyyy" class="date form-control col-sm-2 "  value="<?php echo $srchDate ?>"/>
+					<input type="date" name="datesearch" id='' max="1979-12-31" class="date form-control col-sm-2 "  value="<?php echo $srchDate ?>"/>
 					&nbsp;&nbsp;
 							  
 							       

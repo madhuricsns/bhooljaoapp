@@ -62,7 +62,7 @@
 											
 											<div class="form-group row">
                                                 <label for="mobile_number" class="col-xl-3 col-md-4"><span>*</span>Mobile Number</label>
-                                                <input class="form-control col-xl-4 col-md-4" id="mobile_number" type="text" required="" name="mobile_number" placeholder="Enter mobile number" value="<?php echo $adminInfo[0]['mobile_number']?>">
+                                                <input class="form-control col-xl-4 col-md-4" type="tel" name="mobile_number" id="mobile_number" class="form-control" pattern="[0-9]{10}" required=""  maxlength="10" value="<?php echo $adminInfo[0]['mobile_number']?>">
                                             </div>
 											
 											<div class="form-group row">
@@ -85,8 +85,7 @@
                                     <button type="submit" class="btn btn-primary"  name="btn_updateprofile" id="btn_updateprofile">
 									Update</button>
 									
-									   <button type="reset" class="btn btn-primary"  name="btn_resetprofile" id="btn_resetprofile">
-									Cancel</button>
+									    <a href="<?php echo base_url();?>backend/dashboard" class="btn btn-primary" >Cancel</a>
                                 </div></form>
                             </div>
                         </div>

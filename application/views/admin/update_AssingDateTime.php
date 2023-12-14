@@ -59,7 +59,7 @@
                                              $booking['booking_date']= new DateTime($booking['booking_date']);
                                             $booking['booking_date']=$booking['booking_date']->format('d-M-Y');
 											?>		
-                                                <input type="text" class="form-control " readonly id="servicefile" value="<?php echo $booking['booking_date'];?>" >
+                                                <input type="text" class="form-control " max="1979-12-31" id="servicefile" value="<?php echo $booking['booking_date'];?>" >
 												<?php }?>
                                             </div>
                                         </div>
