@@ -541,14 +541,13 @@ $('#btn_addmaterial').click(function(){
 /* end add material */
 
 $('#btn_addPromocode').click(function(){ 
-	alert();
+	// alert();
 	// var service_id=$("#service_id").val();
 	var promocode_code=$("#promocode_code").val();
 	var promocode_description=$("#promocode_description").val();
 	var promocode_discount=$("#promocode_discount").val();
 	var promocode_type=$("#promocode_type").val();
 	var status=$("#status").val();
-	
 	
 	// $("#err_service_id").html('');
 	$("#err_promocode_code").html('');
@@ -686,12 +685,13 @@ $('#btn_addsp').click(function(){
 	var address=$("#address").val();
 	var experience=$("#experience").val();
 	var mobile_number=$("#mobile_number").val(); 
-	var gender=$("#gender").val();
+	var gender=$("input[name='gender']:checked").val();
 	var zone_id=$("#zone_id").val();
 	var category_id=$("#category_id").val();
-	var daily_report=$("#daily_report").val();
-
+	var is_verified=$("#is_verified").val();
 	var status=$("#status").val();
+
+	var profile_photo=$('#servicefile')[0].files.length;
 
 	$("#err_servicefile").html('');
 	$("#err_full_name").html('');
@@ -703,13 +703,14 @@ $('#btn_addsp').click(function(){
 	$("#err_gender").html('');
 	$("#err_zone_id").html('');
 	$("#err_category_id").html('');
-	$("#err_daily_report").html('');
+	$("#err_is_verified").html('');
 	$("#err_status").html('');
+	$("#err_profile_photo").html('');
 	var flag=1;
 	
-	if(servicefile=="")
+	if(profile_photo==0)
 	{
-		$("#err_servicefile").html('Choose your profile.');
+		$("#err_profile_photo").html('Choose your profile.');
 		flag=0;
 	}
 	if(full_name=="")
@@ -728,22 +729,23 @@ $('#btn_addsp').click(function(){
 		flag=0;
 	}
 	if(mobile_number=="")
-			{
-				$("#err_mobile_number").html('Enter mobile number.');
-				flag=0;
-			}
-			if(mobile_number!="" &&  mobile_number.length!=10)
-			{
-				$("#err_mobile_number").html('Please enter valid contact number of 10 digit.');
-				flag=0;
-			}
-			if(mobile_number!="" && isNaN(mobile_number))
-			{
-				$("#err_mobile_number").html('Please enter valid mobile number.');
-				flag=0;
-			}
-	if(gender=="")
 	{
+		$("#err_mobile_number").html('Enter mobile number.');
+		flag=0;
+	}
+	if(mobile_number!="" &&  mobile_number.length!=10)
+	{
+		$("#err_mobile_number").html('Please enter valid contact number of 10 digit.');
+		flag=0;
+	}
+	if(mobile_number!="" && isNaN(mobile_number))
+	{
+		$("#err_mobile_number").html('Please enter valid mobile number.');
+		flag=0;
+	}
+	if(gender==undefined)
+	{
+		// alert();
 		$("#err_gender").html('Select gender.');
 		flag=0;
 	}
@@ -772,6 +774,11 @@ $('#btn_addsp').click(function(){
 		$("#err_status").html('Please select status.');
 		flag=0;
 	}
+	if(is_verified=="")
+	{
+		$("#err_is_verified").html('Please select is verified.');
+		flag=0;
+	}
 	
 	if(flag==1)
 	{
@@ -786,19 +793,21 @@ $('#btn_addsp').click(function(){
 
 /* valdiation for Add  Users */
 $('#btn_adduser').click(function(){
+	alert();
 	var full_name=$("#full_name").val();
 	var servicefile=$("#servicefile").val();
 	var email_address=$("#email_address").val();
 	var password=$("#password").val();
 	var address=$("#address").val();
 	var mobile_number=$("#mobile_number").val(); 
-	var gender=$("#gender").val();
+	var gender=$("input[name='gender']:checked").val();
 	var zone_id=$("#zone_id").val();
 	var daily_report=$("#daily_report").val();
 
 	var status=$("#status").val();
+	var profile_photo=$('#servicefile')[0].files.length;
 
-	$("#err_servicefile").html('');
+	$("#err_profile_photo").html('');
 	$("#err_full_name").html('');
 	$("#err_email_address").html('');
 	$("#err_password").html('');
@@ -810,9 +819,9 @@ $('#btn_adduser').click(function(){
 	$("#err_status").html('');
 	var flag=1;
 	
-	if(servicefile=="")
+	if(profile_photo=="")
 	{
-		$("#err_servicefile").html('Choose your profile.');
+		$("#err_profile_photo").html('Choose your profile.');
 		flag=0;
 	}
 	if(full_name=="")
@@ -831,21 +840,21 @@ $('#btn_adduser').click(function(){
 		flag=0;
 	}
 	if(mobile_number=="")
-			{
-				$("#err_mobile_number").html('Enter mobile number.');
-				flag=0;
-			}
-			if(mobile_number!="" &&  mobile_number.length!=10)
-			{
-				$("#err_mobile_number").html('Please enter valid contact number of 10 digit.');
-				flag=0;
-			}
-			if(mobile_number!="" && isNaN(mobile_number))
-			{
-				$("#err_mobile_number").html('Please enter valid mobile number.');
-				flag=0;
-			}
-	if(gender=="")
+	{
+		$("#err_mobile_number").html('Enter mobile number.');
+		flag=0;
+	}
+	if(mobile_number!="" &&  mobile_number.length!=10)
+	{
+		$("#err_mobile_number").html('Please enter valid contact number of 10 digit.');
+		flag=0;
+	}
+	if(mobile_number!="" && isNaN(mobile_number))
+	{
+		$("#err_mobile_number").html('Please enter valid mobile number.');
+		flag=0;
+	}
+	if(gender==undefined)
 	{
 		$("#err_gender").html('Select gender.');
 		flag=0;
@@ -1040,6 +1049,7 @@ $('#btn_addService').click(function(){
 
 /* valdiation for add Service */
 $('#btn_uptuser').click(function(){
+	
 	var category=$("#category").val();
 	var service_name=$("#service_name").val();
 	var description=$("#description").val();

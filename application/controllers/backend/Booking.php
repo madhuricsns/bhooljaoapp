@@ -533,11 +533,11 @@ public function viewBookingDetails()
 
 					if($this->form_validation->run())
 					{
+						$bookingdate=$this->input->post('bookingdate');
 						$assingtime=$this->input->post('assingtime');
 						
-						
-							
 						$input_data = array(
+                            'booking_date'=>$bookingdate,
                             'time_slot'=>$assingtime,
 							'admin_demo_accept' => 'Yes'
                          );
@@ -632,9 +632,7 @@ public function exportBookingCSV()
 				$full_name=$g['full_name'];
 				$sp=$sp_name;
 				
-												
-												
-												
+											
 				$status=$g['booking_status'];
 				
 				// echo "<pre>";print_r($sp); exit;
@@ -717,11 +715,11 @@ public function exportBookingCSV()
 				 if($g['service_provider_id']>0 ){
 				$user=$this->Booking_model->getServiceproviderDetails($g['service_provider_id'],1); 
 												
-												if(isset($user[0]['full_name'])) ;
-												
-												} else { 
-											//	echo "---";
-												}
+				if(isset($user[0]['full_name'])) ;
+				
+				} else { 
+			//	echo "---";
+				}
 				 $g['booking_date']= new DateTime($g['booking_date']);
              $g['booking_date']=$g['booking_date']->format('d-M-Y');
 
