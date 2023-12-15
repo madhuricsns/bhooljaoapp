@@ -62,7 +62,7 @@ class Booking extends CI_Controller {
 		$config = array();
 		$config["base_url"] = base_url().'backend/Booking/manageBooking/'.$srchStatus.'/'.$srchDate;
 		$config['per_page'] = 10;
-		$config["uri_segment"] = 4;
+		$config["uri_segment"] = 6;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
 		$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
@@ -119,6 +119,26 @@ class Booking extends CI_Controller {
 			redirect('backend/Booking/manageBooking/'.$srchStatus.'/'.$srchDate);
 		}
 		redirect('backend/Booking/manageBooking', 'refresh');
+	}
+
+	public function searchdemo_list()
+	{
+		$srchStatus = $srchDate = 'Na';
+		
+		if(isset($_POST['Search']))
+		{
+			if($_POST['bookingstatus']!="")
+			{
+				$srchStatus=trim($_POST['bookingstatus']);
+			}
+			if($_POST['datesearch']!="")
+			{
+				$srchDate=trim($_POST['datesearch']);
+			}
+			
+			redirect('backend/Booking/manageBookingDemo/'.$srchStatus.'/'.$srchDate);
+		}
+		redirect('backend/Booking/manageBookingDemo', 'refresh');
 	}
 	
 	public function addMaterial()
@@ -201,6 +221,11 @@ class Booking extends CI_Controller {
 				
 				
 			$category_id = $data['bokingInfo'][0]['category_id'];
+			$categoryData=$this->Booking_model->getCategoryDetails($category_id);
+			if($categoryData->category_parent_id!=0)
+			{
+				$category_id=$categoryData->category_parent_id;
+			}
 			$data['usersList']=$this->Booking_model->getAllUsers(1,"","",$category_id);
 				if(isset($_POST['btn_upAssing']))
 				{
@@ -444,14 +469,45 @@ public function viewBookingDetails()
 	public function manageBookingDemo()
 	{
 		$data['title']='Manage Booking Demo';
-
+		$srchStatus = $srchDate = 'Na';
+		if($this->uri->segment(4)!='')
+		{
+			if($this->uri->segment(4)!="Na")
+			{
+				$srchStatus=($this->uri->segment(4));
+			}
+		}
 		
-		$data['bookingdemocnt']=$this->Booking_model->getAllBookingDemo(0,"","");
+		if($this->uri->segment(5)!='')
+		{
+			if($this->uri->segment(5)!="Na")
+			{
+				$srchDate=($this->uri->segment(5));
+			}
+		}
+		$filter=array();
+		//$date_filter=array();
+		  $selectedBookingstatus = $srchStatus;
+		
+		  $search_date = $srchDate;
+
+			if ($search_date != 'Na') {
+	            // If a category is selected, filter the records by that Booking
+	            $filter['datesearch']=$search_date;
+	           //  $data['datesearch']=$search_date;
+	        } 
+
+		  if ($selectedBookingstatus != 'Na') {
+            // If a category is selected, filter the records by that Booking
+            $filter['status']=$selectedBookingstatus;
+        } 
+		
+		$data['bookingdemocnt']=$this->Booking_model->getAllBookingDemo(0,"","",$filter);
 		
 		$config = array();
-		$config["base_url"] = base_url().'backend/Booking/manageBookingDemo/';
+		$config["base_url"] = base_url().'backend/Booking/manageBookingDemo/'.$srchStatus.'/'.$srchDate;;
 		$config['per_page'] = 10;
-		$config["uri_segment"] = 4;
+		$config["uri_segment"] = 6;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
 		$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
@@ -471,7 +527,7 @@ public function viewBookingDetails()
 		#echo "<pre>"; print_r($config); exit;
 		$this->pagination->initialize($config);
 				
-		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		$page = ($this->uri->segment(6)) ? $this->uri->segment(6) : 0;
 		$data["total_rows"] = $config["total_rows"]; 
 		$data["links"] = $this->pagination->create_links();
 		//echo "ConttPerPage--".$config["per_page"];
@@ -479,22 +535,22 @@ public function viewBookingDetails()
 		//exit();
 		//$data['bookingList']=$this->Booking_model->getAllBooking(1,$config["per_page"],$page);
 		// $data['Bookingstatus'] = $this->Booking_model->getBookingstatus();
-		$filter=array();
-		//$date_filter=array();
-		 $selectedBookingstatus = $this->input->get('bookingstatus');
+		// $filter=array();
+		// //$date_filter=array();
+		//  $selectedBookingstatus = $this->input->get('bookingstatus');
 		
-		  $search_date = $this->input->get('datesearch');
+		//   $search_date = $this->input->get('datesearch');
 
-			if ($search_date) {
-	            // If a category is selected, filter the records by that Booking
-	            $filter['datesearch']=$search_date;
-	           //  $data['datesearch']=$search_date;
-	        } 
+		// 	if ($search_date) {
+	    //         // If a category is selected, filter the records by that Booking
+	    //         $filter['datesearch']=$search_date;
+	    //        //  $data['datesearch']=$search_date;
+	    //     } 
 
-		  if ($selectedBookingstatus) {
-            // If a category is selected, filter the records by that Booking
-            $filter['status']=$selectedBookingstatus;
-        } 
+		//   if ($selectedBookingstatus) {
+        //     // If a category is selected, filter the records by that Booking
+        //     $filter['status']=$selectedBookingstatus;
+        // } 
 
            $data['bookingDemoList']=$this->Booking_model->getAllBookingDemo(1,$config["per_page"],$page,$filter);
       //   echo $this->db->last_query();
@@ -524,6 +580,11 @@ public function viewBookingDetails()
 				$data['bokingInfo'] = $this->Booking_model->getSingleBookingInfo($booking_id,1);
 				
 				$category_id = $data['bokingInfo'][0]['category_id'];
+				$categoryData=$this->Booking_model->getCategoryDetails($category_id);
+				if($categoryData->category_parent_id!=0)
+				{
+					$category_id=$categoryData->category_parent_id;
+				}
 				$data['usersList']=$this->Booking_model->getAllUsers(1,"","",$category_id);
 			
 				if(isset($_POST['btn_upAssing']))
