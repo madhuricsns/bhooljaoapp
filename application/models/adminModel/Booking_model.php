@@ -75,8 +75,17 @@ Class Booking_model extends CI_Model {
 		
 	}
 
+	public function getCategoryDetails($category_id)
+	{
+		$this->db->select('*');
+		$this->db->where('category_id',$category_id );
+		$query = $this->db->get(TBLPREFIX."category");
+		return $query->row();
+	}
 
- public function getBookingBystatus($booking_status) {
+
+ 	public function getBookingBystatus($booking_status) 
+	{
         // Query to fetch products by category
         $this->db->where('booking_status', $booking_status);
         $this->db->order_by('booking_id','DESC');
