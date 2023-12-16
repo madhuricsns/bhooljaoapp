@@ -216,10 +216,10 @@
                             </div>
                         </div>
 <?php if(count($workHistory) > 0) { ?>						
-						<div class="page-body">
+						<!-- <div class="page-body"> -->
 	
 	<!-- Container-fluid starts-->
-	<div class="container-fluid">
+	<!-- <div class="container-fluid"> -->
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="card">
@@ -280,20 +280,20 @@ echo $historydate; }?></td>
 				</div>
 			</div>
 		</div>
-	</div>
+	<!-- </div> -->
 	<!-- Container-fluid Ends-->
 	 
 	
-</div>
+<!-- </div> -->
 
 <?php } ?>
 
 
 <?php if(count($transactionHistory) > 0) { ?>						
-						<div class="page-body">
+						<!-- <div class="page-body"> -->
 	
 	<!-- Container-fluid starts-->
-	<div class="container-fluid">
+	<!-- <div class="container-fluid"> -->
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="card">
@@ -349,11 +349,11 @@ echo $historydate; }?></td>
 				</div>
 			</div>
 		</div>
-	</div>
+	<!-- </div> -->
 	<!-- Container-fluid Ends-->
 	 
 	
-</div>
+<!-- </div> -->
 
 <?php } ?>
 						
