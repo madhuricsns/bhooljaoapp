@@ -793,7 +793,7 @@ $('#btn_addsp').click(function(){
 
 /* valdiation for Add  Users */
 $('#btn_adduser').click(function(){
-	alert();
+	// alert();
 	var full_name=$("#full_name").val();
 	var servicefile=$("#servicefile").val();
 	var email_address=$("#email_address").val();
