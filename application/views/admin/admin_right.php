@@ -40,7 +40,7 @@ $session_subroles="";
 					<!--<li class=" <?php if($this->router->fetch_method()=='manageUsers'){?>nav-expanded nav-active <?php }?>">
 						<a class="sidebar-header" href="<?php //echo base_url("backend/");?>dashboard"><i data-feather="file-text"></i><span>ANALYTICS & REPORTS</span></a>                        
 					</li>-->
-					<li  <?php if($this->router->fetch_class()=='Booking' && $this->router->fetch_method()=='manageBooking'){ ?>class="nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
+					<li  <?php if($this->router->fetch_class()=='Booking' && $this->router->fetch_method()=='viewBookingDetails'){ ?>style="background-color: rgb(68 114 196);"<?php }?> class="<?php if($this->router->fetch_method()=='manageBooking' || $this->router->fetch_method()=='viewBookingDetails'){?> nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
 							{ 
 								if ($modulesId[1]['view'] == 'Yes') 
 								{ 
@@ -57,7 +57,7 @@ $session_subroles="";
 						<span>BOOKINGS </span></a>                        
 					</li>
 					
-					<li  <?php if($this->router->fetch_class()=='Booking' && $this->router->fetch_method()=='manageBookingDemo'){?>style="background-color: rgb(68 114 196);" class=" nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
+					<li  <?php if($this->router->fetch_class()=='Booking' && $this->router->fetch_method()=='viewBookingDemoDetails'){?>style="background-color: rgb(68 114 196);"<?php }?> class="<?php if($this->router->fetch_method()=='manageBookingDemo' || $this->router->fetch_method()=='viewBookingDemoDetails'){?> nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
 							{ 
 								if ($modulesId[1]['view'] == 'Yes') 
 								{ 
@@ -88,7 +88,7 @@ $session_subroles="";
 							?>>
 						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Users/manageUsers"><!-- <i data-feather="home"></i> --><img src="<?php echo base_url()."/uploads/flaticon/value.png"?>" style="max-height: 20px;max-width: 20px;">  &nbsp;&nbsp;<span>CUSTOMER</span></a>                        
 					</li>
-					<li  <?php if($this->router->fetch_class()=='Users/manageServiceProvider' || $this->router->fetch_class()=='Users/addServiceprovider' || $this->router->fetch_class()=='Users/updateServiceprovider'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageServiceProvider' || $this->router->fetch_method()=='addServiceprovider' || $this->router->fetch_method()=='updateServiceprovider'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
+					<li  <?php if($this->router->fetch_class()=='Users/manageServiceProvider' || $this->router->fetch_class()=='Users/addServiceprovider' || $this->router->fetch_class()=='Users/updateServiceprovider'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageServiceProvider' || $this->router->fetch_method()=='viewServiceProviderDetails' || $this->router->fetch_method()=='updateServiceprovider'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
 							{ 
 								if ($modulesId[1]['view'] == 'Yes') 
 								{ 

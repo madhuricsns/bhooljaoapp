@@ -58,7 +58,7 @@
 												//  $booking['booking_date']= new DateTime($booking['booking_date']);
 												// $booking['booking_date']=$booking['booking_date']->format('d-M-Y');
 												?>		
-													<input type="date" min="<?php echo date('Y-m-d');?>" onkeydown="return false" class="form-control" name="bookingdate"  id="servicefile" value="<?php echo $booking['booking_date'];?>" >
+													<input type="date" min="<?php echo date('Y-m-d');?>" onkeydown="return false" class="form-control" name="bookingdate"  id="servicefile" value="<?php echo $booking['booking_date'];?>" required>
 													<?php }?>
 												</div>
 											</div>

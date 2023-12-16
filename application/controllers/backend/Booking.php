@@ -466,6 +466,31 @@ public function viewBookingDetails()
 		$this->load->view('admin/admin_footer');
 	}
 
+	public function viewBookingDemoDetails()
+	{
+		$data['title']='Booking Details';
+	
+		$booking_id=base64_decode($this->uri->segment(4));
+        
+		$data['orderInfo']=$this->Booking_model->getSingleBookingInfo($booking_id,1);
+		
+		$data['serviceDetails'] = $this->Booking_model->getServiceDetails($booking_id);
+		
+		$data['servicePricing'] = $this->Booking_model->getServiceDetailsWOPricing($booking_id);
+		
+		$data['addressDetails'] = $this->Booking_model->getBookingAddressDetails($data['orderInfo'][0]['address_id']);
+		
+		$data['workHistory'] = $this->Booking_model->getBookingWorkHistory($booking_id);
+		
+		$data['transactionHistory'] = $this->Booking_model->getBookingTransactionHistory($booking_id);
+		
+		//echo $this->db->last_query();exit;
+		 $this->load->view('admin/admin_header',$data);
+		// $this->load->view('admin/addMaterial',$data);
+		$this->load->view('admin/viewBookingDetails',$data);
+		$this->load->view('admin/admin_footer');
+	}
+
 	public function manageBookingDemo()
 	{
 		$data['title']='Manage Booking Demo';

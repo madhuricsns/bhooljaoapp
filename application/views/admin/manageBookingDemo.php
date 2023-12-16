@@ -153,7 +153,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 										?>
 										<a href="<?php echo base_url();?>backend/Booking/AssingServiceProvider/<?php echo base64_encode($booking['booking_id']);?>" title="Assign Service Provider"><i data-feather="user-check"></i></a>
 									<?php } else{}?>
-													<a href="<?php echo base_url();?>backend/Booking/viewBookingDetails/<?php echo base64_encode($booking['booking_id']);?>"><i data-feather="eye"></i>
+													<a href="<?php echo base_url();?>backend/Booking/viewBookingDemoDetails/<?php echo base64_encode($booking['booking_id']);?>"><i data-feather="eye"></i>
 													</a>
 										<?php   if ($booking['time_slot']<0 && $booking['booking_status']!='canceled') {
 											?>
