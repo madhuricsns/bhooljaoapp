@@ -191,14 +191,14 @@ class Users extends CI_Controller {
 				{
 	
 			        $this->form_validation->set_rules('full_name','Full Name','required');
-			$this->form_validation->set_rules('email_address', 'Email Address', 'required|valid_email');
-			// $this->form_validation->set_rules('mobile_number', 'Mobile Number ', 'required'); //{10} for 10 digits number
-			// $this->form_validation->set_rules('zone_id','Zone Id','required');
-			//$this->form_validation->set_rules('password','Password','required');
-					$this->form_validation->set_rules('address', 'Address ', 'required');
-			$this->form_validation->set_rules('mobile_number', 'Mobile Number ', 'required|numeric|min_length[7]|max_length[13]'); //{10} for 10 digits number
-			$this->form_validation->set_rules('gender','Gender','required');
-			$this->form_validation->set_rules('status','Status','required');
+					$this->form_validation->set_rules('email_address', 'Email Address', 'required|valid_email');
+					// $this->form_validation->set_rules('mobile_number', 'Mobile Number ', 'required'); //{10} for 10 digits number
+					// $this->form_validation->set_rules('zone_id','Zone Id','required');
+					//$this->form_validation->set_rules('password','Password','required');
+							$this->form_validation->set_rules('address', 'Address ', 'required');
+					$this->form_validation->set_rules('mobile_number', 'Mobile Number ', 'required|numeric|min_length[7]|max_length[13]'); //{10} for 10 digits number
+					$this->form_validation->set_rules('gender','Gender','required');
+					$this->form_validation->set_rules('status','Status','required');
 
 					if($this->form_validation->run())
 					{
@@ -212,82 +212,91 @@ class Users extends CI_Controller {
 						$status=$this->input->post('status');
 				//$description=$this->input->post('description');
 					$servicefile='';
-				if($_FILES['servicefile'])
-				{
-					if($_FILES['servicefile']['name']!="")
+					if($_FILES['servicefile'])
 					{
-						$photo_imagename='';
-						$new_image_name = rand(1, 99999).$_FILES['servicefile']['name'];
-						$config = array(
-									'upload_path' => "uploads/user_profile/",
-									'allowed_types' => "gif|jpg|png|bmp|jpeg",
-									'max_size' => "0", 
-									'file_name' =>$new_image_name
-						);
-						$this->load->library('upload', $config);
-						if($this->upload->do_upload('servicefile'))
-						{ 
-							$imageDetailArray = $this->upload->data();								
-							$photo_imagename =  $imageDetailArray['file_name'];
-						}else
+						if($_FILES['servicefile']['name']!="")
 						{
-							$errorMsg = $this->upload->display_errors();
-							$this->session->set_flashdata('error',$errorMsg);
-							redirect(base_url().'backend/Users/manageUsers');
-
-						}
-						if($_FILES['servicefile']['error']==0)
-						{ 
-							$servicefile=$photo_imagename;
-						}
-					}
-				}	
-						
-				if($servicefile!="")
-					{
-						$input_data = array(
-							'profile_pic'=>$servicefile,
-							'full_name'=>trim($full_name),
-							'email'=>$email_address,
-							//'password'=>md5($password),
-							'gender'=>$gender,
-							'mobile'=>$mobile_number,
-							'address'=>$address,
-							'status'=>$status,
-							'user_type'=>'Customer',
-							'dateupdated' => date('Y-m-d H:i:s'),
+							$photo_imagename='';
+							$new_image_name = rand(1, 99999).$_FILES['servicefile']['name'];
+							$config = array(
+										'upload_path' => "uploads/user_profile/",
+										'allowed_types' => "gif|jpg|png|bmp|jpeg",
+										'max_size' => "0", 
+										'file_name' =>$new_image_name
 							);
-					}
-					else
-					{
-						$input_data = array(
-							'full_name'=>trim($full_name),
-							'email'=>$email_address,
-							//'password'=>md5($password),
-							'gender'=>$gender,
-							'mobile'=>$mobile_number,
-							'address'=>$address,
-							'status'=>$status,
-							'user_type'=>'Customer',
-							'dateupdated' => date('Y-m-d H:i:s'),
-							);
-					}
+							$this->load->library('upload', $config);
+							if($this->upload->do_upload('servicefile'))
+							{ 
+								$imageDetailArray = $this->upload->data();								
+								$photo_imagename =  $imageDetailArray['file_name'];
+							}else
+							{
+								$errorMsg = $this->upload->display_errors();
+								$this->session->set_flashdata('error',$errorMsg);
+								redirect(base_url().'backend/Users/manageUsers');
 
-
-						$userdata = $this->User_model->uptdateUser($input_data,$user_id);
-
-						if($userdata)
-						{	
-							$this->session->set_flashdata('success','Customer updated successfully.');
-
-							redirect(base_url().'backend/Users/manageUsers');	
+							}
+							if($_FILES['servicefile']['error']==0)
+							{ 
+								$servicefile=$photo_imagename;
+							}
+						}
+					}	
+							
+					if($servicefile!="")
+						{
+							$input_data = array(
+								'profile_pic'=>$servicefile,
+								'full_name'=>trim($full_name),
+								'email'=>$email_address,
+								//'password'=>md5($password),
+								'gender'=>$gender,
+								'mobile'=>$mobile_number,
+								'address'=>$address,
+								'status'=>$status,
+								'user_type'=>'Customer',
+								'dateupdated' => date('Y-m-d H:i:s'),
+								);
 						}
 						else
 						{
-							$this->session->set_flashdata('error','Error while updating User.');
+							$input_data = array(
+								'full_name'=>trim($full_name),
+								'email'=>$email_address,
+								//'password'=>md5($password),
+								'gender'=>$gender,
+								'mobile'=>$mobile_number,
+								'address'=>$address,
+								'status'=>$status,
+								'user_type'=>'Customer',
+								'dateupdated' => date('Y-m-d H:i:s'),
+								);
+						}
+
+						$UserdataFound = $this->User_model->checkuptdateUser($mobile_number,$user_id);
+						if($UserdataFound==0)
+						{
+							$userdata = $this->User_model->uptdateUser($input_data,$user_id);
+
+							if($userdata)
+							{	
+								$this->session->set_flashdata('success','Customer updated successfully.');
+
+								redirect(base_url().'backend/Users/manageUsers');	
+							}
+							else
+							{
+								$this->session->set_flashdata('error','Error while updating User.');
+
+								redirect(base_url().'backend/Users/updateUser/'.base64_encode($user_id));
+							}
+						}	
+						else
+						{
+							$this->session->set_flashdata('error','Mobile number already register.');
 
 							redirect(base_url().'backend/Users/updateUser/'.base64_encode($user_id));
-						}	
+						}
 					}
 					else
 					{
@@ -796,29 +805,40 @@ class Users extends CI_Controller {
 								);
 						}
 
-						$userdata = $this->User_model->uptdateUser($input_data,$user_id);
-
-						if($favourite_id>0)
+						$spdataFound = $this->User_model->checkuptdateSP($mobile_number,$user_id);
+						if($spdataFound==0)
 						{
-							$inputData=array('service_provider_id'=>$user_id,'is_verified'=>$is_verified,'dateupdated'=>date('Y-m-d H:i:s'));
-							// print_r($inputData);
-							$this->Common_Model->update_data('sp_favourite_verify','favourite_id',$favourite_id,$inputData);
-							// echo $this->db->last_query();
+							$userdata = $this->User_model->uptdateSP($input_data,$user_id);
+
+							if($favourite_id>0)
+							{
+								$inputData=array('service_provider_id'=>$user_id,'is_verified'=>$is_verified,'dateupdated'=>date('Y-m-d H:i:s'));
+								// print_r($inputData);
+								$this->Common_Model->update_data('sp_favourite_verify','favourite_id',$favourite_id,$inputData);
+								// echo $this->db->last_query();
+							}
+							else
+							{
+								$inputData=array('service_provider_id'=>$user_id,'is_verified'=>$is_verified,'dateadded'=>date('Y-m-d H:i:s'));
+								$this->Common_Model->insert_data('sp_favourite_verify',$inputData);
+							}
+
+							if($userdata)
+							{	
+								$this->session->set_flashdata('success','Service provider updated successfully.');
+
+								redirect(base_url().'backend/Users/manageServiceProvider');	
+							}
+							else
+							{
+								$this->session->set_flashdata('error','Error while updating User.');
+
+								redirect(base_url().'backend/Users/updateServiceprovider/'.base64_encode($user_id));
+							}
 						}
 						else
 						{
-							$inputData=array('service_provider_id'=>$user_id,'is_verified'=>$is_verified,'dateadded'=>date('Y-m-d H:i:s'));
-							$this->Common_Model->insert_data('sp_favourite_verify',$inputData);
-						}
-						if($userdata)
-						{	
-							$this->session->set_flashdata('success','Service provider updated successfully.');
-
-							redirect(base_url().'backend/Users/manageServiceProvider');	
-						}
-						else
-						{
-							$this->session->set_flashdata('error','Error while updating User.');
+							$this->session->set_flashdata('error','Mobile Number already register.');
 
 							redirect(base_url().'backend/Users/updateServiceprovider/'.base64_encode($user_id));
 						}	

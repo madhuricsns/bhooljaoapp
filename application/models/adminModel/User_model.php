@@ -101,9 +101,11 @@ Class User_model extends CI_Model {
 	
 	public function uptdateUser($input_data,$user_id) 
 	{
-		$full_name = $input_data['full_name'];
-		$query=$this->db->query("select * from bhool_users where upper(full_name)=upper('$full_name') and user_id<>$user_id");
-		if($query->num_rows()>0){
+		$mobile = $input_data['mobile'];
+		$query=$this->db->query("select * from bhool_users where mobile='$mobile' and user_type='Customer' and user_id<>$user_id");
+		// echo $this->db->last_query();exit;
+		// echo $query->num_rows();exit;
+		if($query->num_rows()>1){
 			return false;
 		}
 		else {
@@ -116,6 +118,45 @@ Class User_model extends CI_Model {
 			else
 				return false;
 		}
+	}
+
+	public function checkuptdateUser($mobile,$user_id) 
+	{
+		$mobile = $mobile;
+		$query=$this->db->query("select * from bhool_users where mobile='$mobile' and user_type='Customer' and user_id!=$user_id");
+		// echo $this->db->last_query();exit;
+		// echo $query->num_rows();exit;
+		return $query->num_rows();
+	}
+
+	public function uptdateSP($input_data,$user_id) 
+	{
+		$mobile = $input_data['mobile'];
+		$query=$this->db->query("select * from bhool_users where mobile='$mobile' and user_type='Service Provider' and user_id<>$user_id");
+		// echo $this->db->last_query();exit;
+		// echo $query->num_rows();exit;
+		if($query->num_rows()>1){
+			return false;
+		}
+		else {
+			$this->db->where('user_id',$user_id);
+			$res = $this->db->update(TBLPREFIX.'users',$input_data);
+			if($res)
+			{
+				return true;
+			}
+			else
+				return false;
+		}
+	}
+
+	public function checkuptdateSP($mobile,$user_id) 
+	{
+		$mobile = $mobile;
+		$query=$this->db->query("select * from bhool_users where mobile='$mobile' and user_type='Service Provider' and user_id!=$user_id");
+		// echo $this->db->last_query();exit;
+		// echo $query->num_rows();exit;
+		return $query->num_rows();
 	}
 
 	
