@@ -66,14 +66,17 @@
 												<?php } */ ?>
 												<p><i class=""></i> Date : <?php 
 												$orderInfo[0]['booking_date']=new DateTime($orderInfo[0]['booking_date']);
-												$booking_date=$orderInfo[0]['booking_date']=$orderInfo[0]['booking_date']->format('M d,Y');
+												$booking_date=$orderInfo[0]['booking_date']=$orderInfo[0]['booking_date']->format('d-M-Y');
 												echo $booking_date;?>
 												</p>
 												<p><i class="fa fa-clock-o"></i> <?php echo $orderInfo[0]['time_slot'];?></p>
+												<?php  if($orderInfo[0]['is_demo']=='No' ) { ?>
 												<p>Expiry Date: <?php $expiry_date = '';
 												if(isset($orderInfo[0]['expiry_date'])) { $orderInfo[0]['expiry_date']=new DateTime($orderInfo[0]['expiry_date']);
-												$expiry_date=$orderInfo[0]['expiry_date']=$orderInfo[0]['expiry_date']->format('M d,Y'); }
+												$expiry_date=$orderInfo[0]['expiry_date']=$orderInfo[0]['expiry_date']->format('d-M-Y'); }
 												echo $expiry_date;?></p>
+
+											<?php }?>
 												<!-- <p> <i class="fa fa-map-marker"></i> Pickup : <?php //echo $orderInfo[0]['pickup_location'];?> </p> -->
 												<!-- <p> <i class="fa fa-map-marker"></i> Drop : <?php //echo $orderInfo[0]['drop_location'];?> </p> -->
 											</div>
@@ -131,12 +134,14 @@
 							echo $addressDetails->address1;
 							?></td>
 							</tr>
+							<?php  if($orderInfo[0]['is_demo']=='No' ) { ?>
 							<tr>
 							<td colspan="2">
 							<strong>Service Duration: </strong></td>
 							<td style="text-align:right"><?php 
 							echo $orderInfo[0]['duration']; ?></td>
 							</tr>
+						<?php } ?>
 							<tr><td>&nbsp;</td></tr>
 							<tr>
 							<td>
