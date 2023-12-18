@@ -676,6 +676,73 @@ $('#btn_uptcity').click(function(){
 /* end add city */
 
 
+
+/* valdiation for Update profile*/
+$('#btn_updateprofile').click(function(){
+		var username=$("#username").val();
+		var admin_name=$("#admin_name").val();
+		var mobile_number=$("#mobile_number").val();
+		var admin_email=$("#admin_email").val();
+		var admin_address=$("#admin_address").val();
+
+
+	$("#err_admin_name").html('');
+	$("#err_username").html('');
+	$("#err_mobile_number").html('');
+	$("#err_admin_email").html('');
+	$("#err_admin_address").html('');
+	
+	var flag=1;
+	
+	if(admin_name=="")
+	{
+		$("#err_admin_name").html('Enter admin name.');
+		flag=0;
+	}
+	if(username=="")
+	{
+		$("#err_username").html('Enter username.');
+		flag=0;
+	}
+	if(mobile_number=="")
+	{
+		$("#err_mobile_number").html('Enter mobile number.');
+		flag=0;
+	}
+	if(mobile_number!="" &&  mobile_number.length!=10)
+	{
+		$("#err_mobile_number").html('Please enter valid contact number of 10 digit.');
+		flag=0;
+	}
+	if(mobile_number!="" && isNaN(mobile_number))
+	{
+		$("#err_mobile_number").html('Please enter valid mobile number.');
+		flag=0;
+	}
+	if(admin_email=="")
+	{
+		$("#err_admin_email").html('Enter email id.');
+		flag=0;
+	}
+	if(admin_address=="")
+	{
+		$("#err_admin_address").html('Enter address.');
+		flag=0;
+	}
+	
+	if(flag==1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+});
+/* end add city */
+
+
+
 /* valdiation for Add  Service provider*/
 $('#btn_addsp').click(function(){
 	var full_name=$("#full_name").val();

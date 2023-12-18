@@ -42,11 +42,13 @@
 											  <div class="form-group row">
                                                 <label for="admin_name" class="col-xl-3 col-md-4"><span>*</span> Name</label>
                                                 <input class="form-control col-xl-4 col-md-4" id="admin_name" type="text" required="" name="admin_name" placeholder="Enter name" value="<?php echo $adminInfo[0]['admin_name']?>">
+                                                <div id="err_admin_name" class="error_msg"></div>
                                             </div>
 											
 											<div class="form-group row">
                                                 <label for="username" class="col-xl-3 col-md-4"><span>*</span>User Name</label>
                                                 <input class="form-control col-xl-4 col-md-4" id="username" type="text" required="" name="username" placeholder="Enter username" value="<?php echo $adminInfo[0]['username']?>">
+                                                <div id="err_username" class="error_msg"></div>
                                             </div>
 											
 												<div class="form-group row">
@@ -63,17 +65,20 @@
 											<div class="form-group row">
                                                 <label for="mobile_number" class="col-xl-3 col-md-4"><span>*</span>Mobile Number</label>
                                                 <input class="form-control col-xl-4 col-md-4" type="tel" name="mobile_number" id="mobile_number" class="form-control" pattern="[0-9]{10}" required=""  maxlength="10" value="<?php echo $adminInfo[0]['mobile_number']?>">
+                                                <div id="err_mobile_number" class="error_msg"></div>
                                             </div>
 											
 											<div class="form-group row">
                                                 <label for="admin_email" class="col-xl-3 col-md-4"><span>*</span>Email Address</label>
                                                 <input class="form-control col-xl-4 col-md-4" id="admin_email" type="text" required="" name="admin_email" placeholder="Enter email address" value="<?php echo $adminInfo[0]['admin_email']?>">
+                                                <div id="err_admin_email" class="error_msg"></div>
                                             </div>
 											
 											
 											 	<div class="form-group row">
                                                 <label for="admin_email" class="col-xl-3 col-md-4"><span>*</span>Address</label>
                                               <textarea name="admin_address" id="admin_address" class="form-control col-xl-4 col-md-4" required=""><?php echo $adminInfo[0]['admin_address']?></textarea>
+                                              <div id="err_admin_address" class="error_msg"></div>
                                             </div>
 											
                                        
