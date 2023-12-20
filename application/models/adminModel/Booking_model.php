@@ -254,4 +254,16 @@ Class Booking_model extends CI_Model {
 		$query = $this->db->get(TBLPREFIX."booking_transaction");
 		return $query->result_array();
 	}
+
+	public function uptdateStatus($input_data,$booking_id) 
+	{
+		$this->db->where('booking_id',$booking_id);
+		$res = $this->db->update(TBLPREFIX.'booking',$input_data);
+		if($res)
+		{
+			return true;
+		}
+		else
+			return false;
+	}
 }
