@@ -83,6 +83,22 @@ Class Booking_model extends CI_Model {
 		return $query->row();
 	}
 
+	public function getAllGroup($res,$category_id)
+	{
+		$this->db->select('g.*,c.category_name');
+		$this->db->where('group_category_id',$category_id);
+		$this->db->join(TBLPREFIX.'category as c','c.category_id=g.group_category_id','left');
+		$this->db->order_by('group_id','DESC');
+		$result = $this->db->get(TBLPREFIX.'service_group as g');
+		//echo $this->db->last_query();exit;
+		if($res == 1){
+			$response=$result->result_array();
+		}else{
+			$response=$result->num_rows();
+		}
+		return $response;
+	}
+
 
  	public function getBookingBystatus($booking_status) 
 	{

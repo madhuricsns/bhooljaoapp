@@ -71,7 +71,7 @@
 											<div class="form-group">
                                                 <label ><span>*</span>Customer</label>
 												<select name="user_ids[]" id="user_ids_cust" class="form-control select2" multiple>
-													<option value="">Select Users</option>
+													<option value="">Select Customers</option>
 													<option value="All">All</option>
 												<?php 
 												if(count($UserList) > 0) {
@@ -86,9 +86,9 @@
 											
 											<div id="serviceproviderDiv">
 											<div class="form-group">
-                                                <label ><span>*</span>Service Provider</label>
+                                                <label ><span>*</span>Service Givers</label>
 												<select name="user_ids[]" id="user_ids_sp" class="form-control select2" multiple>
-													<option value="">Select Users</option>
+													<option value="">Select Givers</option>
 													<option value="All">All</option>
 							<?php 
 										if(count($ServiceProviderList) > 0) {

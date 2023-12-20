@@ -26,73 +26,47 @@
 							<?php echo $this->session->flashdata('error_msg');?>
 						</div>
 						<?php }?>
-						<?php $encodedValueId=base64_encode($categoryInfo[0]['category_id']); ?>
-						<form class="needs-validation" name="frm_updatebanner" id="frm_updatebanner" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/Category/updateCategory/<?php echo $encodedValueId;?>">
+						<?php $encodedValueId=base64_encode($groupInfo[0]['group_id']); ?>
+						<form class="needs-validation" name="frm_updategroup" id="frm_updategroup" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/Group/updateGroup/<?php echo $encodedValueId;?>">
                         <div class="tab-content" >
                             <div class="tab-pane fade active show">
                             	<div class="row">
                             	<div class="form-group col-md-6">
                                                 <label ><span></span> Category</label>
-												<select name="category" id="category" class="form-control  " >
-
+												<select name="category_id" id="category_id" class="form-control  " >
                                                     <option value="">Select Category</option>
 													<?php
                                                     foreach($categoryLists as $category){
                                                     ?>
-   <option value="<?php echo $category['category_id']?>" <?php if($categoryInfo[0]['category_parent_id']==$category['category_id']){ echo 'selected="selected"';}?>><?php echo $category['category_name']?></option>
+													<option value="<?php echo $category['category_id']?>" <?php if($groupInfo[0]['group_category_id']==$category['category_id']){ echo 'selected="selected"';}?>><?php echo $category['category_name']?></option>
 													<?php } ?>
                                                     
 												</select>
-												<div id="err_category" class="error_msg"></div>
+												<div id="err_category_id" class="error_msg"></div>
                                     </div>
                                     
                                             <div class="form-group col-md-6">
-                                                <label for="category_name"><span>*</span> Category Name</label>
-                                                <input type="text" class="form-control" id="category_name" name="category_name"  required value="<?php echo $categoryInfo[0]['category_name'];?>">
-												 <div id="err_category_name" class="error_msg"></div>
+                                                <label for="group_name"><span>*</span> Group Name</label>
+                                                <input type="text" class="form-control" id="group_name" name="group_name"  required value="<?php echo $groupInfo[0]['group_name'];?>">
+												<div id="err_group_name" class="error_msg"></div>
                                             </div>
                                         </div>
-                                        <div class="row">
-
-											<div class="form-group col-md-6">
-                                                <label for="description"><span>*</span> Description</label>
-                                               <textarea name="description" id="description" class="form-control "><?php echo $categoryInfo[0]['category_description'];?></textarea>
-                                               <div id="err_description" class="error_msg"></div>
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <label for="category_image" ><span>*</span> Category Image</label>
-                                                <input class="form-control" id="category_image" type="file"  name="category_image" />
-												<div class="err_msg" id="err_category_image"></div>
-												
-												<span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span><br/>
-                                            </div>
-
-
-											<div class="form-group col-md-2">
-												<?php
-                                                $str_images="";
-                                                 if($categoryInfo[0]['category_image']!="")
-												{
-												$str_images='<img src="'.base_url().'uploads/category_images/'.$categoryInfo[0]['category_image'].'" style="width:80px;height:80px">';
-												} ?>
-												<span><?php echo $str_images;?></span><br/>
-											</div>
-										</div>
+                                        
 										<div class="row">	
                                             <div class="form-group col-md-6">
                                                 <label ><span>*</span> Status</label>
 												<select name="status" id="status" class="form-control" required>
 													<option value="">Select Status</option>
-													<option value="Active" <?php if($categoryInfo[0]['category_status']=="Active"){ echo 'selected="selected"';}?>>Active</option>
-													<option value="Inactive" <?php if($categoryInfo[0]['category_status']=="Inactive"){ echo 'selected="selected"';}?>>Inactive</option>
+													<option value="Active" <?php if($groupInfo[0]['group_status']=="Active"){ echo 'selected="selected"';}?>>Active</option>
+													<option value="Inactive" <?php if($groupInfo[0]['group_status']=="Inactive"){ echo 'selected="selected"';}?>>Inactive</option>
 												</select>
 												<div id="err_status" class="error_msg"></div>
                                             </div>
                                         </div>
 										<!-- </div> -->
                                             <div class="pull-right">
-						                            <button type="submit" class="btn btn-primary" name="btn_uptcategory" id="btn_uptcategory">Update</button>
-													<a href="<?php echo base_url();?>backend/Category/manageCategory" class="btn btn-primary" >Cancel</a>
+						                            <button type="submit" class="btn btn-primary" name="btn_uptgroup" id="btn_addgroup">Update</button>
+													<a href="<?php echo base_url();?>backend/Group/manageGroup" class="btn btn-primary" >Cancel</a>
                                             </div>
 
                                     

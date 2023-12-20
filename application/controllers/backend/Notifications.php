@@ -23,13 +23,12 @@ class Notifications extends CI_Controller {
 		
 		$data['notificationcnt']=$this->Notification_model->getAllNotifications(0,"","");
 		
-		
 		//$arrGcmID[] = 'ExponentPushToken[ILvrAQKXZylNfqwZrnRmXO]';
 		/*$arrGcmID[] = 'ExponentPushToken[XiEPpvAeQshWRuImc99MHx]';
 		$this->Common_Model->sendexponotification('test', 'Testing notifications 5 pm sent...', $arrGcmID);*/
 		
 		$config = array();
-		$config["base_url"] = base_url().'backend/Notifications/index/';
+		$config["base_url"] = base_url().'backend/Notifications/manageNotifications/';
 		$config['per_page'] = 25;
 		$config["uri_segment"] = 4;
 		$config['full_tag_open'] = '<ul class="pagination">'; 

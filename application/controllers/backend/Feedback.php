@@ -24,7 +24,7 @@ class Feedback extends CI_Controller {
 		$data['feedbackcnt']=$this->Feedback_model->getAllFeedback(0,"","");
 		
 		$config = array();
-		$config["base_url"] = base_url().'backend/Feedback/index/';
+		$config["base_url"] = base_url().'backend/Feedback/manageFeedback/';
 		$config['per_page'] = 25;
 		$config["uri_segment"] = 4;
 		$config['full_tag_open'] = '<ul class="pagination">'; 

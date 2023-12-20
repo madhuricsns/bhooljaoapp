@@ -331,7 +331,7 @@ Class User_model extends CI_Model {
 		$this->db->where('r.service_provider_id',$user_id);
 		$this->db->join(TBLPREFIX.'users as u','u.user_id =r.user_id','left');
 		$this->db->order_by('r.review_id','desc');
-		$this->db->limit(2);
+		// $this->db->limit(2);
 		return $this->db->get()->result_array();			
 	}
 }

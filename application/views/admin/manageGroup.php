@@ -77,9 +77,9 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<td><?php echo $category['group_status'];?></td>
 												<td>
 													<?php if($category['group_status']!='Active') { ?>
-														<a href="<?php echo base_url();?>backend/Category/change_status/<?php echo base64_encode($category['group_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-success">Active</a>
+														<a href="<?php echo base_url();?>backend/Group/change_status/<?php echo base64_encode($category['group_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-success">Active</a>
 														<?php } else { ?>
-														<a href="<?php echo base_url();?>backend/Category/change_status/<?php echo base64_encode($category['group_id']);?>/<?php echo base64_encode('Inactive');?>" class="btn-sm btn-danger">Inactive</a>
+														<a href="<?php echo base_url();?>backend/Group/change_status/<?php echo base64_encode($category['group_id']);?>/<?php echo base64_encode('Inactive');?>" class="btn-sm btn-danger">Inactive</a>
 													<?php } ?>
 												</td>
 												<td class="actions">                    

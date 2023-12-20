@@ -33,20 +33,59 @@
                                     <div class="row">
                                         <div class="col-sm-12">
 
-                                       <div class="form-group row">
-                                                <label class="col-xl-3 col-md-4"><span>*</span>Select Service Provider</label><br>
-                                               
-                        <select name="service_provider" id="service_provider" class="form-control col-md-6" required>
-                          <option value="">Select Service Provider </option>
-                          <?php
-                          foreach($usersList as $users){
-
-                          ?>
-                          <option value="<?php echo $users['user_id'] ?>"><?php echo $users['full_name'] ?></option>
-                        <?php } ?>
-                        </select>
-                        
+										
+										<?php
+										if(!empty($serviceGroup)){
+										?>
+										<div class="form-group row">
+                                                <label class="col-xl-3 col-md-4"><span>*</span>Select Service Giver</label><br>
+												<select name="service_provider" id="service_provider" class="form-control col-md-6" >
+													<option value="">Select Service Giver </option>
+													<?php
+													foreach($usersList as $users){
+													?>
+													<option value="<?php echo $users['user_id'] ?>"><?php echo $users['full_name'] ?></option>
+												<?php } ?>
+												</select>
                                         </div>
+
+										<!-- <div class="form-group row">
+                                                <label class="col-xl-3 col-md-4"></label><br>
+												<label class="col-md-6"> OR </label>
+                                        </div> -->
+
+										<div class="form-group row">
+                                                <label class="col-xl-3 col-md-4"><span>*</span>If Service Group Assign</label><br>
+												<label class="col-md-1"><input type="radio" name="service_group_assign" value="Yes" required> Yes </label>
+												<label class="col-md-3"><input type="radio" name="service_group_assign" value="No" required> No </label>
+                                        </div>
+
+										<div class="form-group row">
+                                                <label class="col-xl-3 col-md-4"><span>*</span>Select Service Group</label><br>
+												<select name="group_id" id="group_id" class="form-control col-md-6" >
+													<option value="">Select Service Group </option>
+													<?php
+													foreach($serviceGroup as $group){
+													?>
+													<option value="<?php echo $group['group_id'] ?>"><?php echo $group['group_name'] ?></option>
+												<?php } ?>
+												</select>
+                                        </div>
+										<?php } else { ?>
+											<div class="form-group row">
+                                                <label class="col-xl-3 col-md-4"><span>*</span>Select Service Giver</label><br>
+												<select name="service_provider" id="service_provider" class="form-control col-md-6" required>
+													<option value="">Select Service Giver </option>
+													<?php
+													foreach($usersList as $users){
+													?>
+													<option value="<?php echo $users['user_id'] ?>"><?php echo $users['full_name'] ?></option>
+												<?php } ?>
+												</select>
+                                        	</div>
+
+
+										<?php } ?>	
                                     <!-- </div> -->
                                     
 

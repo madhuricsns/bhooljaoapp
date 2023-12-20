@@ -74,6 +74,24 @@ Class Group_model extends CI_Model {
 		}	
 	}
 
+	public function chkupdateGroupCategory($category_id,$group_id,$res)
+	{
+		$this->db->select('*');
+		$where = '(group_category_id="'.$category_id.'")';
+       	$this->db->where($where);
+       	$this->db->where('group_id!=',$group_id);
+		$query=$this->db->get(TBLPREFIX."service_group");
+		//echo $this->db->last_query();exit;
+		if($res == 1)
+		{
+			return $query->result_array();
+		}
+		else
+		{
+			return $query->num_rows();
+		}	
+	}
+
 	public function getAllGroup($res,$per_page,$page)
 	{
 		$this->db->select('g.*,c.category_name');
@@ -110,9 +128,9 @@ Class Group_model extends CI_Model {
 	}
 	
 	
-	public function uptdateCategory($input_data,$category_id) 
+	public function uptdateGroup($input_data,$group_id) 
 	{
-		$this->db->where('category_id',$category_id);
+		$this->db->where('group_id',$group_id);
 		$res = $this->db->update(TBLPREFIX.'service_group',$input_data);
 		if($res)
 		{
@@ -123,9 +141,9 @@ Class Group_model extends CI_Model {
 	}
 
 	
-	public function uptdateStatus($input_data,$category_id) 
+	public function uptdateStatus($input_data,$group_id) 
 	{
-		$this->db->where('category_id',$category_id);
+		$this->db->where('group_id',$group_id);
 		$res = $this->db->update(TBLPREFIX.'service_group',$input_data);
 		if($res)
 		{

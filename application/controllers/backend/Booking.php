@@ -212,34 +212,47 @@ class Booking extends CI_Controller {
 		$session_data=$this->session->userdata('logged_in');
 			$booking_id=base64_decode($this->uri->segment(4));
 
-			if ($booking_id) {
+			if($booking_id) {
 				$bokingInfo=$this->Booking_model->getSingleBookingInfo($booking_id,0);
 				
 			if($bokingInfo>0)
 			{
-				$data['bokingInfo'] = $this->Booking_model->getSingleBookingInfo($booking_id,1);
+				$data['bokingInfo'] =$booking= $this->Booking_model->getSingleBookingInfo($booking_id,1);
 				
-				
+			$booking_user_id=$data['bokingInfo'][0]['user_id'];	
 			$category_id = $data['bokingInfo'][0]['category_id'];
 			$categoryData=$this->Booking_model->getCategoryDetails($category_id);
 			if($categoryData->category_parent_id!=0)
 			{
 				$category_id=$categoryData->category_parent_id;
 			}
+			$data['serviceGroup']=$this->Booking_model->getAllGroup(1,$category_id);
 			$data['usersList']=$this->Booking_model->getAllUsers(1,"","",$category_id);
 				if(isset($_POST['btn_upAssing']))
 				{
-				
-			        $this->form_validation->set_rules('service_provider','Service Provider ','required');
-
+			        $this->form_validation->set_rules('service_group_assign','Service Provider ','required');
 					if($this->form_validation->run())
 					{
 						$servicepro=$this->input->post('service_provider');
+						$service_group_assign=$this->input->post('service_group_assign');
+						$group_id=$this->input->post('group_id');
 						// $status=$this->input->post('status');
-							
-						$input_data = array(
-                            'service_provider_id'=>$servicepro
-                         );
+						if($service_group_assign=='Yes')
+						{
+							$input_data = array(
+								'service_provider_id'=>'0',
+								'service_group_assigned'=>$service_group_assign,
+								'service_group_id'=>$group_id,
+							 );
+						}	
+						else
+						{
+							$input_data = array(
+								'service_provider_id'=>$servicepro,
+								'service_group_assigned'=>$service_group_assign
+							 );
+						}
+						
 					// echo"<pre>";
 					// print_r($input_data);
 					// exit();
@@ -249,43 +262,64 @@ class Booking extends CI_Controller {
 						if($updatedata)
 						{	
 							$orderno = $data['bokingInfo'][0]['order_no'];
+							if($service_group_assign=='No')
+							{
+								$user=$this->Notification_model->getUserDetails(1,$servicepro);
+								
+								$title="New Booking Assigned";
+								$message="Booking no $orderno has been assigned to you";
+			
+								$input_data = array(
+									'noti_title'=>trim($title),
+									'noti_message'=>trim($message),
+									'noti_type'=>'Service Provider',
+									'noti_user_id'=>$servicepro,
+									'noti_gcmID'=>$user->user_fcm,
+									'created_by' => $session_data['admin_id'],
+									'dateadded' => date('Y-m-d H:i:s')
+									);
+								
+								$notification_id = $this->Notification_model->insert_notification($input_data);
+								$this->Common_Model->sendexponotification($title,$message,$user->user_fcm);
+							}
+							else
+							{
+								
+							}
 							
-							$user=$this->Notification_model->getUserDetails(1,$servicepro);
+							// Send Customer Notification
+							$customer=$this->Notification_model->getUserDetails(1,$booking_user_id);
 							
-							$title="New Booking Assigned";
-							$message="Booking no $orderno has been assigned to you";
+							$titleC="Your Booking Assigned SP";
+							$messageC="Booking no $orderno has been assigned to $user->full_name";
 		
-							$input_data = array(
-								'noti_title'=>trim($title),
-								'noti_message'=>trim($message),
-								'noti_type'=>'Service Provider',
-								'noti_user_id'=>$servicepro,
-								'noti_gcmID'=>$user->user_fcm,
+							$input_dataC = array(
+								'noti_title'=>trim($titleC),
+								'noti_message'=>trim($messageC),
+								'noti_type'=>'Customer',
+								'noti_user_id'=>$booking_user_id,
+								'noti_gcmID'=>$customer->user_fcm,
 								'created_by' => $session_data['admin_id'],
 								'dateadded' => date('Y-m-d H:i:s')
 								);
-							
-							$notification_id = $this->Notification_model->insert_notification($input_data);
-								
-							$this->Common_Model->sendexponotification($notification_name,$notification_description,$users['user_fcm']);
+
+							$notification_idc = $this->Notification_model->insert_notification($input_dataC);
+							$this->Common_Model->sendexponotification($titleC,$messageC,$customer->user_fcm);
 							
 							
 							$this->session->set_flashdata('success','Assing Service Provider successfully.');
-
 							redirect(base_url().'backend/Booking/manageBooking');	
 						}
 						else
 						{
-							$this->session->set_flashdata('error','Error while updating Zone.');
-
-							redirect(base_url().'backend/Booking/AssingServiceProvider/'.base64_encode($user_id));
+							$this->session->set_flashdata('error','Error while updating Service Provider.');
+							redirect(base_url().'backend/Booking/AssingServiceProvider/'.base64_encode($booking_id));
 						}	
 					}
 					else
 					{
 						$this->session->set_flashdata('error',$this->form_validation->error_string());
-
-						redirect(base_url().'backend/Booking/AssingServiceProvider/'.base64_encode($user_id));
+						redirect(base_url().'backend/Booking/AssingServiceProvider/'.base64_encode($booking_id));
 					}
 				}
 			}
@@ -619,10 +653,12 @@ public function viewBookingDetails()
 
 					if($this->form_validation->run())
 					{
+						$service_provider=$this->input->post('service_provider');
 						$bookingdate=$this->input->post('bookingdate');
 						$assingtime=$this->input->post('assingtime');
 						
 						$input_data = array(
+                            'service_provider_id'=>$service_provider,
                             'booking_date'=>$bookingdate,
                             'time_slot'=>$assingtime,
 							'admin_demo_accept' => 'Yes'

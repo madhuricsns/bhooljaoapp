@@ -62,7 +62,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 											<th>User</th>
 											<th>Service Provider</th>
 											<th>Feedback Message</th>
-											<!-- <th>Action</th> -->
+											<th>Action</th>
 										</tr>
 									</thead>	
 									<tbody>			
@@ -79,9 +79,9 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 											<td><?php echo $feedback['full_name'];?></td>
 											<td><?php echo $feedback['sp_fullname'];?></td>
 											<td><?php echo $feedback['feedback_message'];?></td>
-											<!-- <td class="actions">
+											<td class="actions">
 												<a href="<?php echo base_url();?>backend/Feedback/feedbackReply/<?php echo base64_encode($feedback['feedback_id']);?>" class="btn btn-sm btn-primary">Reply</a>
-											</td>		 -->
+											</td>		
 										</tr>											
 										<?php  }?>
 									</tbody>									
