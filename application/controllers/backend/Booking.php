@@ -123,7 +123,7 @@ class Booking extends CI_Controller {
 
 	public function searchdemo_list()
 	{
-		$srchStatus = $srchDate = 'Na';
+		$srchStatus = $srchDate = $pageNo = 'Na';
 		
 		if(isset($_POST['Search']))
 		{
@@ -136,7 +136,7 @@ class Booking extends CI_Controller {
 				$srchDate=trim($_POST['datesearch']);
 			}
 			
-			redirect('backend/Booking/manageBookingDemo/'.$srchStatus.'/'.$srchDate);
+			redirect('backend/Booking/manageBookingDemo/'.$srchStatus.'/'.$srchDate.'/'.$pageNo);
 		}
 		redirect('backend/Booking/manageBookingDemo', 'refresh');
 	}
@@ -908,6 +908,50 @@ public function exportBookingCSV()
 		  array_to_csv($array,$csvname);
 		  $data['success']= "download sample export data successfully!";
 	}
+
+
+public function change_status()
+	{
+		$data['title']='Change Status';
+		$data['error_msg']='';
+		
+		$srchDate = $srchStatus = $pageNo = "Na";
+
+if (isset($srchStatus) && isset($srchDate) && isset($pageNo) == 1 ){
+	
+		$srchStatus=$this->uri->segment(4);
+		$srchDate=$this->uri->segment(5);
+		$pageNo=$this->uri->segment(6);
+
+		$booking_id=$this->uri->segment(7);
+		$statusTobeUpdated=$this->uri->segment(8);
+
+		
+}else{
+		$booking_id=$this->uri->segment(4);
+		$statusTobeUpdated=$this->uri->segment(5);
+
+}
+		// echo 'srchStatus---'.$srchStatus ."<br>";
+		// echo "srchDate---".$srchDate ."<br>";
+		// echo "pageNo---".$pageNo ."<br>";
+		// echo "booking_id---".$booking_id ."<br>";
+		// echo "statusTobeUpdated---".$statusTobeUpdated;
+
+		//      exit();
+		if($booking_id)
+		{
+			$input_data = array(
+								'booking_status'=> $statusTobeUpdated
+								);
+			$userdata = $this->Booking_model->uptdateStatus($input_data,$booking_id);
+			if($userdata){
+				$this->session->set_flashdata('success','Status updated successfully.');
+				redirect(base_url().'backend/Booking/manageBookingDemo/'.$srchStatus.'/'.$srchDate.'/'.$pageNo.'/'.$booking_id.'/'.$statusTobeUpdated);
+				}
+		}
+	}
+
 
 
 

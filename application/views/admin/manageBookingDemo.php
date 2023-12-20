@@ -57,15 +57,15 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 								<?php if($this->uri->segment(5)!=""){ echo $this->uri->segment(5);}?>/
 								<?php if($this->uri->segment(6)!=""){ echo $this->uri->segment(6);}?>/">
 								<?php 
-								$srchDate = $srchStatus = '';
+								$srchDate = $srchStatus = $pageNo = '';
 								
 								if($this->uri->segment(4) != 'Na') { $srchStatus = $this->uri->segment(4); } 
 								
-								if($this->uri->segment(5) != 'Na') { 
-								$srchDate = $this->uri->segment(5);
+								if($this->uri->segment(5) != 'Na') {  $srchDate = $this->uri->segment(5);
 								//$date1 = new DateTime($srchDate);
 								//$srchDateFormatted = $date1->format('d-m-Y');
 								}
+								if($this->uri->segment(6) == 'Na') { $pageNo = $this->uri->segment(6); } 
 								?>
 						 		 <div class="tab-content" >
 									<div class="tab-pane fade active show">
@@ -98,7 +98,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 						<div class="table-responsive">
 							<div id="basicScenario" class="product-physical"></div>
 							<?php if($bookingdemocnt > 0)	{ ?>
-								<table class="table table-bordered table-striped mb-0" id="datatable-default">
+								<table class="table table-bordered table-striped mb-0" id="myTable">
 									<thead>
 										<tr>
 											
@@ -109,6 +109,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 											<th>Customer</th>
 											<th>Service Provider</th>
 											<th>Status</th>
+											<th>Change Status</th>
 											<th>Actions</th>	
 										</tr>
 									</thead>	
@@ -127,7 +128,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 											$main_categoryname="";
 											if($categoryData->category_parent_id!=0)
 											{
-												$category=$this->Booking_model->getCategoryDetails($categoryData->category_parent_id);
+										$category=$this->Booking_model->getCategoryDetails($categoryData->category_parent_id);
 												$main_categoryname=$category->category_name;
 											}
 											?>		
@@ -146,6 +147,39 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												echo "---";
 												} ?></td>
 												<td><?php echo $booking['booking_status'];?></td>
+
+
+
+												<td>			
+													<?php  if (isset($srchStatus) && isset($srchDate) && isset($pageNo) > 0  ){ ?>
+										<a href="<?php echo base_url();?>backend/Booking/change_status/<?php if(isset($srchStatus)) echo $srchStatus ?>/<?php if(isset($srchDate)) echo $srchDate ?>/<?php  echo $pageNo ?>/<?php echo $booking['booking_id'];?>/<?php echo 'completed';?>" title="Status Change Completed"><i data-feather="check"></i>
+													</a>
+												<?php }else{?>
+
+                                                    <a href="<?php echo base_url();?>backend/Booking/change_status/<?php echo $booking['booking_id'];?>/<?php echo 'completed';?>" title="Status Change Completed"><i data-feather="check"></i>
+													</a>
+
+
+
+												<?php } ?>
+
+
+
+
+
+										<?php  if (isset($srchStatus) && isset($srchDate) && isset($pageNo) > 0  ){ ?>		
+					                	<a href="<?php echo base_url();?>backend/Booking/change_status/<?php echo $srchStatus ?>/<?php echo $srchDate ?>/<?php echo $pageNo ?>/<?php echo $booking['booking_id'];?>/<?php echo'canceled';?>" title="Status Change Canceled"><i data-feather="x-square"></i>
+													</a>
+			                    <?php }else{?>
+
+                                                    <a href="<?php echo base_url();?>backend/Booking/change_status/<?php echo $booking['booking_id'];?>/<?php echo 'canceled';?>" title="Status Change Canceled"><i data-feather="x-square"></i>
+													</a>
+
+
+
+												<?php } ?></td>
+
+
 												<td class="actions">
 							
 
@@ -155,19 +189,28 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 									<?php } else{}?>
 													<a href="<?php echo base_url();?>backend/Booking/viewBookingDemoDetails/<?php echo base64_encode($booking['booking_id']);?>"><i data-feather="eye"></i>
 													</a>
+
 										<?php   if ($booking['time_slot']<0 && $booking['booking_status']!='canceled') {
 											?>
 										<a href="<?php echo base_url();?>backend/Booking/AssingDateTime/<?php echo base64_encode($booking['booking_id']);?>" title="Assign Time"><i data-feather="check-circle"></i></a>
 										<?php } else{}?>														
+										
+ 									
+                 
+
+
 
 											</td>				
 											</tr>											
 											<?php $i++; }?>
 									</tbody>									
 								</table>
+								
 								<div class="dataTables_paginate paging_simple_numbers" id="datatable-default_paginate" style="margin-top:10px;">
 									<?php echo $links; ?>
-								</div>									
+								</div>
+								
+														
 								<?php } else 
 								{?>
 								<div class="alert alert-danger">
