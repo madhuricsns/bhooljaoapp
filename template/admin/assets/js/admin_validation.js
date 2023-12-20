@@ -1036,7 +1036,7 @@ $('#btn_uptcategory').click(function(){
 
 /* valdiation for add Service */
 $('#btn_addService').click(function(){
-	var category=$("#category").val();
+	var category=$("#parent_service_id").val();
 	var service_name=$("#service_name").val();
 	var description=$("#description").val();
 	var price=$("#price").val();
@@ -1045,8 +1045,9 @@ $('#btn_addService').click(function(){
 	var demo_price=$("#demo_price").val();
 	var demo_discount_price=$("#demo_discount_price").val();
 	var status=$("#status").val();
+	var photo=$('#servicefile')[0].files.length;
 
-	$("#err_category_name").html('');
+	$("#err_parent_service_id").html('');
 	$("#err_service_name").html('');
 	$("#err_description").html('');
 	$("#err_price").html('');
@@ -1055,11 +1056,17 @@ $('#btn_addService').click(function(){
 	$("#err_demo_price").html('');
 	$("#err_demo_discount_price").html('');
 	$("#err_status").html('');
+	$("#err_profile_photo").html('');
 	var flag=1;
 	
 	if(category=="")
 	{
-		$("#err_category").html('Please select category.');
+		$("#err_parent_service_id").html('Please select Service.');
+		flag=0;
+	}
+	if(photo=="")
+	{
+		$("#err_profile_photo").html('Choose Service Image.');
 		flag=0;
 	}
 	if(service_name=="")

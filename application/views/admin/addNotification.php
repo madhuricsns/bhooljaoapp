@@ -44,7 +44,7 @@
                               			<div class="col-md-6" >
                                             <div class="form-group">
                                                 <label ><span>*</span>Notification Message</label>
-												<textarea name="message" id="message" class="form-control" required ></textarea>
+												<textarea name="message" id="massage" class="form-control" required ></textarea>
                                                 <div id="err_massage" class="error_msg"></div>
                                             </div>
                                         </div>
