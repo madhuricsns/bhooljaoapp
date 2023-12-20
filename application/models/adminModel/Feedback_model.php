@@ -69,6 +69,18 @@ Class Feedback_model extends CI_Model {
 			return $result->num_rows();
 
 	}
+
+	public function uptdateFeedback($input_data,$feedback_id) 
+	{
+			$this->db->where('feedback_id',$feedback_id);
+			$res = $this->db->update(TBLPREFIX.'feedback',$input_data);
+			if($res)
+			{
+				return true;
+			}
+			else
+				return false;
+	}
 	
 
 }

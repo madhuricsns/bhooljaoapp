@@ -10,7 +10,7 @@
                     <div class="col-sm-4">
                     <div class="card tab2-card">
                             <div class="card-header" style="background-color: #9cabfb;">
-							<h5 style="color: #121111;"><i  class="fa fa-user-circle" ></i> Service Provider Info </h5>
+							<h5 style="color: #121111;"><i  class="fa fa-user-circle" ></i> Service Giver Info </h5>
                             </div>
                         <div class="card-body">
 							<?php

@@ -14,6 +14,7 @@ class Notifications extends CI_Controller {
 		$this->load->model('adminModel/Notification_model');
 		$this->load->model('adminModel/User_model');
 		$this->load->model('Common_Model');
+		date_default_timezone_set('Asia/Kolkata');
 	}
 	
 	public function manageNotifications()
@@ -68,11 +69,12 @@ class Notifications extends CI_Controller {
 		$data['UserList'] = $this->Notification_model->getAllUserlist(1,'Customer');
 		$data['ServiceProviderList']=$this->Notification_model->getAllUserlist(1,'Service Provider');
 		 //echo "<pre>";
-		 print_r($_POST);
+		//  print_r($_POST);
 		// exit();
 
 		if(isset($_POST['btn_addnotification']))
 		{ 
+
 			// echo "OK";exit;
 			$this->form_validation->set_rules('title','Notification Name','required');
 			$this->form_validation->set_rules('message','Notification Description','required');

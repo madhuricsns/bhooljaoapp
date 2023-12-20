@@ -10,6 +10,7 @@ class Banners extends CI_Controller {
 		}
 		$this->load->library("pagination");	
 		$this->load->model('adminModel/Banner_model');
+		$this->load->model('Common_Model');
 	}
 	public function index()
 	{
@@ -62,12 +63,12 @@ class Banners extends CI_Controller {
 		if(isset($_POST['btn_addbanner']))
 		{
 			$this->form_validation->set_rules('banner_title','Banner Title','required');
-			$this->form_validation->set_rules('bannertype','Banner Type ','required');
+			$this->form_validation->set_rules('banner_type','Banner Type ','required');
 			$this->form_validation->set_rules('status','Banner Status','required');
 			if($this->form_validation->run())
 			{
 				$banner_title=$this->input->post('banner_title');
-				$banner_type=$this->input->post('bannertype');
+				$banner_type=$this->input->post('banner_type');
 				$status=$this->input->post('status');
 				$banner_image='';
 				if(isset($_FILES['banner_image']))
@@ -164,56 +165,48 @@ class Banners extends CI_Controller {
 				$data['BannerInfo'] = $this->Banner_model->getSingleBannerInfo($banner_id,1);
 				if(isset($_POST['btn_uptbanner']))
 				{
+					// print_r($_POST);
 					$this->form_validation->set_rules('banner_title','Banner Title','required');
-					$this->form_validation->set_rules('bannertype','Banner Type ','required');
+					$this->form_validation->set_rules('banner_type','Banner Type ','required');
 					$this->form_validation->set_rules('status','Banner Status','required');
 
 					if($this->form_validation->run())
 					{
 						$banner_title = $this->input->post('banner_title');
-						$banner_type=$this->input->post('bannertype');
+						$banner_type=$this->input->post('banner_type');
 						$status = $this->input->post('status');
-						$banner_image='';
-				if(isset($_FILES['banner_image']))
-				{
-					if($_FILES['banner_image']['name']!="")
-					{
-						$photo_imagename='';
-						$new_image_name = rand(1, 99999).$_FILES['banner_image']['name'];
-						$config = array(
-									'upload_path' => "uploads/banner_images/",
-									'allowed_types' => "gif|jpg|png|bmp|jpeg",
-									'max_size' => "0", 
-									'file_name' =>$new_image_name
-						);
-						$this->load->library('upload', $config);
-						if($this->upload->do_upload('banner_image'))
-						{ 
-							$imageDetailArray = $this->upload->data();								
-							$photo_imagename =  $imageDetailArray['file_name'];
-						}else
+						// print_r($_FILES);
+						// echo count($_FILES);
+						// $banner_image='';
+						if(count($_FILES) > 0) 
 						{
-							$errorMsg = $this->upload->display_errors();
-							$this->session->set_flashdata('error',$errorMsg);
-							redirect(base_url().'backend/Banners/updateBanner/'.$banner_id_base64);
-								
+							$ImageName = "banner_image";
+							$target_dir = "uploads/banner_images/";
+							$banner_image= $this->Common_Model->ImageUpload($ImageName,$target_dir);
 						}
-						if($_FILES['banner_image']['error']==0)
-						{ 
-							$banner_image=$photo_imagename;
-						}
-					}
-				}
+						// echo $banner_image;
+						// exit;
 						//$description = $this->input->post('description');
-									
-						$input_data = array(
+						if($_FILES['banner_image']['name']!="")
+						{
+							$input_data = array(
 								'banner_title'=>trim($banner_title),
 								'banner_type'=>$banner_type,
 								'banner_status'=>$status,
 								'banner_image'=>$banner_image,
 								'dateupdated' => date('Y-m-d H:i:s')
 								);
-
+						}
+						else
+						{
+							$input_data = array(
+								'banner_title'=>trim($banner_title),
+								'banner_type'=>$banner_type,
+								'banner_status'=>$status,
+								'dateupdated' => date('Y-m-d H:i:s')
+								);
+						}
+						// print_r($input_data);exit;
 						$bannerdata = $this->Banner_model->uptdateBanner($input_data,$banner_id);
 
 						if($bannerdata)

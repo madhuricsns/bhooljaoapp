@@ -19,7 +19,7 @@ class Users extends CI_Controller {
 	}
 	public function manageUsers()
 	{
-		$data['title']='Manage Users';
+		$data['title']='Manage Customer';
 
 		
 		$data['usercnt']=$this->User_model->getAllUsers(0,"","");
@@ -62,7 +62,7 @@ class Users extends CI_Controller {
 	
 	public function addUser()
 	{
-		$data['title']='Add User';
+		$data['title']='Add Customer';
 		$data['error_msg']='';
 				
 		if(isset($_POST['btn_adduser']))
@@ -153,7 +153,7 @@ class Users extends CI_Controller {
 					}
 					else
 					{
-						$this->session->set_flashdata('error','Error while adding user.');
+						$this->session->set_flashdata('error','Error while adding Customer.');
 						redirect(base_url().'backend/Users/addUser/');
 					}	
 				}
@@ -176,7 +176,7 @@ class Users extends CI_Controller {
 	
 	public function updateUser()
 	{
-		$data['title']='Update User';
+		$data['title']='Update Customer';
 		$data['error_msg']='';
 		//echo "segment--".$this->uri->segment(4);exit();
 		$user_id=base64_decode($this->uri->segment(4));
@@ -286,7 +286,7 @@ class Users extends CI_Controller {
 							}
 							else
 							{
-								$this->session->set_flashdata('error','Error while updating User.');
+								$this->session->set_flashdata('error','Error while updating Customer.');
 
 								redirect(base_url().'backend/Users/updateUser/'.base64_encode($user_id));
 							}
@@ -308,7 +308,7 @@ class Users extends CI_Controller {
 			}
 			else
 			{
-				$data['error_msg'] = 'User not found.';
+				$data['error_msg'] = 'Customer not found.';
 			}
 		}
 		
@@ -320,7 +320,7 @@ class Users extends CI_Controller {
 	
 	public function viewUserDetails()
 	{
-		$data['title']='View User Details';
+		$data['title']='View Customer Details';
 		$user_id=base64_decode($this->uri->segment(4));
 		//echo "user_id--".$user_id;exit();
 		$data['user_id'] = $user_id;
@@ -484,7 +484,7 @@ class Users extends CI_Controller {
 
 	public function manageServiceProvider()
 	{
-		$data['title']='Manage Service Providers';
+		$data['title']='Manage Service Givers';
 
 		
 		$data['serviceproviderscnt']=$this->User_model->getAllServiceProvider(0,"","");
@@ -527,7 +527,7 @@ class Users extends CI_Controller {
 
 	public function addServiceprovider()
 	{
-		$data['title']='Add Service Provider';
+		$data['title']='Add Service Giver';
 		$data['error_msg']='';
 		$data['zoneList']=$this->User_model->getAllzone(1,"","");
 		$data['categoryList']=$this->User_model->getAllCategory(1,"","");
@@ -641,20 +641,20 @@ class Users extends CI_Controller {
 							$inputData=array('service_provider_id'=>$user_id,'is_verified'=>$is_verified,'dateadded'=>date('Y-m-d H:i:s'));
 							$this->Common_Model->insert_data('sp_favourite_verify',$inputData);
 						}
-						$this->session->set_flashdata('success','Service provider added successfully.');
+						$this->session->set_flashdata('success','Service Giver added successfully.');
 
 						redirect(base_url().'backend/Users/manageServiceProvider');	
 					}
 					else
 					{
-						$this->session->set_flashdata('error','Error while adding user.');
+						$this->session->set_flashdata('error','Error while adding Service Giver.');
 
 						redirect(base_url().'backend/Users/addServiceprovider/');
 					}	
 				}
 				else
 				{
-					$this->session->set_flashdata('error','Service Provider already exist.');
+					$this->session->set_flashdata('error','Service Giver already exist.');
 					redirect(base_url().'backend/Users/addServiceprovider');	
 				}
 
@@ -671,7 +671,7 @@ class Users extends CI_Controller {
 	
 	public function updateServiceprovider()
 	{
-		$data['title']='Update Service Provider';
+		$data['title']='Update Service Giver';
 		$data['error_msg']='';
 		//echo "segment--".$this->uri->segment(4);exit();
 		$user_id=base64_decode($this->uri->segment(4));
@@ -825,13 +825,13 @@ class Users extends CI_Controller {
 
 							if($userdata)
 							{	
-								$this->session->set_flashdata('success','Service provider updated successfully.');
+								$this->session->set_flashdata('success','Service Giver updated successfully.');
 
 								redirect(base_url().'backend/Users/manageServiceProvider');	
 							}
 							else
 							{
-								$this->session->set_flashdata('error','Error while updating User.');
+								$this->session->set_flashdata('error','Error while updating Service Giver.');
 
 								redirect(base_url().'backend/Users/updateServiceprovider/'.base64_encode($user_id));
 							}
@@ -853,7 +853,7 @@ class Users extends CI_Controller {
 			}
 			else
 			{
-				$data['error_msg'] = 'Service provider not found.';
+				$data['error_msg'] = 'Service Giver not found.';
 			}
 		}
 		$this->load->view('admin/admin_header',$data);
@@ -878,30 +878,30 @@ class Users extends CI_Controller {
 				$deluser = $this->User_model->uptdateUser($input_data,$user_id);
 				if($deluser > 0)
 				{
-					$this->session->set_flashdata('success','Service Provider deleted successfully.');
+					$this->session->set_flashdata('success','Service Giver deleted successfully.');
 					redirect(base_url().'backend/Users/manageServiceProvider');	
 				}
 				else
 				{
-					$this->session->set_flashdata('error','Error while deleting user.');
+					$this->session->set_flashdata('error','Error while deleting Service Giver.');
 					redirect(base_url().'backend/Users/manageServiceProvider');
 				}
 			}
 			else
 			{
-				$data['error_msg'] = 'User not found.';
+				$data['error_msg'] = 'Service Giver not found.';
 			}
 		}
 		else
 		{
-			$this->session->set_flashdata('error','Service Provider not found.');
+			$this->session->set_flashdata('error','Service Giver not found.');
 			redirect(base_url().'backend/Users/manageServiceProvider');
 		}
 	}
 
 public function viewServiceProviderDetails()
 	{
-		$data['title']='View ServiceProvider Details';
+		$data['title']='View Service Giver Details';
 		$user_id=base64_decode($this->uri->segment(4));
 		//echo "user_id--".$user_id;exit();
 		$data['user_id'] = $user_id;
@@ -956,18 +956,10 @@ public function viewServiceProviderDetails()
 		$data['total_rating']=$reviewCount;
 		//End Review & Rating Count
 		
-
-
-
 		$this->load->view('admin/admin_header',$data);
 		$this->load->view('admin/viewServiceProviderDetails',$data);
 		$this->load->view('admin/admin_footer');
 	}
-
-
-
-
-
 
 	public function exportSPCSV()
 	{

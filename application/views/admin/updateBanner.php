@@ -63,8 +63,8 @@
                                                 <label ><span>*</span>Banner Type</label>
 												<select name="banner_type" id="banner_type" class="form-control  " required>
 													<option value="">Select Status</option>
-													<option value="Active" <?php if($BannerInfo[0]['banner_type']=="Customer"){ echo 'selected="selected"';}?>>Customer</option>
-													<option value="Inactive" <?php if($BannerInfo[0]['banner_type']=="Service Provider"){ echo 'selected="selected"';}?>>Service Provider</option>
+													<option value="Customer" <?php if($BannerInfo[0]['banner_type']=="Customer"){ echo 'selected="selected"';}?>>Customer</option>
+													<option value="Service Provider" <?php if($BannerInfo[0]['banner_type']=="Service Provider"){ echo 'selected="selected"';}?>>Service Provider</option>
 												</select>
                                             </div>
                                         </div>
@@ -87,7 +87,7 @@
 												<?php echo $str_images;?>
 
 												<span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span><br/>
-												<input class="form-control " id="banner_image" type="file" required="" name="banner_image" />
+												<input class="form-control " id="banner_image" type="file" name="banner_image" />
 												<div class="err_msg" id="err_banner_image"></div>
                                                 
                                             </div>

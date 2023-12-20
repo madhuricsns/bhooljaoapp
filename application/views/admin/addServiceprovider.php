@@ -4,7 +4,7 @@
 	<div class="container-fluid">
                 <div class="card tab2-card">
                     <div class="card-header">
-                        <h5>ADD SERVICE PROVIDER</h5>
+                        <h5>ADD SERVICE GIVER</h5>
                     </div>
                     <div class="card-body">
                       <?php if($this->session->flashdata('success')!=""){?>

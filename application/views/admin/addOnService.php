@@ -45,7 +45,7 @@
                                             </div>
 											
 											<div class="form-group row">
-                                                <label for="profile_photo" class="col-xl-3 col-md-4"><span>*</span>Service Image</label>
+                                                <label for="full_name" class="col-xl-3 col-md-4"><span>*</span>Service Image</label>
                                                 <input type="file" class="form-control  col-md-6" id="servicefile" name="servicefile"  required>
 												<div id="err_profile_photo" class="error_msg"></div>
                                             </div>
@@ -53,42 +53,42 @@
                                             <div class="form-group row">
                                                 <label for="full_name" class="col-xl-3 col-md-4"><span>*</span>Service Name</label>
                                                 <input type="text" class="form-control  col-md-6" id="service_name" name="service_name"  required>
-												 <div id="err_service_name" class="error_msg"></div>
+												<div id="err_service_name" class="error_msg"></div>
                                             </div>
 											
 											<div class="form-group row">
                                                 <label for="description" class="col-xl-3 col-md-4"><span>*</span> Description</label>
                                                <textarea name="description" id="description" class="form-control  col-md-6" required></textarea>
-                                               <div id="err_description" class="error_msg"></div>
-                                            </div>
+											   <div id="err_description" class="error_msg"></div>
+											</div>
                                            
                                             <div class="form-group row">
                                                 <label for="mobile_pricenumber" class="col-xl-3 col-md-4"><span>*</span> Price</label>
                                                 <input type="text" name="price" id="price" class="form-control  col-md-6" required >
-                                                <div id="err_price" class="error_msg"></div>
+												<div id="err_price" class="error_msg"></div>
                                             </div>
 											<div class="form-group row">
                                                 <label for="discount_price" class="col-xl-3 col-md-4"><span>*</span> Discount Price</label>
                                                 <input type="text" name="discount_price" id="discount_price" class="form-control  col-md-6"required >
-                                                 <div id="err_discount_price" class="error_msg"></div>
-                                            </div>
+												<div id="err_discount_price" class="error_msg"></div>
+											</div>
 
 											<div class="form-group row">
                                                 <label for="offer_percentage" class="col-xl-3 col-md-4"><span>*</span> Offer Percentage</label>
                                                 <input type="text" name="offer_percentage" id="offer_percentage" class="form-control  col-md-6"required >
-                                                <div id="err_offer_percentage" class="error_msg"></div>
-                                            </div>
+												<div id="err_offer_percentage" class="error_msg"></div>
+											</div>
 
 											<div class="form-group row">
                                                 <label for="demo_price" class="col-xl-3 col-md-4"><span>*</span> Demo Price</label>
                                                 <input type="text" name="demo_price" id="demo_price" class="form-control  col-md-6" required >
-                                                <div id="err_offer_percentage" class="error_msg"></div>
-                                            </div>
+												<div id="err_demo_price" class="error_msg"></div>
+											</div>
 											<div class="form-group row">
                                                 <label for="demo_discount_price" class="col-xl-3 col-md-4"><span>*</span> Demo Discount Price</label>
                                                 <input type="text" name="demo_discount_price" id="demo_discount_price" class="form-control  col-md-6"required >
-                                                <div id="err_demo_discount_price" class="error_msg"></div>
-                                            </div>
+												<div id="err_demo_discount_price" class="error_msg"></div>
+											</div>
 
 
                                             <!-- <div class="form-group row">
@@ -122,10 +122,10 @@
 
 														<tr>
 															<!-- <td  class="row-index text-center"></td> -->
-															<td> <input type="text" class="form-control optionsArr" id="optionsArr" name="optionsArr[]" placeholder="Enter Option"  >
+															<td> <input type="text" class="form-control optionsArr" id="optionsArr" name="optionsArr_0[]" placeholder="Enter Option"  >
 																<div id="err_optionsArr" class="error_msg err_optionsArr"></div>
 															</td>
-                                                            <td> <input type="text" class="form-control amountArr" id="amountArr" name="amountArr[]" placeholder="Enter Amount"  >
+                                                            <td> <input type="text" class="form-control amountArr" id="amountArr" name="amountArr_0[]" placeholder="Enter Amount"  >
 																<div id="err_amountArr" class="error_msg err_amountArr"></div>
 															</td>
 															 <td  class="text-center"><button class="btn btn-md btn-success" id="addBtn" type="button">

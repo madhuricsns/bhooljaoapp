@@ -17,7 +17,7 @@ $session_subroles="";
 
         <div class="page-sidebar" style="width:270px;">
             <div class="main-header-left d-none d-lg-block">
-                <div class="logo-wrapper"><a href="<?php echo base_url();?>backend/dashboard"><img class="blur-up lazyloaded" src="<?php echo base_url('template/admin/');?>assets/images/dashboard/BHOOLJAO_logo.png" alt="BHOOLJAO logo"></a></div>
+                <div class="logo-wrapper"><a href="<?php echo base_url();?>backend/Dashboard"><img class="blur-up lazyloaded" src="<?php echo base_url('template/admin/');?>assets/images/dashboard/BHOOLJAO_logo.png" alt="BHOOLJAO logo"></a></div>
             </div>
             <div class="sidebar custom-scrollbar">
                
@@ -35,7 +35,7 @@ $session_subroles="";
 								//}
 							//}
 							?>>
-						<a class="sidebar-header" href="<?php echo base_url("backend/");?>dashboard"><!-- <i data-feather="home"></i> --><img src="<?php echo base_url()."/uploads/flaticon/dashboard.png"?>" style="max-height: 20px;max-width: 20px;"> &nbsp;&nbsp;<span>DASHBOARD</span></a>                        
+						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Dashboard"><!-- <i data-feather="home"></i> --><img src="<?php echo base_url()."/uploads/flaticon/dashboard.png"?>" style="max-height: 20px;max-width: 20px;"> &nbsp;&nbsp;<span>DASHBOARD</span></a>                        
 					</li>
 					<!--<li class=" <?php if($this->router->fetch_method()=='manageUsers'){?>nav-expanded nav-active <?php }?>">
 						<a class="sidebar-header" href="<?php //echo base_url("backend/");?>dashboard"><i data-feather="file-text"></i><span>ANALYTICS & REPORTS</span></a>                        
@@ -88,7 +88,7 @@ $session_subroles="";
 							?>>
 						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Users/manageUsers"><!-- <i data-feather="home"></i> --><img src="<?php echo base_url()."/uploads/flaticon/value.png"?>" style="max-height: 20px;max-width: 20px;">  &nbsp;&nbsp;<span>CUSTOMER</span></a>                        
 					</li>
-					<li  <?php if($this->router->fetch_class()=='Users/manageServiceProvider' || $this->router->fetch_class()=='Users/addServiceprovider' || $this->router->fetch_class()=='Users/updateServiceprovider'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageServiceProvider' || $this->router->fetch_method()=='viewServiceProviderDetails' || $this->router->fetch_method()=='updateServiceprovider'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
+					<li  <?php if($this->router->fetch_class()=='Users/manageServiceProvider' || $this->router->fetch_class()=='Users/addServiceprovider' || $this->router->fetch_class()=='Users/updateServiceprovider'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageServiceProvider' || $this->router->fetch_method()=='addServiceprovider' || $this->router->fetch_method()=='viewServiceProviderDetails' || $this->router->fetch_method()=='updateServiceprovider'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
 							{ 
 								if ($modulesId[1]['view'] == 'Yes') 
 								{ 
@@ -102,7 +102,12 @@ $session_subroles="";
 							?>>
 						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Users/manageServiceProvider"><!-- <i data-feather="home"></i> -->
 						<img src="<?php echo base_url()."/uploads/flaticon/manager.png"?>" style="max-height: 20px;max-width: 20px;">  &nbsp;&nbsp;
-						<span>SERVICE PROVIDER </span></a>                        
+						<span>SERVICE GIVERS </span></a>                        
+					</li>
+					<li class=" <?php if($this->router->fetch_method()=='manageGroup' || $this->router->fetch_method()=='addGroup' || $this->router->fetch_method()=='viewGroup' || $this->router->fetch_method()=='updateGroup'){?>nav-expanded nav-active <?php }?>" >
+						<a class="sidebar-header" href="<?php echo base_url("backend/");?>Group/manageGroup"><!-- <i data-feather="home"></i> -->
+						<img src="<?php echo base_url()."/uploads/flaticon/Service.png"?>" style="max-height: 20px;max-width: 20px;">  &nbsp;&nbsp;
+						<span>SERVICE GROUP </span></a>                        
 					</li>
 					<li  <?php if($this->router->fetch_class()=='Category'){?>style="background-color: rgb(68 114 196);"<?php }?>class=" <?php if($this->router->fetch_method()=='manageCategory'){?>nav-expanded nav-active <?php }?>" <?php if(isset($modulesId)&& count($modulesId)>0)
 							{ 

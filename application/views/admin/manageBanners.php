@@ -91,20 +91,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 														<a href="<?php echo base_url();?>backend/Banners/change_status/<?php echo base64_encode($banner['banner_id']);?>/<?php echo base64_encode('Inactive');?>" class="btn-sm btn-danger">Inactive</a>
 													<?php } ?>
 												</td>
-												<td class="actions" <?php
-												
-												/* if(isset($modulesId)&& count($modulesId)>0)
-							{ 
-								if (array_search('CATEGORY', array_column($modulesId, 'edit')) !== FALSE) 
-								{ 
-									echo 'style="display:block;"';
-							    } 
-								else 
-								{ 
-									echo 'style="display:none;"'; 
-								}
-							} */
-							?>>
+												<td class="actions">
 													<a href="<?php echo base_url();?>backend/Banners/updateBanner/<?php echo base64_encode($banner['banner_id']);?>"><i data-feather="edit"></i></a>
 													
 													<a href="<?php echo base_url();?>backend/Banners/deleteBanner/<?php echo base64_encode($banner['banner_id']);?>" onclick="javascript:return chk_isDeleteComnfirm();">

@@ -12,21 +12,21 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 */
 #echo $this->db->last_query();
  #echo '<pre>';print_r($modulesId);exit;
-//  print_r($this->session->flashdata());exit;
 ?>
 <div class="page-body">
 	
-	<!-- Container-fluid starts-->
+		<!-- Container-fluid starts-->
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="card">
 					<div class="card-header">
-						<h5>FEEDBACK </h5>			
+						<h5>SERVICE GROUP</h5>			
 						<div class="card-header-right">
 						<div class="row">
 							<div class="col-lg-12">
-								<!-- <a class="btn btn-default"  href="<?php echo base_url();?>backend/FAQ/addFAQ" style="float:right"><i class="fa fa-plus-circle"></i>Add FAQ</a> -->
+								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Group/addGroup" style="float:right;"><i class="fa fa-plus-circle"></i>Add Group</a>
+								<!-- <a class="btn btn-default"  href="<?php echo base_url();?>backend/Users/exportSPCSV" style="float:right;margin-right: 5px;"><i class="fa fa-download"></i>Export CSV</a> -->
 							</div>
 							</div>
 						</div>	 
@@ -53,37 +53,42 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 						<?php }?>										
 						<div class="table-responsive">
 							<div id="basicScenario" class="product-physical"></div>
-							<?php if($feedbackcnt > 0)	{ ?>
+							<?php if($categorycnt > 0)	{ ?>
 								<table class="table table-bordered table-striped mb-0" id="datatable-default">
 									<thead>
 										<tr>
-											<th>Date</th>	
-											<th>Booking</th>
-											<th>User</th>
-											<th>Service Provider</th>
-											<th>Feedback Message</th>
-											<!-- <th>Action</th> -->
+											<th>Sr.No</th>	
+											<th>Group Name</th>
+											<th>Service Name</th>
+											<th>Status</th>
+											<th>Change Status</th>
+											<th>Actions</th>	
 										</tr>
 									</thead>	
 									<tbody>			
-										<?php 
-										foreach($Feedbacks as $feedback)
+										<?php $i=1;
+										foreach($categories as $category)
 										{
-											$feedback['dateadded']= new DateTime($feedback['dateadded']);
-                                            $feedback['dateadded']=$feedback['dateadded']->format('d-M-Y');
-											
-											?>		
+										?>		
 										<tr>
-											<td><?php echo $feedback['dateadded'];?></td>
-											<td><?php echo $feedback['order_no'];?></td>
-											<td><?php echo $feedback['full_name'];?></td>
-											<td><?php echo $feedback['sp_fullname'];?></td>
-											<td><?php echo $feedback['feedback_message'];?></td>
-											<!-- <td class="actions">
-												<a href="<?php echo base_url();?>backend/Feedback/feedbackReply/<?php echo base64_encode($feedback['feedback_id']);?>" class="btn btn-sm btn-primary">Reply</a>
-											</td>		 -->
-										</tr>											
-										<?php  }?>
+												<td><?php echo $i;?></td>
+												<td><?php echo $category['group_name'];?></td>
+												<td><?php echo $category['category_name'];?></td>
+												<td><?php echo $category['group_status'];?></td>
+												<td>
+													<?php if($category['group_status']!='Active') { ?>
+														<a href="<?php echo base_url();?>backend/Category/change_status/<?php echo base64_encode($category['group_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-success">Active</a>
+														<?php } else { ?>
+														<a href="<?php echo base_url();?>backend/Category/change_status/<?php echo base64_encode($category['group_id']);?>/<?php echo base64_encode('Inactive');?>" class="btn-sm btn-danger">Inactive</a>
+													<?php } ?>
+												</td>
+												<td class="actions">                    
+													<a href="<?php echo base_url();?>backend/Group/updateGroup/<?php echo base64_encode($category['group_id']);?>" title="Edit"><i data-feather="edit"></i></a>
+													<a href="<?php echo base_url();?>backend/Group/ViewGroup/<?php echo base64_encode($category['group_id']);?>" title="View Details"><i data-feather="eye"></i></a> 
+													<a href="<?php echo base_url();?>backend/Group/deleteGroup/<?php echo base64_encode($category['group_id']);?>" title="Delete" onclick="javascript:return chk_isDeleteComnfirm();"><i data-feather="trash-2"></i></a>
+												</td>				
+											</tr>											
+											<?php $i++; }?>
 									</tbody>									
 								</table>
 								<div class="dataTables_paginate paging_simple_numbers" id="datatable-default_paginate" style="margin-top:10px;">
@@ -102,6 +107,5 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 		</div>
 	</div>
 	<!-- Container-fluid Ends-->
-	 
 	
 </div>

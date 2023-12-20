@@ -9,8 +9,10 @@ class Feedback extends CI_Controller {
 			redirect(base_url().'backend/Login','refresh');
 		}
 		$this->load->library("pagination");	
+		$this->load->library('session');
 		$this->load->model('adminModel/Feedback_model');
 	}
+	
 	public function index()
 	{
 		redirect('backend/Feedback/manageFeedback','refresh');
@@ -115,77 +117,60 @@ class Feedback extends CI_Controller {
 		$this->load->view('admin/admin_footer');
 	}
 	
-	public function updateFAQ()
+	public function feedbackReply()
 	{
-		$data['title']='Update FAQ';
+		$data['title']='Feedback Reply';
 		$data['error_msg']='';
-		//echo "segment--".$this->uri->segment(4);exit();
-		$faq_id=base64_decode($this->uri->segment(4));
-		$faq_id_base64 = base64_encode($faq_id);
+		$feedback_id=base64_decode($this->uri->segment(4));
+		$feedback_id_base64 = base64_encode($feedback_id);
 		//echo "Brand_id--".$brand_id;exit();
-		if($faq_id)
+		if($feedback_id)
 		{
-			$FAQInfo=$this->FAQ_model->getSingleFAQInfo($faq_id,0);
-			if($FAQInfo>0)
+			$FeedbackInfo=$this->Feedback_model->getSingleFeedbackInfo($feedback_id,0);
+			if($FeedbackInfo>0)
 			{
-				$data['FAQInfo'] = $this->FAQ_model->getSingleFAQInfo($faq_id,1);
-				if(isset($_POST['btn_uptFAQ']))
+				$data['FeedbackInfo'] = $this->Feedback_model->getSingleFeedbackInfo($feedback_id,1);
+				if(isset($_POST['btn_replyFeedback']))
 				{
-					$this->form_validation->set_rules('faq_question','FAQ Question','required');
-			$this->form_validation->set_rules('faq_answer','FAQ answer ','required');
-			$this->form_validation->set_rules('faq_type','FAQ Type ','required');
-			$this->form_validation->set_rules('status','FAQ Status','required');
+					$this->form_validation->set_rules('admin_reply','Reply','required');
 
 					if($this->form_validation->run())
 					{
-						$faq_question=$this->input->post('faq_question');
-				$faq_answer=$this->input->post('faq_answer');
-				$faq_type=$this->input->post('faq_type');
-				$faq_status=$this->input->post('status');
-				
+						$admin_reply=$this->input->post('admin_reply');
 									
 						$input_data = array(
-								'faq_question'=>trim($faq_question),
-						'faq_answer'=>$faq_answer,
-						'faq_type'=>$faq_type,
-						'faq_status'=>$faq_status,
-								'dateupdated' => date('Y-m-d H:i:s')
+								'admin_reply'=>trim($admin_reply),
+								'reply_date' => date('Y-m-d')
 								);
-					// 	echo"<pre>";
-					// print_r($input_data);
-					// exit();
+					
+						$Updatedata = $this->Feedback_model->uptdateFeedback($input_data,$feedback_id);
 
-						$FAQdata = $this->FAQ_model->uptdateFAQ($input_data,$faq_id);
-
-						if($FAQdata)
+						if($Updatedata)
 						{	
-							$this->session->set_flashdata('success','FAQ updated successfully.');
-
-							redirect(base_url().'backend/FAQ/index');	
+							$this->session->set_flashdata('success','Feedback updated successfully.');
+							redirect(base_url().'backend/Feedback/index');	
 						}
 						else
 						{
 							$this->session->set_flashdata('error','Error while updating FAQ.');
-
-							redirect(base_url().'backend/FAQ/updateFAQ/'.base64_encode($faq_id));
+							redirect(base_url().'backend/Feedback/feedbackReply/'.base64_encode($faq_id));
 						}	
 					}
 					else
 					{
 						$this->session->set_flashdata('error',$this->form_validation->error_string());
-
-						redirect(base_url().'backend/FAQ/updateFAQ/'.base64_encode($faq_id));
+						redirect(base_url().'backend/Feedback/feedbackReply/'.base64_encode($faq_id));
 					}
 				}
 			}
 			else
 			{
-				$data['error_msg'] = 'FAQ not found.';
+				$data['error_msg'] = 'Feedback not found.';
 			}
 		}
 		
 		$this->load->view('admin/admin_header',$data);
-		$this->load->view('admin/updateFAQ',$data);
+		$this->load->view('admin/feedback_reply',$data);
 		$this->load->view('admin/admin_footer');
 	}
 	
