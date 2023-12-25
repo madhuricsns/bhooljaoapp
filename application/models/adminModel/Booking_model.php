@@ -99,6 +99,30 @@ Class Booking_model extends CI_Model {
 		return $response;
 	}
 
+	public function getGroup($group_id) 
+	{
+		$this->db->select('*');
+        $this->db->where('group_id', $group_id);
+		$result = $this->db->get(TBLPREFIX.'service_group as g');
+        return $response=$result->result_array();
+    }
+
+	public function getGroupBySP($group_id,$res)
+	{
+		$this->db->select('g.*,u.full_name,u.profile_id');
+		$this->db->where('group_parent_id!=','0');
+		$this->db->where('group_parent_id',$group_id);
+		$this->db->join(TBLPREFIX.'users as u','u.user_id=g.service_provider_id','left');
+		$query = $this->db->get(TBLPREFIX."service_group as g");
+		if($res == 1)
+		{
+			return $query->result_array();
+		}
+		else
+		{
+			return $query->num_rows();
+		}	
+	}
 
  	public function getBookingBystatus($booking_status) 
 	{

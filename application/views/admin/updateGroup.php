@@ -53,6 +53,27 @@
                                         </div>
                                         
 										<div class="row">	
+											<div class="form-group  col-md-6">
+                                                 <label for="sp_id"> Service Givers </label>
+												<select name="sp_ids[]" id="sp_id" class="form-control select2" multiple required>
+													<option value="">Select  </option>
+													<?php
+													$spList=$this->Group_model->getGroupSP($groupInfo[0]['group_id'],1);
+													$serviceproviderArr =array();
+													foreach($spList as $sp){
+														$serviceproviderArr[]=$sp['service_provider_id'];
+													}
+													$serviceproviders=$this->Group_model->getAllServiceproviders($groupInfo[0]['group_category_id'],1);
+													// echo $this->db->last_query();
+														// $spArr=explode(",",$serviceproviderArr);
+                                                    foreach($serviceproviders as $servicegiver){
+                                                    ?>
+                                                    <option value="<?php echo $servicegiver['user_id']?>" <?php echo (isset($serviceproviderArr) && in_array($servicegiver['user_id'], $serviceproviderArr) ) ? "selected" : "" ?>><?php echo $servicegiver['full_name']?></option>
+													<?php } ?>
+												</select>
+												<div id="err_sp_id" class="error_msg"></div>
+                                            </div>
+
                                             <div class="form-group col-md-6">
                                                 <label ><span>*</span> Status</label>
 												<select name="status" id="status" class="form-control" required>

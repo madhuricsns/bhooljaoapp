@@ -67,10 +67,10 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 								if($this->uri->segment(5) != 'Na') { $srchDate = $this->uri->segment(5); }
 								if($this->uri->segment(6) != 'Na') { $pageNo = $this->uri->segment(6); }
 								if($this->uri->segment(7) != 'Na') { $per_page = $this->uri->segment(7); }
-								echo "srchDate-".$srchDate."<br>";
-								echo "srchStatus-".$srchStatus."<br>";
-								echo "pageno-".$pageNo."<br>";
-								echo "per_page-".$per_page."<br>";
+								// echo "srchDate-".$srchDate."<br>";
+								// echo "srchStatus-".$srchStatus."<br>";
+								// echo "pageno-".$pageNo."<br>";
+								// echo "per_page-".$per_page."<br>";
 								?>
 						 		 <div class="tab-content" >
 						                            <div class="tab-pane fade active show">
@@ -78,7 +78,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 						                                        <div class="col-sm-12">
 						                                        	<label>Search</label>
 						         <div class="form-group row">
-						            
+						            <input type="hidden" name="per_page" value="<?php echo $per_page;?>">
 										<select name="bookingstatus" id="bookingstatus"class="form-control col-sm-2">
 							            <option value="">All</option>
 							            <option value="waiting" <?php if($srchStatus == 'waiting') echo 'selected';?> >Waiting</option>
@@ -109,6 +109,14 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 
 
 						<div class="table-responsive">
+							<select class='form-control col-md-1' name='s1' id="page_id" style="margin-bottom:10px;float:left">
+								<option value='<?php echo base_url();?>backend/Booking/manageBooking/<?php if(isset($srchStatus) && $srchStatus!="Na") { echo $srchStatus; } else { echo "Na";} ?>/<?php if(isset($srchDate) && $srchDate!='Na') { echo $srchDate; } else { echo 'Na'; }?>/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/10' <?php if($per_page=='10'){ echo 'selected';}?>>10</option>
+								<option value='<?php echo base_url();?>backend/Booking/manageBooking/<?php if(isset($srchStatus) && $srchStatus!="Na") { echo $srchStatus; } else { echo "Na";} ?>/<?php if(isset($srchDate) && $srchDate!='Na') { echo $srchDate; } else { echo 'Na'; }?>/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/20' <?php if($per_page=='20'){ echo 'selected';}?>>20</option>
+								<option value='<?php echo base_url();?>backend/Booking/manageBooking/<?php if(isset($srchStatus) && $srchStatus!="Na") { echo $srchStatus; } else { echo "Na";} ?>/<?php if(isset($srchDate) && $srchDate!='Na') { echo $srchDate; } else { echo 'Na'; }?>/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/50' <?php if($per_page=='50'){ echo 'selected';}?>>50</option>
+								<option value='<?php echo base_url();?>backend/Booking/manageBooking/<?php if(isset($srchStatus) && $srchStatus!="Na") { echo $srchStatus; } else { echo "Na";} ?>/<?php if(isset($srchDate) && $srchDate!='Na') { echo $srchDate; } else { echo 'Na'; }?>/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/100' <?php if($per_page=='100'){ echo 'selected';}?>>100</option>
+								
+							</select>
+										
 							<div id="basicScenario" class="product-physical"></div>
 							<?php if($bookingcnt > 0)	{ ?>
 								<table class="table table-bordered table-striped mb-0" id="datatable-default">
@@ -178,12 +186,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 										<div class="dataTables_paginate paging_simple_numbers col-md-10" id="datatable-default_paginate" style="margin-top:10px;float:left">
 											<?php echo $links; ?>
 										</div>	
-										<select class='form-control col-md-2' name='s1' id="page_id" style="margin-top:10px;float:right">
-											<option value='<?php echo base_url();?>backend/Booking/manageBooking/<?php if(isset($srchStatus) && $srchStatus!="Na") { echo $srchStatus; } else { echo "Na";} ?>/<?php echo $srchDate?>/<?php echo $pageNo;?>/10'>10</option>
-											<option value='<?php echo base_url();?>backend/Booking/manageBooking/<?php if(isset($srchStatus) && $srchStatus!="Na") { echo $srchStatus; } else { echo "Na";} ?>/<?php echo $srchDate?>/<?php echo $pageNo;?>/20'>20</option>
-											<option value='<?php echo base_url();?>backend/Booking/manageBooking/<?php echo $srchStatus?>/<?php echo $srchDate?>/<?php echo $pageNo;?>/50'>50</option>
-											<option value='<?php echo base_url();?>backend/Booking/manageBooking/<?php echo $srchStatus?>/<?php echo $srchDate?>/<?php echo $pageNo;?>/100'>100</option>
-										</select>
+										
 										
 								<?php } else 
 								{?>

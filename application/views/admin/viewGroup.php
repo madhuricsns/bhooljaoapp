@@ -23,7 +23,7 @@
 	<?php if(isset($groupInfo) && count($groupInfo)>0)									
 			{ //print_r($groupInfo); //print_r($orderInfo);?>
                 <div class="row">
-                    <!-- Service Provider Basic details -->
+                    <!-- Service Giver Basic details -->
                     
                     <div class="col-sm-6">
                     <div class="card tab2-card">
@@ -99,10 +99,10 @@
 				
                 
                 
-					<div class="col-sm-6">
+					<!-- <div class="col-sm-6">
                         <div class="card tab2-card">
                             <div class="card-header" style="background-color: #ded9d9">
-                                <h5 style="color: #121111;"> Update Service Provider List </h5>
+                                <h5 style="color: #121111;"> Update Service Giver List </h5>
                             </div>
                             <div class="card-body">
 							<form class="needs-validation" name="frm_addbanner" id="frm_addbanner" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/Group/ViewGroup/<?php echo base64_encode($groupInfo[0]['group_id']); ?>">
@@ -112,7 +112,7 @@
 											
 											<div class="form-group  col-md-12">
 												<input type="hidden" name="group_id" value="<?php echo $groupInfo[0]['group_id'];?>">
-                                                 <label for="category_id"> Service Providers </label>
+                                                 <label for="category_id"> Service Givers </label>
 												<select name="sp_ids[]" id="sp_id" class="form-control select2" multiple required>
 													<option value="">Select  </option>
 													<?php
@@ -140,7 +140,7 @@
                             </div>
                         </div>
 
-                    </div>
+                    </div> -->
                 </div>
                 
 				<?php } else 

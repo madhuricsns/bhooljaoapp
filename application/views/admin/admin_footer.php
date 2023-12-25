@@ -526,7 +526,7 @@ $(document).ready(function(){
     }); 
 
     $("#category_id").change(function () { 
-                                
+                
        var category_id= $('select[name=category_id]').val();
        if(category_id!="")
        {
@@ -549,7 +549,7 @@ $(document).ready(function(){
     });
 
     $("#page_id").change(function(){ // change function of listbox
-        //alert($('#city_id').val());
+        // alert($('#page_id').val());
         window.location = $('#page_id').val();
     });
 

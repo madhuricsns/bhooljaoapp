@@ -37,7 +37,6 @@ Class Promocode_model extends CI_Model {
 
 	public function getAllPromocode($res,$per_page,$page)
 	{
-		
 		$this->db->select('*');
 		//$this->db->join(TBLPREFIX.'service as s','s.service_id=p.service_id','left');
 		$this->db->order_by('promocode_id','DESC');
@@ -77,11 +76,9 @@ Class Promocode_model extends CI_Model {
 	
 	public function uptdatePromocode($input_data,$promocode_id) 
 	{
-		
-		
-			$this->db->where('promocode_id',$promocode_id);
-			$query = $this->db->update(TBLPREFIX.'promo_code',$input_data);
-			if($query==1)
+		$this->db->where('promocode_id',$promocode_id);
+		$query = $this->db->update(TBLPREFIX.'promo_code',$input_data);
+		if($query==1)
 		{
 			return true;
 		}
@@ -128,5 +125,18 @@ Class Promocode_model extends CI_Model {
 		}
 		else
 			return false;
+	}
+
+	public function getAllUsers($res)
+	{
+		$this->db->select('*');
+		$this->db->where('status','Active');
+		$this->db->where('user_type','Customer');
+		$result = $this->db->get(TBLPREFIX.'users');
+		if($res == 1)
+			return $result->result_array();
+		else
+			return $result->num_rows();
+
 	}
 }

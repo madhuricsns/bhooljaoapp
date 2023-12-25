@@ -70,5 +70,17 @@ Class Material_model extends CI_Model {
 		else
 			return false;
 	}
+
+	public function getAllMaterialRequest($material_id)
+	{
+		$this->db->select('r.*,u.full_name,m.material_name');
+		$this->db->where('r.material_id',$material_id);
+		$this->db->join(TBLPREFIX.'users as u','u.user_id=r.service_provider_id','left');
+		$this->db->join(TBLPREFIX.'material as m','m.material_id=r.material_id','left');
+		$this->db->order_by('r.request_id','DESC');
+		$result = $this->db->get(TBLPREFIX.'material_request as r');
+		//echo $this->db->last_query();exit;
+		return $result->result_array();
+	}
 	
 }

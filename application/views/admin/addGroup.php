@@ -34,7 +34,7 @@
 
                                     	 	<div class="form-group  col-md-6">
                                                  <label for="category_id"> Category </label>
-												<select name="category_id" id="category_id" class="form-control" required>
+												<select name="category_id" id="category_id" class="form-control" required >
 													<option value="">Select Category </option>
 													<?php
                                                     foreach($categoryLists as $category){
@@ -53,6 +53,15 @@
 									</div>
 									
 									<div class="row">
+											<div class="form-group  col-md-6">
+                                                 <label for="sp_id"> Service Givers </label>
+												<select name="sp_ids[]" id="sp_id" class="form-control select2" multiple required>
+													<!-- <option value="">Select  </option> -->
+													
+												</select>
+												<div id="err_sp_id" class="error_msg"></div>
+                                            </div>
+
                                             <div class="form-group col-md-6">
                                                 <label><span>*</span> Status</label>
 												<select name="status" id="status" class="form-control" required>
