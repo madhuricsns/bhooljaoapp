@@ -497,6 +497,62 @@ $(document).ready(function(){
         }
         
     }); 
+
+    $("#group_id , #service_provider").change(function () { 
+        // alert();                           
+       var group_id= $('#group_id').val() // Here we can get the value of selected item
+       var service_provider= $('#service_provider').val() // Here we can get the value of selected item
+    //    alert(service_provider);
+    //    alert(group_id);
+        if(service_provider>0 && group_id>0)
+        {
+            $("#service_provider").val('');
+            $("#group_id").val('');
+            alert('Please select at least one option');
+        }
+        else if(service_provider==0 && group_id>0) 
+        {
+            $("#service_provider").val('');
+        }
+        else if(service_provider>0) 
+        {
+            $("#group_id").val('');
+            // alert();
+        }
+        else if(group_id>0)
+        {
+            $("#group_id").val('');
+        }
+    }); 
+
+    $("#category_id").change(function () { 
+                                
+       var category_id= $('select[name=category_id]').val();
+       if(category_id!="")
+       {
+    //    alert(category_id);  
+            $.ajax({
+                type:"POST",
+                url:"<?php echo base_url('backend/');?>Group/getServiceprovider",
+                data:{
+                    category_id:category_id
+                }              
+                }).done(function(message){
+                // alert(message);
+                $("#sp_id").html(message);
+            });
+        }
+        else
+        {
+            alert('Please select Category');
+        }
+    });
+
+    $("#page_id").change(function(){ // change function of listbox
+        //alert($('#city_id').val());
+        window.location = $('#page_id').val();
+    });
+
 });
 
 
@@ -647,7 +703,6 @@ function getStoreByMainCategoryFromUser()
 }
 function getCategoy()
 {
-    
    var rst_id=$("#rst_id").val();
 
       $.ajax({
@@ -665,7 +720,6 @@ function getCategoy()
                      $('#rst_category_id').append(message);
                     
              });
-
 }
 
 $(document).ready(function() {
@@ -676,7 +730,6 @@ $(document).ready(function() {
 			"paging": true,
 			"autoWidth": true,
 			buttons: [
-				 
 				'copyHtml5',
 				'csvHtml5',
 				'excelHtml5',

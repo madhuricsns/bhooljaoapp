@@ -14,7 +14,7 @@ class Booking extends CI_Controller {
 		$this->load->model('adminModel/User_model');
 		$this->load->model('adminModel/Notification_model');
 		$this->load->model('Common_Model');
-		
+		date_default_timezone_set('Asia/Kolkata');
 	}
 	public function index()
 	{
@@ -24,7 +24,7 @@ class Booking extends CI_Controller {
 	public function manageBooking()
 	{
 		$data['title']='Manage Booking';
-		$srchStatus = $srchDate = 'Na';
+		$srchStatus = $srchDate = $pageNo = $per_page='Na';
 		if($this->uri->segment(4)!='')
 		{
 			if($this->uri->segment(4)!="Na")
@@ -39,6 +39,26 @@ class Booking extends CI_Controller {
 			{
 				$srchDate=($this->uri->segment(5));
 			}
+		}
+
+		if($this->uri->segment(6)!='')
+		{
+			if($this->uri->segment(6)!="Na")
+			{
+				$pageNo=($this->uri->segment(6));
+			}
+		}
+
+		if($this->uri->segment(7)!='')
+		{
+			if($this->uri->segment(7)!="Na")
+			{
+				$per_page=($this->uri->segment(7));
+			}
+		}
+		else
+		{
+			$per_page='10';
 		}
 		
 		$filter=array();
@@ -60,8 +80,9 @@ class Booking extends CI_Controller {
 		$data['bookingcnt']=$this->Booking_model->getAllBooking(0,"","",$filter);
 		
 		$config = array();
-		$config["base_url"] = base_url().'backend/Booking/manageBooking/'.$srchStatus.'/'.$srchDate;
-		$config['per_page'] = 10;
+		$config["base_url"] = base_url().'backend/Booking/manageBooking/'.$srchStatus.'/'.$srchDate.'/'.$pageNo.'/'.$per_page;
+		// $config['per_page'] = 10;
+		$config['per_page'] = $per_page;
 		$config["uri_segment"] = 6;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
@@ -82,9 +103,12 @@ class Booking extends CI_Controller {
 		#echo "<pre>"; print_r($config); exit;
 		$this->pagination->initialize($config);
 				
+		$per_page = ($this->uri->segment(7)) ? $this->uri->segment(7) : 0;
 		$page = ($this->uri->segment(6)) ? $this->uri->segment(6) : 0;
 		$data["total_rows"] = $config["total_rows"]; 
 		$data["links"] = $this->pagination->create_links();
+
+		$data["pagecount"] = $this->pagination->create_links();
 		//echo "ConttPerPage--".$config["per_page"];
 		//echo "Conttpage--".$page;
 		//exit();
@@ -103,7 +127,7 @@ class Booking extends CI_Controller {
 	
 	public function search_list()
 	{
-		$srchStatus = $srchDate = 'Na';
+		$srchStatus = $srchDate = $pageNo='Na';
 		
 		if(isset($_POST['Search']))
 		{
@@ -115,15 +139,15 @@ class Booking extends CI_Controller {
 			{
 				$srchDate=trim($_POST['datesearch']);
 			}
-			
-			redirect('backend/Booking/manageBooking/'.$srchStatus.'/'.$srchDate);
+
+			redirect('backend/Booking/manageBooking/'.$srchStatus.'/'.$srchDate.'/'.$pageNo);
 		}
 		redirect('backend/Booking/manageBooking', 'refresh');
 	}
 
 	public function searchdemo_list()
 	{
-		$srchStatus = $srchDate = $pageNo = 'Na';
+		$srchStatus = $srchDate = $pageNo ='Na';
 		
 		if(isset($_POST['Search']))
 		{
@@ -230,14 +254,21 @@ class Booking extends CI_Controller {
 			$data['usersList']=$this->Booking_model->getAllUsers(1,"","",$category_id);
 				if(isset($_POST['btn_upAssing']))
 				{
-			        $this->form_validation->set_rules('service_group_assign','Service Provider ','required');
-					if($this->form_validation->run())
-					{
+			        // $this->form_validation->set_rules('service_provider','Service Provider ','required');
+			        // $this->form_validation->set_rules('service_group_assign','Service Provider ','required');
+					// if($this->form_validation->run())
+					// {
 						$servicepro=$this->input->post('service_provider');
-						$service_group_assign=$this->input->post('service_group_assign');
+						$service_group_assign='NO';
+						
 						$group_id=$this->input->post('group_id');
+						if($group_id>0)
+						{
+							$service_group_assign='YES';
+						}
+						
 						// $status=$this->input->post('status');
-						if($service_group_assign=='Yes')
+						if($group_id>0)
 						{
 							$input_data = array(
 								'service_provider_id'=>'0',
@@ -253,16 +284,16 @@ class Booking extends CI_Controller {
 							 );
 						}
 						
-					// echo"<pre>";
-					// print_r($input_data);
-					// exit();
+						// echo"<pre>";
+						// print_r($input_data);
+						// exit();
 						$updatedata = $this->Booking_model->uptdateAssingServiceprovider($input_data,$booking_id);
                        
                        // echo $this->db->last_query();exit;
 						if($updatedata)
 						{	
 							$orderno = $data['bokingInfo'][0]['order_no'];
-							if($service_group_assign=='No')
+							if($service_group_assign=='NO')
 							{
 								$user=$this->Notification_model->getUserDetails(1,$servicepro);
 								
@@ -272,19 +303,42 @@ class Booking extends CI_Controller {
 								$input_data = array(
 									'noti_title'=>trim($title),
 									'noti_message'=>trim($message),
-									'noti_type'=>'Service Provider',
+									'noti_user_type'=>'Service Provider',
+									'noti_type'=>'Booking',
 									'noti_user_id'=>$servicepro,
 									'noti_gcmID'=>$user->user_fcm,
-									'created_by' => $session_data['admin_id'],
+									// 'created_by' => $session_data['admin_id'],
 									'dateadded' => date('Y-m-d H:i:s')
 									);
 								
 								$notification_id = $this->Notification_model->insert_notification($input_data);
 								$this->Common_Model->sendexponotification($title,$message,$user->user_fcm);
+								
 							}
 							else
 							{
+								$groupBySP=$this->Booking_model->getGroupBySP($group_id,1);
 								
+								foreach($groupBySP as $sp){
+									$user=$this->Notification_model->getUserDetails(1,$sp['service_provider_id']);
+									
+									$title="New Booking Assigned";
+									$message="Booking no $orderno has been assigned to your service group";
+				
+									$input_data = array(
+										'noti_title'=>trim($title),
+										'noti_message'=>trim($message),
+										'noti_user_type'=>'Service Provider',
+										'noti_type'=>'Booking',
+										'noti_user_id'=>$user->user_id,
+										'noti_gcmID'=>$user->user_fcm,
+										// 'created_by' => $session_data['admin_id'],
+										'dateadded' => date('Y-m-d H:i:s')
+										);
+									
+									$notification_id = $this->Notification_model->insert_notification($input_data);
+									$this->Common_Model->sendexponotification($title,$message,$user->user_fcm);
+								}
 							}
 							
 							// Send Customer Notification
@@ -296,7 +350,8 @@ class Booking extends CI_Controller {
 							$input_dataC = array(
 								'noti_title'=>trim($titleC),
 								'noti_message'=>trim($messageC),
-								'noti_type'=>'Customer',
+								'noti_user_type'=>'Customer',
+								'noti_type'=>'Booking',
 								'noti_user_id'=>$booking_user_id,
 								'noti_gcmID'=>$customer->user_fcm,
 								'created_by' => $session_data['admin_id'],
@@ -306,7 +361,6 @@ class Booking extends CI_Controller {
 							$notification_idc = $this->Notification_model->insert_notification($input_dataC);
 							$this->Common_Model->sendexponotification($titleC,$messageC,$customer->user_fcm);
 							
-							
 							$this->session->set_flashdata('success','Assing Service Provider successfully.');
 							redirect(base_url().'backend/Booking/manageBooking');	
 						}
@@ -315,12 +369,12 @@ class Booking extends CI_Controller {
 							$this->session->set_flashdata('error','Error while updating Service Provider.');
 							redirect(base_url().'backend/Booking/AssingServiceProvider/'.base64_encode($booking_id));
 						}	
-					}
-					else
-					{
-						$this->session->set_flashdata('error',$this->form_validation->error_string());
-						redirect(base_url().'backend/Booking/AssingServiceProvider/'.base64_encode($booking_id));
-					}
+					// }
+					// else
+					// {
+					// 	$this->session->set_flashdata('error',$this->form_validation->error_string());
+					// 	redirect(base_url().'backend/Booking/AssingServiceProvider/'.base64_encode($booking_id));
+					// }
 				}
 			}
 			else
@@ -909,34 +963,32 @@ public function exportBookingCSV()
 		  $data['success']= "download sample export data successfully!";
 	}
 
-
-public function change_status()
+	public function change_status()
 	{
 		$data['title']='Change Status';
 		$data['error_msg']='';
 		
 		$srchDate = $srchStatus = $pageNo = "Na";
 
-if (isset($srchStatus) && isset($srchDate) && isset($pageNo) == 1 ){
-	
-		$srchStatus=$this->uri->segment(4);
-		$srchDate=$this->uri->segment(5);
-		$pageNo=$this->uri->segment(6);
+		if (isset($srchStatus) && isset($srchDate) && isset($pageNo) == 1 ){
+			
+				$srchStatus=$this->uri->segment(4);
+				$srchDate=$this->uri->segment(5);
+				$pageNo=$this->uri->segment(6);
 
-		$booking_id=$this->uri->segment(7);
-		$statusTobeUpdated=$this->uri->segment(8);
+				$booking_id=$this->uri->segment(7);
+				$statusTobeUpdated=$this->uri->segment(8);
+				
+		}else{
+				$booking_id=$this->uri->segment(4);
+				$statusTobeUpdated=$this->uri->segment(5);
 
-		
-}else{
-		$booking_id=$this->uri->segment(4);
-		$statusTobeUpdated=$this->uri->segment(5);
-
-}
+		}
 		// echo 'srchStatus---'.$srchStatus ."<br>";
 		// echo "srchDate---".$srchDate ."<br>";
 		// echo "pageNo---".$pageNo ."<br>";
 		// echo "booking_id---".$booking_id ."<br>";
-		// echo "statusTobeUpdated---".$statusTobeUpdated;
+		echo "statusTobeUpdated---".$statusTobeUpdated;
 
 		//      exit();
 		if($booking_id)
@@ -945,14 +997,12 @@ if (isset($srchStatus) && isset($srchDate) && isset($pageNo) == 1 ){
 								'booking_status'=> $statusTobeUpdated
 								);
 			$userdata = $this->Booking_model->uptdateStatus($input_data,$booking_id);
+			echo $this->db->last_query();exit;
 			if($userdata){
 				$this->session->set_flashdata('success','Status updated successfully.');
 				redirect(base_url().'backend/Booking/manageBookingDemo/'.$srchStatus.'/'.$srchDate.'/'.$pageNo.'/'.$booking_id.'/'.$statusTobeUpdated);
 				}
 		}
 	}
-
-
-
 
 }
