@@ -596,6 +596,7 @@ public function viewBookingDetails()
 	{
 		$data['title']='Manage Booking Demo';
 		$srchStatus = $srchDate = 'Na';
+		$per_page='10';
 		if($this->uri->segment(4)!='')
 		{
 			if($this->uri->segment(4)!="Na")
@@ -610,6 +611,26 @@ public function viewBookingDetails()
 			{
 				$srchDate=($this->uri->segment(5));
 			}
+		}
+
+		if($this->uri->segment(6)!='')
+		{
+			if($this->uri->segment(6)!="Na")
+			{
+				$pageNo=($this->uri->segment(6));
+			}
+		}
+
+		if($this->uri->segment(7)!='')
+		{
+			if($this->uri->segment(7)!="Na")
+			{
+				$per_page=($this->uri->segment(7));
+			}
+		}
+		else
+		{
+			$per_page='10';
 		}
 		$filter=array();
 		//$date_filter=array();
@@ -631,8 +652,16 @@ public function viewBookingDetails()
 		$data['bookingdemocnt']=$this->Booking_model->getAllBookingDemo(0,"","",$filter);
 		
 		$config = array();
-		$config["base_url"] = base_url().'backend/Booking/manageBookingDemo/'.$srchStatus.'/'.$srchDate;;
-		$config['per_page'] = 10;
+		$config["base_url"] = base_url().'backend/Booking/manageBookingDemo/'.$srchStatus.'/'.$srchDate.'/'.$per_page;
+		// $config['per_page'] = 10;
+		if($per_page>100)
+		{
+			$config['per_page'] = 100;
+		}
+		else
+		{
+			$config['per_page'] = $per_page;
+		}
 		$config["uri_segment"] = 6;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
@@ -980,40 +1009,27 @@ public function exportBookingCSV()
 	{
 		$data['title']='Change Status';
 		$data['error_msg']='';
-		
-		$srchDate = $srchStatus = $pageNo = "Na";
 
-		if (isset($srchStatus) && isset($srchDate) && isset($pageNo) == 1 ){
-			
-				$srchStatus=$this->uri->segment(4);
-				$srchDate=$this->uri->segment(5);
-				$pageNo=$this->uri->segment(6);
 
-				$booking_id=$this->uri->segment(7);
-				$statusTobeUpdated=$this->uri->segment(8);
-				
-		}else{
-				$booking_id=$this->uri->segment(4);
-				$statusTobeUpdated=$this->uri->segment(5);
+		$booking_id= $this->input->get('booking_id');
+		$status= $this->input->get('status');
 
-		}
-		// echo 'srchStatus---'.$srchStatus ."<br>";
-		// echo "srchDate---".$srchDate ."<br>";
-		// echo "pageNo---".$pageNo ."<br>";
-		// echo "booking_id---".$booking_id ."<br>";
-		echo "statusTobeUpdated---".$statusTobeUpdated;
-
-		//      exit();
 		if($booking_id)
 		{
 			$input_data = array(
-								'booking_status'=> $statusTobeUpdated
+								'booking_status'=> $status
 								);
 			$userdata = $this->Booking_model->uptdateStatus($input_data,$booking_id);
-			echo $this->db->last_query();exit;
+			 // echo $this->db->last_query();
+
+			//echo $userdata;
+
 			if($userdata){
-				$this->session->set_flashdata('success','Status updated successfully.');
-				redirect(base_url().'backend/Booking/manageBookingDemo/'.$srchStatus.'/'.$srchDate.'/'.$pageNo.'/'.$booking_id.'/'.$statusTobeUpdated);
+				
+				echo "Status updated successfully";
+				} else{
+
+					echo "Status updated failed";
 				}
 		}
 	}

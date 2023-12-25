@@ -58,7 +58,10 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 								<?php if($this->uri->segment(6)!=""){ echo $this->uri->segment(6);}?>/
 								<?php if($this->uri->segment(7)!=""){ echo $this->uri->segment(7);}?>/">
 								<?php 
-								$srchDate = $srchStatus = $pageNo = '';
+								$srchDate ='Na';
+								$srchStatus ='Na';
+								$pageNo ='Na';
+								$per_page='Na';
 								
 								if($this->uri->segment(4) != 'Na') { $srchStatus = $this->uri->segment(4); } 
 								
@@ -95,12 +98,15 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 						                                   
 						    </form>
 						    <hr>
-<select onchange="pagelimt(this)">
-	<option value="4">10</option>
-	<option value="8">25</option>
-	<option value="15">50</option>
-	<option value="100">100</option>	
-</select>
+
+						    <div class="table-responsive">
+							<select class='form-control col-md-1' name='s1' id="page_id" style="margin-bottom:10px;float:left">
+								<option value='<?php echo base_url();?>backend/Booking/manageBookingDemo/<?php if(isset($srchStatus) && $srchStatus!="Na") { echo $srchStatus; } else { echo "Na";} ?>/<?php if(isset($srchDate) && $srchDate!='Na') { echo $srchDate; } else { echo 'Na'; }?>/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/10' <?php if($per_page=='10'){ echo 'selected';}?>>10</option>
+								<option value='<?php echo base_url();?>backend/Booking/manageBookingDemo/<?php if(isset($srchStatus) && $srchStatus!="Na") { echo $srchStatus; } else { echo "Na";} ?>/<?php if(isset($srchDate) && $srchDate!='Na') { echo $srchDate; } else { echo 'Na'; }?>/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/20' <?php if($per_page=='20'){ echo 'selected';}?>>20</option>
+								<option value='<?php echo base_url();?>backend/Booking/manageBookingDemo/<?php if(isset($srchStatus) && $srchStatus!="Na") { echo $srchStatus; } else { echo "Na";} ?>/<?php if(isset($srchDate) && $srchDate!='Na') { echo $srchDate; } else { echo 'Na'; }?>/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/50' <?php if($per_page=='50'){ echo 'selected';}?>>50</option>
+								<option value='<?php echo base_url();?>backend/Booking/manageBookingDemo/<?php if(isset($srchStatus) && $srchStatus!="Na") { echo $srchStatus; } else { echo "Na";} ?>/<?php if(isset($srchDate) && $srchDate!='Na') { echo $srchDate; } else { echo 'Na'; }?>/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/100' <?php if($per_page=='100'){ echo 'selected';}?>>100</option>
+								
+							</select>
 
 						<div class="table-responsive">
 							<div id="basicScenario" class="product-physical"></div>
@@ -153,32 +159,18 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												} else { 
 												echo "---";
 												} ?></td>
-												<td><?php echo $booking['booking_status'];?></td>
+												<td id="<?php echo $booking['booking_id'];?>"><?php echo $booking['booking_status'];?></td>
 
 
 
-												<td>
+												  <td>
 
-    <select name='status' id='status' onchange='updateStatus()'>
-        <option value='completed'>Completed</option>
-        <option value='canceled'>Canceled</option>
-    </select>
+													    <select name='ChangeStatus' id='ChangeStatus' onchange="DemostatusChange(this)" class="form-control">
+                               							 <option value="">Action</option>
+						                                  <option value='completed' data-id="<?php echo $booking['booking_id'];?>">Completed</option>
+						                                  <option value='canceled' data-id="<?php echo $booking['booking_id'];?>">Canceled</option>
+						                              </select>
 
-
-
-	<button  onsubmit="checkDB(<?php echo $booking_id = $booking['booking_id'];?>,<?php echo $status= 'completed';?>);" >X</button>	
-						 		 
-								 <!-- <button onclick="location.href='<?php echo base_url();?>backend/Booking/change_status/<?php if (isset($srchStatus)) echo $srchStatus ?>/<?php if(isset($srchDate)) echo $srchDate ?>/<?php if(isset($pageNo))  echo $pageNo ?>/<?php echo base64_encode($booking['booking_id']);?>/<?php echo base64_encode('completed');?>'">X</button> -->
-						                                   
-						    <!-- </form> -->
-
-
-
-
-
-                                               
-
-											
 													</td>
 
 
@@ -211,48 +203,15 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 								<div class="dataTables_paginate paging_simple_numbers" id="datatable-default_paginate" style="margin-top:10px;">
 									<?php  echo $links; ?>
 								</div>
-								<select class='form-control col-md-2' name='s1' id="page_id" style="margin-top:10px;float:right">
-											<option value='<?php echo base_url();?>backend/Booking/manageBookingDemo/<?php if(isset($srchStatus) && $srchStatus!="Na") { echo $srchStatus; } else { echo "Na";} ?>/<?php echo $srchDate?>/<?php echo $pageNo;?>/10'>10</option>
-											<option value='<?php echo base_url();?>backend/Booking/manageBookingDemo/<?php if(isset($srchStatus) && $srchStatus!="Na") { echo $srchStatus; } else { echo "Na";} ?>/<?php echo $srchDate?>/<?php echo $pageNo;?>/20'>20</option>
-											<option value='<?php echo base_url();?>backend/Booking/manageBookingDemo/<?php echo $srchStatus?>/<?php echo $srchDate?>/<?php echo $pageNo;?>/50'>50</option>
-											<option value='<?php echo base_url();?>backend/Booking/manageBookingDemo/<?php echo $srchStatus?>/<?php echo $srchDate?>/<?php echo $pageNo;?>/100'>100</option>
-										</select>
-										
 								
-									
-									
-
-
-    
-								<!-- <div class="form-control"> -->
-									<?php
-							 // echo form_open('backend/Booking/manageBookingDemo');
-							
-							// 		             $options = array(
-							 // 		                            '' => 'Select',
-							 // 		                            	'10'=>'10',
-							 //                                      '20' => '20',
-							 // 		                             '50' => '50',
-							 //                                    '100' => '100');
-
-
-									           
-							 //            echo form_dropdown('sel',$options,'');
-							 // echo form_submit('',);
-									?>
-<!-- </div> -->
-
-
-						
-    
-    
-										
+		
 								<?php } else 
 								{?>
 								<div class="alert alert-danger">
 									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>No records  found.
 								</div>									
 								<?php }?>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -262,60 +221,22 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 	<!-- Container-fluid Ends-->
 	 
 	
-</div>
-<script type="text/javascript">
-	
-	function pagelimt(event)
-	{
-		var value = event.value;
-		// alert(value);
-		 $.ajax({
-        url: "<?php echo base_url();?>backend/Booking/manageBookingDemo",
-        type: "GET",
-        data: {"value" : value}
-    }).done(function(data) {
-        $('value').val(data);
-         // alert(value);
-    });
-	}
-
-</script>
-
-
-
-
-<!-- <script type="text/javascript">
-function checkDB(booking_id, status)
-{
-	var booking_id = booking_id.value;
-	var status = status.value;
-	 alert(booking_id);
-
-  $.ajax({
-  type: "POST",
-  url: "<?php echo base_url();?>backend/Booking/change_status",
-  data: 'booking_id='+booking_id+'status='+status,
-  datatype: "json",
-  success: function(result){
-
-        alert(result);      
-      }
-  })
-
-}
-</script> -->
-
-
-       
-  
+</div>  
 <script>
-    function updateStatus() {
-        var status = $('#status').val();
-        // alert(status);
+    function DemostatusChange(select) {
+    	var selectedOption = select.options[select.selectedIndex];
+  var status = selectedOption.getAttribute('value');
+  var booking_id = selectedOption.getAttribute('data-id');
+        // var status = $('#status').val();
+        // var status= $('select[name=ChangeStatus]').val();
+          var id ="#"+booking_id;
+           alert(status,booking_id);
         $.ajax({ 
-            url: "<?php echo base_url();?>backend/Booking/change_status?id=<?php echo $booking['booking_id'] ?>&status="+status,
+        	
+            url: "<?php echo base_url();?>backend/Booking/change_status?booking_id="+booking_id+"&status="+status,
             success: function(res) { 
                   console.log(res);
+                  $(id).html(status);
                   alert(res);
             }
         });
