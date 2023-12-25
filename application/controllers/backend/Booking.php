@@ -582,7 +582,11 @@ public function viewBookingDetails()
 	public function manageBookingDemo()
 	{
 		$data['title']='Manage Booking Demo';
-		$srchStatus = $srchDate = 'Na';
+		$value = $this->input->get('value');
+     // print_r($value);
+      echo "input_data----".$value;
+
+		$srchStatus = $srchDate = $pageNo = $per_page='Na';
 		if($this->uri->segment(4)!='')
 		{
 			if($this->uri->segment(4)!="Na")
@@ -597,6 +601,25 @@ public function viewBookingDetails()
 			{
 				$srchDate=($this->uri->segment(5));
 			}
+		}
+		if($this->uri->segment(6)!='')
+		{
+			if($this->uri->segment(6)!="Na")
+			{
+				$pageNo=($this->uri->segment(6));
+			}
+		}
+
+		if($this->uri->segment(7)!='')
+		{
+			if($this->uri->segment(7)!="Na")
+			{
+				$per_page=($this->uri->segment(7));
+			}
+		}
+		else
+		{
+			$per_page='10';
 		}
 		$filter=array();
 		//$date_filter=array();
@@ -618,8 +641,18 @@ public function viewBookingDetails()
 		$data['bookingdemocnt']=$this->Booking_model->getAllBookingDemo(0,"","",$filter);
 		
 		$config = array();
-		$config["base_url"] = base_url().'backend/Booking/manageBookingDemo/'.$srchStatus.'/'.$srchDate;;
-		$config['per_page'] = 10;
+		$config["base_url"] = base_url().'backend/Booking/manageBookingDemo/'.$srchStatus.'/'.$srchDate.'/'.$pageNo.'/'.$per_page;
+		// $config['per_page'] = 10;
+
+           if(isset($value))
+           {
+               $config['per_page'] = $value;
+           } else{
+                
+                  $config['per_page'] = 10;
+            }
+
+		// $config['per_page'] = $per_page;
 		$config["uri_segment"] = 6;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
@@ -639,7 +672,7 @@ public function viewBookingDetails()
 		$config["total_rows"] =$data['bookingdemocnt'];
 		#echo "<pre>"; print_r($config); exit;
 		$this->pagination->initialize($config);
-				
+		$per_page = ($this->uri->segment(7)) ? $this->uri->segment(7) : 0;		
 		$page = ($this->uri->segment(6)) ? $this->uri->segment(6) : 0;
 		$data["total_rows"] = $config["total_rows"]; 
 		$data["links"] = $this->pagination->create_links();
@@ -967,28 +1000,36 @@ public function exportBookingCSV()
 	{
 		$data['title']='Change Status';
 		$data['error_msg']='';
+
+
+		$booking_id= $this->input->get('id');
+		$status= $this->input->get('status');
+
+		echo $booking_id;
+		echo $status;
+
 		
-		$srchDate = $srchStatus = $pageNo = "Na";
+		// $srchDate = $srchStatus = $pageNo = "Na";
 
-		if (isset($srchStatus) && isset($srchDate) && isset($pageNo) == 1 ){
+		// if (isset($srchStatus) && isset($srchDate) && isset($pageNo) == 1 ){
 			
-				$srchStatus=$this->uri->segment(4);
-				$srchDate=$this->uri->segment(5);
-				$pageNo=$this->uri->segment(6);
+		// 		$srchStatus=$this->uri->segment(4);
+		// 		$srchDate=$this->uri->segment(5);
+		// 		$pageNo=$this->uri->segment(6);
 
-				$booking_id=$this->uri->segment(7);
-				$statusTobeUpdated=$this->uri->segment(8);
+		// 		$booking_id=$this->uri->segment(7);
+		// 		$statusTobeUpdated=$this->uri->segment(8);
 				
-		}else{
-				$booking_id=$this->uri->segment(4);
-				$statusTobeUpdated=$this->uri->segment(5);
+		// }else{
+		// 		$booking_id=$this->uri->segment(4);
+		// 		$statusTobeUpdated=$this->uri->segment(5);
 
-		}
-		// echo 'srchStatus---'.$srchStatus ."<br>";
-		// echo "srchDate---".$srchDate ."<br>";
-		// echo "pageNo---".$pageNo ."<br>";
-		// echo "booking_id---".$booking_id ."<br>";
-		echo "statusTobeUpdated---".$statusTobeUpdated;
+		// }
+		// // echo 'srchStatus---'.$srchStatus ."<br>";
+		// // echo "srchDate---".$srchDate ."<br>";
+		// // echo "pageNo---".$pageNo ."<br>";
+		// // echo "booking_id---".$booking_id ."<br>";
+		 echo "statusTobeUpdated---".$statusTobeUpdated;
 
 		//      exit();
 		if($booking_id)

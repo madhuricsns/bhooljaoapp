@@ -55,7 +55,8 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 
 						 <form method="POST" action="<?php echo base_url().'backend/Booking/searchdemo_list/'; ?><?php if($this->uri->segment(4)!=""){ echo $this->uri->segment(4);}?>/
 								<?php if($this->uri->segment(5)!=""){ echo $this->uri->segment(5);}?>/
-								<?php if($this->uri->segment(6)!=""){ echo $this->uri->segment(6);}?>/">
+								<?php if($this->uri->segment(6)!=""){ echo $this->uri->segment(6);}?>/
+								<?php if($this->uri->segment(7)!=""){ echo $this->uri->segment(7);}?>/">
 								<?php 
 								$srchDate = $srchStatus = $pageNo = '';
 								
@@ -66,6 +67,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 								//$srchDateFormatted = $date1->format('d-m-Y');
 								}
 								if($this->uri->segment(6) == 'Na') { $pageNo = $this->uri->segment(6); } 
+								if($this->uri->segment(7) != 'Na') { $per_page = $this->uri->segment(7); }
 								?>
 						 		 <div class="tab-content" >
 									<div class="tab-pane fade active show">
@@ -93,7 +95,12 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 						                                   
 						    </form>
 						    <hr>
-
+<select onchange="pagelimt(this)">
+	<option value="4">10</option>
+	<option value="8">25</option>
+	<option value="15">50</option>
+	<option value="100">100</option>	
+</select>
 
 						<div class="table-responsive">
 							<div id="basicScenario" class="product-physical"></div>
@@ -150,34 +157,29 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 
 
 
-												<td>			
-													<?php  if (isset($srchStatus) && isset($srchDate) && isset($pageNo) > 0  ){ ?>
-										<a href="<?php echo base_url();?>backend/Booking/change_status/<?php if(isset($srchStatus)) echo $srchStatus ?>/<?php if(isset($srchDate)) echo $srchDate ?>/<?php  echo $pageNo ?>/<?php echo $booking['booking_id'];?>/<?php echo 'completed';?>" title="Status Change Completed"><i data-feather="check"></i>
-													</a>
-												<?php }else{?>
+												<td>
 
-                                                    <a href="<?php echo base_url();?>backend/Booking/change_status/<?php echo $booking['booking_id'];?>/<?php echo 'completed';?>" title="Status Change Completed"><i data-feather="check"></i>
-													</a>
+    <select name='status' id='status' onchange='updateStatus()'>
+        <option value='completed'>Completed</option>
+        <option value='canceled'>Canceled</option>
+    </select>
 
 
 
-												<?php } ?>
+	<button  onsubmit="checkDB(<?php echo $booking_id = $booking['booking_id'];?>,<?php echo $status= 'completed';?>);" >X</button>	
+						 		 
+								 <!-- <button onclick="location.href='<?php echo base_url();?>backend/Booking/change_status/<?php if (isset($srchStatus)) echo $srchStatus ?>/<?php if(isset($srchDate)) echo $srchDate ?>/<?php if(isset($pageNo))  echo $pageNo ?>/<?php echo base64_encode($booking['booking_id']);?>/<?php echo base64_encode('completed');?>'">X</button> -->
+						                                   
+						    <!-- </form> -->
 
 
 
 
 
-										<?php  if (isset($srchStatus) && isset($srchDate) && isset($pageNo) > 0  ){ ?>		
-					                	<a href="<?php echo base_url();?>backend/Booking/change_status/<?php echo $srchStatus ?>/<?php echo $srchDate ?>/<?php echo $pageNo ?>/<?php echo $booking['booking_id'];?>/<?php echo'canceled';?>" title="Status Change Canceled"><i data-feather="x-square"></i>
-													</a>
-			                    <?php }else{?>
+                                               
 
-                                                    <a href="<?php echo base_url();?>backend/Booking/change_status/<?php echo $booking['booking_id'];?>/<?php echo 'canceled';?>" title="Status Change Canceled"><i data-feather="x-square"></i>
-													</a>
-
-
-
-												<?php } ?></td>
+											
+													</td>
 
 
 												<td class="actions">
@@ -207,10 +209,44 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 								</table>
 								
 								<div class="dataTables_paginate paging_simple_numbers" id="datatable-default_paginate" style="margin-top:10px;">
-									<?php echo $links; ?>
+									<?php  echo $links; ?>
 								</div>
+								<select class='form-control col-md-2' name='s1' id="page_id" style="margin-top:10px;float:right">
+											<option value='<?php echo base_url();?>backend/Booking/manageBookingDemo/<?php if(isset($srchStatus) && $srchStatus!="Na") { echo $srchStatus; } else { echo "Na";} ?>/<?php echo $srchDate?>/<?php echo $pageNo;?>/10'>10</option>
+											<option value='<?php echo base_url();?>backend/Booking/manageBookingDemo/<?php if(isset($srchStatus) && $srchStatus!="Na") { echo $srchStatus; } else { echo "Na";} ?>/<?php echo $srchDate?>/<?php echo $pageNo;?>/20'>20</option>
+											<option value='<?php echo base_url();?>backend/Booking/manageBookingDemo/<?php echo $srchStatus?>/<?php echo $srchDate?>/<?php echo $pageNo;?>/50'>50</option>
+											<option value='<?php echo base_url();?>backend/Booking/manageBookingDemo/<?php echo $srchStatus?>/<?php echo $srchDate?>/<?php echo $pageNo;?>/100'>100</option>
+										</select>
+										
 								
-														
+									
+									
+
+
+    
+								<!-- <div class="form-control"> -->
+									<?php
+							 // echo form_open('backend/Booking/manageBookingDemo');
+							
+							// 		             $options = array(
+							 // 		                            '' => 'Select',
+							 // 		                            	'10'=>'10',
+							 //                                      '20' => '20',
+							 // 		                             '50' => '50',
+							 //                                    '100' => '100');
+
+
+									           
+							 //            echo form_dropdown('sel',$options,'');
+							 // echo form_submit('',);
+									?>
+<!-- </div> -->
+
+
+						
+    
+    
+										
 								<?php } else 
 								{?>
 								<div class="alert alert-danger">
@@ -227,3 +263,61 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 	 
 	
 </div>
+<script type="text/javascript">
+	
+	function pagelimt(event)
+	{
+		var value = event.value;
+		// alert(value);
+		 $.ajax({
+        url: "<?php echo base_url();?>backend/Booking/manageBookingDemo",
+        type: "GET",
+        data: {"value" : value}
+    }).done(function(data) {
+        $('value').val(data);
+         // alert(value);
+    });
+	}
+
+</script>
+
+
+
+
+<!-- <script type="text/javascript">
+function checkDB(booking_id, status)
+{
+	var booking_id = booking_id.value;
+	var status = status.value;
+	 alert(booking_id);
+
+  $.ajax({
+  type: "POST",
+  url: "<?php echo base_url();?>backend/Booking/change_status",
+  data: 'booking_id='+booking_id+'status='+status,
+  datatype: "json",
+  success: function(result){
+
+        alert(result);      
+      }
+  })
+
+}
+</script> -->
+
+
+       
+  
+<script>
+    function updateStatus() {
+        var status = $('#status').val();
+        // alert(status);
+        $.ajax({ 
+            url: "<?php echo base_url();?>backend/Booking/change_status?id=<?php echo $booking['booking_id'] ?>&status="+status,
+            success: function(res) { 
+                  console.log(res);
+                  alert(res);
+            }
+        });
+    }
+</script>
