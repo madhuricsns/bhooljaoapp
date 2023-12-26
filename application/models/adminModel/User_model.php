@@ -39,15 +39,18 @@ Class User_model extends CI_Model {
 			return $query->num_rows();
 		}	
 	}
-	public function chkUserName($mobile,$email_address,$res)
+	public function chkUserName($mobile_number,$email_address,$res)
 	{
 		$this->db->select('*');
 		//$this->db->where('username',$username);
 		$this->db->where('user_type','Customer');
-		$where = '(mobile="'.$mobile.'" AND email = "'.$email_address.'")';
+		$where = '(mobile="'.$mobile_number.'" OR email = "'.$email_address.'")';
        	$this->db->where($where);
 		$query=$this->db->get(TBLPREFIX."users");
-		//echo $this->db->last_query();exit;
+		
+		 // $count_row = $query->num_rows();
+		 // echo $count_row;
+		 // echo $this->db->last_query();exit;
 		if($res == 1)
 		{
 			return $query->result_array();
@@ -63,7 +66,7 @@ Class User_model extends CI_Model {
 		$this->db->select('*');
 		//$this->db->where('username',$username);
 		$this->db->where('user_type','Service Provider');
-		$where = '(mobile="'.$mobile.'" AND email = "'.$email_address.'")';
+		$where = '(mobile="'.$mobile.'" OR email = "'.$email_address.'")';
        	$this->db->where($where);
 		$query=$this->db->get(TBLPREFIX."users");
 		//echo $this->db->last_query();exit;
