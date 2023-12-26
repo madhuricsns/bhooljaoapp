@@ -120,7 +120,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 											<th>Time</th>
 											<th>Service Name</th>
 											<th>Customer</th>
-											<th>Service Provider</th>
+											<th>Service Giver</th>
 											<th>Status</th>
 											<th>Change Status</th>
 											<th>Actions</th>	
