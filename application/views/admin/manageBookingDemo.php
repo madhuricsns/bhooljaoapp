@@ -164,13 +164,18 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 
 
 												  <td>
+												  	
+												  	<?php 
 
+												  $crdate=date("d-M-Y");
+												  	  if ($booking['booking_date'] < $crdate ) {
+										?>
 													    <select name='ChangeStatus' id='ChangeStatus' onchange="DemostatusChange(this)" class="form-control">
                                							 <option value="">Action</option>
 						                                  <option value='completed' data-id="<?php echo $booking['booking_id'];?>">Completed</option>
 						                                  <option value='canceled' data-id="<?php echo $booking['booking_id'];?>">Canceled</option>
 						                              </select>
-
+						                              <?php } else{}?>
 													</td>
 
 
