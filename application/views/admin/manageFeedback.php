@@ -88,12 +88,12 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 								<table class="table table-bordered table-striped mb-0" id="datatable-default">
 									<thead>
 										<tr>
-											<th>Date</th>	
-											<th>Booking</th>
-											<th>User</th>
-											<th>Service Provider</th>
-											<th>Feedback Message</th>
-											<th>Action</th>
+											<th style="width:10%;">Date</th>	
+											<th style="width:10%;">Booking</th>
+											<th style="width:20%;">User</th>
+											<th style="width:20%;">Service Provider</th>
+											<th style="width:30%;">Feedback Message</th>
+											<th style="width:10%;">Action</th>
 										</tr>
 									</thead>	
 									<tbody>			
