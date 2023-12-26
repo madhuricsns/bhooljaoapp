@@ -49,7 +49,40 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 							<?php echo $this->session->flashdata('error_msg');?>
 						</div>
-						<?php }?>										
+						<?php }?>
+
+						<form method="POST" action="<?php echo base_url().'backend/Banners/manageBanner/'; ?><?php if($this->uri->segment(4)!=""){ echo $this->uri->segment(4);}?>/
+								<?php //if($this->uri->segment(5)!=""){ echo $this->uri->segment(5);}?>/
+								<?php //if($this->uri->segment(6)!=""){ echo $this->uri->segment(6);}?>/
+								<?php //if($this->uri->segment(7)!=""){ echo $this->uri->segment(7);}?>/">
+								<?php 
+								// $srchDate ='Na';
+								// $srchStatus ='Na';
+								// $pageNo ='Na';
+								$per_page='Na';
+								
+								// if($this->uri->segment(4) != 'Na') { $srchStatus = $this->uri->segment(4); } else { $srchStatus ='Na'; }
+								// if($this->uri->segment(5) != 'Na') { $srchDate = $this->uri->segment(5); }
+								// if($this->uri->segment(6) != 'Na') { $pageNo = $this->uri->segment(6); }
+								if($this->uri->segment(4) != 'Na') { $per_page = $this->uri->segment(4); }
+								// echo "srchDate-".$srchDate."<br>";
+								// echo "srchStatus-".$srchStatus."<br>";
+								// echo "pageno-".$pageNo."<br>";
+								// echo "per_page-".$per_page."<br>";
+								?>
+	
+						                                   
+						    </form>
+
+							<div class="table-responsive">
+							<select class='form-control col-md-1' name='s1' id="page_id" style="margin-bottom:10px;float:left">
+								<option value='<?php echo base_url();?>backend/Banners/manageBanner/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/10' <?php if($per_page=='10'){ echo 'selected';}?>>10</option>
+								<option value='<?php echo base_url();?>backend/Banners/manageBanner/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/20' <?php if($per_page=='20'){ echo 'selected';}?>>20</option>
+								<option value='<?php echo base_url();?>backend/Banners/manageBanner/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/50' <?php if($per_page=='50'){ echo 'selected';}?>>50</option>
+								<option value='<?php echo base_url();?>backend/Banners/manageBanner/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/100' <?php if($per_page=='100'){ echo 'selected';}?>>100</option>
+								
+							</select>	
+
 						<div class="table-responsive">
 							<div id="basicScenario" class="product-physical"></div>
 							<?php if($bannercnt > 0)	{ ?>

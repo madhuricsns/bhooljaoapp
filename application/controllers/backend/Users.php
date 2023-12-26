@@ -21,12 +21,42 @@ class Users extends CI_Controller {
 	{
 		$data['title']='Manage Customer';
 
+		$per_page='10';
+		
+		if($this->uri->segment(4)!='')
+		{
+			if($this->uri->segment(4)!="Na")
+			{
+				$pageNo=($this->uri->segment(4));
+			}
+		}
+
+		if($this->uri->segment(5)!='')
+		{
+			if($this->uri->segment(5)!="Na")
+			{
+				$per_page=($this->uri->segment(5));
+			}
+		}
+		else
+		{
+			$per_page='10';
+		}
 		
 		$data['usercnt']=$this->User_model->getAllUsers(0,"","");
 		
 		$config = array();
-		$config["base_url"] = base_url().'backend/Users/manageUsers/';
-		$config['per_page'] = 10;
+		$config["base_url"] = base_url().'backend/Users/manageUsers/'.$per_page;
+		// $config['per_page'] = 10;
+		if($per_page>100)
+		{
+			$config['per_page'] = 100;
+		}
+		else
+		{
+			$config['per_page'] = $per_page;
+		}
+		
 		$config["uri_segment"] = 4;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
@@ -486,12 +516,41 @@ class Users extends CI_Controller {
 	{
 		$data['title']='Manage Service Givers';
 
+		$per_page='10';
+		
+		if($this->uri->segment(4)!='')
+		{
+			if($this->uri->segment(4)!="Na")
+			{
+				$pageNo=($this->uri->segment(4));
+			}
+		}
+
+		if($this->uri->segment(5)!='')
+		{
+			if($this->uri->segment(5)!="Na")
+			{
+				$per_page=($this->uri->segment(5));
+			}
+		}
+		else
+		{
+			$per_page='10';
+		}
 		
 		$data['serviceproviderscnt']=$this->User_model->getAllServiceProvider(0,"","");
 		
 		$config = array();
-		$config["base_url"] = base_url().'backend/Users/manageServiceProvider/';
-		$config['per_page'] = 10;
+		$config["base_url"] = base_url().'backend/Users/manageServiceProvider/'.$per_page;
+		// $config['per_page'] = 10;
+		if($per_page>100)
+		{
+			$config['per_page'] = 100;
+		}
+		else
+		{
+			$config['per_page'] = $per_page;
+		}
 		$config["uri_segment"] = 4;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';

@@ -20,8 +20,43 @@ class Notifications extends CI_Controller {
 	public function manageNotifications()
 	{
 		$data['title']='Manage Notifications';
+		$per_page='10';
 		
+		if($this->uri->segment(4)!='')
+		{
+			if($this->uri->segment(4)!="Na")
+			{
+				$pageNo=($this->uri->segment(4));
+			}
+		}
+
+		if($this->uri->segment(5)!='')
+		{
+			if($this->uri->segment(5)!="Na")
+			{
+				$per_page=($this->uri->segment(5));
+			}
+		}
+		else
+		{
+			$per_page='10';
+		}
 		$data['notificationcnt']=$this->Notification_model->getAllNotifications(0,"","");
+		
+		
+		$config = array();
+		$config["base_url"] = base_url().'backend/Notifications/manageNotifications/'.$per_page;
+		// $config['per_page'] = 10;
+		if($per_page>100)
+		{
+			$config['per_page'] = 100;
+		}
+		else
+		{
+			$config['per_page'] = $per_page;
+		}
+		
+		
 		
 		//$arrGcmID[] = 'ExponentPushToken[ILvrAQKXZylNfqwZrnRmXO]';
 		/*$arrGcmID[] = 'ExponentPushToken[XiEPpvAeQshWRuImc99MHx]';

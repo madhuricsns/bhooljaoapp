@@ -19,12 +19,44 @@ class Banners extends CI_Controller {
 	public function manageBanner()
 	{
 		$data['title']='Manage Banners';
+				$per_page='10';
 		
-		$data['bannercnt']=$this->Banner_model->getAllBanners(0,"","");
+		if($this->uri->segment(4)!='')
+		{
+			if($this->uri->segment(4)!="Na")
+			{
+				$pageNo=($this->uri->segment(4));
+			}
+		}
+
+		if($this->uri->segment(5)!='')
+		{
+			if($this->uri->segment(5)!="Na")
+			{
+				$per_page=($this->uri->segment(5));
+			}
+		}
+		else
+		{
+			$per_page='10';
+		}
+		
+			$data['bannercnt']=$this->Banner_model->getAllBanners(0,"","");
+		
+		
 		
 		$config = array();
-		$config["base_url"] = base_url().'backend/Banners/index/';
-		$config['per_page'] = 25;
+		$config["base_url"] = base_url().'backend/Banners/manageBanner/'.$per_page;
+		// $config['per_page'] = 10;
+		if($per_page>100)
+		{
+			$config['per_page'] = 100;
+		}
+		else
+		{
+			$config['per_page'] = $per_page;
+		}
+		
 		$config["uri_segment"] = 4;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';

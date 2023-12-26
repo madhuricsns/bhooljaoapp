@@ -20,12 +20,42 @@ class Feedback extends CI_Controller {
 	public function manageFeedback()
 	{
 		$data['title']='Manage Feedback';
+		$per_page='10';
 		
-		$data['feedbackcnt']=$this->Feedback_model->getAllFeedback(0,"","");
+		if($this->uri->segment(4)!='')
+		{
+			if($this->uri->segment(4)!="Na")
+			{
+				$pageNo=($this->uri->segment(4));
+			}
+		}
+
+		if($this->uri->segment(5)!='')
+		{
+			if($this->uri->segment(5)!="Na")
+			{
+				$per_page=($this->uri->segment(5));
+			}
+		}
+		else
+		{
+			$per_page='10';
+		}
+		
+	$data['feedbackcnt']=$this->Feedback_model->getAllFeedback(0,"","");
+		
 		
 		$config = array();
-		$config["base_url"] = base_url().'backend/Feedback/manageFeedback/';
-		$config['per_page'] = 25;
+		$config["base_url"] = base_url().'backend/Feedback/manageFeedback/'.$per_page;
+		// $config['per_page'] = 10;
+		if($per_page>100)
+		{
+			$config['per_page'] = 100;
+		}
+		else
+		{
+			$config['per_page'] = $per_page;
+		}
 		$config["uri_segment"] = 4;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';

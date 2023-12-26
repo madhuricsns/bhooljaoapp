@@ -18,13 +18,43 @@ class Zone extends CI_Controller {
 	public function manageZones()
 	{
 		$data['title']='Manage Zone';
+		$per_page='10';
+		
+		if($this->uri->segment(4)!='')
+		{
+			if($this->uri->segment(4)!="Na")
+			{
+				$pageNo=($this->uri->segment(4));
+			}
+		}
 
+		if($this->uri->segment(5)!='')
+		{
+			if($this->uri->segment(5)!="Na")
+			{
+				$per_page=($this->uri->segment(5));
+			}
+		}
+		else
+		{
+			$per_page='10';
+		}
 		
 		$data['zonecnt']=$this->Zone_model->getAllZone(0,"","");
 		
+		
 		$config = array();
-		$config["base_url"] = base_url().'backend/Zone/manageZones/';
-		$config['per_page'] = 10;
+		$config["base_url"] = base_url().'backend/Zone/manageZones/'.$per_page;
+		// $config['per_page'] = 10;
+		if($per_page>100)
+		{
+			$config['per_page'] = 100;
+		}
+		else
+		{
+			$config['per_page'] = $per_page;
+		}
+		
 		$config["uri_segment"] = 4;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
