@@ -63,6 +63,23 @@ Class Service_model extends CI_Model {
 		echo "page--".$page;exit();*/
 		$this->db->select('*');
 		$this->db->where('category_status',"Active");
+		$this->db->where('category_parent_id',"0");
+		// $this->db->order_by('category_name','ASC');
+		
+		$result = $this->db->get(TBLPREFIX.'category');
+		//echo $this->db->last_query();exit;
+		if($res == 1)
+			return $result->result_array();
+		else
+			return $result->num_rows();
+
+	}
+
+	public function getAllSubCategory($res,$category_id=0)
+	{
+		$this->db->select('*');
+		$this->db->where('category_status',"Active");
+		$this->db->where('category_parent_id!=',"0");
 		// $this->db->order_by('category_name','ASC');
 		
 		$result = $this->db->get(TBLPREFIX.'category');
@@ -89,13 +106,58 @@ Class Service_model extends CI_Model {
 
 	}
 
+	public function getAllServiceDetailsLabel($service_id) 
+	{
+		$this->db->select('option_id,option_label,option_type,service_id');
+		$this->db->from(TBLPREFIX.'service_details');
+		$this->db->where('service_id',$service_id);
+		$this->db->where('option_type!=','Information');
+		$this->db->where('option_type!=','Vehicle');
+		$this->db->group_by('option_label');
+		$this->db->order_by('option_id','asc');
+		$query = $this->db->get();
+		$result= $query->result_array();
+		return $result;
+	}
+
+	public function getServiceDetailOptions($service_id,$option_type,$option_label) 
+	{
+		$this->db->select('option_name,option_amount');
+		$this->db->from(TBLPREFIX.'service_details');
+		$this->db->where('service_id',$service_id);
+		$this->db->where('option_type',$option_type);
+		$this->db->where('option_label',$option_label);
+		$query = $this->db->get();
+		$result= $query->result_array();
+		
+		return $result;
+	}
+
 	public function getAllServiceDetailOptions($service_id,$res)
+	{
+		/*echo "PerPage--".$per_page;
+		echo "page--".$page;exit();*/
+		$condition="option_type IN('Dropdown','Input','Radio')";
+		$this->db->select('*');
+		$this->db->where('service_id',$service_id);
+		// $this->db->where('option_type','Dropdown');
+		$this->db->where($condition);
+		$result = $this->db->get(TBLPREFIX.'service_details');
+		// echo $this->db->last_query();exit;
+		if($res == 1)
+			return $result->result_array();
+		else
+			return $result->num_rows();
+
+	}
+
+	public function getAllServiceWhyChooseUs($service_id,$res)
 	{
 		/*echo "PerPage--".$per_page;
 		echo "page--".$page;exit();*/
 		$this->db->select('*');
 		$this->db->where('service_id',$service_id);
-		//$this->db->where('option_type','Option');
+		$this->db->where('option_type','Information');
 		$result = $this->db->get(TBLPREFIX.'service_details');
 		//echo $this->db->last_query();exit;
 		if($res == 1)
@@ -105,19 +167,32 @@ Class Service_model extends CI_Model {
 
 	}
 
-	public function getAllServiceDetailLabels($service_id,$res)
+	public function getAllServiceVehicles($service_id,$res)
 	{
 		/*echo "PerPage--".$per_page;
 		echo "page--".$page;exit();*/
 		$this->db->select('*');
 		$this->db->where('service_id',$service_id);
-		$this->db->where('option_type','Label');
+		$this->db->where('option_type','Vehicle');
 		$result = $this->db->get(TBLPREFIX.'service_details');
 		//echo $this->db->last_query();exit;
 		if($res == 1)
-			return $result->result_array();
+		{
+			$response=$result->result_array();
+			foreach($response as $key=>$row)
+			{
+				if(isset($row['option_image']) && $row['option_image']!="")
+				{
+					$row['option_image']=base_url()."uploads/vehicle_images/".$row['option_image'];
+				}
+				$response[$key]=$row;
+			}
+		}
 		else
-			return $result->num_rows();
+		{
+			$response=$result->num_rows();
+		}
+			return $response;
 
 	}
 	
@@ -180,6 +255,19 @@ public function insert_MultiImage_Service($input_data){
 	public function deleteoption($service_id)
 	{
 		$this->db->where('service_id',$service_id);
+		$this->db->where('option_type!=','Information');
+		$this->db->where('option_type!=','Vehicle');
+		$res = $this->db->delete(TBLPREFIX.'service_details');
+		if($res)
+			return true;
+		else
+			return false;
+	}
+
+	public function deleteWhychooseus($service_id)
+	{
+		$this->db->where('service_id',$service_id);
+		$this->db->where('option_type=','Information');
 		$res = $this->db->delete(TBLPREFIX.'service_details');
 		if($res)
 			return true;
@@ -293,7 +381,7 @@ public function insert_MultiImage_Service($input_data){
 
 	}
 
-public function deleteServiceimages($service_image_id)
+	public function deleteServiceimages($service_image_id)
 	{
 		$this->db->where('service_image_id',$service_image_id);
 		$res = $this->db->delete(TBLPREFIX.'service_images');
@@ -302,7 +390,6 @@ public function deleteServiceimages($service_image_id)
 		else
 			return false;
 	}
-
 
 	public function getSingleServiceimageInfo($service_image_id,$res)
 	{
@@ -320,5 +407,4 @@ public function deleteServiceimages($service_image_id)
 		}	
 		return $result;
 	}
-	
 }

@@ -101,12 +101,7 @@
 													: <?php echo $serviceinfo[0]['service_status']?>
 												</div>
                                             </div>
-											<div class="form-group row">
-                                                <label for="mobile_number" class="col-xl-3 col-md-4">  Option Label Name</label>
-												<div class="col-md-6">
-													: <?php echo $serviceinfo[0]['service_option_name']?>
-												</div>
-                                            </div>
+											
                                             
                                             <div class="form-group row" id="show-div">
 												<label class="col-xl-3 col-md-4"> Options</label>
@@ -115,18 +110,41 @@
 													<tbody id="tbody">
 														<tr>
 															<th> Option</th>
-<th> Option Type</th>
-<th> Amount</th>
+                                                            <th>Amount</th>
 														</tr>
 														<?php
                                                          $i=1;
                                                         foreach($optionList as $option){
                                                         ?>
+														<tr>
+															<!-- <td  class="row-index text-center"></td> -->
+															<td>
+																<?php if($option['option_type']=='Input'){ echo $option['option_label']; } ?>
+																<?php echo $option['option_name'];  ?></td>
+                                                            <td><?php echo "₹".$option['option_amount']?></td>
+														</tr>
+                                                        <?php $i++; }  ?>
+													</tbody>
+													
+												</table>
+											</div>
+
+											
+											<div class="form-group row" id="show-div">
+												<label class="col-xl-3 col-md-4"> Why Choose us</label>
+                                                
+												<table class="table1 col-md-6 " style="width:100%;max-width: 100%;border-collapse: collapse;    display: table;">
+													<tbody id="tbody">
+														<tr>
+															<th> Why Choose us</th>
+														</tr>
+														<?php
+                                                         $i=1;
+                                                        foreach($whychooseusList as $whychooseus){
+                                                        ?>
 														<tr  id="<?php echo "R".$i?>">
 															<!-- <td  class="row-index text-center"></td> -->
-															<td> <?php echo $option['option_name']?></td>
-<td> <?php echo $option['option_type']?></td>
-<td><?php echo "₹".$option['option_amount']?></td>
+															<td> <?php echo $whychooseus['option_name']?></td>
 														</tr>
                                                         <?php $i++; }  ?>
 													</tbody>
@@ -135,20 +153,21 @@
 											</div>
 
 											<div class="form-group row" id="show-div">
-												<label class="col-xl-3 col-md-4"> More option</label>
+												<label class="col-xl-3 col-md-4"> Vehicle List</label>
                                                 
-												<table class="table1 col-md-6 " style="width:100%;max-width: 100%;border-collapse: collapse;    display: table;">
+												<table class="table col-md-6 " style="width:100%;max-width: 100%;border-collapse: collapse;    display: table;">
 												
 													<tbody id="tbodyLabel">
                                                         
                                                         <?php
                                                          $i=1;
-                                                        foreach($labelList as $label){
+                                                        foreach($vehicleList as $label){
                                                         ?>
 														<tr>
 															<!-- <td  class="row-index text-center"></td> -->
+															<td><img src="<?php echo $label['option_image']?>" class="img-fluid" width="50px"></td>
 															<td><?php echo $label['option_name']?></td>
-                                                            <td><?php echo $label['option_value']?></td>
+                                                            <td><?php echo "₹".$label['option_amount']?></td>
 														</tr>
                                                         <?php $i++; } ?>
                                                             
@@ -156,6 +175,7 @@
 													
 												</table>
 											</div>
+
                                            
                                            
 

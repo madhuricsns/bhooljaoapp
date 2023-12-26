@@ -34,6 +34,7 @@ $session_user_type=$sessiondata['user_type'];*/
 													</div>
 												</div>
 											</div>
+											
 											<div class="col-lg-6 col-xl-3 xl-30">
 												<div class="card card-border">
 													<div class="card-body overviwe-icon service-pro-icon" >
@@ -41,7 +42,7 @@ $session_user_type=$sessiondata['user_type'];*/
 															<a href="#"  >
 																<div class="media-body1 col-12 de-icon1">
 																	<div>
-																		<h5 class="m-0" style="color: #000;">Total Service Providers</h5>
+																		<h5 class="m-0" style="color: #000;">Total Service Givers</h5>
 																		<h2 class="counter"><?php echo $ServiceProvider;?></h2>
 																	</div>
 																</div>
@@ -102,7 +103,7 @@ $session_user_type=$sessiondata['user_type'];*/
 											</h4>
 										</div>
 										<div class="row">
-											<div class="col-lg-6 col-xl-4 xl-30">
+											<!-- <div class="col-lg-6 col-xl-4 xl-30">
 												<div class="card card-border">
 													<div class="card-body overviwe-icon total-booking" >
 														<div class="media1 static-top-widget row">	
@@ -117,7 +118,7 @@ $session_user_type=$sessiondata['user_type'];*/
 														</div>
 													</div>
 												</div>
-											</div>
+											</div> -->
 											<div class="col-lg-6 col-xl-4 xl-30">
 												<div class="card card-border">
 													<div class="card-body overviwe-icon pending-icon" >
@@ -134,7 +135,7 @@ $session_user_type=$sessiondata['user_type'];*/
 													</div>
 												</div>
 											</div>
-											<div class="col-lg-6 col-xl-4 xl-30">
+											<!-- <div class="col-lg-6 col-xl-4 xl-30">
 												<div class="card card-border">
 													<div class="card-body overviwe-icon accepted-icon" >
 														<div class="media1 static-top-widget row">
@@ -149,7 +150,7 @@ $session_user_type=$sessiondata['user_type'];*/
 														</div>
 													</div>
 												</div>
-											</div>
+											</div> -->
 											<div class="col-lg-6 col-xl-4 xl-30">
 												<div class="card card-border">
 													<div class="card-body overviwe-icon ongoing-icon" >

@@ -66,7 +66,7 @@
 												<select name="banner_type" id="bannertype" class="form-control" required>
 													<option value="">Select Banner Type</option>
 													<option value="Customer">Customer</option>
-													<option value="Service Provider">Service Provider</option>
+													<option value="Service Provider">Service Giver</option>
 												</select>
 												 <div id="err_bannertype" class="error_msg"></div>
                                             </div>

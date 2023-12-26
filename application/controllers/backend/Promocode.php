@@ -138,8 +138,30 @@ class Promocode extends CI_Controller {
 					
 					if($promocode_id)
 					{	
-						$this->session->set_flashdata('success','Promocode added successfully.');
+						$customers = $this->Promocode_model->getAllUsers(1);
+						$titleC="New offer available";
+						$messageC="New Promo code available $promocode_code, discount of $discount";
+	
+						if(!empty($customers))
+						{
+							foreach($customers as $customer)
+							{
+								$input_dataC = array(
+									'noti_title'=>trim($titleC),
+									'noti_message'=>trim($messageC),
+									'noti_user_type'=>'Customer',
+									'noti_type'=>'Offer',
+									'noti_user_id'=>$customer['user_id'],
+									'noti_gcmID'=>$customer['user_fcm'],
+									'dateadded' => date('Y-m-d H:i:s')
+									);
 
+								$notification_idc = $this->Common_Model->insert_data('notification',$input_dataC);
+								// echo $this->db->last_query();
+								$this->Common_Model->sendexponotification($titleC,$messageC,$customer['user_fcm']);
+							}
+						}
+						$this->session->set_flashdata('success','Promocode added successfully.');
 						redirect(base_url().'backend/Promocode/index');	
 					}
 					else

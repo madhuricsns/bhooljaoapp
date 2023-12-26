@@ -5,7 +5,7 @@
 	<?php if(isset($userinfo) && count($userinfo)>0)									
 			{ //print_r($userinfo); //print_r($orderInfo);?>
                 <div class="row">
-                    <!-- Service Provider Basic details -->
+                    <!-- Service Giver Basic details -->
                     
                     <div class="col-sm-4">
                     <div class="card tab2-card">

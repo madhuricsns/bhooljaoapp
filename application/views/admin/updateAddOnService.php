@@ -117,29 +117,52 @@
 															    </button>
                                                             </td>
 														</tr>
+														<?php
+														foreach($labelListArr as $labelname){
+														?>
+														<tr>
+															<td> <input type="text" class="form-control option_label" id="option_label" name="option_label" placeholder="Enter Label Name" value="<?php echo $labelname['option_label']?>" >
+																<div id="err_option_label" class="error_msg err_option_label"></div>
+															</td>
+                                                            <td> <select class="form-control " id="option_type" name="option_type" required>
+																 <option value="">Select Option Type</option>
+																 <option value="Dropdown" <?php if(isset($labelname['option_type'])) if($labelname['option_type']=='Dropdown') { echo 'selected';} ?>>Dropdown</option>
+																 <option value="Input" <?php if(isset($labelname['option_type'])) if($labelname['option_type']=='Input') { echo 'selected';} ?>>Input</option>
+																 <option value="Radio" <?php if(isset($labelname['option_type'])) if($labelname['option_type']=='Radio') { echo 'selected';} ?>>Radio</option>
+																</select>
+																<div id="err_option_type" class="error_msg err_option_type"></div>
+															</td>
+															<td  class="text-center"><!--<button class="btn btn-md btn-success addLabel" id="addLabel" type="button">
+															 <i class="fa fa-plus"></i>Add Label
+															</button> --> </td>
+														</tr>
+
+
+
                                                         <?php
                                                          $i=1;
+														//  print_r($labelList);
                                                         foreach($optionList as $option){
                                                         ?>
 														<tr  id="<?php echo "R".$i?>">
 															<!-- <td  class="row-index text-center"></td> -->
-															<td> <input type="text" class="form-control optionsArr" id="optionsArr" name="optionsArr[]" placeholder="Enter Option" value="<?php echo $option['option_name']?>" >
+															<td> <input type="text" class="form-control optionsArr" id="optionsArr" name="optionsArr_0[]" placeholder="Enter Option" value="<?php echo $option['option_name']?>" >
 																<div id="err_optionsArr" class="error_msg err_optionsArr"></div>
 															</td>
-                                                            <td> <input type="text" class="form-control amountArr" id="amountArr" name="amountArr[]" placeholder="Enter Amount"  value="<?php echo $option['option_amount']?>">
+                                                            <td> <input type="text" class="form-control amountArr" id="amountArr" name="amountArr_0[]" placeholder="Enter Amount"  value="<?php echo $option['option_amount']?>">
 																<div id="err_amountArr" class="error_msg err_amountArr"></div>
 															</td>
 															<td  class="text-center">
                                                              <button class="btn btn-danger remove" type="button"><i class="fa fa-remove"></i></button>
                                                             </td>
 														</tr>
-                                                        <?php $i++; }  } else {?>
+                                                        <?php $i++; } }   } else {?>
                                                             <tr>
 															<!-- <td  class="row-index text-center"></td> -->
-															<td> <input type="text" class="form-control optionsArr" id="optionsArr" name="optionsArr[]" placeholder="Enter Option"  >
+															<td> <input type="text" class="form-control optionsArr" id="optionsArr" name="optionsArr_0[]" placeholder="Enter Option"  >
 																<div id="err_optionsArr" class="error_msg err_optionsArr"></div>
 															</td>
-                                                            <td> <input type="text" class="form-control amountArr" id="amountArr" name="amountArr[]" placeholder="Enter Amount"  >
+                                                            <td> <input type="text" class="form-control amountArr" id="amountArr" name="amountArr_0[]" placeholder="Enter Amount"  >
 																<div id="err_amountArr" class="error_msg err_amountArr"></div>
 															</td>
 															<td  class="text-center"><button class="btn btn-md btn-success" id="addBtn" type="button">
@@ -153,7 +176,7 @@
 												</table>
 											</div>
 
-                                            <div class="form-group row" id="show-div">
+                                            <!-- <div class="form-group row" id="show-div">
 												<label class="col-xl-3 col-md-4"><span>*</span> Add More option</label>
                                                 
 												<table class="table1 col-md-6 " style="width:100%;max-width: 100%;border-collapse: collapse;    display: table;">
@@ -188,7 +211,6 @@
 														</tr>
                                                         <?php $i++; }  } else {?>
                                                             <tr>
-															<!-- <td  class="row-index text-center"></td> -->
 															<td> <input type="text" class="form-control labelArr" id="labelArr" name="labelArr[]" placeholder="Enter Label"  >
 																<div id="err_labelArr" class="error_msg err_labelArr"></div>
 															</td>
@@ -204,7 +226,7 @@
 													</tbody>
 													
 												</table>
-											</div>
+											</div> -->
                                             
 
                                             <div class="form-group row">

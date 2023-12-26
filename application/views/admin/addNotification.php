@@ -59,7 +59,7 @@
                                                 <label ><span>*</span>Select Type</label>
 												<select name="select_type" id="select_type" class="form-control" required >
 													<option value="">Select Type</option>
-													<option value="Service Provider">Service Provider</option>
+													<option value="Service Provider">Service Giver</option>
 													<option value="Customer">Customer</option>
 												</select>
                                                 <div id="err_select_type" class="error_msg"></div>

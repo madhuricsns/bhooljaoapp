@@ -34,28 +34,29 @@
                                         <div class="col-sm-12">
                                         	  
                                            <div class="row">
-                                            <div class="form-group col-md-6">
-                                                 <label for="help_image" ><span>*</span> Help Center Image</label>
+												<div class="form-group col-md-4">
+													<label for="help_image" ><span>*</span> Help Center Image</label>
+													<input class="form-control " id="helpcenter_image" type="file"  name="helpcenter_image" />
+													<span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span><br/>
+													<div class="err_msg" id="err_helpcenter_image"></div>
+												</div>
+												<div class="form-group col-md-2">
+												<?php 
+													if($HelpInfo[0]['help_image']!="")
+													{
+		
+													$str_images='<img src="'.base_url().'uploads/helpcenter/'.$HelpInfo[0]['help_image'].'" style="width:80px;height:80px">';
+													}
+													else
+													{
+													$str_images='<img src="'.base_url().'uploads/banner_images/default.png" style="width:80px;height:80px">';
+													}
+													?>
+													<?php echo $str_images;?>
+													</div>
+													
+                                        	</div>
 
-                                                <?php 
-                                                   if($HelpInfo[0]['help_image']!="")
-												{
-	
-												$str_images='<img src="'.base_url().'uploads/helpcenter/'.$HelpInfo[0]['help_image'].'" style="width:80px;height:80px">';
-												}
-												else
-												{
-												$str_images='<img src="'.base_url().'uploads/banner_images/default.png" style="width:80px;height:80px">';
-												}
-												?>
-												<?php echo $str_images;?>
-
-												<span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span><br/>
-												<input class="form-control " id="helpcenter_image" type="file"  name="helpcenter_image" />
-												<div class="err_msg" id="err_helpcenter_image"></div>
-                                               
-                                            </div>
-                                        </div>
 											<div class="row">
 											<div class="form-group col-md-6">
                                                 <label for="helpcenter_Name" ><span>*</span>Help Center Name</label>

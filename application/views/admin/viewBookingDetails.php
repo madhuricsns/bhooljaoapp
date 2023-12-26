@@ -172,9 +172,19 @@
 								<tr><td>
 								<?php echo $service['service_name'];?>
 								</td><td style="text-align:center;"> 
-								<?php echo $service['option_amount'].' * '.$duration[0]; ?> 
+								<?php if($orderInfo[0]['is_demo'] == 'Yes') {
+										echo $service['option_amount'];
+									}
+									else {
+										echo $service['option_amount'].' * '.$duration[0];} 
+									?> 
 								</td><td style="text-align:right">
-								<?php echo $service['option_amount'] * $duration[0]; ?></td></tr>
+								<?php
+								 if($orderInfo[0]['is_demo'] == 'Yes') {
+										echo $service['option_amount'];
+									}
+									else {
+								 echo $service['option_amount'] * $duration[0]; } ?></td></tr>
 							<?php }
 							}
 							?>
@@ -241,10 +251,10 @@
 									<thead>
 										<tr>
 											<th>Sr.No</th>
-											<th>Description</th>
+											<!-- <th>Description</th> -->
 											<th>Date</th>
 											<th>Time</th>
-											<th>Status</th>
+											<!-- <th>Status</th> -->
 											<th>Work Photo1</th>	
 											<th>Work Photo2</th>
 										</tr>
@@ -254,23 +264,26 @@
 										$i=1;
 										foreach($workHistory as $history)
 										{
-											
 											?>		
 										<tr>
 												<td><?php echo $i ;?></td>
-												
-												
-												<td><?php echo $history['history_description'];?></td>
+												<!-- <td><?php echo $history['history_description'];?></td> -->
 												<td><?php 
-if($history['history_date'] == 0) echo "---"; else {
-				
-				$history['history_date']=new DateTime($history['history_date']);
-										$historydate = $history['history_date']->format('d-m-Y');
-echo $historydate; }?></td>
+													if($history['history_date'] == 0) echo "---"; else {
+																	
+																	$history['history_date']=new DateTime($history['history_date']);
+																							$historydate = $history['history_date']->format('d-m-Y');
+													echo $historydate; }?></td>
 												<td><?php echo $history['history_time'];?></td>
-												<td><?php echo $history['booking_status'];?></td>												
-												<td><img src="<?php echo base_url().'/uploads/work_history/'.$history['work_photo1'];?>" style="width:80px;height:80px" /></td>												
-												<td><img src="<?php echo base_url().'/uploads/work_history/'.$history['work_photo2'];?>" style="width:80px;height:80px" /></td>												
+												<!-- <td><?php echo $history['booking_status'];?></td>												 -->
+												<td><?php if(isset($history['work_photo1']) && $history['work_photo1']!="") { ?>
+													<img src="<?php echo base_url().'/uploads/work_history/'.$history['work_photo1'];?>" style="width:80px;height:80px" />
+													<?php } ?>
+												</td>												
+												<td><?php if(isset($history['work_photo1']) && $history['work_photo1']!="") { ?>
+													<img src="<?php echo base_url().'/uploads/work_history/'.$history['work_photo2'];?>" style="width:80px;height:80px" />
+													<?php } ?>
+												</td>												
 											</tr>											
 											<?php $i++; }?>
 									</tbody>									
@@ -330,16 +343,13 @@ echo $historydate; }?></td>
 											?>		
 										<tr>
 												<td><?php echo $i ;?></td>
-												
-												
 												<td><?php $transhistory['dateadded']=new DateTime($transhistory['dateadded']);
-										$transdate=$transhistory['dateadded']->format('d-m-Y');
-												
+														$transdate=$transhistory['dateadded']->format('d-m-Y');
 												echo $transdate;
 												?></td>
 												<td><?php echo $transhistory['paid_amount'];?></td>
 												<td><?php echo $transhistory['transaction_id'];?></td>
-												<td><?php echo $transhistory['payment_status'];?></td>												
+												<td><?php echo $transhistory['payment_response'];?></td>												
 											</tr>											
 											<?php $i++; }?>
 									</tbody>									
@@ -400,7 +410,7 @@ echo $historydate; }?></td>
 
 						<div class="card tab2-card">
                             <div class="card-header" style="background-color: white;">
-                                <h5 style="color: #121111;"><i class="fa fa-user-circle-o"></i>  Service Provider Info </h5>
+                                <h5 style="color: #121111;"><i class="fa fa-user-circle-o"></i>  Service Giver Info </h5>
                             </div>
                             <div class="card-body">
 						
@@ -425,8 +435,35 @@ echo $historydate; }?></td>
 													</h4> 
 													<p class="info"><i class="fa fa-envelope"></i> <?php if(isset($user[0]['email'])) echo $user[0]['email'];?> </p>
 													<p class="info"><i class="fa fa-phone"></i> <?php if(isset($user[0]['mobile'])) echo $user[0]['mobile'];?> </p>
-												<?php } else { ?>
-													<p class="info error_msg"><i class="fa fa-warning"></i> Not available service provider because booking status  still waiting</p>
+												<?php } else if($orderInfo[0]['service_group_id']>0 ){
+													$group=$this->Booking_model->getGroup($orderInfo[0]['service_group_id'],1); 
+													$groupBySP=$this->Booking_model->getGroupBySP($group[0]['group_id'],1);
+													?>
+													<h4>Group - <?php if(isset($group[0]['group_name'])) echo $group[0]['group_name'];?></h4>
+													<hr>
+													<?php
+													foreach($groupBySP as $sp){
+														$user=$this->Notification_model->getUserDetails(1,$sp['service_provider_id']);
+														?>
+
+														<h4>
+															<?php if(isset($user->profile_pic) && $user->profile_pic!="") { ?>
+															<img src="<?php echo base_url()."uploads/user_profile/".$user->profile_pic?>" width="30px" height="30px" style="border-radius:100%">
+														<?php } else { ?>
+															<img src="<?php echo base_url()?>uploads/user_profile/user.jpg" alt="" class="rounded-circle" width="32" height="32">
+														<?php } ?>
+															<?php if(isset($user->full_name)) echo $user->full_name;?> 
+														</h4> 
+														<p class="info"><i class="fa fa-envelope"></i> <?php if(isset($user->email)) echo $user->email;?> </p>
+														<p class="info"><i class="fa fa-phone"></i> <?php if(isset($user->mobile)) echo $user->mobile;?> </p>
+														<hr>
+													<?php
+													}
+													?>
+
+
+													<?php } else { ?>
+													<p class="info error_msg"><i class="fa fa-warning"></i> Not available service giver because booking status  still waiting</p>
 												<?php } ?>
 											</div>
 										</div>

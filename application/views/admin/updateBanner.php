@@ -64,7 +64,7 @@
 												<select name="banner_type" id="banner_type" class="form-control  " required>
 													<option value="">Select Status</option>
 													<option value="Customer" <?php if($BannerInfo[0]['banner_type']=="Customer"){ echo 'selected="selected"';}?>>Customer</option>
-													<option value="Service Provider" <?php if($BannerInfo[0]['banner_type']=="Service Provider"){ echo 'selected="selected"';}?>>Service Provider</option>
+													<option value="Service Provider" <?php if($BannerInfo[0]['banner_type']=="Service Provider"){ echo 'selected="selected"';}?>>Service Giver</option>
 												</select>
                                             </div>
                                         </div>

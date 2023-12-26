@@ -107,11 +107,7 @@
 												 <div id="err_status" class="error_msg"></div>
                                             </div>
 
-                                            <div class="form-group row">
-                                                <label for="option_label" class="col-xl-3 col-md-4"><span>*</span> Option Label Name</label>
-                                                <input type="text" name="option_label" id="option_label" class="form-control  col-md-6" required value="<?php echo $serviceInfo[0]['service_option_name'];?>">
-                                            </div>
-
+                                          
                                             <div class="form-group row" id="show-div">
 												<label class="col-xl-3 col-md-4"><span>*</span> Enter Options</label>
                                                 
@@ -119,8 +115,8 @@
 												
 													<tbody id="tbody">
                                                         <?php 
+														// print_r($labelListArr);
                                                         if(!empty($optionList)){
-                                                           
                                                         ?>
                                                         <tr>
 															<!-- <td  class="row-index text-center"></td> -->
@@ -130,29 +126,66 @@
 															    </button>
                                                             </td>
 														</tr>
+														<?php
+														foreach($labelListArr as $labelname){
+														?>
+														<tr>
+															<td> <input type="text" class="form-control option_label" id="option_label" name="option_label" placeholder="Enter Label Name" value="<?php echo $labelname['option_label']?>" >
+																<div id="err_option_label" class="error_msg err_option_label"></div>
+															</td>
+                                                            <td> <select class="form-control " id="option_type" name="option_type" required>
+																 <option value="">Select Option Type</option>
+																 <option value="Dropdown" <?php if(isset($labelname['option_type'])) if($labelname['option_type']=='Dropdown') { echo 'selected';} ?>>Dropdown</option>
+																 <option value="Input" <?php if(isset($labelname['option_type'])) if($labelname['option_type']=='Input') { echo 'selected';} ?>>Input</option>
+																 <option value="Radio" <?php if(isset($labelname['option_type'])) if($labelname['option_type']=='Radio') { echo 'selected';} ?>>Radio</option>
+																</select>
+																<div id="err_option_type" class="error_msg err_option_type"></div>
+															</td>
+															<td  class="text-center"><!--<button class="btn btn-md btn-success addLabel" id="addLabel" type="button">
+															 <i class="fa fa-plus"></i>Add Label
+															</button> --> </td>
+														</tr>
+
                                                         <?php
                                                          $i=1;
+														//  $optionList=$this->Service_model->getAllServiceDetailOptions($id,1);
                                                         foreach($optionList as $option){
                                                         ?>
 														<tr  id="<?php echo "R".$i?>">
 															<!-- <td  class="row-index text-center"></td> -->
-															<td> <input type="text" class="form-control optionsArr" id="optionsArr" name="optionsArr[]" placeholder="Enter Option" value="<?php echo $option['option_name']?>" >
+															<td> <input type="text" class="form-control optionsArr" id="optionsArr" name="optionsArr_0[]" placeholder="Enter Option" value="<?php echo $option['option_name']?>" >
 																<div id="err_optionsArr" class="error_msg err_optionsArr"></div>
 															</td>
-                                                            <td> <input type="text" class="form-control amountArr" id="amountArr" name="amountArr[]" placeholder="Enter Amount"  value="<?php echo $option['option_amount']?>">
+                                                            <td> <input type="text" class="form-control amountArr" id="amountArr" name="amountArr_0[]" placeholder="Enter Amount"  value="<?php echo $option['option_amount']?>">
 																<div id="err_amountArr" class="error_msg err_amountArr"></div>
 															</td>
 															<td  class="text-center">
                                                              <button class="btn btn-danger remove" type="button"><i class="fa fa-remove"></i></button>
                                                             </td>
 														</tr>
-                                                        <?php $i++; }  } else {?>
+                                                        <?php $i++; }  } }  else {?>
+															<tr>
+															<td> <input type="text" class="form-control option_label" id="option_label" name="option_label" placeholder="Enter Label Name"  >
+																<div id="err_option_label" class="error_msg err_option_label"></div>
+															</td>
+                                                            <td> <select class="form-control " id="option_type" name="option_type" required>
+																 <option value="">Select Option Type</option>
+																 <option value="Dropdown">Dropdown</option>
+																 <option value="Input">Input</option>
+																 <option value="Radio">Radio</option>
+																</select>
+																<div id="err_option_type" class="error_msg err_option_type"></div>
+															</td>
+															<td  class="text-center"><!--<button class="btn btn-md btn-success addLabel" id="addLabel" type="button">
+															 <i class="fa fa-plus"></i>Add Label
+															</button> --> </td>
+														</tr>
                                                             <tr>
 															<!-- <td  class="row-index text-center"></td> -->
-															<td> <input type="text" class="form-control optionsArr" id="optionsArr" name="optionsArr[]" placeholder="Enter Option"  >
+															<td> <input type="text" class="form-control optionsArr" id="optionsArr" name="optionsArr_0[]" placeholder="Enter Option"  >
 																<div id="err_optionsArr" class="error_msg err_optionsArr"></div>
 															</td>
-                                                            <td> <input type="text" class="form-control amountArr" id="amountArr" name="amountArr[]" placeholder="Enter Amount"  >
+                                                            <td> <input type="text" class="form-control amountArr" id="amountArr" name="amountArr_0[]" placeholder="Enter Amount"  >
 																<div id="err_amountArr" class="error_msg err_amountArr"></div>
 															</td>
 															<td  class="text-center"><button class="btn btn-md btn-success" id="addBtn" type="button">
@@ -166,7 +199,106 @@
 												</table>
 											</div>
 
-                                            <div class="form-group row" id="show-div">
+											<div class="form-group row" id="show-div">
+												<label class="col-xl-3 col-md-4"><span>*</span> Why Choose Us</label>
+												<table class="table1 col-md-6 " style="width:100%;max-width: 100%;border-collapse: collapse;    display: table;">
+													<tbody id="tbodywhychooswus">
+													<?php
+                                                         $i=1;
+														//  print_r($whychooseusList);
+														if(!empty($whychooseusList))
+														{ ?>
+															<tr>
+																<!-- <td  class="row-index text-center"></td> -->
+																<td></td>
+																<td  class="text-center"><button class="btn btn-md btn-success" id="addwhychooswusRow" type="button">
+																<i class="fa fa-plus"></i>
+																</button></td>
+															</tr>
+														<?php
+                                                        foreach($whychooseusList as $whychooseus)
+														{
+                                                        ?>
+														<tr>
+															<td> <input type="text" class="form-control whychooswusArr" id="labelArr" name="whychooswusArr[]" placeholder="Enter why Choose Us" value="<?php echo $whychooseus['option_name'];?>" >
+																<div id="err_whychooswusArr" class="error_msg err_whychooswusArr"></div>
+															</td>
+															<td  class="text-center">
+																<button class="btn btn-danger WhyremoveRow" type="button"><i class="fa fa-remove"></i></button>
+															</td>
+														</tr>
+														<?php } } else{ ?>
+															<tr>
+															<td> <input type="text" class="form-control whychooswusArr" id="labelArr" name="whychooswusArr[]" placeholder="Enter why Choose Us"  >
+																<div id="err_whychooswusArr" class="error_msg err_whychooswusArr"></div>
+															</td>
+															<td  class="text-center"><button class="btn btn-md btn-success" id="addwhychooswusRow" type="button">
+															<i class="fa fa-plus"></i>
+															</button></td>
+														</tr>
+														<?php } ?>
+													</tbody>
+													
+												</table>
+											</div>
+
+											<div class="form-group row" id="show-div">
+												<label class="col-xl-3 col-md-4"><span>*</span> Update Vehicle</label>
+                                                
+												<table class="table1 col-md-8 " style="width:100%;max-width: 100%;border-collapse: collapse;    display: table;">
+												
+													<tbody id="tbodyvehicle">
+													<?php
+														if(!empty($whychooseusList))
+														{ ?>
+															<tr>
+																<!-- <td  class="row-index text-center"></td> -->
+																<td></td><td></td><td></td>
+																<td  class="text-center"><button class="btn btn-md btn-success" id="addVehicleRow" type="button">
+																	<i class="fa fa-plus"></i>
+																	</button>
+																</td>
+															</tr>
+														<?php
+                                                        foreach($vehicleList as $vehicle)
+														{
+                                                        ?>
+														<tr>
+															<td><input type="hidden" class="form-control" name="option_ids[]" value="<?php echo $vehicle['option_id'];?>" >
+																 <input type="text" class="form-control vehiclenameArr" id="vehiclenameArr" name="vehiclenameArr[]" placeholder="Enter Vehicle Name" value="<?php echo $vehicle['option_name'];?>" >
+																<div id="err_vehicleArr" class="error_msg err_vehicleArr"></div>
+															</td>
+															<td> <input type="text" class="form-control vehicleamountArr" id="vehicleamountArr" name="vehicleamountArr[]" placeholder="Enter amount" value="<?php echo $vehicle['option_amount'];?>" >
+																<div id="err_vehicleamountArr" class="error_msg err_vehicleamountArr"></div>
+															</td>
+															<td> <input type="file" class="form-control vehicleimageArr" id="vehicleimageArr" name="vehicleimageArr[]"  >
+																<div id="err_vehicleimageArr" class="error_msg err_vehicleimageArr"></div>
+															</td>
+															<td  class="text-center"> <button class="btn btn-danger VehicleremoveRow" type="button"><i class="fa fa-remove"></i></button></td>
+														</tr>
+															<?php } } else { ?>
+														
+														<tr>
+															<td> <input type="text" class="form-control vehiclenameArr" id="vehiclenameArr" name="vehiclenameArr[]" placeholder="Enter Vehicle Name"  >
+																<div id="err_vehicleArr" class="error_msg err_vehicleArr"></div>
+															</td>
+															<td> <input type="text" class="form-control vehicleamountArr" id="vehicleamountArr" name="vehicleamountArr[]" placeholder="Enter amount"  >
+																<div id="err_vehicleamountArr" class="error_msg err_vehicleamountArr"></div>
+															</td>
+															<td> <input type="file" class="form-control vehicleimageArr" id="vehicleimageArr" name="vehicleimageArr[]"  >
+																<div id="err_vehicleimageArr" class="error_msg err_vehicleimageArr"></div>
+															</td>
+															<td  class="text-center"><button class="btn btn-md btn-success" id="addVehicleRow" type="button">
+															<i class="fa fa-plus"></i>
+															</button></td>
+														</tr>
+														<?php } ?>
+													</tbody>
+													
+												</table>
+											</div>
+
+                                            <!-- <div class="form-group row" id="show-div">
 												<label class="col-xl-3 col-md-4"><span>*</span> Add More option</label>
                                                 
 												<table class="table1 col-md-6 " style="width:100%;max-width: 100%;border-collapse: collapse;    display: table;">
@@ -176,7 +308,6 @@
                                                         if(!empty($labelList)){
                                                         ?>
                                                         <tr>
-															<!-- <td  class="row-index text-center"></td> -->
 															<td></td> <td></td>
 															<td  class="text-center">
                                                                 <button class="btn btn-md btn-success" id="addRow" type="button"><i class="fa fa-plus"></i>
@@ -188,7 +319,6 @@
                                                         foreach($labelList as $label){
                                                         ?>
 														<tr  id="<?php echo "R".$i?>">
-															<!-- <td  class="row-index text-center"></td> -->
 															<td> <input type="text" class="form-control labelArr" id="labelArr" name="labelArr[]" placeholder="Enter Label" value="<?php echo $label['option_name']?>" >
 																<div id="err_labelArr" class="error_msg err_labelArr"></div>
 															</td>
@@ -201,7 +331,6 @@
 														</tr>
                                                         <?php $i++; }  } else {?>
                                                             <tr>
-															<!-- <td  class="row-index text-center"></td> -->
 															<td> <input type="text" class="form-control labelArr" id="labelArr" name="labelArr[]" placeholder="Enter Label"  >
 																<div id="err_labelArr" class="error_msg err_labelArr"></div>
 															</td>
@@ -217,7 +346,7 @@
 													</tbody>
 													
 												</table>
-											</div>
+											</div> -->
                                             
 
                                             <div class="form-group row">

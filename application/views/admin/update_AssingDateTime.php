@@ -36,10 +36,10 @@
                                        <div class="row">
                                            
 										   <div class="col-md-6">
-												<label><span></span>Service Provider</label><br>
+												<label><span></span>Service Giver</label><br>
 												<div class="form-group ">
 													<select name="service_provider" id="service_provider" class="form-control" required>
-														<option value="">Select Service Provider </option>
+														<option value="">Select Service Giver </option>
 														<?php
 														foreach($usersList as $users){
 														?>

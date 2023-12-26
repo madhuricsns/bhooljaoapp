@@ -4,7 +4,7 @@
 	<div class="container-fluid">
                 <div class="card tab2-card">
                     <div class="card-header">
-                        <h5>ASSIGN SERVICE PROVIDER</h5>
+                        <h5>ASSIGN SERVICE GIVER</h5>
                     </div>
                     <div class="card-body">
                       <?php if($this->session->flashdata('success')!=""){?>
@@ -33,10 +33,6 @@
                                     <div class="row">
                                         <div class="col-sm-12">
 
-										
-										<?php
-										if(!empty($serviceGroup)){
-										?>
 										<div class="form-group row">
                                                 <label class="col-xl-3 col-md-4"><span>*</span>Select Service Giver</label><br>
 												<select name="service_provider" id="service_provider" class="form-control col-md-6" >
@@ -48,17 +44,19 @@
 												<?php } ?>
 												</select>
                                         </div>
-
-										<!-- <div class="form-group row">
+										<?php
+										if(!empty($serviceGroup)){
+										?>
+										<div class="form-group row">
                                                 <label class="col-xl-3 col-md-4"></label><br>
 												<label class="col-md-6"> OR </label>
-                                        </div> -->
+                                        </div>
 
-										<div class="form-group row">
+										<!-- <div class="form-group row">
                                                 <label class="col-xl-3 col-md-4"><span>*</span>If Service Group Assign</label><br>
 												<label class="col-md-1"><input type="radio" name="service_group_assign" value="Yes" required> Yes </label>
 												<label class="col-md-3"><input type="radio" name="service_group_assign" value="No" required> No </label>
-                                        </div>
+                                        </div> -->
 
 										<div class="form-group row">
                                                 <label class="col-xl-3 col-md-4"><span>*</span>Select Service Group</label><br>
@@ -71,21 +69,8 @@
 												<?php } ?>
 												</select>
                                         </div>
-										<?php } else { ?>
-											<div class="form-group row">
-                                                <label class="col-xl-3 col-md-4"><span>*</span>Select Service Giver</label><br>
-												<select name="service_provider" id="service_provider" class="form-control col-md-6" required>
-													<option value="">Select Service Giver </option>
-													<?php
-													foreach($usersList as $users){
-													?>
-													<option value="<?php echo $users['user_id'] ?>"><?php echo $users['full_name'] ?></option>
-												<?php } ?>
-												</select>
-                                        	</div>
-
-
-										<?php } ?>	
+										<?php }  ?>
+											
                                     <!-- </div> -->
                                     
 

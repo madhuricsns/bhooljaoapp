@@ -138,7 +138,8 @@ class Notifications extends CI_Controller {
 								$input_data = array(
 								'noti_title'=>trim($notification_name),
 								'noti_message'=>trim($notification_description),
-								'noti_type'=>$type,
+								'noti_user_type'=>$type,
+								'noti_type'=>'Admin',
 								'noti_user_id'=>$users['user_id'],
 								'noti_gcmID'=>$users['user_fcm'],
 								'created_by' => $session_data['admin_id'],
@@ -157,7 +158,8 @@ class Notifications extends CI_Controller {
 								$input_data = array(
 								'noti_title'=>trim($notification_name),
 								'noti_message'=>trim($notification_description),
-								'noti_type'=>$type,
+								'noti_user_type'=>$type,
+								'noti_type'=>'Admin',
 								'noti_user_id'=>$users['user_id'],
 								'noti_gcmID'=>$users['user_fcm'],
 								'created_by' => $session_data['admin_id'],
@@ -179,7 +181,8 @@ class Notifications extends CI_Controller {
 							$input_data = array(
 								'noti_title'=>trim($notification_name),
 								'noti_message'=>trim($notification_description),
-								'noti_type'=>$type,
+								'noti_user_type'=>$type,
+								'noti_type'=>'Admin',
 								'noti_user_id'=>$user_id,
 								'noti_gcmID'=>$user->user_fcm,
 								'created_by' => $session_data['admin_id'],
