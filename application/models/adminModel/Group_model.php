@@ -116,6 +116,7 @@ Class Group_model extends CI_Model {
 	{
 		$this->db->select('*');
 		$this->db->where('category_parent_id','0');
+		$this->db->where('category_status','Active');
 		$this->db->order_by('category_name','ASC');
 		$result = $this->db->get(TBLPREFIX.'category');
 		//echo $this->db->last_query();exit;

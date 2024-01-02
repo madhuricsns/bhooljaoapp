@@ -22,43 +22,13 @@ class Service extends CI_Controller {
 	public function manageService()
 	{
 		$data['title']='Manage Sub Category';
-		$per_page='10';
-		
-		if($this->uri->segment(4)!='')
-		{
-			if($this->uri->segment(4)!="Na")
-			{
-				$pageNo=($this->uri->segment(4));
-			}
-		}
 
-		if($this->uri->segment(5)!='')
-		{
-			if($this->uri->segment(5)!="Na")
-			{
-				$per_page=($this->uri->segment(5));
-			}
-		}
-		else
-		{
-			$per_page='10';
-		}
 		
 		$data['usercnt']=$this->Service_model->getAllService(0,"","");
 		
-		
 		$config = array();
-		$config["base_url"] = base_url().'backend/Service/manageService/'.$per_page;
-		// $config['per_page'] = 10;
-		if($per_page>100)
-		{
-			$config['per_page'] = 100;
-		}
-		else
-		{
-			$config['per_page'] = $per_page;
-		}
-		
+		$config["base_url"] = base_url().'backend/Service/manageService/';
+		$config['per_page'] = 10;
 		$config["uri_segment"] = 4;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
@@ -94,32 +64,49 @@ class Service extends CI_Controller {
 	
 	public function addService()
 	{
-		$data['title']='Add Sub Category';
+		$data['title']='Add Service';
 		$data['error_msg']='';
 		$data['categoryList']=$this->Service_model->getAllCategory(1);		
+		$data['subcategoryList']=$this->Service_model->getAllSubCategory(1);		
 		if(isset($_POST['btn_addService']))
 		{
-			// print_r($_POST);//exit;
+			// print_r($_POST);
+			// echo "<pre>";
+			// print_r($_FILES);
+				
+			// exit;
 			$this->form_validation->set_rules('category','Category','required');
 			$this->form_validation->set_rules('service_name', 'Service Name', 'required');
 			//$this->form_validation->set_rules('email_address', 'Email Address', 'required');
 			$this->form_validation->set_rules('description','Description','required');
-			$this->form_validation->set_rules('minprice', 'Price ', 'required'); //{10} for 10 digits number
-			$this->form_validation->set_rules('maxprice', 'Max Price ', 'required'); //{10} for 10 digits number
-
+			
 			if($this->form_validation->run())
 			{
 				//echo "successfully validated";exit();
 			
 				$category_id=$this->input->post('category');
+				$subcategory_id=$this->input->post('subcategory');
+				if($subcategory_id>0)
+				{
+					$category_id=$subcategory_id;
+				}
 				$Service_name=$this->input->post('service_name');
-				$minprice=$this->input->post('minprice');
-				$maxprice=$this->input->post('maxprice');
-				$option_label=$this->input->post('option_label');
-				$optionsArr=$this->input->post('optionsArr');
-				$amountArr=$this->input->post('amountArr');
+				$price=$this->input->post('price');
+				$discount_price=$this->input->post('discount_price');
+				$offer_percentage=$this->input->post('offer_percentage');
+				$demo_price=$this->input->post('demo_price');
+				$demo_discount_price=$this->input->post('demo_discount_price');
+				$option_labelArr=$this->input->post('option_label');
+				// $service_typeArr=$this->input->post('service_typeArr');
+				$option_typeArr=$this->input->post('option_type');
+				// $optionsArr=$this->input->post('optionsArr');
+				// $amountArr=$this->input->post('amountArr');
 				$labelArr=$this->input->post('labelArr');
 				$labelvalueArr=$this->input->post('labelvalueArr');
+				$whychooswusArr=$this->input->post('whychooswusArr');
+				$vehiclenameArr=$this->input->post('vehiclenameArr');
+				$vehicleamountArr=$this->input->post('vehicleamountArr');
+				$vehicleimageArr=$this->input->post('vehicleimageArr');
 
 				//$daily_report=$this->input->post('daily_report');
 				$status="Active";
@@ -137,11 +124,13 @@ class Service extends CI_Controller {
 						'category_id'=>$category_id,
 						'service_name'=>trim($Service_name),
 						'service_description'=>$description,
-						'min_price'=>$minprice,
-						'max_price'=>$maxprice,
 						'service_image'=>$service_image,
+						'service_price'=>$price,
+						'service_discount_price'=>$discount_price,
+						'offer_percentage'=>$offer_percentage,
+						'service_demo_price'=>$demo_price,
+						'service_demo_discount_price'=>$demo_discount_price,
 						'service_status'=>$status,
-						'service_option_name'=>$option_label,
 						'dateadded' => date('Y-m-d H:i:s'),
 						'dateupdated' => date('Y-m-d H:i:s')
 						);
@@ -154,41 +143,161 @@ class Service extends CI_Controller {
 					
 					if($Service_id>0)
 					{	
-						// print_r($optionsArr);
-						if(!empty($optionsArr))
+						if($service_image!="")
 						{
-							foreach($optionsArr as $key=>$option)
+						// Upload Service Image
+							$image_data = array(
+								'service_id'=>$Service_id,
+								'service_image'=>$service_image,
+								'dateadded' => date('Y-m-d H:i:s'),
+								'dateupdated' => date('Y-m-d H:i:s')
+								);
+		
+							$this->Common_Model->insert_data('service_images',$image_data);
+						}
+
+						if(!empty($option_labelArr))
+						{
+							// print_r($optionsArr);
+							$optionsStr="";
+							$amountStr="";
+							foreach($option_labelArr as $key=>$label)
 							{
-								$amount=$amountArr[$key];
+								
+								$optionsStr="optionsArr"."_".$key;
+								$optionsArr=$this->input->post($optionsStr);
+								$amountStr="amountArr"."_".$key;
+								$amountArr=$this->input->post($amountStr);
+
+
+								// print_r($optionsArr);
+								// print_r($amountArr);
+								// $servicetype = $service_typeArr[$key];
+								// $serviceData=array(
+								// 	'service_type'=>$servicetype,
+								// 	'dateadded' => date('Y-m-d H:i:s')
+								// );
+								// $service_type_id=$this->Common_Model->insert_data('service_type',$serviceData);
+
+								$optype = $option_typeArr[$key];
+								// echo count($optionsArr);
+								for($i=0;$i<count($optionsArr);$i++)
+								{
+									// $label = $option_labelArr[$i];
+									// $optype = $option_typeArr[$i];
+									$insert_data=array(
+											'service_id'=>$Service_id,
+											// 'service_type_id'=>$service_type_id,
+											'option_label'=>$label,
+											'option_name'=>$optionsArr[$i],
+											'option_amount'=>$amountArr[$i],
+											'option_type' =>$optype,
+											'dateadded' => date('Y-m-d H:i:s'),
+											'dateupdated' => date('Y-m-d H:i:s')
+										);
+										
+										// print_r($insert_data);
+										
+									$this->Common_Model->insert_data('service_details',$insert_data);
+									//  echo $this->db->last_query();
+								}
+							}
+						}
+						// exit;
+						// Add Why Choose Us data
+						if(!empty($whychooswusArr))
+						{
+							foreach($whychooswusArr as $key=>$whychooswus)
+							{
 								$insert_data=array(
 									'service_id'=>$Service_id,
-									'option_name'=>$option,
-									'option_amount'=>$amount,
+									'option_label'=>"Why choose us",
+									'option_name'=>$whychooswus,
+									'option_type'=>"Information",
 									'dateadded' => date('Y-m-d H:i:s'),
 									'dateupdated' => date('Y-m-d H:i:s')
 								);
-								if($option!="" && $amount!=""){
-									$this->Common_Model->insert_data('service_details',$insert_data);
-									}
+								$this->Common_Model->insert_data('service_details',$insert_data);
 								// echo $this->db->last_query();
 							}
 						}
 
-						foreach($labelArr as $key=>$label)
+						// Add Vehicle data
+						if(!empty($vehiclenameArr))
 						{
-							$labelvalue=$labelvalueArr[$key];
-							$insert_data=array(
-								'service_id'=>$Service_id,
-								'option_name'=>$label,
-								'option_value'=>$labelvalue,
-								'option_type'=>'Label',
-								'dateadded' => date('Y-m-d H:i:s'),
-								'dateupdated' => date('Y-m-d H:i:s')
-							);
-							if($label!="" && $labelvalue!=""){
-								$this->Common_Model->insert_data('service_details',$insert_data);
+							foreach($vehiclenameArr as $key=>$vehicleName)
+							{
+								$amount=$vehicleamountArr[$key];
+								// $image=$vehicleimageArr[$key];
+
+								$strDocName = "vehicleimageArr";
+								$_FILES['file']['name']     = $_FILES[$strDocName]['name'][$key]; 
+								$_FILES['file']['type']     = $_FILES[$strDocName]['type'][$key]; 
+								$_FILES['file']['tmp_name'] = $_FILES[$strDocName]['tmp_name'][$key]; 
+								$_FILES['file']['error']    = $_FILES[$strDocName]['error'][$key]; 
+								$_FILES['file']['size']     = $_FILES[$strDocName]['size'][$key]; 
+								
+								$photo='';
+								$new_doc_name = "";
+								$new_doc_name = date('YmdHis').$this->Common_Model->randomImageName();
+								$target_dir="uploads/vehicle_images/";
+					
+								// echo $new_doc_name;
+								$config = array(
+										'upload_path' => $target_dir,
+										'allowed_types' => "jpg|png|jpeg|pdf",
+										'max_size' => "0", 
+										'file_name' =>$new_doc_name
+										);
+								$this->load->library('upload', $config);
+								$this->upload->initialize($config); 
+								if($this->upload->do_upload('file'))
+								{ 
+									$docDetailArray = $this->upload->data();
+									$photo =  $docDetailArray['file_name'];
 								}
+								else
+								{
+									echo $this->upload->display_errors();
+								}
+								if($_FILES[$strDocName]['error'][$i]==0)
+								{ 
+									$photo=$photo;
+								}
+
+								$insert_data=array(
+									'service_id'=>$Service_id,
+									'option_label'=>"Select Vehicle Type",
+									'option_name'=>$vehicleName,
+									'option_amount'=>$amount,
+									'option_image'=>$photo,
+									'option_type'=>"Vehicle",
+									'dateadded' => date('Y-m-d H:i:s'),
+									'dateupdated' => date('Y-m-d H:i:s')
+								);
+								if($vehicleName!="" && $amount!=""){
+									$this->Common_Model->insert_data('service_details',$insert_data);
+									}
+								echo $this->db->last_query();
+							}
 						}
+
+						// foreach($labelArr as $key=>$label)
+						// {
+						// 	$labelvalue=$labelvalueArr[$key];
+						// 	$insert_data=array(
+						// 		'service_id'=>$Service_id,
+						// 		'option_name'=>$label,
+						// 		'option_value'=>$labelvalue,
+						// 		'option_type'=>'Label',
+						// 		'dateadded' => date('Y-m-d H:i:s'),
+						// 		'dateupdated' => date('Y-m-d H:i:s')
+						// 	);
+						// 	if($label!="" && $labelvalue!=""){
+						// 		$this->Common_Model->insert_data('service_details',$insert_data);
+						// 		}
+						// }
+						// exit;
 						$this->session->set_flashdata('success','Service added successfully.');
 
 						redirect(base_url().'backend/Service/manageService');	
@@ -225,8 +334,15 @@ class Service extends CI_Controller {
 			if($serviceInfo>0)
 			{
 				$data['serviceInfo'] = $this->Service_model->getSingleServiceInfo($id,1);
-				$data['optionList']=$this->Service_model->getAllServiceDetailOptions($id,1);	
-				$data['labelList']=$this->Service_model->getAllServiceDetailLabels($id,1);	
+				// $data['labelList']=$this->Service_model->getAllServiceDetailsLabel($id,1);	
+				$data['labelListArr']=$this->Service_model->getAllServiceDetailsLabel($id,1);	
+				$data['optionList']=$this->Service_model->getAllServiceDetailOptions($id,1);
+				
+				// $data['labelListArr']=$this->Service_model->getAllServiceDetailsLabel($id,1);
+				// $data['optionList']=$this->Service_model->getAllServiceDetailOptions($id,1);	
+				// $data['labelList']=$this->Service_model->getAllServiceDetailLabels($id,1);	
+				$data['whychooseusList']=$this->Service_model->getAllServiceWhyChooseUs($id,1);	
+				$data['vehicleList']=$this->Service_model->getAllServiceVehicles($id,1);
 				if(isset($_POST['btn_uptuser']))
 				{
 					$this->form_validation->set_rules('category','Category','required');
@@ -247,14 +363,24 @@ class Service extends CI_Controller {
 					$service_discount_price=$this->input->post('service_discount_price');
 					$service_demo_price=$this->input->post('service_demo_price');
 					$service_demo_discount_price=$this->input->post('service_demo_discount_price');
-					$optionsArr=$this->input->post('optionsArr');
-					$amountArr=$this->input->post('amountArr');
+
+					$option_label=$this->input->post('option_label');
+					$option_type=$this->input->post('option_type');
+					$optionsArr=$this->input->post('optionsArr_0');
+					$amountArr=$this->input->post('amountArr_0');
 					$labelArr=$this->input->post('labelArr');
 					$labelvalueArr=$this->input->post('labelvalueArr');
 
 					$status=$this->input->post('status');
 					//$status="active";
 					$description=$this->input->post('description');
+
+					
+					$whychooswusArr=$this->input->post('whychooswusArr');
+					$option_ids=$this->input->post('option_ids');
+					$vehiclenameArr=$this->input->post('vehiclenameArr');
+					$vehicleamountArr=$this->input->post('vehicleamountArr');
+					$vehicleimageArr=$this->input->post('vehicleimageArr');
 				
 					//Image Upload Code 
 					if(count($_FILES) > 0) 
@@ -299,41 +425,149 @@ class Service extends CI_Controller {
 // 					exit();
 						if($Service_data)
 						{	
-							$delOption=$this->Service_model->deleteoption($id);
+							// $delOption=$this->Service_model->deleteoption($id);
 							// print_r($optionsArr);
+							// echo $option_type;
 							if(!empty($optionsArr))
 							{
-								foreach($optionsArr as $key=>$option)
-								{
-									$amount=$amountArr[$key];
-									$insert_data=array(
-										'service_id'=>$id,
-										'option_name'=>$option,
-										'option_amount'=>$amount,
-										'dateadded' => date('Y-m-d H:i:s'),
-										'dateupdated' => date('Y-m-d H:i:s')
-									);
-									if($option!="" && $amount!=""){
-									$this->Common_Model->insert_data('service_details',$insert_data);
+									foreach($optionsArr as $key=>$option)
+									{
+										$amount=$amountArr[$key];
+										$insert_data=array(
+											'service_id'=>$id,
+											'option_label'=>$option_label,
+											'option_type'=>$option_type,
+											'option_name'=>$option,
+											'option_amount'=>$amount,
+											'dateadded' => date('Y-m-d H:i:s'),
+											'dateupdated' => date('Y-m-d H:i:s')
+										);
+										// if($option!="" && $amount!=""){
+										$this->Common_Model->insert_data('service_details',$insert_data);
+										// }
+										// echo $this->db->last_query();
 									}
-									// echo $this->db->last_query();
-								}
-							}
-							foreach($labelArr as $key=>$label)
+								
+							} 
+// exit;
+							// Add Why Choose Us data
+						if(!empty($whychooswusArr))
+						{
+							$delwhychooseus=$this->Service_model->deleteWhychooseus($id);
+							foreach($whychooswusArr as $key=>$whychooswus)
 							{
-								$labelvalue=$labelvalueArr[$key];
 								$insert_data=array(
 									'service_id'=>$id,
-									'option_name'=>$label,
-									'option_value'=>$labelvalue,
-									'option_type'=>'Label',
+									'option_label'=>"Why choose us",
+									'option_name'=>$whychooswus,
+									'option_type'=>"Information",
 									'dateadded' => date('Y-m-d H:i:s'),
 									'dateupdated' => date('Y-m-d H:i:s')
 								);
-								if($label!="" && $labelvalue!=""){
-									$this->Common_Model->insert_data('service_details',$insert_data);
-									}
+								$this->Common_Model->insert_data('service_details',$insert_data);
+								// echo $this->db->last_query();
 							}
+						}
+
+						// Add Vehicle data
+						if(!empty($vehiclenameArr))
+						{
+							foreach($vehiclenameArr as $key=>$vehicleName)
+							{
+								$amount=$vehicleamountArr[$key];
+								$option_id=$option_ids[$key];
+								// $image=$vehicleimageArr[$key];
+
+								$strDocName = "vehicleimageArr";
+								$_FILES['file']['name']     = $_FILES[$strDocName]['name'][$key]; 
+								$_FILES['file']['type']     = $_FILES[$strDocName]['type'][$key]; 
+								$_FILES['file']['tmp_name'] = $_FILES[$strDocName]['tmp_name'][$key]; 
+								$_FILES['file']['error']    = $_FILES[$strDocName]['error'][$key]; 
+								$_FILES['file']['size']     = $_FILES[$strDocName]['size'][$key]; 
+								
+								$photo='';
+								$new_doc_name = "";
+								$new_doc_name = date('YmdHis').$this->Common_Model->randomImageName();
+								$target_dir="uploads/vehicle_images/";
+					
+								// echo $new_doc_name;
+								$config = array(
+										'upload_path' => $target_dir,
+										'allowed_types' => "jpg|png|jpeg|pdf",
+										'max_size' => "0", 
+										'file_name' =>$new_doc_name
+										);
+								$this->load->library('upload', $config);
+								$this->upload->initialize($config); 
+								if($this->upload->do_upload('file'))
+								{ 
+									$docDetailArray = $this->upload->data();
+									$photo =  $docDetailArray['file_name'];
+								}
+								else
+								{
+									echo $this->upload->display_errors();
+								}
+								if($_FILES[$strDocName]['error'][$key]==0)
+								{ 
+									$photo=$photo;
+								}
+								if($photo!="")
+								{
+									$insert_data=array(
+										'service_id'=>$id,
+										'option_label'=>"Select Vehicle Type",
+										'option_name'=>$vehicleName,
+										'option_amount'=>$amount,
+										'option_image'=>$photo,
+										'option_type'=>"Vehicle",
+										'dateadded' => date('Y-m-d H:i:s'),
+										'dateupdated' => date('Y-m-d H:i:s')
+									);
+								}
+								else
+								{
+									$insert_data=array(
+										'service_id'=>$id,
+										'option_label'=>"Select Vehicle Type",
+										'option_name'=>$vehicleName,
+										'option_amount'=>$amount,
+										'option_type'=>"Vehicle",
+										'dateadded' => date('Y-m-d H:i:s'),
+										'dateupdated' => date('Y-m-d H:i:s')
+									);
+								}
+								
+								if($vehicleName!="" && $amount!=""){
+									if(isset($option_id) && $option_id!="" && $option_id!="0")
+									{
+										$this->Common_Model->update_data('service_details','option_id',$option_id,$insert_data);
+									}
+									else
+									{
+										$this->Common_Model->insert_data('service_details',$insert_data);
+									}
+									
+									}
+								echo $this->db->last_query();
+							}
+						}
+// exit;
+							// foreach($labelArr as $key=>$label)
+							// {
+							// 	$labelvalue=$labelvalueArr[$key];
+							// 	$insert_data=array(
+							// 		'service_id'=>$id,
+							// 		'option_name'=>$label,
+							// 		'option_value'=>$labelvalue,
+							// 		'option_type'=>'Label',
+							// 		'dateadded' => date('Y-m-d H:i:s'),
+							// 		'dateupdated' => date('Y-m-d H:i:s')
+							// 	);
+							// 	if($label!="" && $labelvalue!=""){
+							// 		$this->Common_Model->insert_data('service_details',$insert_data);
+							// 		}
+							// }
 							$this->session->set_flashdata('success','Service updated successfully.');
 
 							redirect(base_url().'backend/Service/manageService');	
@@ -375,7 +609,8 @@ class Service extends CI_Controller {
 		$data['serviceinfo']=$this->Service_model->getSingleServiceInfo($service_id,1);
 		// echo $this->db->last_query();
 		$data['optionList']=$this->Service_model->getAllServiceDetailOptions($service_id,1);	
-		$data['labelList']=$this->Service_model->getAllServiceDetailLabels($service_id,1);	
+		$data['whychooseusList']=$this->Service_model->getAllServiceWhyChooseUs($service_id,1);	
+		$data['vehicleList']=$this->Service_model->getAllServiceVehicles($service_id,1);
 		/*echo "<pre>";
 		print_r($data['userinfo']);
 		exit();*/
@@ -522,7 +757,6 @@ class Service extends CI_Controller {
 			if($this->form_validation->run())
 			{
 				//echo "successfully validated";exit();
-			
 				$parent_service_id=$this->input->post('parent_service_id');
 				$Service_name=$this->input->post('service_name');
 				$price=$this->input->post('price');
@@ -531,8 +765,8 @@ class Service extends CI_Controller {
 				$demo_price=$this->input->post('demo_price');
 				$demo_discount_price=$this->input->post('demo_discount_price');
 				$option_labelArr=$this->input->post('option_label');
-				$optionsArr=$this->input->post('optionsArr');
-				$amountArr=$this->input->post('amountArr');
+				$optionsArr=$this->input->post('optionsArr_0');
+				$amountArr=$this->input->post('amountArr_0');
 				$labelArr=$this->input->post('labelArr');
 				$labelvalueArr=$this->input->post('labelvalueArr');
 
@@ -567,7 +801,7 @@ class Service extends CI_Controller {
 					// print_r($input_data);
 					// exit();
 					
-					$Service_id = $this->Service_model->insert_Service($input_data);
+					$Service_id = $this->Common_Model->insert_data('service',$input_data);
 					
 					if($Service_id>0)
 					{	
@@ -575,7 +809,7 @@ class Service extends CI_Controller {
 						{
 						// Upload Service Image
 							$image_data = array(
-								'service_id'=>$service_id,
+								'service_id'=>$Service_id,
 								'service_image'=>$service_image,
 								'dateadded' => date('Y-m-d H:i:s'),
 								'dateupdated' => date('Y-m-d H:i:s')
@@ -663,19 +897,22 @@ class Service extends CI_Controller {
 			if($serviceInfo>0)
 			{
 				$data['serviceInfo'] = $this->Service_model->getSingleServiceInfo($id,1);
+				$data['labelListArr']=$this->Service_model->getAllServiceDetailsLabel($id,1);	
 				$data['optionList']=$this->Service_model->getAllServiceDetailOptions($id,1);	
-				$data['labelList']=$this->Service_model->getAllServiceDetailLabels($id,1);	
+				// $data['labelList']=$this->Service_model->getAllServiceDetailLabels($id,1);	
 				if(isset($_POST['btn_uptuser']))
 				{
+					print_r($_POST);
+					// exit;
 					$this->form_validation->set_rules('parent_service_id','Parent Service','required');
 			
-		     	$this->form_validation->set_rules('service_name', 'Service Name', 'required');
-			   //$this->form_validation->set_rules('email_address', 'Email Address', 'required');
-			   $this->form_validation->set_rules('description','Description','required');
-			   /*$this->form_validation->set_rules('minprice', 'Min Price ', 'required'); //{10} for 10 digits number
-			   $this->form_validation->set_rules('maxprice', 'Max Price ', 'required'); //{10} for 10 digits number
-			  */
-			  $this->form_validation->set_rules('status','Service Status','required');
+					$this->form_validation->set_rules('service_name', 'Service Name', 'required');
+					//$this->form_validation->set_rules('email_address', 'Email Address', 'required');
+					$this->form_validation->set_rules('description','Description','required');
+					/*$this->form_validation->set_rules('minprice', 'Min Price ', 'required'); //{10} for 10 digits number
+					$this->form_validation->set_rules('maxprice', 'Max Price ', 'required'); //{10} for 10 digits number
+					*/
+					$this->form_validation->set_rules('status','Service Status','required');
 
 				if($this->form_validation->run())
 				{ 
@@ -685,8 +922,11 @@ class Service extends CI_Controller {
 					$service_discount_price=$this->input->post('service_discount_price');
 					$service_demo_price=$this->input->post('service_demo_price');
 					$service_demo_discount_price=$this->input->post('service_demo_discount_price');
-					$optionsArr=$this->input->post('optionsArr');
-					$amountArr=$this->input->post('amountArr');
+
+					$option_label=$this->input->post('option_label');
+					$option_type=$this->input->post('option_type');
+					$optionsArr=$this->input->post('optionsArr_0');
+					$amountArr=$this->input->post('amountArr_0');
 					$labelArr=$this->input->post('labelArr');
 					$labelvalueArr=$this->input->post('labelvalueArr');
 
@@ -733,8 +973,8 @@ class Service extends CI_Controller {
 					
 						$Service_data = $this->Service_model->uptdateService($input_data,$id);
 // echo"<pre>";
-// 					print_r($Service_data);
-// 					exit();
+					// print_r($Service_data);
+					// exit();
 						if($Service_data)
 						{	
 							$delOption=$this->Service_model->deleteoption($id);
@@ -746,6 +986,9 @@ class Service extends CI_Controller {
 									$amount=$amountArr[$key];
 									$insert_data=array(
 										'service_id'=>$id,
+										'option_label'=>$option_label,
+										'option_type'=>$option_type,
+										'option_name'=>$option,
 										'option_name'=>$option,
 										'option_amount'=>$amount,
 										'dateadded' => date('Y-m-d H:i:s'),
@@ -899,7 +1142,7 @@ public function addmultiple_images()
 				{	
 					$this->session->set_flashdata('success','Service Images uploaded successfully.');
 
-					redirect(base_url().'backend/Service/addmultiple_images/'.base64_encode($service_id));	
+					redirect(base_url().'backend/Service/manageService');	
 				}
 				else
 				{
@@ -921,7 +1164,9 @@ public function addmultiple_images()
 		$this->load->view('admin/admin_footer');
 
 
-}
+	}
+
+	
 // private function set_upload_options()
 // {   
 //     //upload an image options
@@ -935,9 +1180,8 @@ public function addmultiple_images()
 // }
 
 
-
-public function deleteImage()
-{
+	public function deleteImage()
+	{
 		$data['error_msg']='';
 		$service_image_id = base64_decode($this->uri->segment(4));
 		$service_id=base64_decode($this->uri->segment(5));
@@ -945,13 +1189,10 @@ public function deleteImage()
 		if($service_image_id)
 		{
 
-
-				$data['service_id']=$service_id;
-				$serviceInfo=$this->Service_model->getSingleServiceInfo($service_id,0);
-				$serviceimage_id=$this->Service_model->getSingleServiceimageInfo($service_image_id,0);	
+			$data['service_id']=$service_id;
+			$serviceInfo=$this->Service_model->getSingleServiceInfo($service_id,0);
+			$serviceimage_id=$this->Service_model->getSingleServiceimageInfo($service_image_id,0);	
 				
-				
-
 			if($serviceInfo > 0)
 			 {   
 			// 	$data['serviceInfo'] =$this->Service_model->getSingleServiceInfo($service_id,1);
@@ -984,7 +1225,6 @@ public function deleteImage()
 			redirect(base_url().'backend/Service/managesservice');
 		}
 	}
-
 
 
 }

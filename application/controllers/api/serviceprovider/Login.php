@@ -15,7 +15,7 @@ class Login extends REST_Controller {
 	{
 		$token 		  = $this->input->post("token");
 		$username	  = $this->input->post('username');
-		$fcm		  = $this->input->post('fcm');
+		$fcm		  = $this->input->post('user_fcm');
 		
 		if($token == TOKEN)
 		{
@@ -36,12 +36,17 @@ class Login extends REST_Controller {
 				
 				if($status == 'Active')
 				{
+					$zone = $this->LoginModel->getZoneBySP($result->zone_id);
+
 					$session_data = array(
 						'user_id' => $result->user_id,
 						'full_name' => $result->full_name,
 						'mobile' => $result->mobile,
 						'email' => $result->email,
-						'status' => $result->status);
+						'status' => $result->status,
+						'zone_lat' => $zone->zone_lat,
+						'zone_long' => $zone->zone_long
+					);
 
 					// Send OTP
 					$otp_code = $this->Common_Model->otp();
@@ -60,9 +65,9 @@ class Login extends REST_Controller {
 					//*********** */
 					//$this->session->set_userdata('logged_in', $session_data);
 
-					$title="Login OTP";
-					$message="OTP for your login is $otp_code . Do not share it with anyone.";
-					$output=$this->Common_Model->sendexponotification($title,$message,$result->user_fcm);
+					// $title="Login OTP";
+					// $message="OTP for your login is $otp_code . Do not share it with anyone.";
+					// $output=$this->Common_Model->sendexponotification($title,$message,$result->user_fcm);
 
 
 					$response_array['data'] = $session_data;
@@ -116,14 +121,17 @@ class Login extends REST_Controller {
 
 				if ($loginData > 0) 
 				{
+					
 					$result = $this->LoginModel->chk_otp($data,1);
- 					
+					$zone = $this->LoginModel->getZoneBySP($result->zone_id);
 						$session_data = array(
 							'user_id' => $result->user_id,
 							'full_name' => $result->full_name,
 							'mobile' => $result->mobile,
 							'email' => $result->email,
-							'status' => $result->status);
+							'status' => $result->status,
+							'zone_lat' => $zone->zone_lat,
+							'zone_long' => $zone->zone_long);
 						
 						$response_array['data'] = $session_data;
 						$response_array['responsecode'] = "200";

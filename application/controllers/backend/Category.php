@@ -123,7 +123,7 @@ class Category extends CI_Controller {
 						$target_dir = "uploads/category_images/";
 						$category_image= $this->Common_Model->ImageUpload($ImageName,$target_dir);
 					}
-					$input_data = array(
+						$input_data = array(
 						'category_parent_id'=>$category,
 						'category_name'=>trim($category_name),
 						'category_image'=>$category_image,
@@ -154,13 +154,13 @@ class Category extends CI_Controller {
 				}
 				else
 				{
-					$this->session->set_flashdata('success','Category  already exist.');
+					$this->session->set_flashdata('error','Category  already exist.');
 
 					redirect(base_url().'backend/Category/addCategory');	
 				}
 
 			}else{
-				$this->session->set_flashdata('success','Validation failed. Please enter valid email or mobile number.');
+				$this->session->set_flashdata('error','Validation failed.');
 				redirect(base_url().'backend/Category/addCategory');
 			}
 		}

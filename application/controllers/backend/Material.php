@@ -87,6 +87,8 @@ class Material extends CI_Controller {
 		//echo "Conttpage--".$page;
 		//exit();
 		$data['materialList']=$this->Material_model->getAllMaterial(1,$config["per_page"],$page);
+		
+		
 		//echo $this->db->last_query();exit;
 		$this->load->view('admin/admin_header',$data);
 		$this->load->view('admin/manageMaterial',$data);
@@ -231,26 +233,21 @@ class Material extends CI_Controller {
 
 		//echo "seg4--".$this->uri->segment(4);
 		//echo "seg5--".$this->uri->segment(5);exit();
-		$action=$this->uri->segment(4);
 
-		$task_id=base64_decode($this->uri->segment(5));
-		$user_id=$this->uri->segment(6);
+		$request_id=base64_decode($this->uri->segment(4));
+		$statusTobeUpdated=base64_decode($this->uri->segment(5));
+		$material_id=base64_decode($this->uri->segment(6));
 		//echo "user_id--".$user_id;exit();
-		if($action=='accept'){
-			$statusTobeUpdated="Accepted";
-		}elseif($action=='reject'){
-			 $statusTobeUpdated="Rejected";
-		}
-
-		if($task_id)
+		
+		if($request_id)
 		{
 			$input_data = array(
-								'zone_status'=> $statusTobeUpdated
+								'request_status'=> $statusTobeUpdated
 								);
-			$usertaskdata = $this->Material_model->uptdateStatus($input_data,$task_id);
+			$usertaskdata = $this->Common_Model->update_data('material_request','request_id',$request_id,$input_data);
 			if($usertaskdata){
-				$this->session->set_flashdata('success','Status updated successfully.');
-				redirect(base_url().'backend/users/viewUsertask/'.$user_id);
+				$this->session->set_flashdata('success',$statusTobeUpdated.' successfully.');
+				redirect(base_url().'backend/Material/materialRequest/'.base64_encode($material_id));
 				}
 		}
 	}
@@ -312,6 +309,23 @@ class Material extends CI_Controller {
 				$this->session->set_flashdata('success','Status updated successfully.');
 				redirect(base_url().'backend/Material/manageMaterial/');
 				}
+		}
+	}
+
+	public function materialRequest()
+	{
+		$data['title']='Material Requests';
+		$data['error_msg']='';
+		
+		$material_id=base64_decode($this->uri->segment(4));
+		//echo "user_id--".$user_id;exit();
+		if($material_id)
+		{
+			$data['material_id']=$material_id;
+			$data['requestList'] = $this->Material_model->getAllMaterialRequest($material_id);
+			$this->load->view('admin/admin_header',$data);
+			$this->load->view('admin/materialRequest',$data);
+			$this->load->view('admin/admin_footer');
 		}
 	}
 }

@@ -6,13 +6,14 @@
 			parent::__construct();
             date_default_timezone_set('Asia/Kolkata');
 			//date_default_timezone_set(DEFAULT_TIME_ZONE);
-			$this->load->model('ApiModels/sp/Chatmodel');
+			$this->load->model('ApiModels/customer/Chatmodel');
 			 
 			$this->load->helper('url');
 		}
 		
 		public function listchat_post()
 		{			 
+			//date_default_timezone_set(DEFAULT_TIME_ZONE);	
 			$token 		= $this->input->post("token");
 			$user_id	= $this->input->post("user_id");
 
@@ -29,48 +30,39 @@
 					 
 				}
 				else{
+					 
 					// $this->db->where('service_provider_id',5);
 					// $this->db->delete('bhool_chat_channels'); 
-					// $this->Chatmodel->delete_chat('chat_channels');
 					// echo $this->db->last_query();exit;
 					$chatData = $this->Chatmodel->getChatList($user_id);
 					
-					// if(is_array($chatData) && count($chatData) > 0)
-					// {
-						foreach($chatData  as $key=>$chatDataDtls)
+					foreach($chatData  as $key=>$chatDataDtls)
+					{
+						$user_photo='';
+						if($chatDataDtls['user_photo']!="")
 						{
-							$user_photo='';
-							if($chatDataDtls['user_photo']!="")
-							{
-								$chatDataDtls['user_photo']=base_url().'uploads/user_profile/'.$chatDataDtls['user_photo'];
-							}
-							$rst_photo='';
-							if($chatDataDtls['sp_image']!="")
-							{
-								$chatDataDtls['sp_image']=base_url().'uploads/user_profile/'.$chatDataDtls['sp_image'];
-							}
-
-							$dateadded=new DateTime($chatDataDtls['dateadded']);
-							$chatDataDtls['dateadded']=$dateadded->format('Y-m-d H:i');
-
-							$dateupdated=new DateTime($chatDataDtls['dateupdated']);
-							$chatDataDtls['dateupdated']=$dateadded->format('Y-m-d H:i');
-
-							$chatDataDtls['message']="";
-
-							$chatData[$key]=$chatDataDtls;				  
+							$chatDataDtls['user_photo']=base_url().'uploads/user_profile/'.$chatDataDtls['user_photo'];
 						}
-						$data['data'] = $chatData;
-						$data['responsemessage'] = 'Chat List';
-						$data['responsecode'] = "200";
-						$response_array=json_encode($data);	
-					// }
-					// else
-					// {
-					// 	$data['responsemessage'] = 'No Chat List ';
-					// 	$data['responsecode'] = "200";
-					// 	$response_array=json_encode($data);	
-					// }
+						$rst_photo='';
+						if($chatDataDtls['sp_image']!="")
+						{
+							$chatDataDtls['sp_image']=base_url().'uploads/user_profile/'.$chatDataDtls['sp_image'];
+						}
+
+						$dateadded=new DateTime($chatDataDtls['dateadded']);
+						$chatDataDtls['dateadded']=$dateadded->format('Y-m-d H:i');
+
+						$dateupdated=new DateTime($chatDataDtls['dateupdated']);
+						$chatDataDtls['dateupdated']=$dateadded->format('Y-m-d H:i');
+						$chatDataDtls['message']="";
+						
+						$chatData[$key]=$chatDataDtls;				  
+					}
+					$data['data'] = $chatData;
+					$data['responsemessage'] = 'Chat List';
+					$data['responsecode'] = "200";
+					$response_array=json_encode($data);	
+					
 				}
 			}
 			else
@@ -122,20 +114,18 @@
 					$checkChatData = $this->Chatmodel->checkChatExists(0,$channel_id,$user_id,$service_provider_id);
 					if($checkChatData > 0 ){
 						$ChatData = $this->Chatmodel->checkChatExists(1,$channel_id,$user_id,$service_provider_id);
-						// $data['responsemessage'] = 'Chat data already Inititated.';
-						// $data['responsecode'] = "402";
-						 $this->Chatmodel->update_new_Chat($arrInsertChat,'chat_id',$ChatData->chat_id);
-						 $chatData 	= $this->Chatmodel->getChat($user_id);
+						$this->Chatmodel->update_new_Chat($arrInsertChat,'chat_id',$ChatData->chat_id);
+						$chatData 	= $this->Chatmodel->getChat($service_provider_id);
+						
 						$data['responsemessage'] = 'Chat data added successfully ';
 						$data['responsecode'] = "200";
 						$data['data'] = $chatData;
-						$response_array=json_encode($data);	
+						$response_array=json_encode($data);		
 					}
 					else
 					{
 						$chat_id 	= $this->Chatmodel->insert_new_Chat($arrInsertChat);
-						$chatData 	= $this->Chatmodel->getChat($user_id);
-
+						$chatData 	= $this->Chatmodel->getChat($service_provider_id);
 						if($chat_id){
 							$data['responsemessage'] = 'Chat data added successfully ';
 							$data['responsecode'] = "200";

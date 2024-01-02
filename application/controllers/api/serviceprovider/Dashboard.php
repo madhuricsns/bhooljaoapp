@@ -25,11 +25,15 @@ class Dashboard extends REST_Controller {
             }
             else
             { 
-                // $userdetails = $this->DashboardModel->getUserDetails($user_id);
+                $userdetails = $this->DashboardModel->getUserDetails($user_id);
+				
 				// Update booking status
 				$this->DashboardModel->updateBookingStatus($user_id);
+				$this->DashboardModel->updateGroupBookingStatus($user_id);
+				$this->DashboardModel->updateDemoBookingStatus($user_id);
 				
 				$assignedBooking = $this->DashboardModel->getAllBookings($user_id,'waiting',0);
+				// echo $this->db->last_query();
 				$ongoingBooking = $this->DashboardModel->getAllBookings($user_id,'ongoing',0);
 				$completedBooking = $this->DashboardModel->getAllBookings($user_id,'completed',0);
 				$demoBooking = $this->DashboardModel->getAllDemoBookings($user_id,0);
@@ -38,11 +42,23 @@ class Dashboard extends REST_Controller {
 				// $this->Common_Model->update_data('booking','booking_id','202',$input);
 
 				$todayschedule = $this->DashboardModel->getAllBookings($user_id,'ongoing',1);
+				// echo $this->db->last_query();
 				foreach($todayschedule as $key=>$booking)
 				{
+					$categoryData=$this->DashboardModel->getCategory($booking['category_id']);
+					$main_category="";
+					if($categoryData->category_parent_id!=0)
+					{
+						$category=$this->DashboardModel->getCategory($categoryData->category_parent_id);
+						$category_id=$categoryData->category_parent_id;
+						$main_category=$category->category_name;
+						$booking['category_name']=$main_category."-".$booking['category_name'];
+					}
+
 					// Calculate Days
 					$date1 = new DateTime($booking['booking_date']);
 					$date1 = $date1->format('Y-m-d');
+					
 					
 					if($booking['expiry_date']!="" || $booking['expiry_date']!=null)
 					{
@@ -56,13 +72,20 @@ class Dashboard extends REST_Controller {
 					
 
 					$today=date('Y-m-d');
-					$date1=date_create($today);
+					if($booking['booking_date']<$today && $booking['is_demo']=='No')
+					{
+						$date1=date_create($today);
+					}
+					else{ $date1=date_create($date1);}
 					$date2=date_create($date2);
 					
 					$interval = date_diff($date1, $date2); 
 					$days  = $interval->format('%a days left'); 
 					
-					$booking['booking_date']=$date1->format('M d,Y');
+					$booking_date = new DateTime($booking['booking_date']);
+					// $booking_date = $booking_date->format('M d,Y');
+
+					$booking['booking_date']=$booking_date->format('M d,Y');
 					$booking['expiry_date']=$date2->format('M d,Y');
 
 					$booking['expiry_day']=$days;
@@ -84,7 +107,16 @@ class Dashboard extends REST_Controller {
 				$demoschedule = $this->DashboardModel->getAllDemoBookings($user_id,1);
 				foreach($demoschedule as $k=>$demo)
 				{
-
+					$categoryData=$this->DashboardModel->getCategory($demo['category_id']);
+					$main_category="";
+					if($categoryData->category_parent_id!=0)
+					{
+						$category=$this->DashboardModel->getCategory($categoryData->category_parent_id);
+						$category_id=$categoryData->category_parent_id;
+						$main_category=$category->category_name;
+						$demo['category_name']=$main_category."-".$demo['category_name'];
+					}
+					
 					$checkReport=$this->DashboardModel->checkTodayWorkHistory($demo['booking_id']);
 					$demo['reportAvailable']=$checkReport;
 					
@@ -92,7 +124,7 @@ class Dashboard extends REST_Controller {
 				}
 
                 $data['responsecode'] = "200";
-                // $data['UserData'] = $userdetails;
+                $data['data']['UserDetails'] = $userdetails;
                 $data['data']['AssignedBooking'] = $assignedBooking;
                 $data['data']['ongoingBooking'] = $ongoingBooking;
                 $data['data']['completedBooking'] = $completedBooking;

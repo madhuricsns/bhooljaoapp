@@ -12,14 +12,17 @@
 		public function getMyBookings($user_id,$status)
 		{
             //(DATE_FORMAT(DATE(b.booking_date),'%M/%d/,%Y')) as booking_date
-			$this->db->select("b.booking_id,b.order_no,c.category_name,c.category_image,u.profile_id,u.profile_pic,u.full_name,b.booking_date,b.time_slot,b.expiry_date,b.booking_status,b.service_provider_id");
+			$this->db->select("b.booking_id,b.order_no,c.category_id,c.category_name,c.category_image,u.profile_id,u.profile_pic,u.full_name,b.booking_date,b.time_slot,b.expiry_date,b.booking_status,b.service_provider_id,b.service_group_id,b.service_group_assigned,b.is_demo,b.admin_demo_accept");
             $this->db->from(TBLPREFIX.'booking b');
             $this->db->where('b.user_id',$user_id);
             $this->db->where('b.booking_status',$status);
+            // $this->db->where('b.is_demo','No');
+            $this->db->order_by('b.booking_id','desc');
             $this->db->join(TBLPREFIX.'users as u','u.user_id =b.user_id','left');
             $this->db->join(TBLPREFIX.'category as c','c.category_id = b.category_id','left');
 			$query = $this->db->get();
             $result= $query->result_array();
+            // echo $this->db->last_query();
 			if(!empty ($result) )
 			{
 				foreach($result as $key=>$row)
@@ -40,7 +43,7 @@
 		
 		public function getBookingData($booking_id)
 		{
-			$this->db->select('b.order_no,b.booking_status,c.category_name,c.category_description,c.category_image,ad.address1 as address,b.booking_date,b.time_slot,b.expiry_date,b.duration,b.service_provider_id,b.payment_type');
+			$this->db->select('b.order_no,b.booking_status,b.user_id,c.category_id,c.category_name,c.category_description,c.category_image,ad.address1 as address,b.booking_date,b.time_slot,b.expiry_date,b.duration,b.service_provider_id,b.service_group_id,b.service_group_assigned,b.payment_type,b.is_demo,b.admin_demo_accept');
 			$this->db->from(TBLPREFIX.'booking as b');
 			$this->db->where('b.booking_id',$booking_id);
 			$this->db->join(TBLPREFIX.'category as c','c.category_id = b.category_id','left');
@@ -55,11 +58,77 @@
 					
 			return $result;
 		}
+
+        public function getCartBookingData($booking_id)
+		{
+			$this->db->select('b.order_no,b.booking_status,c.category_id,c.category_name,c.category_description,c.category_image,ad.address1 as address,b.booking_date,b.time_slot,b.expiry_date,b.duration,b.service_provider_id,b.payment_type');
+			$this->db->from(TBLPREFIX.'cart_booking as b');
+			$this->db->where('b.booking_id',$booking_id);
+			$this->db->join(TBLPREFIX.'category as c','c.category_id = b.category_id','left');
+			$this->db->join(TBLPREFIX.'addresses as ad','ad.address_id = b.address_id','left');
+			$query = $this->db->get();
+			$result= $query->row();
+			// echo $this->db->last_query();
+			if(isset($result->category_image) && $result->category_image!="")
+			{
+				$result->category_image = base_url()."uploads/category_images/".$result->category_image;
+			}
+					
+			return $result;
+		}
+
+        public function getCartBookingDataDetails($booking_id)
+		{
+			$this->db->select('b.*');
+			$this->db->from(TBLPREFIX.'cart_booking as b');
+			$this->db->where('b.booking_id',$booking_id);
+			$this->db->join(TBLPREFIX.'category as c','c.category_id = b.category_id','left');
+			$this->db->join(TBLPREFIX.'addresses as ad','ad.address_id = b.address_id','left');
+			$query = $this->db->get();
+			$result= $query->row();
+			// echo $this->db->last_query();
+			if(isset($result->category_image) && $result->category_image!="")
+			{
+				$result->category_image = base_url()."uploads/category_images/".$result->category_image;
+			}
+					
+			return $result;
+		}
 		
 		public function getBookingDetails($booking_id)
 		{
 			$this->db->select('*');
 			$this->db->from(TBLPREFIX.'booking as b');
+			$this->db->where('b.booking_id',$booking_id);
+			$query = $this->db->get();
+			$result= $query->row();
+			return $result;
+		}
+
+        public function getBookingPaymentHistory($booking_id)
+		{
+			$this->db->select('*');
+			$this->db->from(TBLPREFIX.'booking_transaction');
+			$this->db->where('booking_id',$booking_id);
+			$query = $this->db->get();
+			$result= $query->result_array();
+			return $result;
+		}
+
+        public function getPaymentHistoryByCustomer($user_id)
+		{
+			$this->db->select('*');
+			$this->db->from(TBLPREFIX.'booking_transaction');
+			$this->db->where('user_id',$user_id);
+			$query = $this->db->get();
+			$result= $query->result_array();
+			return $result;
+		}
+
+        public function getCartBookingDetails($booking_id)
+		{
+			$this->db->select('*');
+			$this->db->from(TBLPREFIX.'cart_booking as b');
 			$this->db->where('b.booking_id',$booking_id);
 			$query = $this->db->get();
 			$result= $query->row();
@@ -78,6 +147,29 @@
 			$result= $query->result_array();
 			return $result;
 		}
+
+        public function getCartServiceDetailsWOPricing($booking_id) 
+		{
+			$this->db->select('s.service_name,bd.option_label,bd.option_value');
+			$this->db->from(TBLPREFIX.'cart_booking as b');
+			$this->db->where('b.booking_id',$booking_id);
+			$this->db->join(TBLPREFIX.'cart_booking_details as bd','bd.booking_id = b.booking_id','left');
+			$this->db->where('bd.option_amount =',0);
+			$this->db->join(TBLPREFIX.'service as s','s.service_id = bd.service_id','left');
+			$query = $this->db->get();
+			$result= $query->result_array();
+			return $result;
+		}
+
+        public function getCartAddonServiceDetails($booking_id) 
+		{
+			$this->db->select('*');
+			$this->db->from(TBLPREFIX.'cart_booking_details');
+			$this->db->where('booking_id',$booking_id);
+			$query = $this->db->get();
+			$result= $query->result_array();
+			return $result;
+		}
 		
 		public function getServiceDetails($booking_id) 
 		{
@@ -87,6 +179,31 @@
 			$this->db->join(TBLPREFIX.'booking_details as bd','bd.booking_id = b.booking_id','left');
 			$this->db->where('bd.option_amount >',0);
 			$this->db->join(TBLPREFIX.'service as s','s.service_id = bd.service_id','left');
+			$query = $this->db->get();
+			$result= $query->result_array();
+			return $result;
+		}
+
+        public function getCartServiceDetails($booking_id) 
+		{
+			$this->db->select('s.service_name,bd.option_label,bd.option_value,bd.option_amount,b.duration,b.admin_commision,b.gst_amount,b.gst_percentage,b.coupon_code,b.coupon_amount,b.coupon_percentage');
+			$this->db->from(TBLPREFIX.'cart_booking as b');
+			$this->db->where('b.booking_id',$booking_id);
+			$this->db->join(TBLPREFIX.'cart_booking_details as bd','bd.booking_id = b.booking_id','left');
+			$this->db->where('bd.option_amount >',0);
+			$this->db->join(TBLPREFIX.'service as s','s.service_id = bd.service_id','left');
+			$query = $this->db->get();
+			$result= $query->result_array();
+			return $result;
+		}
+
+        public function getServiceDetailsByCategoryId($category_id) 
+		{
+			$this->db->select('s.*');
+			$this->db->from(TBLPREFIX.'service as s');
+			$this->db->where('s.category_id =',$category_id);
+			$this->db->where('s.parent_service_id =','0');
+			$this->db->limit(1);
 			$query = $this->db->get();
 			$result= $query->result_array();
 			return $result;
@@ -240,71 +357,6 @@
                 return $query->num_rows();
         }
 
-        
-        public function getAllDoctors() 
-        {
-            $this->db->select('*');
-            $this->db->from(TBLPREFIX.'doctors');
-            $this->db->where('doctor_status','Active');
-            $query = $this->db->get();
-            $result= $query->result_array();
-            foreach($result as $key=>$row)
-            {
-                if(isset($row['doctor_image']) && $row['doctor_image']!="")
-                {
-                    $row['doctor_image']=base_url()."uploads/doctor_images/".$row['doctor_image'];
-                }
-                $result[$key]=$row;
-            }
-            return $result;
-        }
-
-        public function getDoctorDetails($doctor_id) 
-        {
-            $this->db->select('*');
-            $this->db->from(TBLPREFIX.'doctors');
-            $this->db->where('doctor_id',$doctor_id);
-            $query = $this->db->get();
-            $result= $query->row();
-            if(isset($result->doctor_image) && $result->doctor_image!="")
-            {
-                $result->doctor_image=base_url()."uploads/doctor_images/".$result->doctor_image;
-            }
-            return $result;
-        }
-
-        public function getAllNurse() 
-        {
-            $this->db->select('*');
-            $this->db->from(TBLPREFIX.'nurse');
-            $this->db->where('nurse_status','Active');
-            $query = $this->db->get();
-            $result= $query->result_array();
-            foreach($result as $key=>$row)
-            {
-                if(isset($row['nurse_image']) && $row['nurse_image']!="")
-                {
-                    $row['nurse_image']=base_url()."uploads/nurse_images/".$row['nurse_image'];
-                }
-                $result[$key]=$row;
-            }
-            return $result;
-        }
-
-        public function getNurseDetails($nurse_id) 
-        {
-            $this->db->select('*');
-            $this->db->from(TBLPREFIX.'nurse');
-            $this->db->where('nurse_id',$nurse_id);
-            $query = $this->db->get();
-            $result= $query->row();
-            if(isset($result->nurse_image) && $result->nurse_image!="")
-            {
-                $result->nurse_image=base_url()."uploads/nurse_images/".$result->nurse_image;
-            }
-            return $result;
-        }
-
         public function getMyBookingsold($user_id,$status='')
         {
             $this->db->select('b.booking_id,b.service_category_id,b.booking_category_id,b.booking_date,b.time_slot,b.no_of_hourse,b.select_mobility_aid,b.booking_status,b.booking_sub_status,b.service_provider_id
@@ -432,7 +484,7 @@
                 $result= $query->row();
                 if(isset($result->profile_pic) && $result->profile_pic!="")
                 {
-                    $result->profile_pic=base_url()."uploads/user/profile_photo/".$result->profile_pic;
+                    $result->profile_pic=base_url()."uploads/user_profile/".$result->profile_pic;
                 }
                 return $result;
             }
@@ -442,7 +494,7 @@
         {
             if(!empty($user_id))
             {
-                $this->db->select('user_id,profile_id,full_name,mobile,profile_pic');
+                $this->db->select('user_id,profile_id,full_name,mobile,profile_pic,category_id');
                 $this->db->from(TBLPREFIX.'users');
                 $this->db->where('user_id',$user_id);
                 // $this->db->where('user_type','Customer');
@@ -450,7 +502,7 @@
                 $result= $query->row();
                 if(isset($result->profile_pic) && $result->profile_pic!="")
                 {
-                    $result->profile_pic=base_url()."uploads/user/profile_photo/".$result->profile_pic;
+                    $result->profile_pic=base_url()."uploads/user_profile/".$result->profile_pic;
                 }
                 return $result;
             }
@@ -497,6 +549,14 @@
             return $result;
         }
 
+        public function getCategory($category_id)
+        {
+            $this->db->select('*');
+            $this->db->where('category_id',$category_id );
+            $query = $this->db->get(TBLPREFIX."category");
+            return $query->row();
+        }
+
         public function getMyratings($service_provider_id,$qty) 
         {
             if(!empty($service_provider_id))
@@ -512,7 +572,7 @@
             }
         }
 
-        public function checkreviewExist($user_id,$service_provider_id,$booking_id) 
+        public function checkreviewExist($res,$user_id,$service_provider_id,$booking_id) 
         {
             $this->db->select('*');
             $this->db->from(TBLPREFIX.'review');
@@ -520,7 +580,15 @@
             $this->db->where('user_id',$user_id);
             // $this->db->where('booking_id',$booking_id);
             $query = $this->db->get();
-            return $query->num_rows();
+            if($res==1)
+            {
+                $result=$query->row();
+            }
+            else
+            {
+                $result=$query->num_rows();
+            }
+            return $result;
         }
 
         function getnotifications($user_id)
@@ -528,7 +596,7 @@
             $this->db->select('*');
             $this->db->from(TBLPREFIX.'notification');
             $this->db->where('noti_user_id',$user_id);
-            $this->db->where('noti_user_type','User');
+            // $this->db->where('noti_user_type','User');
             $this->db->order_by('noti_id','desc');
             $this->db->limit('50');
             return $result = $this->db->get()->result_array();
@@ -587,5 +655,150 @@
             }
             return  $result;
         }
-        
+
+        public function checkFavourite($res,$user_id,$service_provider_id)
+        {
+            $this->db->select('*');
+            $this->db->from(TBLPREFIX.'sp_favourite_verify ');
+            $this->db->where('user_id',$user_id);
+            $this->db->where('service_provider_id',$service_provider_id);
+            if($res==1)
+            {
+                $result=$this->db->get()->row();
+            }
+            else
+            {
+                $result=$this->db->get()->num_rows();
+            }
+            return  $result;
+        }
+
+        public function FavouriteList($res,$user_id)
+        {
+            $this->db->select('f.*,u.user_id as service_provider_id,u.full_name,u.address,u.profile_id,u.profile_pic,u.category_id,u.zone_id,c.category_name,u.status');
+			$this->db->join(TBLPREFIX.'users as u','u.user_id=f.service_provider_id','left');
+			$this->db->join(TBLPREFIX.'category as c','c.category_id=u.category_id','left');
+            $this->db->from(TBLPREFIX.'sp_favourite_verify as f');
+            $this->db->where('f.user_id',$user_id);
+            $this->db->where('u.status','Active');
+            // $this->db->where('f.service_provider_id',$service_provider_id);
+            $this->db->where('f.is_favourite','Yes');
+            if($res==1)
+            {
+                $result = $this->db->get()->result_array();
+                if(!empty ($result) )
+                {
+                    foreach($result as $k=>$row)
+                    {
+                        if(isset($row['category_image']) && $row['category_image']!="")
+                        {
+                            $row['category_image']=base_url()."uploads/category_images/".$row['category_image'];
+                        }
+                        if(isset($row['profile_pic']) && $row['profile_pic']!="")
+                        {
+                            $row['profile_pic']=base_url()."uploads/user_profile/".$row['profile_pic'];
+                        }
+                        $result[$k]=$row;
+                    }
+                }
+            }
+            else
+            {
+                $result=$this->db->get()->num_rows();
+            }
+            return  $result;
+        }
+
+        public function checkIsFavourite($user_id,$service_provider_id) 
+        {
+            $this->db->select('*');
+            $this->db->from(TBLPREFIX.'sp_favourite_verify');
+            $this->db->where('user_id',$user_id);
+            $this->db->where('service_provider_id',$service_provider_id);
+            $query = $this->db->get();
+            $result= $query->row();
+            return $result;
+        }
+
+		public function checkIsVerified($service_provider_id) 
+        {
+            $this->db->select('*');
+            $this->db->from(TBLPREFIX.'sp_favourite_verify');
+            // $this->db->where('user_id',$user_id);
+            $this->db->where('service_provider_id',$service_provider_id);
+            $query = $this->db->get();
+            $result= $query->row();
+            return $result;
+        }
+
+        public function getAllSubCategories($res,$category_id) 
+        {
+            $this->db->select('*');
+            $this->db->from(TBLPREFIX.'category');
+            $this->db->where('category_status','Active');
+            $this->db->where('category_parent_id',$category_id);
+            $query = $this->db->get();
+            if($res==1)
+            {
+                $result= $query->result_array();
+                foreach($result as $key=>$row)
+                {
+                    if(isset($row['category_image']) && $row['category_image']!="")
+                    {
+                        $row['category_image']=base_url()."uploads/category_images/".$row['category_image'];
+                    }
+                    $result[$key]=$row;
+                }
+            }
+            else
+            {
+                $result= $query->num_rows();
+            }
+            return $result;
+        }
+
+        function getAllpayment($orderNo)
+		{
+			$this->db->select('*');
+			$this->db->from(TBLPREFIX.'booking_payment');
+			$this->db->where('order_no',$orderNo);
+			// $this->db->where('user_id',$user_id);
+			return $this->db->get()->row();			
+		}
+
+        public function getSingleGroupInfo($group_id,$res)
+        {
+            $this->db->select('g.*,c.category_name');
+            $this->db->where('group_parent_id','0');
+            $this->db->where('group_id',$group_id);
+            $this->db->join(TBLPREFIX.'category as c','c.category_id=g.group_category_id','left');
+            $query = $this->db->get(TBLPREFIX."service_group as g");
+            if($res == 1)
+            {
+                return $query->row();
+            }
+            else
+            {
+                return $query->num_rows();
+            }	
+        }
+
+        public function getGroupSP($group_id,$res)
+        {
+            $this->db->select('g.*,u.full_name,u.profile_id');
+            $this->db->where('group_parent_id!=','0');
+            $this->db->where('group_parent_id',$group_id);
+            // $this->db->join(TBLPREFIX.'category as c','c.category_id=g.group_category_id','left');
+            $this->db->join(TBLPREFIX.'users as u','u.user_id=g.service_provider_id','left');
+            $query = $this->db->get(TBLPREFIX."service_group as g");
+            if($res == 1)
+            {
+                return $query->result_array();
+            }
+            else
+            {
+                return $query->num_rows();
+            }	
+        }
+
 	}

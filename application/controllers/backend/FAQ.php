@@ -40,7 +40,7 @@ class FAQ extends CI_Controller {
 			$per_page='10';
 		}
 		
-	$data['faqcnt']=$this->FAQ_model->getAllFAQ(0,"","");
+		$data['faqcnt']=$this->FAQ_model->getAllFAQ(0,"","");
 		
 		
 		$config = array();
@@ -54,8 +54,6 @@ class FAQ extends CI_Controller {
 		{
 			$config['per_page'] = $per_page;
 		}
-		
-		
 		
 		$config["uri_segment"] = 4;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
@@ -104,7 +102,10 @@ class FAQ extends CI_Controller {
 				$faq_answer=$this->input->post('faq_answer');
 				$faq_type=$this->input->post('faq_type');
 				$faq_status=$this->input->post('status');
-				
+
+				$checkName = $this->FAQ_model->chkFaqName($faq_question,0);
+				if($checkName==0)
+				{
 					$input_data = array(
 						'faq_question'=>trim($faq_question),
 						'faq_answer'=>$faq_answer,
@@ -112,37 +113,34 @@ class FAQ extends CI_Controller {
 						'faq_status'=>$faq_status,
 						'dateupdated' => date('Y-m-d H:i:s'),
 						'dateadded' => date('Y-m-d H:i:s')
-						
-						);
-					// echo"<pre>";
-					// print_r($input_data);
-					// exit();
-
+					);
+					
 					$faq_id = $this->FAQ_model->insert_FAQ($input_data);
 					
 					if($faq_id)
 					{	
 						$this->session->set_flashdata('success','FAQ added successfully.');
-
 						redirect(base_url().'backend/FAQ/index');	
 					}
 					else
 					{
 						$this->session->set_flashdata('error','Error while adding FAQ.');
-
 						redirect(base_url().'backend/FAQ/addFAQ/');
-					}	
+					}
 				}
 				else
 				{
 					$this->session->set_flashdata('error','FAQ is already exist.');
-
 					redirect(base_url().'backend/FAQ/addFAQ');	
-				}
-
+				}	
 			}
-		
+			else
+			{
+				$this->session->set_flashdata('error','Validation failed.');
+				redirect(base_url().'backend/FAQ/addFAQ');	
+			}
 
+		}
 		$this->load->view('admin/admin_header',$data);
 		$this->load->view('admin/addFAQ',$data);
 		$this->load->view('admin/admin_footer');
@@ -165,48 +163,49 @@ class FAQ extends CI_Controller {
 				if(isset($_POST['btn_uptFAQ']))
 				{
 					$this->form_validation->set_rules('faq_question','FAQ Question','required');
-			$this->form_validation->set_rules('faq_answer','FAQ answer ','required');
-			$this->form_validation->set_rules('faq_type','FAQ Type ','required');
-			$this->form_validation->set_rules('status','FAQ Status','required');
+					$this->form_validation->set_rules('faq_answer','FAQ answer ','required');
+					$this->form_validation->set_rules('faq_type','FAQ Type ','required');
+					$this->form_validation->set_rules('status','FAQ Status','required');
 
 					if($this->form_validation->run())
 					{
 						$faq_question=$this->input->post('faq_question');
-				$faq_answer=$this->input->post('faq_answer');
-				$faq_type=$this->input->post('faq_type');
-				$faq_status=$this->input->post('status');
-				
-									
-						$input_data = array(
+						$faq_answer=$this->input->post('faq_answer');
+						$faq_type=$this->input->post('faq_type');
+						$faq_status=$this->input->post('status');
+						$checkName = $this->FAQ_model->chkUpdateFaqName($faq_question,$faq_id,0);
+						if($checkName==0)
+						{
+							$input_data = array(
 								'faq_question'=>trim($faq_question),
-						'faq_answer'=>$faq_answer,
-						'faq_type'=>$faq_type,
-						'faq_status'=>$faq_status,
+								'faq_answer'=>$faq_answer,
+								'faq_type'=>$faq_type,
+								'faq_status'=>$faq_status,
 								'dateupdated' => date('Y-m-d H:i:s')
-								);
-					// 	echo"<pre>";
-					// print_r($input_data);
-					// exit();
+							);
 
-						$FAQdata = $this->FAQ_model->uptdateFAQ($input_data,$faq_id);
+							$FAQdata = $this->FAQ_model->uptdateFAQ($input_data,$faq_id);
 
-						if($FAQdata)
-						{	
-							$this->session->set_flashdata('success','FAQ updated successfully.');
-
-							redirect(base_url().'backend/FAQ/index');	
+							if($FAQdata)
+							{	
+								$this->session->set_flashdata('success','FAQ updated successfully.');
+								redirect(base_url().'backend/FAQ/index');	
+							}
+							else
+							{
+								$this->session->set_flashdata('error','Error while updating FAQ.');
+								redirect(base_url().'backend/FAQ/updateFAQ/'.base64_encode($faq_id));
+							}	
 						}
 						else
 						{
-							$this->session->set_flashdata('error','Error while updating FAQ.');
-
+							$this->session->set_flashdata('error','FAQ question already exist.');
 							redirect(base_url().'backend/FAQ/updateFAQ/'.base64_encode($faq_id));
 						}	
 					}
 					else
 					{
 						$this->session->set_flashdata('error',$this->form_validation->error_string());
-
 						redirect(base_url().'backend/FAQ/updateFAQ/'.base64_encode($faq_id));
 					}
 				}

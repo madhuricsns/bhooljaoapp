@@ -150,12 +150,24 @@ class Profile extends REST_Controller {
 				 }
 				$arrUserData = array('profile_pic' => $profile_pic);
 								
-				$this->Common_Model->update_data('users','user_id',$user_id,$arrUserData);
-				$arrData = $this->CustomerModel->getUserDetails($user_id);
+				$updateData=$this->Common_Model->update_data('users','user_id',$user_id,$arrUserData);
+				// echo $this->db->last_query();
 				
-				$data['data'] = $arrData;
-				$data['responsemessage'] = 'Profile photo updated successfully';
-				$data['responsecode'] = "200";
+				if($updateData)
+				{
+					$arrData = $this->CustomerModel->getUserDetails($user_id);
+					$data['data'] = $arrData;
+					$data['responsemessage'] = 'Profile photo updated successfully';
+					$data['responsecode'] = "200";
+				}
+				else
+				{
+					// $arrData = $this->CustomerModel->getUserDetails($user_id);
+				
+					// $data['data'] = $arrData;
+					$data['responsemessage'] = 'Profile photo updated failed';
+					$data['responsecode'] = "201";
+				}
 			}
 		}
 		else
@@ -304,5 +316,96 @@ class Profile extends REST_Controller {
 		print_r($response);
 	}
 
+	public function materialList_post()
+	{
+		$token 			= $this->input->post("token");
+		// $user_id			= $this->input->post("service_provider_id");
+		
+		if($token == TOKEN)
+		{
+			$arrData = $this->CustomerModel->getAllMaterials();
+			foreach($arrData  as $key=>$material)
+			{
+				$material['material_qty']=0;
+				$arrData[$key]=$material;
+			}
+			$data['data'] = $arrData;
+			$data['responsecode'] = "200";		
+		}
+		else
+		{
+			$data['responsecode'] = "201";
+			$data['responsemessage'] = 'Token did not match';
+		}	
+		$obj = (object)$data;//Creating Object from array
+		$response = json_encode($obj);
+		print_r($response);
+	}
+
+	public function addmaterialRequest_post()
+	{
+		$token 			= $this->input->post("token");
+		$service_provider_id= $this->input->post("service_provider_id");
+		$material_id		= $this->input->post("material_id");
+		$qty				= $this->input->post("qty");
+		
+		if($token == TOKEN)
+		{
+			if($service_provider_id=="" || $material_id=="" || $qty=="")
+			{
+				$data['responsemessage'] = 'Please provide valid data';
+				$data['responsecode'] = "400";
+			}
+			else
+			{
+				$inputData=array(
+					'service_provider_id'=>$service_provider_id,
+					'material_id'=>$material_id,
+					'request_material_qty'=>$qty,
+					'dateadded'=>date('Y-m-d H:i:s')
+				);
+
+				$insert_id = $this->Common_Model->insert_data('material_request',$inputData);
+				// $data['data'] = $arrData;
+				$data['responsemessage'] = 'Request added successfully';
+				$data['responsecode'] = "200";	
+			}
+				
+		}
+		else
+		{
+			$data['responsecode'] = "201";
+			$data['responsemessage'] = 'Token did not match';
+		}	
+		$obj = (object)$data;//Creating Object from array
+		$response = json_encode($obj);
+		print_r($response);
+	}
+
+	public function requestmaterialList_post()
+	{
+		$token 			= $this->input->post("token");
+		$service_provider_id = $this->input->post("service_provider_id");
+		
+		if($token == TOKEN)
+		{
+			$arrData = $this->CustomerModel->getAllMaterialRequest($service_provider_id);
+			// foreach($arrData  as $key=>$material)
+			// {
+			// 	$material['material_qty']=0;
+			// 	$arrData[$key]=$material;
+			// }
+			$data['data'] = $arrData;
+			$data['responsecode'] = "200";		
+		}
+		else
+		{
+			$data['responsecode'] = "201";
+			$data['responsemessage'] = 'Token did not match';
+		}	
+		$obj = (object)$data;//Creating Object from array
+		$response = json_encode($obj);
+		print_r($response);
+	}
 	
 }

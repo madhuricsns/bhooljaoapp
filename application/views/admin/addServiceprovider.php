@@ -44,7 +44,7 @@
                                             <div class="form-group file-upload">
 											<div class="form-group row">
                                                 <label for="profile_photo" ><span>*</span>Profile</label>
-                                                <input type="file" class="form-control " id="servicefile" name="servicefile" >
+                                                <input type="file" class="form-control " id="servicefile1" name="servicefile" >
 												<div id="err_profile_photo" class="error_msg"></div>
                                             </div>
                                         </div>

@@ -20,11 +20,27 @@ Class FAQ_model extends CI_Model {
 			return $query->num_rows();
 		}	
 	}
-	public function chkBannerName($banner_title,$res)
+	public function chkFaqName($faq_question,$res)
 	{
 		$this->db->select('*');
-		$this->db->where('banner_title',$banner_title);
-		$query=$this->db->get(TBLPREFIX."banner");
+		$this->db->where('faq_question',$faq_question);
+		$query=$this->db->get(TBLPREFIX."faq");
+		if($res == 1)
+		{
+			return $query->result_array();
+		}
+		else
+		{
+			return $query->num_rows();
+		}	
+	}
+
+	public function chkUpdateFaqName($faq_question,$faq_id,$res)
+	{
+		$this->db->select('*');
+		$this->db->where('faq_id!=',$faq_id);
+		$this->db->where('faq_question',$faq_question);
+		$query=$this->db->get(TBLPREFIX."faq");
 		if($res == 1)
 		{
 			return $query->result_array();
@@ -55,7 +71,6 @@ Class FAQ_model extends CI_Model {
 	
 	public function uptdateFAQ($input_data,$faq_id) 
 	{
-		
 			$this->db->where('faq_id',$faq_id);
 			$res = $this->db->update(TBLPREFIX.'faq',$input_data);
 			if($res)

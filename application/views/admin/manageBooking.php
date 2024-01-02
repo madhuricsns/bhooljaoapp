@@ -82,7 +82,6 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 										<select name="bookingstatus" id="bookingstatus"class="form-control col-sm-2">
 							            <option value="">All</option>
 							            <option value="waiting" <?php if($srchStatus == 'waiting') echo 'selected';?> >Waiting</option>
-							            <option value="accepted" <?php if($srchStatus == 'accepted') echo 'selected';?>>Accepted</option>
 							            <option value="ongoing" <?php if($srchStatus == 'ongoing') echo 'selected';?>>Ongoing</option>
 							            <option value="completed" <?php if($srchStatus == 'completed') echo 'selected';?>>Completed</option>
 										<option value="canceled" <?php if($srchStatus == 'canceled') echo 'selected';?>>Canceled</option>

@@ -145,13 +145,13 @@ class Zone extends CI_Controller {
 				}
 				else
 				{
-					$this->session->set_flashdata('success','Zone name  already exist.');
+					$this->session->set_flashdata('error','Zone name already exist.');
 
 					redirect(base_url().'backend/Zone/addZone');	
 				}
 
 			}else{
-				$this->session->set_flashdata('success','Validation failed.');
+				$this->session->set_flashdata('error','Validation failed.');
 				redirect(base_url().'backend/Zone/addZone');
 			}
 		}
@@ -185,12 +185,12 @@ class Zone extends CI_Controller {
 					if($this->form_validation->run())
 					{
 						$address=$this->input->post('zone_name');
-				$zone_pincode=$this->input->post('zone_pincode');
-				$status=$this->input->post('status');
-                		
-				$zonename=$this->Zone_model->chkZoneName($address,0);
+						$zone_pincode=$this->input->post('zone_pincode');
+						$status=$this->input->post('status');
+								
+						$zonename=$this->Zone_model->chkZoneName($address,0);
 
-				$latlong=$this->get_lat_long($address);
+						$latlong=$this->get_lat_long($address);
 						$parts=explode(",",$latlong);
 						$zone_lat=$parts[0];
 						$zone_long=$parts[1];
@@ -352,5 +352,4 @@ public function change_status()
 				}
 		}
 	}
-
 }

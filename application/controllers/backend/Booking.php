@@ -172,8 +172,12 @@ class Booking extends CI_Controller {
 			{
 				$srchDate=trim($_POST['datesearch']);
 			}
+			if($_POST['per_page']!="")
+			{
+				$per_page=trim($_POST['per_page']);
+			}
 			
-			redirect('backend/Booking/manageBookingDemo/'.$srchStatus.'/'.$srchDate.'/'.$pageNo);
+			redirect('backend/Booking/manageBookingDemo/'.$srchStatus.'/'.$srchDate.'/'.$pageNo.'/'.$per_page);
 		}
 		redirect('backend/Booking/manageBookingDemo', 'refresh');
 	}

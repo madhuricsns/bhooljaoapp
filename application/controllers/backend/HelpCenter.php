@@ -63,8 +63,6 @@ class HelpCenter extends CI_Controller {
 		{
 			$this->form_validation->set_rules('helpcenter_name','HelpCenter Name','required');
 			$this->form_validation->set_rules('helpcenter_value','HelpCenter Value ','required');
-			
-
 
 			if($this->form_validation->run())
 			{
@@ -102,45 +100,50 @@ class HelpCenter extends CI_Controller {
 						}
 					}
 				}
-				
-					$input_data = array(
-						'help_image'=>$helpcenter_image,
-						'help_name'=>$helpcenter_name,
-						'help_value'=>$helpcenter_value,
-						'help_type'=>'contactus',
-						'dateupdated' => date('Y-m-d H:i:s'),
-						'dateadded' => date('Y-m-d H:i:s')
+					$checkName = $this->HelpCenter_model->chkHelpName($helpcenter_name,0);
+					// echo $checkName;
+					// echo $this->db->last_query();exit;
+					if($checkName==0)
+					{
+						$input_data = array(
+							'help_image'=>$helpcenter_image,
+							'help_name'=>$helpcenter_name,
+							'help_value'=>$helpcenter_value,
+							'help_type'=>'contactus',
+							'dateupdated' => date('Y-m-d H:i:s'),
+							'dateadded' => date('Y-m-d H:i:s')
+							);
+						// echo"<pre>";
+						// print_r($input_data);
+						// exit();
+
+						$help_id = $this->HelpCenter_model->insert_HelpCenter($input_data);
 						
-						);
-					// echo"<pre>";
-					// print_r($input_data);
-					// exit();
-
-					$help_id = $this->HelpCenter_model->insert_HelpCenter($input_data);
-					
-					if($help_id)
-					{	
-						$this->session->set_flashdata('success','HelpCenter added successfully.');
-
-						redirect(base_url().'backend/HelpCenter/index');	
+						if($help_id)
+						{	
+							$this->session->set_flashdata('success','HelpCenter added successfully.');
+							redirect(base_url().'backend/HelpCenter/index');	
+						}
+						else
+						{
+							$this->session->set_flashdata('error','Error while adding HelpCenter.');
+							redirect(base_url().'backend/HelpCenter/addHelpCenter/');
+						}
 					}
 					else
 					{
-						$this->session->set_flashdata('error','Error while adding HelpCenter.');
-
+						$this->session->set_flashdata('error','Help name already exist.');
 						redirect(base_url().'backend/HelpCenter/addHelpCenter/');
-					}	
+					}
+
 				}
 				else
 				{
 					$this->session->set_flashdata('error','HelpCenter is already exist.');
-
 					redirect(base_url().'backend/HelpCenter/addHelpCenter');	
 				}
 
 			}
-		
-
 		$this->load->view('admin/admin_header',$data);
 		$this->load->view('admin/addHelpCenter',$data);
 		$this->load->view('admin/admin_footer');
@@ -163,83 +166,98 @@ class HelpCenter extends CI_Controller {
 				if(isset($_POST['btn_uptHelpCenter']))
 				{
 				$this->form_validation->set_rules('helpcenter_name','HelpCenter Name','required');
-			$this->form_validation->set_rules('helpcenter_value','HelpCenter Value ','required');
+				$this->form_validation->set_rules('helpcenter_value','HelpCenter Value ','required');
 
-					if($this->form_validation->run())
-					{
-
-						$helpcenter_name=$this->input->post('helpcenter_name');
-				        $helpcenter_value=$this->input->post('helpcenter_value');
-
-
-				$helpcenter_image='';
-				if(isset($_FILES['helpcenter_image']))
+				if($this->form_validation->run())
 				{
-					if($_FILES['helpcenter_image']['name']!="")
-					{
-						$photo_imagename='';
-						$new_image_name = rand(1, 99999).$_FILES['helpcenter_image']['name'];
-						$config = array(
-									'upload_path' => "uploads/helpcenter/",
-									'allowed_types' => "gif|jpg|png|bmp|jpeg",
-									'max_size' => "0", 
-									'file_name' =>$new_image_name
-						);
-						$this->load->library('upload', $config);
-						if($this->upload->do_upload('helpcenter_image'))
-						{ 
-							$imageDetailArray = $this->upload->data();								
-							$photo_imagename =  $imageDetailArray['file_name'];
-						}else
-						{
-							$errorMsg = $this->upload->display_errors();
-							$this->session->set_flashdata('error',$errorMsg);
-							redirect(base_url().'backend/HelpCenter/addHelpCenter/');
 
-						}
-						if($_FILES['helpcenter_image']['error']==0)
-						{ 
-							$helpcenter_image=$photo_imagename;
+					$helpcenter_name=$this->input->post('helpcenter_name');
+					$helpcenter_value=$this->input->post('helpcenter_value');
+
+
+					$helpcenter_image='';
+					if(isset($_FILES['helpcenter_image']))
+					{
+						if($_FILES['helpcenter_image']['name']!="")
+						{
+							$photo_imagename='';
+							$new_image_name = rand(1, 99999).$_FILES['helpcenter_image']['name'];
+							$config = array(
+										'upload_path' => "uploads/helpcenter/",
+										'allowed_types' => "gif|jpg|png|bmp|jpeg",
+										'max_size' => "0", 
+										'file_name' =>$new_image_name
+							);
+							$this->load->library('upload', $config);
+							if($this->upload->do_upload('helpcenter_image'))
+							{ 
+								$imageDetailArray = $this->upload->data();								
+								$photo_imagename =  $imageDetailArray['file_name'];
+							}else
+							{
+								$errorMsg = $this->upload->display_errors();
+								$this->session->set_flashdata('error',$errorMsg);
+								redirect(base_url().'backend/HelpCenter/addHelpCenter/');
+
+							}
+							if($_FILES['helpcenter_image']['error']==0)
+							{ 
+								$helpcenter_image=$photo_imagename;
+							}
 						}
 					}
-				}
-				
-					$input_data = array(
-						'help_image'=>$helpcenter_image,
-						'help_name'=>$helpcenter_name,
-						'help_value'=>$helpcenter_value,
-								'dateupdated' => date('Y-m-d H:i:s')
-								);
-					// 	echo"<pre>";
-					// print_r($input_data);
-					// exit();
+						$checkName = $this->HelpCenter_model->chkUpdateHelpName($helpcenter_name,$help_id,0);
+						// echo $checkName;
+						// echo $this->db->last_query();exit;
+						if($checkName==0)
+						{
+							if($helpcenter_image!="")
+							{
+								$input_data = array(
+									'help_image'=>$helpcenter_image,
+									'help_name'=>$helpcenter_name,
+									'help_value'=>$helpcenter_value,
+									'dateupdated' => date('Y-m-d H:i:s')
+									);
+							}
+							else
+							{
+								$input_data = array(
+									'help_name'=>$helpcenter_name,
+									'help_value'=>$helpcenter_value,
+									'dateupdated' => date('Y-m-d H:i:s')
+									);
+							}
+							
+							$HELPdata = $this->HelpCenter_model->uptdateHelpCenter($input_data,$help_id);
 
-						$HELPdata = $this->HelpCenter_model->uptdateHelpCenter($input_data,$help_id);
-
-						if($HELPdata)
-						{	
-							$this->session->set_flashdata('success','HelpCenter updated successfully.');
-
-							redirect(base_url().'backend/HelpCenter/index');	
+							if($HELPdata)
+							{	
+								$this->session->set_flashdata('success','HelpCenter updated successfully.');
+								redirect(base_url().'backend/HelpCenter/index');	
+							}
+							else
+							{
+								$this->session->set_flashdata('error','Error while updating FAQ.');
+								redirect(base_url().'backend/HelpCenter/updateHelpCenter/'.base64_encode($help_id));
+							}	
 						}
 						else
 						{
-							$this->session->set_flashdata('error','Error while updating FAQ.');
-
-							redirect(base_url().'backend/FAQ/updateFAQ/'.base64_encode($faq_id));
-						}	
+							$this->session->set_flashdata('error','Help name already exist.');
+							redirect(base_url().'backend/HelpCenter/updateHelpCenter/'.base64_encode($help_id));
+						}
 					}
 					else
 					{
 						$this->session->set_flashdata('error',$this->form_validation->error_string());
-
-						redirect(base_url().'backend/FAQ/updateFAQ/'.base64_encode($faq_id));
+						redirect(base_url().'backend/HelpCenter/updateHelpCenter/'.base64_encode($help_id));
 					}
 				}
 			}
 			else
 			{
-				$data['error_msg'] = 'FAQ not found.';
+				$data['error_msg'] = 'Help name not found.';
 			}
 		}
 		

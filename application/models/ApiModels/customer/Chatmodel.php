@@ -24,7 +24,6 @@
 			{
 				return $this->db->get()->num_rows();
 			}
-			
 		}
 		
 		 /* getFeedBackList functions */
@@ -35,7 +34,7 @@
 			$this->db->join(TBLPREFIX.'users as sp','sp.user_id=c.service_provider_id','left');
 			$this->db->join(TBLPREFIX.'users as u','u.user_id=c.user_id','left');
 			$this->db->order_by('c.chat_id','DESC');
-            $this->db->where('c.service_provider_id',$user_id);
+            $this->db->where('c.user_id',$user_id);
 			if($channel_id != "")
             {
                 $this->db->where('channel_id',$channel_id);
@@ -71,20 +70,20 @@
 
 		public function delete_chat($tablename)
 		{
-			$this->db->where('service_provider_id',7);
+			$this->db->where('service_provider_id',5);
 			$this->db->delete(TBLPREFIX.$tablename); 
 		
 			#return $query=$this->db->insert('birth',$data);
 		}
 
-		function getChat($user_id)
+		function getChat($service_provider_id)
 		{				
 			$this->db->select('u.full_name,u.user_fcm');
 			// $this->db->from(TBLPREFIX.'chat_channels as c');
 			// $this->db->join(TBLPREFIX.'users as sp','sp.user_id=c.service_provider_id','left');
 			$this->db->from(TBLPREFIX.'users as u');
 			// $this->db->order_by('c.chat_id','DESC');
-            $this->db->where('u.user_id',$user_id);
+            $this->db->where('u.user_id',$service_provider_id);
 			
 			return $this->db->get()->row();
 		}

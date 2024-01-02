@@ -44,6 +44,16 @@ Class LoginModel extends CI_Model {
 		}
 	}
 
+	public function getZoneBySP($zone_id) 
+	{
+		$this->db->select('*');
+		$this->db->from(TBLPREFIX.'zone');
+		$this->db->where('zone_id',$zone_id);
+		$query = $this->db->get();
+		//echo $this->db->last_query();exit;
+		return $query->row();
+	}
+
 	public function check_user($user_id) 
 	{
 		if(!empty ($user_id))

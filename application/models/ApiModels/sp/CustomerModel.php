@@ -66,8 +66,9 @@
         {
             if(!empty ($user_id))
             {
-                $this->db->select('*');
-                $this->db->from(TBLPREFIX.'users');
+                $this->db->select('u.*,z.zone_name,z.zone_lat,z.zone_long');
+                $this->db->from(TBLPREFIX.'users as u');
+                $this->db->join(TBLPREFIX.'zone as z','z.zone_id=u.zone_id','left');
                 $this->db->where('user_id',$user_id);
                 $this->db->where('user_type','Service Provider');
                 $this->db->limit(1);
@@ -115,6 +116,16 @@
                 return $result;
             }
         }
+
+		public function getZoneBySP($zone_id) 
+		{
+			$this->db->select('*');
+			$this->db->from(TBLPREFIX.'zone');
+			$this->db->where('zone_id',$zone_id);
+			$query = $this->db->get();
+			//echo $this->db->last_query();exit;
+			return $query->row();
+		}
 
 		public function deletephoto($user_id) 
         {
@@ -339,4 +350,26 @@
             }
             return $result;
         }
+
+		public function getAllMaterials() 
+        {
+            $this->db->select('material_id,material_name,material_status');
+            $this->db->from(TBLPREFIX.'material');
+            $this->db->where('material_status','Active');
+            $query = $this->db->get();
+			$result= $query->result_array();
+            return $result;
+        }
+
+		public function getAllMaterialRequest($service_provider_id)
+		{
+			$this->db->select('r.*,u.full_name,m.material_name');
+			$this->db->where('r.service_provider_id',$service_provider_id);
+			$this->db->join(TBLPREFIX.'users as u','u.user_id=r.service_provider_id','left');
+			$this->db->join(TBLPREFIX.'material as m','m.material_id=r.material_id','left');
+			$this->db->order_by('r.request_id','DESC');
+			$result = $this->db->get(TBLPREFIX.'material_request as r');
+			//echo $this->db->last_query();exit;
+			return $result->result_array();
+		}
 	}

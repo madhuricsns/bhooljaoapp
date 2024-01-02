@@ -21,11 +21,11 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 			<div class="col-sm-12">
 				<div class="card">
 					<div class="card-header">
-						<h5>SERVICE PROVIDERS</h5>			
+						<h5>SERVICE GIVERS</h5>			
 						<div class="card-header-right">
 						<div class="row">
 							<div class="col-lg-12">
-								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Users/addServiceprovider" style="float:right;"><i class="fa fa-plus-circle"></i>Add Service Provider</a>
+								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Users/addServiceprovider" style="float:right;"><i class="fa fa-plus-circle"></i>Add Service Giver</a>
 								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Users/exportSPCSV" style="float:right;margin-right: 5px;"><i class="fa fa-download"></i>Export CSV</a>
 							</div>
 							</div>

@@ -38,31 +38,42 @@ class Login extends REST_Controller {
 				
 				if($status == 'Active')
 				{
+					if(isset($result->profile_pic) && $result->profile_pic!="")
+					{
+						$result->profile_pic=base_url()."uploads/user_profile/".$result->profile_pic;;
+					}
 					$session_data = array(
 						'user_id' => $result->user_id,
 						'full_name' => $result->full_name,
 						'mobile' => $result->mobile,
 						'email' => $result->email,
+						'profile_pic' => $result->profile_pic,
 						'status' => $result->status);
 
 					// Send OTP
 					$otp_code = $this->Common_Model->otp();
 
-					$strMessage=urlencode("$otp_code is your OTP. Please do not share it with anybody.");
+					$strMessage=urlencode("$otp_code is your OTP. Please do not share it with anybody. Panan Saathi Ventures");
 					$output=$this->Common_Model->SendSms($strMessage, $result->mobile);	
 
 					$response_array['OTP'] = $otp_code;
 
 					//Send Email
-					/*$Subject="Login OTP";
-					$msg="OTP for your login is $otp_code . Do not share it with anyone.";
-					$usermail=$this->Common_Model->SendMail($result->email,$msg,$Subject);*/
-
+					$data['fullname']=$result->full_name;
+					$data['otp_code']=$otp_code;
+					$Subject="Login OTP";
+					$loginbody = $this->Common_Model->email_content('Login',$data);
+					$usermail=$this->Common_Model->SendMail($result->email,$loginbody,$Subject);
+					
 					//*** User Update */
 					$updatedata=array('user_fcm'=>$fcm,'otp'=>$otp_code);
 					$q=$this->Common_Model->update_data('users','user_id',$result->user_id,$updatedata);
 					//*********** */
 					//$this->session->set_userdata('logged_in', $session_data);
+					// $title="Login OTP";
+					// $message="OTP for your login is $otp_code . Do not share it with anyone.";
+					// $output=$this->Common_Model->sendexponotification($title,$message,$result->user_fcm);
+
 					$response_array['data'] = $session_data;
 					$response_array['responsecode'] = "200";
 					$response_array['responsemessage'] = 'OTP send successfully.';
@@ -81,8 +92,7 @@ class Login extends REST_Controller {
 			else
 			{
 				$response_array['responsecode'] = "402";
-				$response_array['responsemessage'] = 'Invalid Username or Password';
-				
+				$response_array['responsemessage'] = 'Invalid Mobile or Password';
 			}
 		}
 		else
@@ -189,7 +199,7 @@ class Login extends REST_Controller {
 						$updateData['otp'] 	= $otp_code;
 						$this->Common_Model->update_Data('users','user_id',$user_id,$updateData);
 						
-						$strMessage=urlencode("$otp_code is your OTP. Please do not share it with anybody.");
+						$strMessage=urlencode("$otp_code is your OTP. Please do not share it with anybody. Panan Saathi Ventures");
 						$output=$this->Common_Model->SendSms($strMessage, $username);	
 						
 						$datas = array(
@@ -198,6 +208,14 @@ class Login extends REST_Controller {
 								'otp' 	=> $updateData['otp'],
 									);
 						$data['data'] = $datas;
+
+						//Send Email
+						$dataArr['fullname']=$users_username->full_name;
+						$dataArr['otp_code']=$otp_code;
+						$Subject="Login OTP";
+						$loginbody = $this->Common_Model->email_content('Login',$dataArr);
+						$usermail=$this->Common_Model->SendMail($users_username->email,$loginbody,$Subject);
+
 						$data['responsemessage'] = 'OTP Send Successfully';
 						$data['responsecode'] = "200";
 						$response_array=json_encode($data);
@@ -248,11 +266,11 @@ class Login extends REST_Controller {
 	public function forgot_password_post()
 	{
 		$token 	= $this->input->post("token");
-		$email	= $this->input->post('email');
+		$mobile	= $this->input->post('mobile');
 		
 		if($token == TOKEN)
 		{
-			$userExists=$this->LoginModel->chkUserEmailExists($email);
+			$userExists=$this->LoginModel->chkUserMobileExists($mobile);
 			
 			if(!empty($userExists))
 			{
@@ -262,8 +280,11 @@ class Login extends REST_Controller {
 				//$rnd_number = "5678"; //default SMS
 				$rnd_number = $this->Common_Model->otp();
 				$updateData['otp'] 	= $rnd_number;
-					
+				// $updateData1['password'] 	= "e10adc3949ba59abbe56e057f20f883e";
+				
 				$updateOtp 	= $this->Common_Model->update_data('users','user_id',$userExists->user_id,$updateData);
+				// $updateOtp1 	= $this->Common_Model->update_data('users','user_id',$userExists->user_id,$updateData1);
+
 				$arrUserDetails = $this->CustomerModel->getUserDetails($userExists->user_id);
 				//print_r($arrUserDetails);
 
@@ -272,6 +293,10 @@ class Login extends REST_Controller {
 				$strMessage="Dear user your Forgot Password OTP for MSMED is ".$rnd_number;
 				$output=$this->Common_Model->SendMail($email,$strMessage,$subject);
 				*/
+				// Send SMS
+				$strMessage=urlencode("$rnd_number is your OTP. Please do not share it with anybody. Panan Saathi Ventures");
+				$output=$this->Common_Model->SendSms($strMessage, $mobile);
+
 				$response_array['responsecode'] = "200";
 				$response_array['responsemessage'] = 'OTP sent successfully.';
 				$response_array['data'] = $arrUserDetails;
@@ -279,7 +304,7 @@ class Login extends REST_Controller {
 			else
 			{
 				$response_array['responsecode'] = "402";
-				$response_array['responsemessage'] = 'Invalid email';
+				$response_array['responsemessage'] = 'Invalid Mobile';
 				
 			}
 		}
@@ -297,21 +322,21 @@ class Login extends REST_Controller {
 	public function reset_password_post()
 	{
 		$token 			=   $this->input->post("token");
-		$email_address	=	$this->input->post('email');
+		$mobile	        =	$this->input->post('mobile');
 		$otp_code		=	$this->input->post('otp');
 		$password		=	$this->input->post('password');
 		$cpassword		=	$this->input->post('cpassword');
 
 		if($token == TOKEN)
 		{
-			if($email_address == "" || $otp_code == "" || $password == "" || $cpassword == "" || $password != $cpassword)
+			if($mobile == "" || $otp_code == "" || $password == "" || $cpassword == "" || $password != $cpassword)
 			{
 				$response_array['responsecode'] = '400';
 				$response_array['responsemessage'] = 'Please provide valid data';
 			}
 			else 
 			{
-				$userExists=$this->LoginModel->chkUserEmailExists($email_address);
+				$userExists=$this->LoginModel->chkUserMobileExists($mobile);
 			
 				if(!empty($userExists))
 				{
@@ -321,13 +346,13 @@ class Login extends REST_Controller {
 					if(!empty($usersOtp))
 					{ 			
 						$updateData['password'] = md5($password);
-						$updateData['otp'] = '';
+						// $updateData['otp'] = '';
 						$updateUser 	= $this->Common_Model->update_data('users','user_id',$usersOtp->user_id,$updateData);
 						
 						$arrUserDetails = $this->CustomerModel->getUserDetails($usersOtp->user_id);
+						
 						$response_array['responsecode'] = "200";
 						$response_array['responsemessage'] = 'Your password has been updated';
-						
 						$response_array['userDetails'] = $arrUserDetails;
 					}
 					else  
@@ -337,9 +362,8 @@ class Login extends REST_Controller {
 					}
 				}
 				else {
-				$response_array['responsecode'] = "402";
-				$response_array['responsemessage'] = 'Invalid email';
-				
+						$response_array['responsecode'] = "402";
+						$response_array['responsemessage'] = 'Invalid Mobile';
 				}
 			}
 		}

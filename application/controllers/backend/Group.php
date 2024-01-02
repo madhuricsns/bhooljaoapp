@@ -152,77 +152,79 @@ class Group extends CI_Controller {
 		$data['title']='Update Group';
 		$data['error_msg']='';
 		//echo "segment--".$this->uri->segment(4);exit();
-		$category_id=base64_decode($this->uri->segment(4));
-		$data['categoryLists']=$this->Group_model->getAllGroupdropdown(1);
-		//echo "Brand_id--".$brand_id;exit();
+		$group_id=base64_decode($this->uri->segment(4));
 
-		if($category_id)
+		$data['categoryLists']=$this->Group_model->getAllCategory(1);
+		if($group_id)
 		{
-			$categoryInfo=$this->Group_model->getSingleGroupInfo($category_id,0);
-			if($categoryInfo>0)
+			$groupInfo=$this->Group_model->getSingleGroupInfo($group_id,0);
+			if($groupInfo>0)
 			{
-				$data['categoryInfo'] = $this->Group_model->getSingleGroupInfo($category_id,1);
-				if(isset($_POST['btn_uptcategory']))
+				$data['groupInfo'] = $this->Group_model->getSingleGroupInfo($group_id,1);
+				if(isset($_POST['btn_uptgroup']))
 				{
-					$this->form_validation->set_rules('category_name','Group Name','required');
-					$this->form_validation->set_rules('description', 'Description', 'required');
+					$this->form_validation->set_rules('group_name','Group Name','required');
+					$this->form_validation->set_rules('category_id', 'Category Id', 'required');
 					$this->form_validation->set_rules('status','Group Status','required');
 
 					if($this->form_validation->run())
 					{
-						$category=$this->input->post('category');
-						$category_name=$this->input->post('category_name');
-						$category_description=$this->input->post('description');
+						$category_id=$this->input->post('category_id');
+						$group_name=$this->input->post('group_name');
 						$status=$this->input->post('status');
+						$sp_ids=$this->input->post('sp_ids');
 
-						//Image Upload Code 
-						if(count($_FILES) > 0) 
-						{
-							$ImageName = "category_image";
-							$target_dir = "uploads/category_images/";
-							$category_image= $this->Common_Model->ImageUpload($ImageName,$target_dir);
-						}
-						if($_FILES['category_image']['name']!="")
+						$categoryName=$this->Group_model->chkupdateGroupCategory($category_id,$group_id,0);
+						if($categoryName==0)
 						{
 							$input_data = array(
-								'category_parent_id'=>$category,
-								'category_name'=>trim($category_name),
-								'category_image'=>$category_image,
-								'category_description'=>$category_description,
-								'category_status'=>$status,
-								'dateupdated' => date('Y-m-d H:i:s')
+								'group_category_id'=>$category_id,
+								'group_name'=>trim($group_name),
+								'group_status'=>$status
 							);
-						}
-						else{
-							$input_data = array(
-								'category_parent_id'=>$category,
-								'category_name'=>trim($category_name),
-								'category_description'=>$category_description,
-								'category_status'=>$status,
-								'dateupdated' => date('Y-m-d H:i:s')
-							);
-						}
-					
-						$userdata = $this->Group_model->uptdateGroup($input_data,$category_id);
-						// echo $this->db->last_query();exit;
-						if($userdata)
-						{	
-							$this->session->set_flashdata('success','Group updated successfully.');
+							
+							$updatedata = $this->Group_model->uptdateGroup($input_data,$group_id);
+							// echo $this->db->last_query();exit;
+							if($updatedata)
+							{	
+								if(!empty($sp_ids))
+								{
+									$this->db->where('group_parent_id',$group_id);
+									$this->db->delete('bhool_service_group');
+									foreach($sp_ids as $sp_id){
+										if($sp_id!="")
+										{
+											$input_data = array(
+												'group_parent_id'=>$group_id,
+												'service_provider_id'=>$sp_id,
+												'group_status'=>'Active',
+												'dateadded' => date('Y-m-d H:i:s')
+												);
 
-							redirect(base_url().'backend/Group/manageGroup');	
+											$insertgroup_id = $this->Common_Model->insert_data('service_group',$input_data);
+										}
+									}
+								}
+
+								$this->session->set_flashdata('success','Group updated successfully.');
+								redirect(base_url().'backend/Group/manageGroup');	
+							}
+							else
+							{
+								$this->session->set_flashdata('error','Error while updating User.');
+								redirect(base_url().'backend/Group/updateGroup/'.base64_encode($group_id));
+							}	
 						}
 						else
 						{
-							$this->session->set_flashdata('error','Error while updating User.');
-
-							redirect(base_url().'backend/Group/updateGroup/'.base64_encode($category_id));
-						}	
+							$this->session->set_flashdata('error','Your selected Category group already exist.');
+							redirect(base_url().'backend/Group/updateGroup/'.base64_encode($group_id));
+						}
 					}
 					else
 					{
 						$this->session->set_flashdata('error',$this->form_validation->error_string());
-
-						redirect(base_url().'backend/Group/updateGroup/'.base64_encode($category_id));
+						redirect(base_url().'backend/Group/updateGroup/'.base64_encode($group_id));
 					}
 				}
 			}
@@ -421,76 +423,34 @@ class Group extends CI_Controller {
 			redirect(base_url().'backend/Users/index');
 		}
 	}
-	public function exportCustomerCSV()
-	{
-		$this->load->helper('download');
-        $data['error']=$data['success']="";
-		$todaysdate=date('d-M-YHi');
-		
-		// $data['session_from_date'] = $this->session->userdata('session_from_date');		
-		// $data['session_to_date'] = $this->session->userdata('session_to_date');		
-		// $input_data = array(
-		// 	'from_date'=> $data['session_from_date'] ?? ''	,
-		// 	'to_date'=>$data['session_to_date'] ?? '');
-		
-		$array[] = array('','','Bhooljao - Export CSV For Customer','','','');
-		
-		$i=1;
-
-		$data['userList']=$userList=$this->Group_model->getAllUsers(1,"","");
-
-		$people = array('Sr.','Full Name','Email','Mobile','Gender','Status');
-		$array[] =$people;
-
-	   	if(isset($userList) && count($userList)>0)
-		{  	
-			foreach($userList as $g)
-			{
-				$user_id =$g['user_id'];
-				$full_name=ucfirst($g['full_name']);
-				$email=$g['email'];
-				$mobile=$g['mobile'];
-				$gender=$g['gender'];
-				$status=$g['status'];
-				
-				//echo "<pre>";print_r($straddress); exit;
-				if(is_array($people) &&count($people)> 0){
-					foreach ($people as $key => $peopledtls) {
-						$strVal = $peopledtls;
-						switch ($peopledtls) {
-							case 'Sr.':
-								$strDtlVal = $i;
-								break;
-							case 'Full Name':
-								$strDtlVal = $full_name;
-								break;
-							case 'Email':
-								$strDtlVal = $email;
-								break;
-							case 'Mobile':
-								$strDtlVal = $mobile;
-								break;
-							case 'Gender':
-								$strDtlVal = $gender;
-								break;
-							case 'Status':
-								$strDtlVal = $status;
-								break;
-						}
-						
-						$arrayCSV[$peopledtls]=$strDtlVal;
-					}
+	
+	public function getServiceprovider()
+    {
+        if($this->input->post('category_id')) 
+        {
+			// print_r($this->input->post('category_id'));exit;
+            $countsp=$this->Group_model->getAllServiceproviders($this->input->post('category_id'),0);
+			if($countsp>0){
+				$serviceproviders=$this->Group_model->getAllServiceproviders($this->input->post('category_id'),1);
+				$output = '<option value="">Select Service Givers</option>';
+				// echo json_encode($serviceproviders);
+				foreach($serviceproviders as $row)
+				{
+					$output .= '<option value="'.$row['user_id'].'">'.$row['full_name'].'</option>';
 				}
-				$array[] = $arrayCSV;
-				$i++;
+				 echo $output; 
 			}
-			#print_r($array); exit;
-		}
-		  $this->load->helper('csv');
-		  $csvname = 'CustomerListExport'.$todaysdate.'.csv';
-		  array_to_csv($array,$csvname);
-		  $data['success']= "download sample export data successfully!";
-	}
+			else{
+				echo "<option>No Service Giver Available.</option>";
+			}
+
+        }else{
+			echo "<option>No Service Giver Available.</option>";
+        }
+
+		// return $output;
+
+    }
 
 
 }

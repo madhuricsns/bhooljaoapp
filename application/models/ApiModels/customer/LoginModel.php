@@ -114,4 +114,15 @@ Class LoginModel extends CI_Model {
 		$query = $this->db->get();
 		return $query->row();
 	}
+
+	public function chkUserMobileExists($mobile) 
+	{
+		$this->db->select('*');
+		$this->db->from(TBLPREFIX.'users');
+		$this->db->where('user_type','Customer');
+		$this->db->where('mobile',$mobile);
+		$this->db->limit(1);
+		$query = $this->db->get();
+		return $query->row();
+	}
 }

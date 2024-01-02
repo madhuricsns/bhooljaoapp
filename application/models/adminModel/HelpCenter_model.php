@@ -20,11 +20,27 @@ Class HelpCenter_model extends CI_Model {
 			return $query->num_rows();
 		}	
 	}
-	public function chkBannerName($banner_title,$res)
+	public function chkHelpName($helpcenter_name,$res)
 	{
 		$this->db->select('*');
-		$this->db->where('banner_title',$banner_title);
-		$query=$this->db->get(TBLPREFIX."banner");
+		$this->db->where('help_name',$helpcenter_name);
+		$query=$this->db->get(TBLPREFIX."helpcenter");
+		if($res == 1)
+		{
+			return $query->result_array();
+		}
+		else
+		{
+			return $query->num_rows();
+		}	
+	}
+
+	public function chkUpdateHelpName($helpcenter_name,$help_id,$res)
+	{
+		$this->db->select('*');
+		$this->db->where('help_id!=',$help_id);
+		$this->db->where('help_name',$helpcenter_name);
+		$query=$this->db->get(TBLPREFIX."helpcenter");
 		if($res == 1)
 		{
 			return $query->result_array();

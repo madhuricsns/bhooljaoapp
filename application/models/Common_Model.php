@@ -154,23 +154,18 @@
 		### FUNCTION TO SEND SMS 
 		public function SendSms($strMessage = "", $strMobile= "")
 		{
-			$strUserName = "shramapi";
+			$strSenderName = "PANANS";
 			$strMobile = $strMobile;
 
 			//Template ID - 
-			$templateid='1207162288297684013';
+			$templateid='1207170382400848768';
 
-			//Entity ID - 
-			$entityid='1201162246168290922';
+			//PE ID - 
+			$peid='1201170317327391541';
 
-			//$key="http://sms.messageindia.in/v2/sendSMS?username=shramapi&message=XXXXXXXXXX&sendername=XYZ&smstype=TRANS&numbers=";
-			//mobile_numbers>&apikey=32cce567-656c-40bd-80e6-9319e7128f1b&peid=XXXXXX&templateid=XXXXXX
-			//echo $entityid;
-			//http://sms.messageindia.in/v2/sendSMS?username=shramapi&message=Dear%20user%20your%20CSNS%20Login%20OTP%20for%20MSMED%20is%201234&sendername=CSNSIN&smstype=TRANS&numbers=9527482493&apikey=32cce567-656c-40bd-80e6-9319e7128f1b&peid=1201162246168290922&templateid=1207162288297684013
-			//$strUrl = "http://sms.messageindia.in/v2/sendSMS?username=$strUserName&message=$strMessage&sendername=CSNSIN&smstype=TRANS&numbers=$strMobile&apikey=32cce567-656c-40bd-80e6-9319e7128f1b&peid=$entityid&templateid=$templateid";
-			// echo $strUrl;
+			// $strUrl="http://sms.messageindia.in/v2/sendSMS?username=cyborgapi&message=$strMessage&sendername=MIRICR&smstype=TRANS&numbers=$strMobile&apikey=949776f6-b95e-4d74-944b-03d5bfc051da&peid=1201161527747662237&templateid=1207161760669839695";
+			$strUrl="http://sms.messageindia.in/v2/sendSMS?username=pananapi&message=$strMessage&sendername=$strSenderName&smstype=TRANS&numbers=$strMobile&apikey=eeb6ad00-6d9e-4c52-8107-094a0308cff5&peid=$peid&templateid=$templateid";
 			
-			$strUrl="http://sms.messageindia.in/v2/sendSMS?username=cyborgapi&message=$strMessage&sendername=MIRICR&smstype=TRANS&numbers=$strMobile&apikey=949776f6-b95e-4d74-944b-03d5bfc051da&peid=1201161527747662237&templateid=1207161760669839695";
 			$curl 		 = curl_init() or die("Error"); 	
 			//echo $strUrl;exit;	
 			curl_setopt($curl, CURLOPT_URL, $strUrl);  // Web service for OTP sending 
@@ -190,8 +185,9 @@
 		### FUNCTION TO SEND SMS WITH EMAIL
 		function SendMail($userEmail,$strMessage,$subject)
 		{
-			//$strSubjectMessage='checking mail';
-			//$strMessage='this is testing mail';
+			// echo $userEmail;
+			// $strSubjectMessage='checking mail';
+			// $strMessage='this is testing mail';
 			$strSubjectMessage=$subject;
 			$strMessage=$strMessage;
 		
@@ -202,7 +198,8 @@
 			  $email = new \SendGrid\Mail\Mail(); 
 			  $personalization1=new \SendGrid\Mail\Personalization();
 		
-			  $email->setFrom("msmednsk@gmail.com", "msmed.csnsindia.com");
+			  $email->setFrom("panansathi@gmail.com", "Panan Sathi");
+				// $email->setFrom("msmednsk@gmail.com", "msmed.csnsindia.com");
 			  if(isset($strSubjectMessage))
 			  {
 				$email->setSubject($strSubjectMessage);
@@ -210,15 +207,23 @@
 			   $personalization1->addTo(new SendGrid\Mail\To(trim($userEmail)));
 			  //$email->addTo($userEmail);
 			  //$email->addContent("text/plain", "and easy to do anywhere, even with PHP");
-			   $message ="<html><body><h4>".$strMessage."</h4></body></html>"; //$ci->load->view('emails/'.$output_arr1['view_load'],$input_arr1,true);
+			   $message ="<html><body><h4>".$strMessage."</h4></body></html>"; 
+			   
+			//   $message="<html><body></body></html>";
+			 
+			 
+			 
+			   //$ci->load->view('emails/'.$output_arr1['view_load'],$input_arr1,true);
 			   $email->addContent(
 					"text/html", $message
 				  );
 				  $email->addPersonalization($personalization1);
-			  $sendgrid = new \SendGrid('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');
+			//   $sendgrid = new \SendGrid('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');
+			  $sendgrid = new \SendGrid('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');
+			  
 			  try {
 				  $response = $sendgrid->send($email);
-				  //print_r($response);
+				//   print_r($response);
 				  //print $response->statusCode() . "\n";
 				  //print_r($response->headers());
 				  //print $response->body() . "\n";
@@ -244,6 +249,7 @@
 			// echo $status;
 
 			$payload = array(
+				'title' => $strTitle,
 				'to' => $arrGcmID,
 				'sound' => 'default',
 				'body' => $strMessage,
@@ -285,6 +291,7 @@
 				//echo $response;
 				}
 		}
+
 		function SendNotification($strTitle, $strMessage, $arrGcmID) 
 		{
 			$msg = array(
@@ -310,7 +317,8 @@
 				print_r($fields);
 				exit;	
 				//echo "<pre>"; print_r( $fields ); //die;
-				define('FIREBASE_API_KEY', 'AAAA8mbICJ8:APA91bFcnzwJJFAzAH3whFLXwMb0bN_Hfd3dBmug-09QY3nYEOM_zfWcJZzq3xP_0iRXTrhEVoVbMBo-3asGjYdL-G-RggBCR7qzDqgeCtP1jhJmNfOWP4LCC7Gzs-fLV3lP0MmuOlDQ');
+				// define('FIREBASE_API_KEY', 'AAAA8mbICJ8:APA91bFcnzwJJFAzAH3whFLXwMb0bN_Hfd3dBmug-09QY3nYEOM_zfWcJZzq3xP_0iRXTrhEVoVbMBo-3asGjYdL-G-RggBCR7qzDqgeCtP1jhJmNfOWP4LCC7Gzs-fLV3lP0MmuOlDQ');
+				define('FIREBASE_API_KEY', 'AAAAxD6-Zx4:APA91bFE-XNt_iQ7CrpKZO9YzdsSleW8B7q5MfobLtEKECoeZ7zTgCgzxdPApytGZxnOnCB55ZFIIxSdPWk8wQ0aEqBHyfHLCQC6HTq8R73CTUlGDu0UWw4LMjNkYzU7P-V5YJnRf-ea');
 				//define( 'FIREBASE_API_KEY', 'AIzaSyD3JzXow72jcze-PvQevko5KWNsgjLvuQ0' );
 				//firebase server url to send the curl request
 				$url = 'https://fcm.googleapis.com/fcm/send';
@@ -409,6 +417,66 @@
 			}
 			return $arrReturn;
 		}
+
+		public function adminSetting($res)
+        {
+            $this->db->select('*');
+            $this->db->from(TBLPREFIX.'admin_settings');
+            if($res==1)
+            {
+                $result=$this->db->get()->result_array();
+            }
+            else
+            {
+                $result=$this->db->get()->num_rows();
+            }
+            return  $result;
+        }
+
+		function encrypt($plainText,$key)
+		{
+			$key = hex2bin(md5($key));
+			$initVector = pack("C*", 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f);
+			$openMode = openssl_encrypt($plainText, 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $initVector);
+			$encryptedText = bin2hex($openMode);
+			return $encryptedText;
+		}
+
+		function decrypt($encryptedText,$key)
+		{
+			$key = hex2bin(md5($key));
+			$initVector = pack("C*", 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f);
+			$encryptedText = hex2bin($encryptedText);
+			$decryptedText = openssl_decrypt($encryptedText, 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $initVector);
+			return $decryptedText;
+		}
+
+		function email_content($mailtype,$data)
+		{
+			if($mailtype=='Signup')
+			{
+				$body = $this->load->view('emailtemplate/signup_success',$data,true);
+			}
+			else if($mailtype=='Login')
+			{
+				$body = $this->load->view('emailtemplate/signup_otp',$data,true);
+			}
+			else if($mailtype=='Booking')
+			{
+				$body = $this->load->view('emailtemplate/bookingplaced',$data,true);
+			}
+			else if($mailtype=='BookingCancel')
+			{
+				$body = $this->load->view('emailtemplate/bookingCanceled',$data,true);
+			}
+			else if($mailtype=='Payment')
+			{
+				$body = $this->load->view('emailtemplate/payment',$data,true);
+			}
+			
+			return $body;
+		}
+		
 		
     }
 ?>

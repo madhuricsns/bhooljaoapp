@@ -14,6 +14,8 @@
             $this->db->select('*');
             $this->db->from(TBLPREFIX.'category');
             $this->db->where('category_status','Active');
+            $this->db->where('category_parent_id','0');
+            $this->db->order_by('category_name','asc');
             $query = $this->db->get();
 			$result= $query->result_array();
             foreach($result as $key=>$row)
@@ -23,6 +25,32 @@
                     $row['category_image']=base_url()."uploads/category_images/".$row['category_image'];
                 }
                 $result[$key]=$row;
+            }
+            return $result;
+        }
+
+        public function getAllSubCategories($res,$category_id) 
+        {
+            $this->db->select('*');
+            $this->db->from(TBLPREFIX.'category');
+            $this->db->where('category_status','Active');
+            $this->db->where('category_parent_id',$category_id);
+            $query = $this->db->get();
+            if($res==1)
+            {
+                $result= $query->result_array();
+                foreach($result as $key=>$row)
+                {
+                    if(isset($row['category_image']) && $row['category_image']!="")
+                    {
+                        $row['category_image']=base_url()."uploads/category_images/".$row['category_image'];
+                    }
+                    $result[$key]=$row;
+                }
+            }
+            else
+            {
+                $result= $query->num_rows();
             }
             return $result;
         }
@@ -50,6 +78,25 @@
             return $result;
         }
 
+        public function getCategory($category_id)
+        {
+            $this->db->select('*');
+            $this->db->where('category_id',$category_id );
+            $query = $this->db->get(TBLPREFIX."category");
+            return $query->row();
+        }
+
+        public function getReviewByCategory($category_id)
+        {
+            $this->db->select('r.*,u.user_id,u.full_name,u.profile_pic');
+            $this->db->from(TBLPREFIX.'review r');
+            $this->db->where('u.category_id',$category_id);
+            // $this->db->where('u.user_type','Service Provider');
+            $this->db->join(TBLPREFIX.'users as u','u.user_id =r.service_provider_id','left');
+            $this->db->order_by('r.review_id','desc');
+            return $this->db->get()->result_array();			
+        }
+
         public function getAllServiceByCategoryId($category_id) 
         {
             $this->db->select('*');
@@ -70,13 +117,28 @@
             return $result;
         }
 
+        public function getServiceDetails($service_id) 
+        {
+            $this->db->select('*');
+            $this->db->from(TBLPREFIX.'service_details');
+            $this->db->where('service_id',$service_id);
+            // $this->db->where('option_type!=','Information');
+            // $this->db->where('option_type!=','Vehicle');
+            // $this->db->group_by('option_label');
+            $this->db->order_by('option_id','asc');
+            $query = $this->db->get();
+			$result= $query->result_array();
+            
+            return $result;
+        }
+
         public function getAllServiceDetails($service_id) 
         {
             $this->db->select('option_id,option_label,option_type,service_id');
             $this->db->from(TBLPREFIX.'service_details');
             $this->db->where('service_id',$service_id);
-            $this->db->where('option_type!=','Information');
-            $this->db->where('option_type!=','Vehicle');
+            // $this->db->where('option_type!=','Information');
+            // $this->db->where('option_type!=','Vehicle');
             $this->db->group_by('option_label');
             $this->db->order_by('option_id','asc');
             $query = $this->db->get();

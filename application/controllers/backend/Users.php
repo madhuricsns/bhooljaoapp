@@ -552,7 +552,6 @@ $per_page='10';
 			$config['per_page'] = $per_page;
 		}
 		
-		
 		$config["uri_segment"] = 4;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
@@ -972,7 +971,7 @@ public function viewServiceProviderDetails()
 		$data['zoneList']=$this->User_model->getAllzone(1,"","");
 		$data['categoryList']=$this->User_model->getAllCategory(1,"","");
 		//  Review
-		$arrReviews=$this->User_model->getReviews($user_id);
+		$data['reviewList']=$arrReviews=$this->User_model->getReviews($user_id);
 		//echo $this->db->last_query();
 		$star1=$star2=$star3=$star4=$star5=$rowCount=$average=$percent=0;
 		foreach($arrReviews as $key=>$review)

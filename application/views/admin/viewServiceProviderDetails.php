@@ -83,7 +83,7 @@
 																}
 															</style>
 															<tr>
-				                                                <td><span style="background-color: #1fed1f;padding: 3px;"><?php echo $rating_avg;?></span>
+				                                                <td><span style="background-color: #1fed1f;padding: 3px;"><?php echo number_format($rating_avg,1);?></span>
 																<?php if($rating_avg==0) { ?> 
 																<i class="fa fa-star unchecked"></i><i class="fa fa-star unchecked"></i><i class="fa fa-star unchecked"> </i><i class="fa fa-star unchecked"> </i><i class="fa fa-star unchecked"> </i>
 																<?php } if($rating_avg>=1 && $rating_avg<2) { ?> 
@@ -104,11 +104,15 @@
 																<div class="bar-container"><div class="bar-container-label">3 Star</div><div class="bar-container-rating"><div style="width:<?php echo $star3;?>%;height: 15px ; background-color: #00bcd4;">&nbsp;</div></div></div><br>
 																<div class="bar-container"><div class="bar-container-label">2 Star</div><div class="bar-container-rating"><div style="width:<?php echo $star2;?>%;height: 15px ; background-color: #ff9800;">&nbsp;</div></div></div><br>
 																<div class="bar-container"><div class="bar-container-label">1 Star</div><div class="bar-container-rating"><div style="width:<?php echo $star1;?>%;height: 15px ; background-color: #f44336;">&nbsp;</div></div></div>
-															
 																</td>
-
 				                                            </tr>
-															
+															<?php
+															foreach($reviewList as $review){
+																echo "<pre>";
+																echo $review['rating']."-".$review['review'];
+																echo "</pre>";
+															}
+															?>
 
 				                                        </tbody>
 				                                    </table>

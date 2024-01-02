@@ -97137,9 +97137,16 @@ body.rtl .account-setting {
   background-image: url("../images/dashboard/icins_user.png");
 
 }
+.card-body.service-pro-icon::before {
+  background-image: url("../images/dashboard/icins_service-provider.png");
+}
 
-
-
+.card-body.total-booking::before {
+  background-image: url("../images/dashboard/icins_total-order.png");
+}
+.card-body.pending-icon::before {
+  background-image: url("../images/dashboard/icins_pending-order.png");
+}
 .card-body.Operational-Health-icon::before {
 
   background-image: url("../images/dashboard/Operational-Health-icon.png");
@@ -97384,6 +97391,7 @@ p.info {
     background-color: transparent;
     border: none;
     border-bottom: 1px solid #495057;
+    padding-left: 40px;
 }
 .authentication-box input:-internal-autofill-selected {   
     background-color: transparent; !important;    
@@ -97400,3 +97408,44 @@ p.info {
   color: #011893;
 }
 .authentication-box .form-control:focus{box-shadow: none;}
+.authentication-box input:autofill,
+.authentication-box input:autofill:hover, 
+.authentication-box input:autofill:focus, 
+.authentication-box input:autofill:active,
+.authentication-box input:-webkit-autofill,
+.authentication-box input:-webkit-autofill:hover, 
+.authentication-box input:-webkit-autofill:focus, 
+.authentication-box input:-webkit-autofill:active  {
+  transition: background-color 5000s;  
+}
+.file-upload .form-control {
+  padding: 0 0.75rem 0 0 !important;
+}
+.file-upload input[type="file"]::file-selector-button {
+  border: none;
+  padding: 8px 12px;
+  border-radius: 0.2em;
+  background-color: #007bff;
+  transition: 1s;
+  color:#fff;
+  cursor: pointer;
+}
+.file-upload input[type="file"]::-ms-browse:hover {
+  background-color: #0069d9;
+ 
+}
+.file-upload input[type="file"]::-webkit-file-upload-button:hover {
+  background-color: #0069d9;
+  
+}
+.file-upload input[type="file"]::file-selector-button:hover {
+  background-color: #0069d9;
+ 
+}
+
+
+.authentication-box .before-icon {
+  position: absolute;
+  margin-top: 11px;
+  margin-left: 15px;
+}

@@ -8,6 +8,7 @@ class Booking extends REST_Controller {
         parent::__construct();
 		$this->load->model('ApiModels/sp/BookingModel');
 		$this->load->model('Common_Model');
+		date_default_timezone_set('Asia/Kolkata');
 	}
 	
     public function myBooking_post()
@@ -25,14 +26,28 @@ class Booking extends REST_Controller {
             }
             else
             { 
+				$this->BookingModel->updateBookingStatus($user_id);
+				$this->BookingModel->updateGroupBookingStatus($user_id);
+				$this->BookingModel->updateDemoBookingStatus($user_id);
+				// echo $this->db->last_query();
 				if($status=='assigned')
 				{
 					$status='waiting';
 				}
 				$arrBooking = $this->BookingModel->getMyBookings($user_id,$status,1);
-				
+				// echo $this->db->last_query();
 				foreach($arrBooking as $key=>$booking)
 				{
+					$categoryData=$this->BookingModel->getCategory($booking['category_id']);
+					$main_category="";
+					if($categoryData->category_parent_id!=0)
+					{
+						$category=$this->BookingModel->getCategory($categoryData->category_parent_id);
+						$category_id=$categoryData->category_parent_id;
+						$main_category=$category->category_name;
+						$booking['category_name']=$main_category."-".$booking['category_name'];
+					}
+					
 					// Calculate Days
 					$date1 = new DateTime($booking['booking_date']);
 					$date1 = $date1->format('Y-m-d');
@@ -51,14 +66,32 @@ class Booking extends REST_Controller {
 					}
 
 					$today=date('Y-m-d');
-					$date1=date_create($today);
+					if($booking['booking_date']<$today && $booking['is_demo']=='No')
+					{
+						$date1=date_create($today);
+					}
+					else{ $date1=date_create($date1);}
 					$date2=date_create($date2);
 					
 					$interval = date_diff($date1, $date2); 
 					$days  = $interval->format('%a days left'); 
 					
-					$booking['booking_date']=$date1->format('M d,Y');
-					$booking['expiry_date']=$date2->format('M d,Y');
+					if($booking['is_demo']=='Yes' && $booking['booking_date']=='0000-00-00')
+					{
+						$booking['booking_date']=$booking['booking_date'];
+						$booking['expiry_date']=$booking['expiry_date'];
+					}
+					else
+					{
+						$booking_date = new DateTime($booking['booking_date']);
+						$booking['booking_date']=$booking_date->format('M d,Y');
+						$booking['expiry_date']=$date2->format('M d,Y');
+						
+					}
+
+					// $booking['booking_date1']=$date1;
+					// $booking['booking_date']=$date1->format('M d,Y');
+					// $booking['expiry_date']=$date2->format('M d,Y');
 
 					$booking['expiry_day']=$days;
 					if(!isset($booking['full_name']))
@@ -117,7 +150,19 @@ class Booking extends REST_Controller {
 				//  $this->Common_Model->update_data('booking','booking_id',$booking_id,$inputData);
 
 				$arrBookingData = $this->BookingModel->getBookingData($booking_id,$userLat,$userLong);
-				
+				/***** Category with Sub Category Name **************** */
+					$categoryData=$this->BookingModel->getCategory($arrBookingData->category_id);
+					$main_category="";
+					if($categoryData->category_parent_id!=0)
+					{
+						$category=$this->BookingModel->getCategory($categoryData->category_parent_id);
+						$category_id=$categoryData->category_parent_id;
+						$main_category=$category->category_name;
+						$arrBookingData->category_name=$main_category."-".$arrBookingData->category_name;
+					}
+				/********************** */
+
+
 					// Calculate Days
 					$date1 = new DateTime($arrBookingData->booking_date);
 					$date1 = $date1->format('Y-m-d');
@@ -135,11 +180,24 @@ class Booking extends REST_Controller {
 
 					$date1=date_create($date1);
 					$date2=date_create($date2);
+
 					
 					$interval = date_diff($date1, $date2); 
 					$days  = $interval->format('%a'); 
-					$arrBookingData->booking_date=$date1->format('M d,Y');
-					$arrBookingData->expiry_date=$date2->format('M d,Y');
+
+					
+					if($arrBookingData->is_demo=='Yes' && $arrBookingData->booking_date=='0000-00-00')
+					{
+						$arrBookingData->booking_date=$arrBookingData->booking_date;
+						$arrBookingData->expiry_date=$arrBookingData->expiry_date;
+					}
+					else
+					{
+						$arrBookingData->booking_date=$date1->format('M d,Y');
+						$arrBookingData->expiry_date=$date2->format('M d,Y');
+					}
+					
+					
 					$arrBookingData->left_days=$days." days left";
 
 					$checkReport=$this->BookingModel->checkTodayWorkHistory($booking_id);
@@ -294,6 +352,62 @@ class Booking extends REST_Controller {
 					);
 								
 				$this->Common_Model->insert_data('booking_history',$arrInputData);
+
+				$bookingDate=$this->BookingModel->getBookingDetails($booking_id);
+
+				//IF Is demo booking update booking status
+				if($bookingDate->is_demo=='No' && $bookingDate->expiry_date==date('Y-m-d'))
+				{
+					$arrInputData = array(
+						'booking_status' => "completed"
+					);
+					$this->Common_Model->update_data('booking','booking_id',$booking_id,$arrInputData);
+					// Send Notification order placed
+					$userDetails=$this->BookingModel->getUserDetails($bookingDate->user_id);
+					$title="Booking Completed";
+					$message="Booking no $bookingDate->order_no has been completed";
+					$output=$this->Common_Model->sendexponotification($title,$message,$userDetails->user_fcm);
+
+					$inputData=array(
+						'noti_user_type'=>'Customer',
+						'noti_type'=>'Booking',
+						'noti_title'=>$title,
+						'noti_message'=>$message,
+						'noti_gcmID'=>$userDetails->user_fcm,
+						'noti_user_id'=>$bookingDate->user_id,
+						'noti_booking_id'=>$booking_id,
+						'dateadded'=>date('Y-m-d H:i:s')
+					);
+					$this->Common_Model->insert_data('notification',$inputData);
+				}
+
+				//IF Is demo booking update booking status
+				if($bookingDate->is_demo=='Yes')
+				{
+					$arrInputData = array(
+						'booking_status' => "completed"
+					);
+									
+					$this->Common_Model->update_data('booking','booking_id',$booking_id,$arrInputData);
+				}
+				// Send Notification order placed
+				$userDetails=$this->BookingModel->getUserDetails($bookingDate->user_id);
+				$title="Today Work Report";
+				$message="Booking no $bookingDate->order_no today work report has been submitted";
+				$output=$this->Common_Model->sendexponotification($title,$message,$userDetails->user_fcm);
+
+				$inputData=array(
+					'noti_user_type'=>'Customer',
+					'noti_title'=>$title,
+					'noti_type'=>'Booking',
+					'noti_message'=>$message,
+					'noti_gcmID'=>$userDetails->user_fcm,
+					'noti_user_id'=>$bookingDate->user_id,
+					'noti_booking_id'=>$booking_id,
+					'dateadded'=>date('Y-m-d H:i:s')
+				);
+				$this->Common_Model->insert_data('notification',$inputData);
+
 					// echo $this->db->last_query();
 				$data['responsecode'] = "200";
 				$data['responsemessage'] = 'Todays report submit successfully';
@@ -359,7 +473,7 @@ class Booking extends REST_Controller {
 				{
 					$average = $tot_stars/$rowCount;
 				}
-				$rating_arr['average']=$average;
+				$rating_arr['average']=number_format($average,1);
 				$rating_arr['total']=$rowCount;
 
 				for ($i=1;$i<=5;++$i) 
@@ -373,7 +487,6 @@ class Booking extends REST_Controller {
 					$rating_arr['star'.$i.'_total']=$count;
 					$rating_arr['star'.$i.'_per']=round($percent);
 				}
-
 				$arrReviews=$this->BookingModel->getReviews($user_id);
 				//echo $this->db->last_query();
 				foreach($arrReviews as $key=>$review)
@@ -537,6 +650,72 @@ class Booking extends REST_Controller {
 			$data['responsemessage'] = 'Token did not match';
 		}	
 		$obj = (object)$data;//Creating Object from array
+		$response = json_encode($obj);
+		print_r($response);
+	}
+
+	public function report_post()
+	{
+		$token 		 = $this->input->post("token");
+		$user_id 	 = $this->input->post("user_id");
+		$report_type = $this->input->post("report_type");
+		$fromdate 	 = $this->input->post("from_date");
+		$todate 	 = $this->input->post("to_date");
+		$searchkeyword 	 = $this->input->post("searchkeyword");
+
+		$from = str_replace('/', '-', $fromdate);  
+    	$from_date = date("Y-m-d", strtotime($from));  
+		
+		$to = str_replace('/', '-', $todate);  
+    	$to_date = date("Y-m-d", strtotime($to));  
+
+		
+		if(!isset($from_date) && !isset($to_date))
+		{
+			$from_date=$to_date="";
+		}
+		if($token == TOKEN)
+		{
+			if($user_id=="" || $report_type=="")
+			{
+				$response_array['responsecode'] = "400";
+				$response_array['responsemessage'] = 'Please Provide valid data';
+			}
+			else
+			{
+				
+				$arrBookings=$this->BookingModel->getreport($user_id,$report_type,$from_date,$to_date,$searchkeyword);
+				
+				// echo $this->db->last_query();
+				foreach($arrBookings as $key=>$booking)
+				{
+					
+					if($booking['history_date'] && $booking['history_date']!="")
+					{
+						$booking['history_date']=new DateTime($booking['history_date']);
+						$booking['history_date']=$booking['history_date']->format('d-m-Y');
+					}
+					if(isset($booking['work_photo1']) && $booking['work_photo1']!="")
+					{
+						$booking['work_photo1'] = base_url()."uploads/work_history/".$booking['work_photo1'];
+					}
+					if(isset($booking['work_photo2']) && $booking['work_photo2']!="")
+					{
+						$booking['work_photo2'] = base_url()."uploads/work_history/".$booking['work_photo2'];
+					}
+					$arrBookings[$key]=$booking;
+				}
+				
+				$response_array['responsecode'] = "200";
+				$response_array['data'] = $arrBookings;
+			}
+		}
+		else
+		{
+			$response_array['responsecode'] = "201";
+			$response_array['responsemessage'] = 'Token did not match';
+		}
+		$obj = (object)$response_array;//Creating Object from array
 		$response = json_encode($obj);
 		print_r($response);
 	}

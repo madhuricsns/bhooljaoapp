@@ -25,11 +25,49 @@ class Category extends REST_Controller {
             else
             {
                 //$userdetails = $this->DashboardModel->getUserDetails($user_id);
-				
 				$categories = $this->CategoryModel->getAllCategories();
-				
+				foreach($categories as $key=>$category)
+				{
+					$subcategories = $this->CategoryModel->getAllSubCategories(0,$category['category_id']);
+					$category['isSubcategoryAvailable']=false;
+					if($subcategories>0)
+					{
+						$category['isSubcategoryAvailable']=true;
+					}
+					$categories[$key]=$category;
+				}
                 $data['responsecode'] = "200";
                 $data['data'] = $categories;
+            }
+		}
+		else
+		{
+			$data['responsecode'] = "201";
+			$data['responsemessage'] = 'Token did not match';
+		}	
+		$obj = (object)$data;//Creating Object from array
+		$response = json_encode($obj);
+		print_r($response);
+	}
+
+	public function subcategoryList_post()
+	{
+		$token 			= $this->input->post("token");
+		$user_id		= $this->input->post("user_id");
+		$category_id	= $this->input->post("category_id");
+		
+		if($token == TOKEN)
+		{
+            if($category_id=="" || $category_id==0)
+            {
+                $data['responsemessage'] = 'Please provide valid data ';
+                $data['responsecode'] = "400"; //create an array
+            }
+            else
+            {
+				$subcategories = $this->CategoryModel->getAllSubCategories(1,$category_id);
+                $data['responsecode'] = "200";
+                $data['data'] = $subcategories;
             }
 		}
 		else
@@ -57,20 +95,11 @@ class Category extends REST_Controller {
             }
             else
             {
-				// $input_data=array(
-				// 	'option_label'=>'Select no of Rooms',
-				// 	'option_name'=>'3',
-				// 	'option_amount'=>'800',
-				// 	'service_id'=>'2',
-				// 	'option_type'=>'Dropdown'
-				// );
-				// $insert_id=$this->Common_Model->insert_data('service_details',$input_data);
+				
+				$service = $this->CategoryModel->getAllServiceByCategoryId($category_id);
 
-				// $this->db->where('option_label',"");
-				// $this->db->where('service_id',"2");
-			  	// $this->db->delete(TBLPREFIX.'service_details');
-             	// $categories = $this->CategoryModel->getCategoryDetails($category_id);
-             	$service = $this->CategoryModel->getAllServiceByCategoryId($category_id);
+				//  $allservice = $this->CategoryModel->getServiceDetails($service->service_id);
+				//  print_r($allservice);
 				// foreach($services as $key=>$service)
 				// {
 					$images=array();
@@ -82,9 +111,52 @@ class Category extends REST_Controller {
 					$services_details = $this->CategoryModel->getAllServiceDetails($service->service_id);
 					$Vehicle_details = $this->CategoryModel->getAllVehicleDetails($service->service_id);
 					$whychooseus = $this->CategoryModel->whyChooseus($service->service_id);
+					$main_category_id=$category_id;
+					$categoryData=$this->CategoryModel->getCategory($category_id);
+					if($categoryData->category_parent_id!=0)
+					{
+						$category=$this->CategoryModel->getCategory($categoryData->category_parent_id);
+						$main_category_id=$categoryData->category_parent_id;
+					}
+					$arrReviews = $this->CategoryModel->getReviewByCategory($main_category_id);
+
+					// print_r($arrReviews);
 					// echo $this->db->last_query();
-					$service->rating_avg="4.6";
-					$service->total_rating="120";
+					$star1=$star2=$star3=$star4=$star5=$rowCount=$average=$percent=0;
+					foreach($arrReviews as $rating)
+					{
+						if($rating['rating']=='1')
+						{
+							$star1+=$rating['rating'];
+						}
+						if($rating['rating']=='2')
+						{
+							$star2+=$rating['rating'];
+						}
+						if($rating['rating']=='3')
+						{
+							$star3+=$rating['rating'];
+						}
+						if($rating['rating']=='4')
+						{
+							$star4+=$rating['rating'];
+						}
+						if($rating['rating']=='5')
+						{
+							$star5+=$rating['rating'];
+						}
+					}
+					$tot_stars = $star1 + $star2 + $star3 + $star4 + $star5;
+					$rowCount=count($arrReviews);
+					if($tot_stars>0)
+					{
+						$average = $tot_stars/$rowCount;
+					}
+					$service->rating_avg=number_format($average,1);
+					$service->total_rating=$rowCount;
+					// $service->rating_avg="4.6";
+					// $service->total_rating="120";
+
 					$service->addonServiceAvailable=false;
 					$checkAVailable = $this->CategoryModel->checkAddonServicesAvailable($service->service_id);
 					if($checkAVailable>0)
