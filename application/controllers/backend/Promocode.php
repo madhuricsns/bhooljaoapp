@@ -10,6 +10,8 @@ class Promocode extends CI_Controller {
 		}
 		$this->load->library("pagination");	
 		$this->load->model('adminModel/Promocode_model');
+		$this->load->model('Common_Model');
+		date_default_timezone_set('Asia/Kolkata');
 	}
 	public function index()
 	{
@@ -112,7 +114,14 @@ class Promocode extends CI_Controller {
 				$promocode_discount=$this->input->post('promocode_discount');
 				$promocode_type=$this->input->post('promocode_type');
 				$status=$this->input->post('status');
-				
+				if($promocode_type=='Percentage')
+				{
+					$discount=$promocode_discount."% OFF";
+				}
+				else
+				{
+					$discount="Rs.".$promocode_discount." OFF";
+				}
 				//$description=$this->input->post('description');
 				
 				$promocode=$this->Promocode_model->chkPromocode_codeName($promocode_code,0);

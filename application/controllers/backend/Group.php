@@ -108,8 +108,8 @@ class Group extends CI_Controller {
 						
 				$categoryName=$this->Group_model->chkGroupCategory($category_id,0);
 
-				if($categoryName==0)
-				{
+				// if($categoryName==0)
+				// {
 					$input_data = array(
 						'group_category_id'=>$category_id,
 						'group_name'=>trim($group_name),
@@ -129,12 +129,12 @@ class Group extends CI_Controller {
 						$this->session->set_flashdata('error','Error while adding user.');
 						redirect(base_url().'backend/Group/addGroup/');
 					}	
-				}
-				else
-				{
-					$this->session->set_flashdata('error','Your selected Category group already exist.');
-					redirect(base_url().'backend/Group/addGroup');	
-				}
+				// }
+				// else
+				// {
+				// 	$this->session->set_flashdata('error','Your selected Category group already exist.');
+				// 	redirect(base_url().'backend/Group/addGroup');	
+				// }
 
 			}else{
 				$this->session->set_flashdata('error','Validation failed.');
@@ -311,22 +311,23 @@ class Group extends CI_Controller {
 		$data['title']='Change Status';
 		$data['error_msg']='';
 		
-		$user_id=base64_decode($this->uri->segment(4));
+		$group_id=base64_decode($this->uri->segment(4));
 
 		$statusTobeUpdated=base64_decode($this->uri->segment(5));
 		//echo "user_id--".$user_id;exit();
-		if($user_id)
+		if($group_id)
 		{
 			$input_data = array(
-								'category_status'=> $statusTobeUpdated
+								'group_status'=> $statusTobeUpdated
 								);
-			$userdata = $this->Group_model->uptdateStatus($input_data,$user_id);
+			$userdata = $this->Group_model->uptdateStatus($input_data,$group_id);
 			if($userdata){
 				$this->session->set_flashdata('success','Status updated successfully.');
 				redirect(base_url().'backend/Group/manageGroup/');
 				}
 		}
 	}
+
 
 	public function addSPGroup()
 	{
@@ -389,18 +390,17 @@ class Group extends CI_Controller {
 	public function deleteGroup()
 	{
 		$data['error_msg']='';
-		$category_id = base64_decode($this->uri->segment(4));
-		if($category_id)
+		$group_id = base64_decode($this->uri->segment(4));
+		if($group_id)
 		{
-			$categoryInfo = $data['categoryInfo'] = $this->Group_model->getSingleGroupInfo($category_id,1);
-			if(count($categoryInfo) > 0)
+			$groupInfo = $data['groupInfo'] = $this->Group_model->getSingleGroupInfo($group_id,1);
+			if(count($groupInfo) > 0)
 			{   
 				$input_data = array(
-					'category_status'=>'Delete',
-					'dateupdated' => date('Y-m-d H:i:s')
+					'group_status'=>'Delete'
 				);
 
-				$deluser = $this->Group_model->uptdateGroup($input_data,$category_id);
+				$deluser = $this->Group_model->uptdateGroup($input_data,$group_id);
 				if($deluser > 0)
 				{
 					$this->session->set_flashdata('success','Group deleted successfully.');
@@ -419,7 +419,7 @@ class Group extends CI_Controller {
 		}
 		else
 		{
-			$this->session->set_flashdata('error','User not found.');
+			$this->session->set_flashdata('error','Group not found.');
 			redirect(base_url().'backend/Users/index');
 		}
 	}
