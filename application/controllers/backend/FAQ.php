@@ -18,25 +18,12 @@ class FAQ extends CI_Controller {
 	public function manageFAQ()
 	{
 		$data['title']='Manage FAQ';
-		$per_page='10';
 		
-		if($this->uri->segment(4)!='')
+		if($this->session->userdata("pagination_rows") != '')
 		{
-			if($this->uri->segment(4)!="Na")
-			{
-				$pageNo=($this->uri->segment(4));
-			}
+			$per_page = $this->session->userdata("pagination_rows");
 		}
-
-		if($this->uri->segment(5)!='')
-		{
-			if($this->uri->segment(5)!="Na")
-			{
-				$per_page=($this->uri->segment(5));
-			}
-		}
-		else
-		{
+		else {
 			$per_page='10';
 		}
 		
@@ -45,17 +32,9 @@ class FAQ extends CI_Controller {
 		
 		$config = array();
 		$config["base_url"] = base_url().'backend/FAQ/manageFAQ/'.$per_page;
-		// $config['per_page'] = 10;
-		if($per_page>100)
-		{
-			$config['per_page'] = 100;
-		}
-		else
-		{
-			$config['per_page'] = $per_page;
-		}
+		$config['per_page'] = $per_page;
 		
-		$config["uri_segment"] = 4;
+		$config["uri_segment"] = 5;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
 		$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
@@ -75,7 +54,7 @@ class FAQ extends CI_Controller {
 		#echo "<pre>"; print_r($config); exit;
 		$this->pagination->initialize($config);
 				
-		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
 		$data["total_rows"] = $config["total_rows"]; 
 		$data["links"] = $this->pagination->create_links();
 		$data['FAQS']=$this->FAQ_model->getAllFAQ(1,$config["per_page"],$page);

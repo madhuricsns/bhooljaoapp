@@ -22,8 +22,17 @@ class Material extends CI_Controller {
 	public function manageMaterial()
 	{
 		$data['title']='Manage Material';
-
+	
+	
+		if($this->session->userdata("pagination_rows") != '')
+		{
+			$per_page = $this->session->userdata("pagination_rows");
+		}
+		else {
 			$per_page='10';
+		}
+		
+		/*$per_page='10';
 		
 		if($this->uri->segment(4)!='')
 		{
@@ -43,7 +52,7 @@ class Material extends CI_Controller {
 		else
 		{
 			$per_page='10';
-		}
+		}*/
 		
 			$data['materialcnt']=$this->Material_model->getAllMaterial(0,"","");
 		
@@ -51,16 +60,17 @@ class Material extends CI_Controller {
 		
 		$config = array();
 		$config["base_url"] = base_url().'backend/Material/manageMaterial/'.$per_page;
+		$config['per_page'] = $per_page;
 		// $config['per_page'] = 10;
-		if($per_page>100)
+		/*if($per_page>100)
 		{
 			$config['per_page'] = 100;
 		}
 		else
 		{
 			$config['per_page'] = $per_page;
-		}
-		$config["uri_segment"] = 4;
+		}*/
+		$config["uri_segment"] = 5;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
 		$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
@@ -80,7 +90,7 @@ class Material extends CI_Controller {
 		#echo "<pre>"; print_r($config); exit;
 		$this->pagination->initialize($config);
 				
-		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
 		$data["total_rows"] = $config["total_rows"]; 
 		$data["links"] = $this->pagination->create_links();
 		//echo "ConttPerPage--".$config["per_page"];

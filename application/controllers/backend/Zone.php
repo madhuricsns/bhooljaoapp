@@ -18,7 +18,16 @@ class Zone extends CI_Controller {
 	public function manageZones()
 	{
 		$data['title']='Manage Zone';
-		$per_page='10';
+		
+		if($this->session->userdata("pagination_rows") != '')
+		{
+			$per_page = $this->session->userdata("pagination_rows");
+		}
+		else {
+			$per_page='10';
+		}
+		
+		/*$per_page='10';
 		
 		if($this->uri->segment(4)!='')
 		{
@@ -38,24 +47,26 @@ class Zone extends CI_Controller {
 		else
 		{
 			$per_page='10';
-		}
+		}*/
 		
 		$data['zonecnt']=$this->Zone_model->getAllZone(0,"","");
 		
 		
 		$config = array();
 		$config["base_url"] = base_url().'backend/Zone/manageZones/'.$per_page;
+		$config['per_page'] = $per_page;
+		
 		// $config['per_page'] = 10;
-		if($per_page>100)
+		/*if($per_page>100)
 		{
 			$config['per_page'] = 100;
 		}
 		else
 		{
 			$config['per_page'] = $per_page;
-		}
+		}*/
 		
-		$config["uri_segment"] = 4;
+		$config["uri_segment"] = 5;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
 		$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
@@ -75,7 +86,15 @@ class Zone extends CI_Controller {
 		#echo "<pre>"; print_r($config); exit;
 		$this->pagination->initialize($config);
 				
-		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		/*if(HOSTPAGINATE == 'local')
+		{
+			$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+		}
+		else
+		{*/
+			$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+		//}
+		
 		$data["total_rows"] = $config["total_rows"]; 
 		$data["links"] = $this->pagination->create_links();
 		//echo "ConttPerPage--".$config["per_page"];

@@ -75,12 +75,11 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 						    </form>
 
 							<div class="table-responsive">
-							<select class='form-control col-md-1' name='s1' id="page_id" style="margin-bottom:10px;float:left">
-								<option value='<?php echo base_url();?>backend/Zone/manageZones/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/10' <?php if($per_page=='10'){ echo 'selected';}?>>10</option>
-								<option value='<?php echo base_url();?>backend/Zone/manageZones/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/20' <?php if($per_page=='20'){ echo 'selected';}?>>20</option>
-								<option value='<?php echo base_url();?>backend/Zone/manageZones/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/50' <?php if($per_page=='50'){ echo 'selected';}?>>50</option>
-								<option value='<?php echo base_url();?>backend/Zone/manageZones/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/100' <?php if($per_page=='100'){ echo 'selected';}?>>100</option>
-								
+							<select class='form-control col-md-1' name='s1' id="page_id" style="margin-bottom:10px;float:left" onchange="setPagination()">
+								<option <?php if($this->session->userdata("pagination_rows") == '10') { ?> selected <?php } ?>  value='10'>10</option>
+								<option <?php if($this->session->userdata("pagination_rows") == '20') { ?> selected <?php } ?> value='20'>20</option>
+								<option <?php if($this->session->userdata("pagination_rows") == '50') { ?> selected <?php } ?> value='50'>50</option>
+								<option <?php if($this->session->userdata("pagination_rows") == '100') { ?> selected <?php } ?> value='100'>100</option>
 							</select>										
 						<div class="table-responsive">
 							<div id="basicScenario" class="product-physical"></div>
