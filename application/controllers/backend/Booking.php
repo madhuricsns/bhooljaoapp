@@ -736,7 +736,7 @@ public function viewBookingDetails()
 			
 			if($bokingInfo>0)
 			{
-				$data['bokingInfo'] = $this->Booking_model->getSingleBookingInfo($booking_id,1);
+				$data['bokingInfo'] = $bokingInfo=$this->Booking_model->getSingleBookingInfo($booking_id,1);
 				
 				$category_id = $data['bokingInfo'][0]['category_id'];
 				$categoryData=$this->Booking_model->getCategoryDetails($category_id);
@@ -763,29 +763,35 @@ public function viewBookingDetails()
                             'time_slot'=>$assingtime,
 							'admin_demo_accept' => 'Yes'
                          );
-					/*echo"<pre>";
-					print_r($input_data);
-					exit();*/
+					
 						$updatedata = $this->Booking_model->uptdateAssingServiceprovider($input_data,$booking_id);
                        
                        // echo $this->db->last_query();exit;
 						if($updatedata)
 						{	
-							$this->session->set_flashdata('success','Assing Service Provider successfully.');
-
+							// Send Email
+							$dataMail['fullname']=$bokingInfo[0]['full_name'];
+							$dataMail['order_no']=$bokingInfo[0]['order_no'];
+							$dataMail['booking_date']=$bokingInfo[0]['booking_date'];
+							$dataMail['expiry_date']=$bokingInfo[0]['booking_date'];
+							$dataMail['duration']=$bokingInfo[0]['duration'];
+							$dataMail['category_name']=$bokingInfo[0]['category_name'];
+							$Subject="Demo booking assigned date & time";
+							$mailbody = $this->Common_Model->email_content('BookingDateAssigned',$dataMail);
+							// echo $mailbody;
+							$mail=$this->Common_Model->SendMail($bokingInfo[0]['email'],$mailbody,$Subject);
+							$this->session->set_flashdata('success','Assing date and time successfully.');
 							redirect(base_url().'backend/Booking/manageBookingDemo');	
 						}
 						else
 						{
 							$this->session->set_flashdata('error','Error while updating Zone.');
-
 							redirect(base_url().'backend/Booking/AssingDateTime/'.base64_encode($booking_id));
 						}	
 					}
 					else
 					{
 						$this->session->set_flashdata('error',$this->form_validation->error_string());
-
 						redirect(base_url().'backend/Booking/AssingDateTime/'.base64_encode($booking_id));
 					}
 				}
@@ -799,9 +805,6 @@ public function viewBookingDetails()
 		$this->load->view('admin/admin_header',$data);
 		$this->load->view('admin/update_AssingDateTime',$data);
 		$this->load->view('admin/admin_footer');
-					// echo"<pre>";
-					// print_r($bokingidInfo);
-					// exit();
 	}
 
 
