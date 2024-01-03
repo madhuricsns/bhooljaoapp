@@ -80,7 +80,6 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 								<option <?php if($this->session->userdata("pagination_rows") == '20') { ?> selected <?php } ?> value='20'>20</option>
 								<option <?php if($this->session->userdata("pagination_rows") == '50') { ?> selected <?php } ?> value='50'>50</option>
 								<option <?php if($this->session->userdata("pagination_rows") == '100') { ?> selected <?php } ?> value='100'>100</option>
-								<option <?php if($this->session->userdata("pagination_rows") == '2') { ?> selected <?php } ?> value='2'>2</option>
 							</select>										
 						<div class="table-responsive">
 							<div id="basicScenario" class="product-physical"></div>
