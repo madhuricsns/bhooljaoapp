@@ -548,10 +548,10 @@ $(document).ready(function(){
         }
     });
 
-    $("#page_id").change(function(){ // change function of listbox
+   /* $("#page_id").change(function(){ // change function of listbox
         // alert($('#page_id').val());
         window.location = $('#page_id').val();
-    });
+    });*/
 
 });
 
@@ -794,6 +794,50 @@ function getProductByRest()
                             $('#sel_product').append(message);
       
                        });
+}
+
+
+function getIncomes()
+{
+	var filterval=$("#income_filter").val();
+	//alert(filterval);
+      $.ajax({
+            type:"POST",
+            url:"<?php echo base_url('backend/');?>Dashboard/getIncomeFilters",
+             data:{
+                  filter:filterval
+               }              
+            }).done(function(message){
+            
+            //alert(message);
+            var res=message.split('_');
+				   $('#totalIncome').empty();
+                   $('#totalIncome').append(res[0]);
+                   $('#totalPaid').empty();
+				   $('#totalPaid').append(res[1]);
+				   $('#totalUnpaid').empty();
+                   $('#totalUnpaid').append(res[2]);
+                    
+             });
+}
+
+function setPagination()
+{
+	var pageid=$("#page_id").val();
+	//alert(pageid);
+      $.ajax({
+            type:"POST",
+            url:"<?php echo base_url('backend/');?>Notifications/setPagination",
+             data:{
+                  pageid:pageid
+               }              
+            }).done(function(message){
+            
+            //alert(message);
+			//alert('<?php echo $this->router->fetch_class();?>');
+			//alert('<?php echo $this->router->fetch_method();?>');
+				window.location = '<?php echo base_url().'/backend/'.$this->router->fetch_class().'/'.$this->router->fetch_method();?>';      
+             });
 }
 </script>
 <!--Datepicker jquery-->

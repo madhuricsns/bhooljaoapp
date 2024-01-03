@@ -20,50 +20,30 @@ class Notifications extends CI_Controller {
 	public function manageNotifications()
 	{
 		$data['title']='Manage Notifications';
-		$per_page='10';
 		
-		if($this->uri->segment(4)!='')
+		if($this->session->userdata("pagination_rows") != '')
 		{
-			if($this->uri->segment(4)!="Na")
-			{
-				$pageNo=($this->uri->segment(4));
-			}
+			$per_page = $this->session->userdata("pagination_rows");
 		}
-
-		if($this->uri->segment(5)!='')
-		{
-			if($this->uri->segment(5)!="Na")
-			{
-				$per_page=($this->uri->segment(5));
-			}
-		}
-		else
-		{
+		else {
 			$per_page='10';
 		}
+		
 		$data['notificationcnt']=$this->Notification_model->getAllNotifications(0,"","");
 		
-		
 		$config = array();
-		$config["base_url"] = base_url().'backend/Notifications/manageNotifications/'.$per_page;
-		// $config['per_page'] = 10;
-		if($per_page>100)
-		{
-			$config['per_page'] = 100;
-		}
-		else
-		{
-			$config['per_page'] = $per_page;
-		}
 		
+		$config["base_url"] = base_url().'backend/Notifications/manageNotifications/'.$per_page;
+		
+		$config['per_page'] = $per_page;
 		
 		
 		//$arrGcmID[] = 'ExponentPushToken[ILvrAQKXZylNfqwZrnRmXO]';
 		/*$arrGcmID[] = 'ExponentPushToken[XiEPpvAeQshWRuImc99MHx]';
 		$this->Common_Model->sendexponotification('test', 'Testing notifications 5 pm sent...', $arrGcmID);*/
 		
-		
-		$config["uri_segment"] = 4;
+		//print $uriSegment; exit;
+		$config["uri_segment"] = 5;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
 		$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
@@ -80,10 +60,19 @@ class Notifications extends CI_Controller {
 		$config['num_tag_close'] = "</li>"; 
 		$config['attributes'] =array('class' => 'page-link');
 		$config["total_rows"] =$data['notificationcnt'];
-		#echo "<pre>"; print_r($config); exit;
+		//print_r($config);
 		$this->pagination->initialize($config);
-				
-		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		
+		if(HOSTPAGINATE == 'local')
+		{
+			$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		}
+		else
+		{
+			$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+		}
+		//echo "<pre>";print_r($config);
+		//echo "<pre>";print_r($this->uri->segment); exit;
 		$data["total_rows"] = $config["total_rows"]; 
 		$data["links"] = $this->pagination->create_links();
 		$data['notifications']=$this->Notification_model->getAllNotifications(1,$config["per_page"],$page);
@@ -287,5 +276,10 @@ class Notifications extends CI_Controller {
 			redirect(base_url().'backend/Users/index');
 		}
 	}
-
+	
+	public function setPagination()
+	{
+		$the_session = array('pagination_rows',$_POST['pageid']);
+		$this->session->set_userdata('pagination_rows',$_POST['pageid']);
+	}	
 }

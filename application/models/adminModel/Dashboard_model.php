@@ -56,6 +56,20 @@ public function getAllBookingcount($res)
 			return $result->num_rows();
 
 	}
+	
+	public function getAllDemoBookingcount($res)
+	{
+		$this->db->select('*');
+		$this->db->where('is_demo','Yes'); 
+		$this->db->order_by('booking_id','ASC');
+		$result = $this->db->get(TBLPREFIX.'booking');
+		//echo $result;exit;
+		if($res == 1)
+			return $result->result_array();
+		else
+			return $result->num_rows();
+
+	}
 
 public function getAllBookingWaitingcount($res)
 	{
@@ -158,6 +172,68 @@ public function getLatRecords($res,$per_page,$page)
 		else
 			return $result->num_rows();
    }
+   
+   public function getAllBookingIncome($filter)
+	{
+		$this->db->select('sum(total_booking_amount) as total');
+		
+		if($filter == 'Last Month')
+		{
+			$this->db->where('MONTH(dateadded) = MONTH(NOW()) - 1');
+		}	
+		else if($filter == 'Last 6 Months')
+		{	
+			$this->db->where('dateadded >= DATE(NOW()) - INTERVAL 6 MONTH');
+		}
+		else if($filter == 'Last Year')
+		{
+			$this->db->where('YEAR(dateadded) = YEAR(NOW() - INTERVAL 1 YEAR)');
+		}
+		else {
+			$this->db->where('DATE(dateadded) = CURDATE()');
+		}
+		//$this->db->where('is_demo','Yes'); 
+		//$this->db->order_by('booking_id','ASC');
+		$result = $this->db->get(TBLPREFIX.'booking');
+		//echo $this->db->last_query();
+		$res = $result->row();
+		if($res->total == NULL)
+			return 0;
+		else 
+			return $res->total;
+		
+	}
+	
+	public function getAllBookingPaid($filter)
+	{
+		$this->db->select('sum(paid_amount) as total');
+		$this->db->where('payment_response','success'); 
+		//$this->db->order_by('booking_id','ASC');
+		if($filter == 'Last Month')
+		{
+			$this->db->where('MONTH(dateadded) = MONTH(NOW()) - 1');
+		}	
+		else if($filter == 'Last 6 Months')
+		{
+			$this->db->where('dateadded >= DATE(NOW()) - INTERVAL 6 MONTH');
+		}
+		else if($filter == 'Last Year')
+		{
+			$this->db->where('YEAR(dateadded) = YEAR(NOW() - INTERVAL 1 YEAR)');
+		}
+		else {
+			$this->db->where('DATE(dateadded) = CURDATE()');
+		}
+		
+		$result = $this->db->get(TBLPREFIX.'booking_transaction');
+		//echo $result;exit;
+		$res = $result->row();
+		if($res->total == NULL)
+			return 0;
+		else 
+			return $res->total;
+		
+	}
 	
 	
 }

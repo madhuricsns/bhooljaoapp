@@ -37,6 +37,23 @@ $session_user_type=$sessiondata['user_type'];*/
 											
 											<div class="col-lg-6 col-xl-3 xl-30">
 												<div class="card card-border">
+													<div class="card-body overviwe-icon total-booking" >
+														<div class="media1 static-top-widget row">
+															<a href="#"  >
+																<div class="media-body1 col-12 de-icon1">
+																	<div>
+																		<h5 class="m-0" style="color: #000;">Total Demo Bookings</h5>
+																		<h2 class="counter"><?php echo $DemoBooking ;?></h2>
+																	</div>									
+																</div>
+															</a>
+														</div>
+													</div>
+												</div>
+											</div>
+											
+											<div class="col-lg-6 col-xl-3 xl-30">
+												<div class="card card-border">
 													<div class="card-body overviwe-icon service-pro-icon" >
 														<div class="media1 static-top-widget row">	
 															<a href="#"  >
@@ -262,7 +279,7 @@ $session_user_type=$sessiondata['user_type'];*/
 												<!-- onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);" -->
 												<span class=" pull-right mb-3" style="width:20%,">
 													<div class="income"><i class="fa fa-calendar"></i>
-														<select name="booking_filter"  data-show-content="true" id="income_filter" class="form-control income-filter pull-right" aria-label="Filter select">
+														<select name="booking_filter"  data-show-content="true" id="income_filter" class="form-control income-filter pull-right" aria-label="Filter select" onchange="getIncomes()">
 														
 															<option selected value="Todays"> Todays </option>
 															<option value="Last Month">Last Month</option>
@@ -283,7 +300,7 @@ $session_user_type=$sessiondata['user_type'];*/
 																<div class="media-body1 col-12 de-icon1">
 																	<div>
 																		<h5 class="m-0" style="color: #000;">All Income</h5>
-																		<h2 style="font-size: 25px;">₹<span class="counter totalincome">0</span></h2>
+																		<h2 style="font-size: 25px;">₹<span id="totalIncome" class="counter totalincome"><?php echo $AllIncome; ?></span></h2>
 																	</div>
 																</div>
 															</a>
@@ -299,7 +316,7 @@ $session_user_type=$sessiondata['user_type'];*/
 																<div class="media-body1 col-12 de-icon1">
 																	<div>
 																		<h5 class="m-0" style="color: #000;"> Paid</h5>
-																		<h2 style="font-size: 25px;">₹<span class="counter totalpaid">0</span></h2>
+																		<h2 style="font-size: 25px;">₹<span id="totalPaid" class="counter totalpaid"><?php echo $Paid; ?></span></h2>
 																	</div>
 																</div>
 															</a>
@@ -315,7 +332,7 @@ $session_user_type=$sessiondata['user_type'];*/
 																<div class="media-body1 col-12 de-icon1">
 																	<div>
 																		<h5 class="m-0" style="color: #000;"> Unpaid</h5>
-																		<h2 style="font-size: 25px;">₹<span class="counter totalunpaid">0</span></h2>
+																		<h2 style="font-size: 25px;">₹<span id="totalUnpaid" class="counter totalunpaid"><?php echo $UnPaid; ?></span></h2>
 																	</div>
 																</div>
 															</a>
@@ -341,3 +358,5 @@ $session_user_type=$sessiondata['user_type'];*/
 
 </div>
 </div>
+
+
