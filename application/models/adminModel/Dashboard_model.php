@@ -179,15 +179,15 @@ public function getLatRecords($res,$per_page,$page)
 		
 		if($filter == 'Last Month')
 		{
-			$this->db->where('MONTH(dateadded) = MONTH(NOW()) - 1');
+			$this->db->where('MONTH(dateadded) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)');
 		}	
 		else if($filter == 'Last 6 Months')
 		{	
-			$this->db->where('dateadded >= DATE(NOW()) - INTERVAL 6 MONTH');
+			$this->db->where('MONTH(dateadded) >= CURRENT_DATE - INTERVAL 6 MONTH');
 		}
 		else if($filter == 'Last Year')
 		{
-			$this->db->where('YEAR(dateadded) = YEAR(NOW() - INTERVAL 1 YEAR)');
+			$this->db->where('YEAR(dateadded) >= CURRENT_DATE - INTERVAL 1 YEAR');
 		}
 		else {
 			$this->db->where('DATE(dateadded) = CURDATE()');
@@ -211,15 +211,15 @@ public function getLatRecords($res,$per_page,$page)
 		//$this->db->order_by('booking_id','ASC');
 		if($filter == 'Last Month')
 		{
-			$this->db->where('MONTH(dateadded) = MONTH(NOW()) - 1');
+			$this->db->where('MONTH(dateadded) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)');
 		}	
 		else if($filter == 'Last 6 Months')
 		{
-			$this->db->where('dateadded >= DATE(NOW()) - INTERVAL 6 MONTH');
+			$this->db->where('MONTH(dateadded) >= CURRENT_DATE - INTERVAL 6 MONTH');
 		}
 		else if($filter == 'Last Year')
 		{
-			$this->db->where('YEAR(dateadded) = YEAR(NOW() - INTERVAL 1 YEAR)');
+			$this->db->where('YEAR(dateadded) >= CURRENT_DATE - INTERVAL 1 YEAR');
 		}
 		else {
 			$this->db->where('DATE(dateadded) = CURDATE()');
@@ -227,6 +227,7 @@ public function getLatRecords($res,$per_page,$page)
 		
 		$result = $this->db->get(TBLPREFIX.'booking_transaction');
 		//echo $result;exit;
+		//echo $this->db->last_query();exit;
 		$res = $result->row();
 		if($res->total == NULL)
 			return 0;
