@@ -62,7 +62,7 @@
 												<td><?php echo $service['parent_service'];?></td>
 												<td><?php echo $service['service_name'];?></td>
 												<td><?php echo $service['service_description'];?></td>
-												<td><?php echo $service['service_status'];?></td>
+												<td style="color:<?php if($service['service_status']=='Active'){ echo '#058f05';}else { echo 'red';}?>"><?php echo $service['service_status'];?></td>
 												<td class="actions">  
 													<a href="<?php echo base_url();?>backend/Service/updateAddOnService/<?php echo base64_encode($service['service_id']);?>"><i data-feather="edit"></i></a>
 													

@@ -23,13 +23,21 @@ class Service extends CI_Controller {
 	{
 		$data['title']='Manage Sub Category';
 
-		
+		if($this->session->userdata("pagination_rows") != '')
+		{
+			$per_page = $this->session->userdata("pagination_rows");
+		}
+		else {
+			$per_page='10';
+		}
+
 		$data['usercnt']=$this->Service_model->getAllService(0,"","");
 		
 		$config = array();
-		$config["base_url"] = base_url().'backend/Service/manageService/';
-		$config['per_page'] = 10;
-		$config["uri_segment"] = 4;
+		$config["base_url"] = base_url().'backend/Service/manageService/'.$per_page;
+		// $config['per_page'] = 10;
+		$config['per_page'] = $per_page;
+		$config["uri_segment"] = 5;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
 		$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
@@ -49,7 +57,14 @@ class Service extends CI_Controller {
 		#echo "<pre>"; print_r($config); exit;
 		$this->pagination->initialize($config);
 				
-		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		/*if(HOSTPAGINATE == 'local')
+		{
+			$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+		}
+		else
+		{*/
+			$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+		//}
 		$data["total_rows"] = $config["total_rows"]; 
 		$data["links"] = $this->pagination->create_links();
 		//echo "ConttPerPage--".$config["per_page"];
@@ -112,6 +127,10 @@ class Service extends CI_Controller {
 				$status="Active";
 				$description=$this->input->post('description');
 				
+				$checkservicename=$this->Service_model->checkServiceName(0,$category_id,$Service_name);
+				
+				if($checkservicename==0)
+				{
 					//Image Upload Code 
 					if(count($_FILES) > 0) 
 					{
@@ -299,15 +318,19 @@ class Service extends CI_Controller {
 						// }
 						// exit;
 						$this->session->set_flashdata('success','Service added successfully.');
-
 						redirect(base_url().'backend/Service/manageService');	
 					}
 					else
 					{
 						$this->session->set_flashdata('error','Error while adding Service.');
-
 						redirect(base_url().'backend/Service/addService');
 					}	
+				}
+				else
+				{
+					$this->session->set_flashdata('error','Service name already exist');
+					redirect(base_url().'backend/Service/addService');
+				}	
 				
 			}else{
 				$this->session->set_flashdata('success','Validation failed. Please enter valid Text.');
@@ -327,6 +350,8 @@ class Service extends CI_Controller {
 		//echo "segment--".$this->uri->segment(4);exit();
 		$id=base64_decode($this->uri->segment(4));
 		$data['categoryList']=$this->Service_model->getAllCategory(1);	
+		$data['subcategoryList']=$this->Service_model->getAllSubCategory(1);
+
 		//echo "Brand_id--".$brand_id;exit();
 		if($id)
 		{
@@ -358,6 +383,11 @@ class Service extends CI_Controller {
 				if($this->form_validation->run())
 				{ 
 					$category_id=$this->input->post('category');
+					$subcategory_id=$this->input->post('subcategory');
+					if($subcategory_id>0)
+					{
+						$category_id=$subcategory_id;
+					}
 					$service_name=$this->input->post('service_name');
 					$service_price=$this->input->post('service_price');
 					$service_discount_price=$this->input->post('service_discount_price');
@@ -420,36 +450,34 @@ class Service extends CI_Controller {
 					}
 					
 						$Service_data = $this->Service_model->uptdateService($input_data,$id);
-// echo"<pre>";
-// 					print_r($Service_data);
-// 					exit();
+
 						if($Service_data)
 						{	
-							// $delOption=$this->Service_model->deleteoption($id);
+							$delOption=$this->Service_model->deleteoption($id);
 							// print_r($optionsArr);
 							// echo $option_type;
 							if(!empty($optionsArr))
 							{
-									foreach($optionsArr as $key=>$option)
-									{
-										$amount=$amountArr[$key];
-										$insert_data=array(
-											'service_id'=>$id,
-											'option_label'=>$option_label,
-											'option_type'=>$option_type,
-											'option_name'=>$option,
-											'option_amount'=>$amount,
-											'dateadded' => date('Y-m-d H:i:s'),
-											'dateupdated' => date('Y-m-d H:i:s')
-										);
-										// if($option!="" && $amount!=""){
-										$this->Common_Model->insert_data('service_details',$insert_data);
-										// }
-										// echo $this->db->last_query();
-									}
+								foreach($optionsArr as $key=>$option)
+								{
+									$amount=$amountArr[$key];
+									$insert_data=array(
+										'service_id'=>$id,
+										'option_label'=>$option_label,
+										'option_type'=>$option_type,
+										'option_name'=>$option,
+										'option_amount'=>$amount,
+										'dateadded' => date('Y-m-d H:i:s'),
+										'dateupdated' => date('Y-m-d H:i:s')
+									);
+									// if($option!="" && $amount!=""){
+									$this->Common_Model->insert_data('service_details',$insert_data);
+									// }
+									// echo $this->db->last_query();
+								}
 								
 							} 
-// exit;
+
 							// Add Why Choose Us data
 						if(!empty($whychooswusArr))
 						{
@@ -472,46 +500,53 @@ class Service extends CI_Controller {
 						// Add Vehicle data
 						if(!empty($vehiclenameArr))
 						{
+							$update=array('option_type'=>'List');
+							$this->db->where('option_type','Vehicle');
+							$this->db->where('service_id',$id);
+							$this->db->update('bhool_service_details',$update);
 							foreach($vehiclenameArr as $key=>$vehicleName)
 							{
 								$amount=$vehicleamountArr[$key];
 								$option_id=$option_ids[$key];
 								// $image=$vehicleimageArr[$key];
-
-								$strDocName = "vehicleimageArr";
-								$_FILES['file']['name']     = $_FILES[$strDocName]['name'][$key]; 
-								$_FILES['file']['type']     = $_FILES[$strDocName]['type'][$key]; 
-								$_FILES['file']['tmp_name'] = $_FILES[$strDocName]['tmp_name'][$key]; 
-								$_FILES['file']['error']    = $_FILES[$strDocName]['error'][$key]; 
-								$_FILES['file']['size']     = $_FILES[$strDocName]['size'][$key]; 
-								
-								$photo='';
-								$new_doc_name = "";
-								$new_doc_name = date('YmdHis').$this->Common_Model->randomImageName();
-								$target_dir="uploads/vehicle_images/";
-					
-								// echo $new_doc_name;
-								$config = array(
-										'upload_path' => $target_dir,
-										'allowed_types' => "jpg|png|jpeg|pdf",
-										'max_size' => "0", 
-										'file_name' =>$new_doc_name
-										);
-								$this->load->library('upload', $config);
-								$this->upload->initialize($config); 
-								if($this->upload->do_upload('file'))
-								{ 
-									$docDetailArray = $this->upload->data();
-									$photo =  $docDetailArray['file_name'];
-								}
-								else
+								if(count($_FILES)>0)
 								{
-									echo $this->upload->display_errors();
+									$strDocName = "vehicleimageArr";
+									$_FILES['file']['name']     = $_FILES[$strDocName]['name'][$key]; 
+									$_FILES['file']['type']     = $_FILES[$strDocName]['type'][$key]; 
+									$_FILES['file']['tmp_name'] = $_FILES[$strDocName]['tmp_name'][$key]; 
+									$_FILES['file']['error']    = $_FILES[$strDocName]['error'][$key]; 
+									$_FILES['file']['size']     = $_FILES[$strDocName]['size'][$key]; 
+									
+									$photo='';
+									$new_doc_name = "";
+									$new_doc_name = date('YmdHis').$this->Common_Model->randomImageName();
+									$target_dir="uploads/vehicle_images/";
+						
+									// echo $new_doc_name;
+									$config = array(
+											'upload_path' => $target_dir,
+											'allowed_types' => "jpg|png|jpeg|pdf",
+											'max_size' => "0", 
+											'file_name' =>$new_doc_name
+											);
+									$this->load->library('upload', $config);
+									$this->upload->initialize($config); 
+									if($this->upload->do_upload('file'))
+									{ 
+										$docDetailArray = $this->upload->data();
+										$photo =  $docDetailArray['file_name'];
+									}
+									else
+									{
+										echo $this->upload->display_errors();
+									}
+									if($_FILES[$strDocName]['error'][$key]==0)
+									{ 
+										$photo=$photo;
+									}
 								}
-								if($_FILES[$strDocName]['error'][$key]==0)
-								{ 
-									$photo=$photo;
-								}
+
 								if($photo!="")
 								{
 									$insert_data=array(
@@ -549,10 +584,10 @@ class Service extends CI_Controller {
 									}
 									
 									}
-								echo $this->db->last_query();
+								// echo $this->db->last_query();
 							}
 						}
-// exit;
+						//exit;
 							// foreach($labelArr as $key=>$label)
 							// {
 							// 	$labelvalue=$labelvalueArr[$key];
@@ -670,7 +705,7 @@ class Service extends CI_Controller {
 				);
 
 				$deluser = $this->Service_model->uptdateService($input_data,$id);
-				if($deluser > 0)
+				if($deluser)
 				{
 					$this->session->set_flashdata('success','Service deleted successfully.');
 					//redirect(base_url().'backend/Users/index');	
@@ -679,18 +714,18 @@ class Service extends CI_Controller {
 				else
 				{
 					$this->session->set_flashdata('error','Error while deleting user.');
-					redirect(base_url().'backend/Service/managesservice');
+					redirect(base_url().'backend/Service/manageService');
 				}
 			}
 			else
 			{
-				$data['error_msg'] = 'User not found.';
+				$data['error_msg'] = 'Record not found.';
 			}
 		}
 		else
 		{
-			$this->session->set_flashdata('error','User not found.');
-			redirect(base_url().'backend/Service/managesservice');
+			$this->session->set_flashdata('error','Record not found.');
+			redirect(base_url().'backend/Service/manageService');
 		}
 	}
 
@@ -700,13 +735,22 @@ class Service extends CI_Controller {
 		$data['title']='Manage Sub Category';
 		
 		$id = base64_decode($this->uri->segment(4));
+		if($this->session->userdata("pagination_rows") != '')
+		{
+			$per_page = $this->session->userdata("pagination_rows");
+		}
+		else {
+			$per_page='10';
+		}
 		
 		$data['servicecnt']=$this->Service_model->getAllAddonService(0,"","",$id);
 		
 		$config = array();
-		$config["base_url"] = base_url().'backend/Service/manageAddonServices/';
-		$config['per_page'] = 10;
-		$config["uri_segment"] = 4;
+		$config["base_url"] = base_url().'backend/Service/manageAddonServices/'.$per_page;;
+		// $config['per_page'] = 10;
+		// $config["uri_segment"] = 4;
+		$config['per_page'] = $per_page;
+		$config["uri_segment"] = 5;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
 		$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
@@ -733,6 +777,7 @@ class Service extends CI_Controller {
 		//echo "Conttpage--".$page;
 		//exit();
 		$data['serviceList']=$this->Service_model->getAllAddonService(1,$config["per_page"],$page,$id);
+		// print_r($data['serviceList']);
 		//echo $this->db->last_query();exit;
 		$this->load->view('admin/admin_header',$data);
 		$this->load->view('admin/manageAddonService',$data);
@@ -773,7 +818,11 @@ class Service extends CI_Controller {
 				//$daily_report=$this->input->post('daily_report');
 				$status="Active";
 				$description=$this->input->post('description');
-				
+
+				$checkservicename=$this->Service_model->checkExistServiceName(0,$parent_service_id,$Service_name);
+				// echo $this->db->last_query();exit;
+				if($checkservicename==0)
+				{
 					//Image Upload Code 
 					if(count($_FILES) > 0) 
 					{
@@ -802,7 +851,7 @@ class Service extends CI_Controller {
 					// exit();
 					
 					$Service_id = $this->Common_Model->insert_data('service',$input_data);
-					
+
 					if($Service_id>0)
 					{	
 						if($service_image!="")
@@ -861,15 +910,19 @@ class Service extends CI_Controller {
 						// 		}
 						// }
 						$this->session->set_flashdata('success','Service added successfully.');
-
 						redirect(base_url().'backend/Service/manageAddonServices/'.base64_encode($parent_service_id));
 					}
 					else
 					{
 						$this->session->set_flashdata('error','Error while adding Service.');
-
 						redirect(base_url().'backend/Service/addOnService');
-					}	
+					}
+				}
+				else
+				{
+					$this->session->set_flashdata('error','Service name already exist');
+					redirect(base_url().'backend/Service/addOnService');
+				}	
 				
 			}else{
 				$this->session->set_flashdata('success','Validation failed. Please enter valid Text.');
@@ -1066,7 +1119,7 @@ class Service extends CI_Controller {
 		}
 	}
 
-public function addmultiple_images()
+	public function addmultiple_images()
 	{
 		$data['title']='Update User';
 		$data['error_msg']='';
@@ -1135,7 +1188,7 @@ public function addmultiple_images()
 								);
 		  
 		             $serviceimage_id= $this->Service_model->insert_MultiImage_Service($input_data);
-		             echo $this->db->last_query();
+		            //  echo $this->db->last_query();
 		            }
     			}
 				if($serviceimage_id>0)
@@ -1226,6 +1279,52 @@ public function addmultiple_images()
 		}
 	}
 
+	public function getsubcategory()
+    {
+        if($this->input->post('category_id')) 
+        {
+			print_r($this->input->post('category_id'));exit;
+            $countList=$this->Service_model->getAllSubCategoryByCategory(0,$this->input->post('category_id'));
+			if($countList>0){
+				$subcategoryList=$this->Service_model->getAllSubCategoryByCategory(1,$this->input->post('category_id'));
+				$output = '<option value="">Select Sub Category</option>';
+				// echo json_encode($serviceproviders);
+				foreach($subcategoryList as $subcategory)
+				{
+					$output .= '<option value="'.$subcategory['category_id'].'">'.$subcategory['category_name'].'</option>';
+				}
+				 echo $output; 
+			}
+			else
+			{
+				echo "<option>No Subcategory Available.</option>";
+			}
+        }
+		else
+		{
+			echo "<option>No Subcategory Available.</option>";
+        }
+    }
+	
+	public function deleteOption()
+	{
+		$data['title']='Change Status';
+		$data['error_msg']='';
+		
+		$option_id=base64_decode($this->uri->segment(4));
+
+		if($option_id)
+		{
+			$input_data = array(
+								'option_type'=> 'List'
+								);
+			$userdata = $this->Common_Model->uptdate_data('service_details','option_id',$option_id,$input_data);
+			if($userdata){
+				$this->session->set_flashdata('success','Status updated successfully.');
+				redirect(base_url().'backend/Service/manageService/');
+				}
+		}
+	}
+
 
 }
-

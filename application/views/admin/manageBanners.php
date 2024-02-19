@@ -23,10 +23,10 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 					<div class="card-header">
 						<h5>BANNERS </h5>			
 						<div class="card-header-right">
-						<div class="row">
-							<div class="col-lg-12">
-								<a class="btn btn-default"  href="<?php echo base_url();?>backend/Banners/addBanner" style="float:right"><i class="fa fa-plus-circle"></i>Add Banner</a>
-							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<a class="btn btn-default"  href="<?php echo base_url();?>backend/Banners/addBanner" style="float:right"><i class="fa fa-plus-circle"></i>Add Banner</a>
+								</div>
 							</div>
 						</div>	 
 					</div>
@@ -61,31 +61,24 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 								// $pageNo ='Na';
 								$per_page='Na';
 								
-								// if($this->uri->segment(4) != 'Na') { $srchStatus = $this->uri->segment(4); } else { $srchStatus ='Na'; }
-								// if($this->uri->segment(5) != 'Na') { $srchDate = $this->uri->segment(5); }
-								// if($this->uri->segment(6) != 'Na') { $pageNo = $this->uri->segment(6); }
 								if($this->uri->segment(4) != 'Na') { $per_page = $this->uri->segment(4); }
-								// echo "srchDate-".$srchDate."<br>";
-								// echo "srchStatus-".$srchStatus."<br>";
-								// echo "pageno-".$pageNo."<br>";
-								// echo "per_page-".$per_page."<br>";
+								
 								?>
-	
 						                                   
 						    </form>
 
-							<div class="table-responsive">
-							<select class='form-control col-md-1' name='s1' id="page_id" style="margin-bottom:10px;float:left" onchange="setPagination()">
-								<option <?php if($this->session->userdata("pagination_rows") == '10') { ?> selected <?php } ?>  value='10'>10</option>
-								<option <?php if($this->session->userdata("pagination_rows") == '20') { ?> selected <?php } ?> value='20'>20</option>
-								<option <?php if($this->session->userdata("pagination_rows") == '50') { ?> selected <?php } ?> value='50'>50</option>
-								<option <?php if($this->session->userdata("pagination_rows") == '100') { ?> selected <?php } ?> value='100'>100</option>
-								<option <?php if($this->session->userdata("pagination_rows") == '2') { ?> selected <?php } ?> value='2'>2</option>
-							</select>	
-
 						<div class="table-responsive">
-							<div id="basicScenario" class="product-physical"></div>
-							<?php if($bannercnt > 0)	{ ?>
+								<select class='form-control col-md-1' name='s1' id="page_id" style="margin-bottom:10px;float:left" onchange="setPagination()">
+									<option <?php if($this->session->userdata("pagination_rows") == '10') { ?> selected <?php } ?>  value='10'>10</option>
+									<option <?php if($this->session->userdata("pagination_rows") == '20') { ?> selected <?php } ?> value='20'>20</option>
+									<option <?php if($this->session->userdata("pagination_rows") == '50') { ?> selected <?php } ?> value='50'>50</option>
+									<option <?php if($this->session->userdata("pagination_rows") == '100') { ?> selected <?php } ?> value='100'>100</option>
+									<!-- <option <?php if($this->session->userdata("pagination_rows") == '2') { ?> selected <?php } ?> value='2'>2</option> -->
+								</select>	
+
+							<div class="table-responsive">
+								<div id="basicScenario" class="product-physical"></div>
+								<?php if($bannercnt > 0)	{ ?>
 								<table class="table table-bordered table-striped mb-0" id="datatable-default">
 									<thead>
 										<tr>
@@ -116,10 +109,10 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<td> <img src="<?php echo base_url();?>template/admin/assets/images/lookbook.jpg" alt="No image Found"style="width:80px;height:80px" /></td>
 												<?php } ?>
 												<td><?php echo $banner['banner_type'];?></td>
-												<td><?php echo $banner['banner_status'];?></td>
+												<td style="color:<?php if($banner['banner_status']=='Active'){ echo '#058f05';}else { echo 'red';}?>"><?php echo $banner['banner_status'];?></td>
 												<td>
 													<?php if($banner['banner_status']!='Active') { ?>
-														<a href="<?php echo base_url();?>backend/Banners/change_status/<?php echo base64_encode($banner['banner_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-success">Active</a>
+														<a href="<?php echo base_url();?>backend/Banners/change_status/<?php echo base64_encode($banner['banner_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-danger">Active</a>
 														<?php } else { ?>
 														<a href="<?php echo base_url();?>backend/Banners/change_status/<?php echo base64_encode($banner['banner_id']);?>/<?php echo base64_encode('Inactive');?>" class="btn-sm btn-danger">Inactive</a>
 													<?php } ?>
@@ -144,6 +137,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>No records  found.
 								</div>									
 								<?php }?>
+							</div>
 						</div>
 					</div>
 				</div>

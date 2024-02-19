@@ -40,6 +40,14 @@
 							<?php
 							 if(isset($orderInfo) && count($orderInfo)>0 && isset($orderInfo) && count($orderInfo)>0)									
 							{
+								// print_r($orderInfo);
+								$categoryData=$this->Booking_model->getCategoryDetails($orderInfo[0]['category_id']);
+								$main_categoryname="";
+								if($categoryData->category_parent_id!=0)
+								{
+									$category=$this->Booking_model->getCategoryDetails($categoryData->category_parent_id);
+									$main_categoryname=$category->category_name;
+								}
 							?>
                                 <div class="tab-content" id="myTabContent">
 								
@@ -47,14 +55,14 @@
                                        
                                         <div class="booking_details row">
 											<div class="col-sm-3">
-												<?php if(isset($orderInfo[0]['service_image'])) { ?>
-												<img src="<?php  echo base_url()."uploads/service_img/".$orderInfo[0]['service_image']?>" class="img-fluid">
+												<?php if(isset($orderInfo[0]['category_image'])) { ?>
+												<img src="<?php  echo base_url()."uploads/category_images/".$orderInfo[0]['category_image']?>" class="img-fluid1" width="120px">
 												<?php } else { ?>
 												<img src="<?php  echo base_url()."template/admin/assets/images/avatar.jpg";?>" width="80px">
 												<?php } ?>
 											</div>
 											<div class="col-sm-6">
-												<h4><?php  echo $orderInfo[0]['category_name'];?></h4>
+												<h4><?php if($main_categoryname!="") { echo $main_categoryname."-"; } ?><?php echo $orderInfo[0]['category_name'];?></h4>
 
 												<p><?php echo strtoupper($orderInfo[0]['booking_status']);?>
 													<?php if($orderInfo[0]['booking_status']=='ongoing') { echo "- ".strtoupper($orderInfo[0]['booking_sub_status']); } ?>
@@ -144,24 +152,24 @@
 						<?php } ?>
 							<tr><td>&nbsp;</td></tr>
 							<tr>
-							<td>
-<?php  echo $orderInfo[0]['category_name'];?>
-							</td>
+							<th><?php  //echo $orderInfo[0]['category_name'];?></th>
 							</tr>
 						<?php
 							if(isset($servicePricing) && count($servicePricing) > 0) {
+								//echo "<pre>";print_r($servicePricing);
 								foreach($servicePricing as $service) 
 								{ ?>
 								<tr>
-								<td><?php echo $service['service_name'].' </td>';
+								<td><?php echo $service['option_label'].' </td>';
 								
-								echo '<td>'.$service['option_label'].':</td><td> '.$service['option_value'].'</td>'; ?> 
+								echo '<td> '.$service['option_value'].'</td>'; ?> 
 								</tr>
 							<?php }
 							}
 							?>
 						<?php //print_r($serviceDetails);exit;
 							if(isset($serviceDetails) && count($serviceDetails) > 0) {
+								//echo "<pre>";print_r($serviceDetails);
 								foreach($serviceDetails as $service) 
 								{ 
 								if($orderInfo[0]['is_demo'] == 'Yes') {
@@ -215,7 +223,7 @@
 												  <p><strong>GST 18%</strong>
 												<?php if(isset($orderInfo[0]['gst_amount']) && $orderInfo[0]['gst_amount']!="")// echo "(Coupon Code : ".$orderInfo[0]['gst_amount'].")";?> 
 												 <span>Rs.<?php echo $orderInfo[0]['gst_amount'];?></span><br></p>
-												<p><strong><b>Paid Amount</b></strong><span><strong>Rs.<?php echo $orderInfo[0]['total_booking_amount'];?></strong></span></p>
+												<p><strong><b>Pay Amount</b></strong><span><strong>Rs.<?php echo $orderInfo[0]['total_booking_amount'];?></strong></span></p>
 											</div>
 											
 										    </div>
@@ -257,6 +265,7 @@
 											<!-- <th>Status</th> -->
 											<th>Work Photo1</th>	
 											<th>Work Photo2</th>
+											<th>Address</th>
 										</tr>
 									</thead>	
 									<tbody>			
@@ -264,26 +273,27 @@
 										$i=1;
 										foreach($workHistory as $history)
 										{
+											$address=$this->Common_Model->get_address_lat_long($history['history_lat'],$history['history_long']);
 											?>		
 										<tr>
 												<td><?php echo $i ;?></td>
 												<!-- <td><?php echo $history['history_description'];?></td> -->
 												<td><?php 
 													if($history['history_date'] == 0) echo "---"; else {
-																	
-																	$history['history_date']=new DateTime($history['history_date']);
-																							$historydate = $history['history_date']->format('d-m-Y');
+													$history['history_date']=new DateTime($history['history_date']);
+													$historydate = $history['history_date']->format('d-m-Y');
 													echo $historydate; }?></td>
 												<td><?php echo $history['history_time'];?></td>
 												<!-- <td><?php echo $history['booking_status'];?></td>												 -->
 												<td><?php if(isset($history['work_photo1']) && $history['work_photo1']!="") { ?>
-													<img src="<?php echo base_url().'/uploads/work_history/'.$history['work_photo1'];?>" style="width:80px;height:80px" />
+													<a href="<?php echo base_url().'/uploads/work_history/'.$history['work_photo1'];?>" target="_blank"><img src="<?php echo base_url().'/uploads/work_history/'.$history['work_photo1'];?>" style="width:80px;height:80px" /></a>
 													<?php } ?>
 												</td>												
-												<td><?php if(isset($history['work_photo1']) && $history['work_photo1']!="") { ?>
-													<img src="<?php echo base_url().'/uploads/work_history/'.$history['work_photo2'];?>" style="width:80px;height:80px" />
+												<td><?php if(isset($history['work_photo2']) && $history['work_photo2']!="") { ?>
+													<a href="<?php echo base_url().'/uploads/work_history/'.$history['work_photo2'];?>" target="_blank"><img src="<?php echo base_url().'/uploads/work_history/'.$history['work_photo2'];?>" style="width:80px;height:80px" /></a>
 													<?php } ?>
-												</td>												
+												</td>		
+												<td><?php echo $address;?></td>										
 											</tr>											
 											<?php $i++; }?>
 									</tbody>									
@@ -421,10 +431,12 @@
 										<div class="booking_details row">
 										
 											<div class="col-sm-12">
+											
 												<?php
 												if($orderInfo[0]['service_provider_id']>0 ){
 												$user=$this->Booking_model->getServiceproviderDetails($orderInfo[0]['service_provider_id'],1);
 												?>
+												
 													<h4>
 														<?php if(isset($user[0]['profile_pic']) && $user[0]['profile_pic']!="") { ?>
 														 <img src="<?php echo base_url()."uploads/user_profile/".$user[0]['profile_pic']?>" width="30px" height="30px" style="border-radius:100%">
@@ -432,6 +444,7 @@
 														 <img src="<?php echo base_url()?>uploads/user_profile/user.jpg" alt="" class="rounded-circle" width="32" height="32">
 													<?php } ?>
 														 <?php if(isset($user[0]['full_name'])) echo $user[0]['full_name'];?> 
+														 <a href="<?php echo base_url()?>backend/Booking/changeAssingServiceProvider/<?php echo base64_encode($orderInfo[0]['booking_id'])?>" title="Change Service Giver" style="float: right;"><i data-feather="edit"></i></a>
 													</h4> 
 													<p class="info"><i class="fa fa-envelope"></i> <?php if(isset($user[0]['email'])) echo $user[0]['email'];?> </p>
 													<p class="info"><i class="fa fa-phone"></i> <?php if(isset($user[0]['mobile'])) echo $user[0]['mobile'];?> </p>
@@ -439,7 +452,10 @@
 													$group=$this->Booking_model->getGroup($orderInfo[0]['service_group_id'],1); 
 													$groupBySP=$this->Booking_model->getGroupBySP($group[0]['group_id'],1);
 													?>
-													<h4>Group - <?php if(isset($group[0]['group_name'])) echo $group[0]['group_name'];?></h4>
+													<h4>
+													<a href="<?php echo base_url()?>backend/Booking/changeAssingServiceProvider/<?php echo base64_encode($orderInfo[0]['booking_id'])?>" title="Change Group" ><i data-feather="edit"></i></a>
+														Group - <?php if(isset($group[0]['group_name'])) echo $group[0]['group_name'];?>
+													</h4>
 													<hr>
 													<?php
 													foreach($groupBySP as $sp){
@@ -453,6 +469,7 @@
 															<img src="<?php echo base_url()?>uploads/user_profile/user.jpg" alt="" class="rounded-circle" width="32" height="32">
 														<?php } ?>
 															<?php if(isset($user->full_name)) echo $user->full_name;?> 
+
 														</h4> 
 														<p class="info"><i class="fa fa-envelope"></i> <?php if(isset($user->email)) echo $user->email;?> </p>
 														<p class="info"><i class="fa fa-phone"></i> <?php if(isset($user->mobile)) echo $user->mobile;?> </p>
@@ -479,6 +496,7 @@
                         </div>
                         <div class="row">
                         	<div class="col-sm-12">
+							
                         		<!--<a class="btn btn-primary custom-btn btn-block" target="_blank" href="<?php //echo site_url('backend/Booking/generatepdf/'.base64_encode($orderInfo[0]['booking_id']));?>">
 									View Invoice</a>-->
                         	</div>

@@ -85,27 +85,45 @@
                                         </div>
                                          </div>
 											
-                                           <div class="row">
+										<div class="row">
                                         	<div class="col-md-6">
-                                            <div class="form-group">
-                                                <label ><span>*</span> Promocode Discount</label>
-												 <input type="text" class="form-control" id="promocode_discount" name="promocode_discount"   required value="">
-												 <div id="err_promocode_discount" class="error_msg"></div>
-                                            </div>
-                                        </div>
+												<div class="form-group">
+													<label ><span>*</span> Promocode Discount</label>
+													<input type="text" class="form-control" id="promocode_discount" name="promocode_discount"   required value="">
+													<div id="err_promocode_discount" class="error_msg"></div>
+												</div>
+											</div>
                                        
-                                        		<div class="col-md-6">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label ><span>*</span> Status</label>
+													<select name="status" id="status" class="form-control  " required>
+														<option value="">Select Status</option>
+														<option value="Active">Active</option>
+														<option value="Inactive">Inactive</option>
+													</select>
+													<div id="err_status" class="error_msg"></div>
+												</div>
+											</div>
+                                    </div>
+
+									<div class="row">
+										<div class="col-md-6">
                                             <div class="form-group">
-                                                <label ><span>*</span> Status</label>
-												<select name="status" id="status" class="form-control  " required>
-													<option value="">Select Status</option>
-													<option value="Active">Active</option>
-													<option value="Inactive">Inactive</option>
+                                                <label for="banner_title" ><span>*</span> Customers</label>
+                                              	<select name="user_id" id="user_id" class="form-control" required>
+													<option value="">Select Customer</option>
+													<option value="All">All Customer</option>
+													<?php
+													foreach($userList as $user){
+													?>
+													<option value="<?php echo $user['user_id'] ?>"><?php echo $user['full_name'] ?></option>
+													<?php } ?>
 												</select>
-												 <div id="err_status" class="error_msg"></div>
+												 <div id="err_user_id" class="error_msg"></div>
                                             </div>
                                         </div>
-                                    </div>
+									</div>
 
 									<div class="pull-right">
 										<button type="submit" class="btn btn-primary" name="btn_addPromocode" id="btn_addPromocode">Add</button>

@@ -12,7 +12,7 @@ class Login extends CI_Controller {
 	public function index()
 	{
 		if(isset($_POST['btn_login']))
-		{	# print_r($_POST);exit;
+		{	#print_r($_POST);exit;
 			//echo "in index";exit()
 			$this->form_validation->set_rules('username','User Name','required');
 			$this->form_validation->set_rules('admin_password','Admin Password','required');
@@ -20,13 +20,13 @@ class Login extends CI_Controller {
 			{
 				$username=$this->input->post('username');
 				$admin_password=$this->input->post('admin_password');
-				//echo md5($this->input->post('admin_password'));exit;
+				// echo md5($this->input->post('admin_password'));exit;
 				
 				$data = array('username' => $this->input->post('username')
 								,'admin_password' => $this->input->post('admin_password'));
 				
 				$result11 = $this->Login_model->chk_login_username($data);
-				
+				// echo $this->db->last_query();exit;
 				if ($result11>0) 
 				{
 						$result1 = $this->Login_model->chk_login($data,0);
@@ -42,13 +42,13 @@ class Login extends CI_Controller {
 							{
 								
 								$session_data = array(
-															'admin_id' => $result[0]['admin_id'],
-															'admin_name' => $result[0]['admin_name'],
-															'username' => $result[0]['username'],
-															'mobile_number' => $result[0]['mobile_number'],
-															'user_type' => $result[0]['user_type'],
-															
-															'status'=>$result[0]['status']);
+										'admin_id' => $result[0]['admin_id'],
+										'admin_name' => $result[0]['admin_name'],
+										'username' => $result[0]['username'],
+										'mobile_number' => $result[0]['mobile_number'],
+										'user_type' => $result[0]['user_type'],
+										
+										'status'=>$result[0]['status']);
 								
 								$this->session->set_userdata('logged_in', $session_data);
 								redirect('backend/Dashboard/index', 'refresh');

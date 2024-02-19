@@ -32,7 +32,7 @@
                             <div class="tab-pane fade active show">
                                     <div class="row">
                                         <div class="col-sm-12">
-                                        	 <div class="form-group row">
+                                        	<div class="form-group row">
                                                 <label class="col-xl-3 col-md-4"><span>*</span> Category</label>
 												<select name="category" id="category" class="form-control  col-md-6" required onchange="showDiv(this)">
 
@@ -45,6 +45,19 @@
                                                     
 												</select>
 												<div id="err_category" class="error_msg"></div>
+                                            </div>
+
+											<div class="form-group row">
+                                                <label class="col-xl-3 col-md-4"><span>*</span> Sub Category</label>
+												<select name="subcategory" id="subcategory" class="form-control  col-md-6">
+													<option value="">Select Sub Category </option>
+													<?php 
+                                                    foreach($subcategoryList as $subcategory){
+                                                    ?>
+                                                    <option value="<?php echo $subcategory['category_id']?>"><?php echo $subcategory['category_name']?></option>
+													<?php }  ?>
+												</select>
+												<div id="err_subcategory" class="error_msg"></div>
                                             </div>
 
                                              <div class="form-group row">

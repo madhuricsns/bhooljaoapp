@@ -92,6 +92,7 @@
 									</div>	 -->
 									
 										<div class="form-group">
+                                            <span class="icon-email before-icon"></span>
 											 <input required="" name="email_address" type="text" class="form-control" placeholder="Email Address" id="email_address">
 											 <div class="err_msg" id="err_email_address" style="color:red"></div>
                                         </div>

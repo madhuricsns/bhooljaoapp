@@ -93,7 +93,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 											<th>Title</th>
 										    <th>Description</th> 
 											<th>Customer/Service Provider</th>
-											<th>Actions</th>	
+											<!-- <th>Actions</th>	 -->
 										</tr>
 									</thead>	
 									<tbody>			
@@ -107,15 +107,18 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<td><?php echo $i;?></td>
 												<td><?php echo $noti['dateadded'];?></td>
 												<td><?php echo $noti['noti_title'];?></td>
-												 <td><?php echo $noti['noti_message'];?></td> 
-												<td><?php echo $noti['full_name'];?></td>
-												<td class="actions">                     
-													<!-- <a href="<?php //echo base_url();?>backend/Material/updateMaterial/<?php //echo base64_encode($material['material_id']);?>"><i data-feather="edit"></i></a> -->
+												<td><?php echo $noti['noti_message'];?></td> 
+												<?php if($noti['noti_user_id']=='0'){ ?>
+													<td>All - <?php if($noti['noti_user_type']=='Service Provider') { echo 'Service Givers';}else { echo $noti['noti_user_type'];}?></td>
+												<?php } else { ?>
+													<td><?php echo $noti['full_name'];?></td>
+												<?php } ?>
+												<!-- <td class="actions">                     
 													<a href="<?php echo base_url();?>backend/Notifications/deletenotification/<?php echo base64_encode($noti['noti_id']);?>" onclick="javascript:return chk_isDeleteComnfirm();">
 													<i data-feather="trash-2"></i>
 													</a>
 
-											</td>				
+												</td>				 -->
 											</tr>											
 											<?php $i++; }?>
 									</tbody>									

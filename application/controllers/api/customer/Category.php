@@ -96,6 +96,12 @@ class Category extends REST_Controller {
             else
             {
 				
+				// $input_data=array(
+				// 	'option_label'=>'Select Vehicle Type',
+				// 	'option_type'=>'Vehicle'
+				// );
+				// $this->Common_Model->update_data('service_details','option_id','132',$input_data);
+				
 				$service = $this->CategoryModel->getAllServiceByCategoryId($category_id);
 
 				//  $allservice = $this->CategoryModel->getServiceDetails($service->service_id);

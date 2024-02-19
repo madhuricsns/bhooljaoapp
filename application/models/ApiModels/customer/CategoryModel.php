@@ -137,8 +137,8 @@
             $this->db->select('option_id,option_label,option_type,service_id');
             $this->db->from(TBLPREFIX.'service_details');
             $this->db->where('service_id',$service_id);
-            // $this->db->where('option_type!=','Information');
-            // $this->db->where('option_type!=','Vehicle');
+            $this->db->where('option_type!=','Information');
+            $this->db->where('option_type!=','Vehicle');
             $this->db->group_by('option_label');
             $this->db->order_by('option_id','asc');
             $query = $this->db->get();
@@ -225,6 +225,7 @@
             $this->db->select('*');
             $this->db->from(TBLPREFIX.'service');
             $this->db->where('service_status','Active');
+            $this->db->where('service_id!=','0');
             $this->db->where('parent_service_id',$service_id);
             $query = $this->db->get();
 			$result= $query->result_array();

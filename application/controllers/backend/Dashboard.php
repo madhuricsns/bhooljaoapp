@@ -49,6 +49,46 @@ class Dashboard extends CI_Controller {
 		$this->load->view('admin/dashboard',$data);
 		$this->load->view('admin/admin_footer');
 	}
+
+	public function income()
+	{
+		$data['title']='Dashboard';
+		$todays=date('Y-m-d');
+		if(isset($_GET['filter']))
+		{
+			$filter = $_GET['filter'];
+		}
+		else
+		{
+			$filter = 'Today';
+		}
+
+		if($_GET['report_type']=='AllIncome')
+		{
+			$data['income_data']=$booking=$this->Dashboard_model->getAllBookingIncomeHistory($filter);
+			$data['total']=$this->Dashboard_model->getAllBookingIncome($filter);
+		}
+		else if($_GET['report_type']=='Paid')
+		{
+			$data['income_data']=$booking=$this->Dashboard_model->getAllBookingPaidHistory($filter);
+			$data['total']=$this->Dashboard_model->getAllBookingPaid($filter);
+		}
+		else if($_GET['report_type']=='UnPaid')
+		{
+			$data['income_data']=$booking=$this->Dashboard_model->getAllBookingPaidHistory($filter);
+		}
+		
+		// echo "<pre>";
+		// print_r($booking);
+		// echo "</pre>";
+		// echo $this->db->last_query();exit;
+		// $data['Paid']=$this->Dashboard_model->getAllBookingPaid($filter);
+		// $data['UnPaid']=$data['AllIncome'] - $data['Paid'];
+		
+		$this->load->view('admin/admin_header',$data);
+		$this->load->view('admin/incomeList',$data);
+		$this->load->view('admin/admin_footer');
+	}
 	
 	public function getIncomeFilters()
 	{

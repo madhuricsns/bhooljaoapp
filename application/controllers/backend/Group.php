@@ -21,25 +21,12 @@ class Group extends CI_Controller {
 	public function manageGroup()
 	{
 		$data['title']='Manage Group';
-		$per_page='10';
 		
-		if($this->uri->segment(4)!='')
+		if($this->session->userdata("pagination_rows") != '')
 		{
-			if($this->uri->segment(4)!="Na")
-			{
-				$pageNo=($this->uri->segment(4));
-			}
+			$per_page = $this->session->userdata("pagination_rows");
 		}
-
-		if($this->uri->segment(5)!='')
-		{
-			if($this->uri->segment(5)!="Na")
-			{
-				$per_page=($this->uri->segment(5));
-			}
-		}
-		else
-		{
+		else {
 			$per_page='10';
 		}
 		
@@ -47,16 +34,9 @@ class Group extends CI_Controller {
 		
 		$config = array();
 		$config["base_url"] = base_url().'backend/Group/manageGroup/'.$per_page;
-		// $config['per_page'] = 10;
-		if($per_page>100)
-		{
-			$config['per_page'] = 100;
-		}
-		else
-		{
-			$config['per_page'] = $per_page;
-		}
-		$config["uri_segment"] = 4;
+		$config['per_page'] = $per_page;
+		
+		$config["uri_segment"] = 5;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
 		$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
@@ -76,7 +56,9 @@ class Group extends CI_Controller {
 		#echo "<pre>"; print_r($config); exit;
 		$this->pagination->initialize($config);
 				
-		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		// $page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+		
 		$data["total_rows"] = $config["total_rows"]; 
 		$data["links"] = $this->pagination->create_links();
 		//echo "ConttPerPage--".$config["per_page"];
@@ -100,11 +82,13 @@ class Group extends CI_Controller {
 			$this->form_validation->set_rules('group_name','Group Name','required');
 			$this->form_validation->set_rules('category_id', 'Category Id', 'required');
 			$this->form_validation->set_rules('status','Group Status','required');
+			// $this->form_validation->set_rules('sp_ids','Service Giver','required');
 			if($this->form_validation->run())
 			{
 				$category_id=$this->input->post('category_id');
 				$group_name=$this->input->post('group_name');
 				$status=$this->input->post('status');
+				$sp_ids=$this->input->post('sp_ids');
 						
 				$categoryName=$this->Group_model->chkGroupCategory($category_id,0);
 
@@ -121,6 +105,24 @@ class Group extends CI_Controller {
 					
 					if($group_id)
 					{	
+						if(!empty($sp_ids))
+						{
+							$this->db->where('group_parent_id',$group_id);
+							$this->db->delete('bhool_service_group');
+							foreach($sp_ids as $sp_id){
+								if($sp_id!="")
+								{
+									$input_data = array(
+										'group_parent_id'=>$group_id,
+										'service_provider_id'=>$sp_id,
+										'group_status'=>'Active',
+										'dateadded' => date('Y-m-d H:i:s')
+										);
+
+									$insertgroup_id = $this->Common_Model->insert_data('service_group',$input_data);
+								}
+							}
+						}
 						$this->session->set_flashdata('success','Group added successfully.');
 						redirect(base_url().'backend/Group/manageGroup');	
 					}
@@ -137,7 +139,7 @@ class Group extends CI_Controller {
 				// }
 
 			}else{
-				$this->session->set_flashdata('error','Validation failed.');
+				$this->session->set_flashdata('error',$this->form_validation->error_string());
 				redirect(base_url().'backend/Group/addGroup');
 			}
 		}

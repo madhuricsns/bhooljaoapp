@@ -33,7 +33,7 @@
                                         <div class="col-sm-12">
 											<div class="form-group row">
                                                 <label class="col-xl-3 col-md-4"><span>*</span> Category</label>
-												<select name="category" id="category" class="form-control  col-md-6" required onchange="showDiv(this)">
+												<select name="category" id="category" class="form-control  col-md-6" required >
 													<option value="">Select Category </option>
 													<?php
                                                     foreach($categoryList as $category){
@@ -46,15 +46,15 @@
 
 											<div class="form-group row">
                                                 <label class="col-xl-3 col-md-4"><span>*</span> Sub Category</label>
-												<select name="subcategory" id="subcategory" class="form-control  col-md-6"  onchange="showDiv(this)">
+												<select name="subcategory" id="subcategory" class="form-control  col-md-6">
 													<option value="">Select Sub Category </option>
-													<?php
+													<?php 
                                                     foreach($subcategoryList as $subcategory){
                                                     ?>
                                                     <option value="<?php echo $subcategory['category_id']?>"><?php echo $subcategory['category_name']?></option>
-													<?php } ?>
+													<?php }  ?>
 												</select>
-												<div id="err_category" class="error_msg"></div>
+												<div id="err_subcategory" class="error_msg"></div>
                                             </div>
 
 											<div class="form-group row">
@@ -151,16 +151,14 @@
 												</table>
 											</div>
 
-											<div class="form-group row" id="show-div">
+											<!-- <div class="form-group row" id="show-div">
 												<label class="col-xl-3 col-md-4"><span>*</span> Add More Options</label>
                                                 
 												<table class="table1 col-md-8" id="myTable" style="width:100%;max-width: 100%;border-collapse: collapse;    display: table;">
 												
 													<tbody id="tbody">
 														<tr>
-															<!-- <td> <input type="text" class="form-control service_type" id="service_type" name="service_typeArr[]" placeholder="Enter Service Type"  >
-																<div id="err_service_type" class="error_msg err_service_type"></div>
-															</td> -->
+															
 															<td> <input type="text" class="form-control option_label" id="option_label" name="option_label[]" placeholder="Enter Label Name"  >
 																<div id="err_option_label" class="error_msg err_option_label"></div>
 															</td>
@@ -172,12 +170,9 @@
 																</select>
 																<div id="err_option_type" class="error_msg err_option_type"></div>
 															</td>
-															<td  class="text-center"> <!--<button class="btn btn-md btn-success addLabel1" id="addLabel1" type="button" onclick="insert_Row()">
-															 <i class="fa fa-plus"></i> Add Label
-															</button>--> </td>
+															<td  class="text-center">  </td>
 														</tr>
 														<tr>
-															<!-- <td  class="row-index text-center"></td> -->
 															<td> <input type="text" class="form-control optionsArr" id="optionsArr" name="optionsArr_0[]" placeholder="Enter Option"  >
 																<div id="err_optionsArr" class="error_msg err_optionsArr"></div>
 															</td>
@@ -191,7 +186,7 @@
 													</tbody>
 													
 												</table>
-											</div>
+											</div> -->
 
 											<div class="form-group row" id="show-div">
 												<label class="col-xl-3 col-md-4"><span>*</span> Why Choose Us</label>
@@ -287,7 +282,7 @@
 	<!-- Container-fluid Ends-->
 </div>
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 function showDiv(select){
 	//alert("Hi");
    if(select.value=="Yes"){
@@ -296,4 +291,4 @@ function showDiv(select){
    	document.getElementById('daily_report').disabled  = false;
    }
 } 
-</script>
+</script> -->

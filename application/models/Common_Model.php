@@ -64,7 +64,7 @@
                     
                     $config = array(
                             'upload_path' => $target_dir,
-                            'allowed_types' => "jpg|png|jpeg|pdf",
+                            'allowed_types' => "jpg|png|jpeg|pdf|GIF|PSD|TIFF|INDD|RAW",
                             'max_size' => "0", 
                             'file_name' =>$new_doc_name
                             );
@@ -154,6 +154,7 @@
 		### FUNCTION TO SEND SMS 
 		public function SendSms($strMessage = "", $strMobile= "")
 		{
+			// return "";
 			$strSenderName = "PANANS";
 			$strMobile = $strMobile;
 
@@ -163,8 +164,8 @@
 			//PE ID - 
 			$peid='1201170317327391541';
 
-			// $strUrl="http://sms.messageindia.in/v2/sendSMS?username=cyborgapi&message=$strMessage&sendername=MIRICR&smstype=TRANS&numbers=$strMobile&apikey=949776f6-b95e-4d74-944b-03d5bfc051da&peid=1201161527747662237&templateid=1207161760669839695";
-			$strUrl="http://sms.messageindia.in/v2/sendSMS?username=pananapi&message=$strMessage&sendername=$strSenderName&smstype=TRANS&numbers=$strMobile&apikey=eeb6ad00-6d9e-4c52-8107-094a0308cff5&peid=$peid&templateid=$templateid";
+			// $strUrl="http://sms.messageindia.in/v2/sendSMS?username=pananapi&message=$strMessage&sendername=$strSenderName&smstype=TRANS&numbers=$strMobile&apikey=eeb6ad00-6d9e-4c52-8107-094a0308cff5&peid=$peid&templateid=$templateid";
+			$strUrl="http://sms.messageindia.in/v2/sendSMS?username=pananapi&message=$strMessage&sendername=$strSenderName&smstype=TRANS&numbers=$strMobile&apikey=0ca859ee-2e6d-45fa-8be3-3278f58b9650&peid=$peid&templateid=$templateid";
 			
 			$curl 		 = curl_init() or die("Error"); 	
 			//echo $strUrl;exit;	
@@ -174,20 +175,14 @@
 			$output = curl_exec($curl); 
 			$info = curl_getinfo($curl);		
 			$result=curl_close($curl);
-			//print_r($curl);
-			//exit;
-			//echo $strUrl;
-			//return $result;
-			//echo "<pre> $strUrl ";
-			//var_dump($output); //exit;
+			// return false;
+			
 		}
 
 		### FUNCTION TO SEND SMS WITH EMAIL
 		function SendMail($userEmail,$strMessage,$subject)
 		{
-			// echo $userEmail;
-			// $strSubjectMessage='checking mail';
-			// $strMessage='this is testing mail';
+			// return "";
 			$strSubjectMessage=$subject;
 			$strMessage=$strMessage;
 		
@@ -205,31 +200,28 @@
 				$email->setSubject($strSubjectMessage);
 			  }
 			   $personalization1->addTo(new SendGrid\Mail\To(trim($userEmail)));
-			  //$email->addTo($userEmail);
-			  //$email->addContent("text/plain", "and easy to do anywhere, even with PHP");
+			 
 			   $message ="<html><body><h4>".$strMessage."</h4></body></html>"; 
-			   
-			//   $message="<html><body></body></html>";
-			 
-			 
-			 
+			
 			   //$ci->load->view('emails/'.$output_arr1['view_load'],$input_arr1,true);
 			   $email->addContent(
 					"text/html", $message
 				  );
 				  $email->addPersonalization($personalization1);
 			//   $sendgrid = new \SendGrid('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');
-			  $sendgrid = new \SendGrid('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');
+			//   $sendgrid = new \SendGrid('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');
+			  $sendgrid = new \SendGrid('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');
+			  
 			  
 			  try {
 				  $response = $sendgrid->send($email);
-				//   print_r($response);
-				  //print $response->statusCode() . "\n";
-				  //print_r($response->headers());
-				  //print $response->body() . "\n";
+				  return false;
+				
 			  } catch (Exception $e) {
 				  echo 'Caught exception: '. $e->getMessage() ."\n";
 			  }
+
+			  
 		}
 		function sendexponotification($strTitle, $strMessage, $arrGcmID)
 		{
@@ -371,6 +363,7 @@
 			  	$this->db->update(TBLPREFIX.$tablename,$data); 
 		  	}
 		} 
+
 		function get_lat_long($address)
 		{
 			$arrReturn = array();
@@ -386,6 +379,14 @@
 
 				$lat = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
 				$long = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
+				// if(!isset($lat))
+				// {
+				// 	$lat="";
+				// }
+				// if(!isset($long))
+				// {
+				// 	$long="";
+				// }
 				$city = "";
 				$state = "";
 				$country = "";
@@ -406,7 +407,6 @@
 				
 				//$zipcode = $json->{'results'}[0]->{'address_components'}[6]->{'long_name'};
 				
-				
 				$arrReturn['latitude'] = $lat;
 				$arrReturn['longitude'] = $long;
 				$arrReturn['city'] = $city;
@@ -416,6 +416,36 @@
 				//return $lat.','.$long;	
 			}
 			return $arrReturn;
+		}
+
+		function get_address_lat_long($lat,$long)
+		{
+			$formatted_address = "";
+			if($lat!="" && $long!="")
+			{
+				// Google Maps API Key 
+				$GOOGLE_API_KEY = 'AIzaSyB0-m0BRbw8AtbMAawt7YPC4hFKmAO2hBI'; 
+				
+				// Latitude & Longitude from which the address will be retrieved 
+				// $latitude = '20.0259535'; 
+				// $longitude = '73.8369211'; 
+
+				$latitude = $lat; 
+				$longitude = $long; 
+				
+				// Formatted latitude & longitude string 
+				$formatted_latlng = trim($latitude).','.trim($longitude); 
+				
+				// Get geo data from Google Maps API by lat lng 
+				$geocodeFromLatLng = file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?latlng={$formatted_latlng}&key={$GOOGLE_API_KEY}"); 
+				
+				// Decode JSON data returned by API 
+				$apiResponse = json_decode($geocodeFromLatLng); 
+				
+				// Retrieve address from API data 
+				$formatted_address = $apiResponse->results[0]->formatted_address; 
+			}
+			return $formatted_address;
 		}
 
 		public function adminSetting($res)
@@ -465,13 +495,17 @@
 			{
 				$body = $this->load->view('emailtemplate/bookingplaced',$data,true);
 			}
+			else if($mailtype=='BookingDateAssigned')
+			{
+				$body = $this->load->view('emailtemplate/bookingDateAssigned',$data,true);
+			}
 			else if($mailtype=='BookingCancel')
 			{
 				$body = $this->load->view('emailtemplate/bookingCanceled',$data,true);
 			}
 			else if($mailtype=='Payment')
 			{
-				$body = $this->load->view('emailtemplate/payment',$data,true);
+				$body = $this->load->view('emailtemplate/paymentSuccess',$data,true);
 			}
 			
 			return $body;

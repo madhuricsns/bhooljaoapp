@@ -21,25 +21,11 @@ class Category extends CI_Controller {
 	public function manageCategory()
 	{
 		$data['title']='Manage Category';
-		$per_page='10';
-		
-		if($this->uri->segment(4)!='')
+		if($this->session->userdata("pagination_rows") != '')
 		{
-			if($this->uri->segment(4)!="Na")
-			{
-				$pageNo=($this->uri->segment(4));
-			}
+			$per_page = $this->session->userdata("pagination_rows");
 		}
-
-		if($this->uri->segment(5)!='')
-		{
-			if($this->uri->segment(5)!="Na")
-			{
-				$per_page=($this->uri->segment(5));
-			}
-		}
-		else
-		{
+		else {
 			$per_page='10';
 		}
 		
@@ -48,18 +34,9 @@ class Category extends CI_Controller {
 		
 		$config = array();
 		$config["base_url"] = base_url().'backend/Category/manageCategory/'.$per_page;
-		// $config['per_page'] = 10;
-		if($per_page>100)
-		{
-			$config['per_page'] = 100;
-		}
-		else
-		{
-			$config['per_page'] = $per_page;
-		}
+		$config['per_page'] = $per_page;
 		
-		
-		$config["uri_segment"] = 4;
+		$config["uri_segment"] = 5;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
 		$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
@@ -79,7 +56,15 @@ class Category extends CI_Controller {
 		#echo "<pre>"; print_r($config); exit;
 		$this->pagination->initialize($config);
 				
-		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		/*if(HOSTPAGINATE == 'local')
+		{
+			$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+		}
+		else
+		{*/
+			$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+		//}
+		
 		$data["total_rows"] = $config["total_rows"]; 
 		$data["links"] = $this->pagination->create_links();
 		//echo "ConttPerPage--".$config["per_page"];

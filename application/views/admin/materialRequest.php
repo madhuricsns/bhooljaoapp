@@ -79,7 +79,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<td><?php echo $material['request_status'];?></td>
 												<td>
 													<?php if($material['request_status']=='Waiting') { ?>
-														<a href="<?php echo base_url();?>backend/Material/updateStatus/<?php echo base64_encode($material['request_id']);?>/<?php echo base64_encode('Accepted');?>/<?php echo base64_encode($material_id);?>" class="btn-sm btn-success">Accept</a>
+														<a href="<?php echo base_url();?>backend/Material/updateStatus/<?php echo base64_encode($material['request_id']);?>/<?php echo base64_encode('Approved');?>/<?php echo base64_encode($material_id);?>" class="btn-sm btn-success">Approve</a>
 														<?php //} else { ?>
 														<a href="<?php echo base_url();?>backend/Material/updateStatus/<?php echo base64_encode($material['request_id']);?>/<?php echo base64_encode('Rejected');?>/<?php echo base64_encode($material_id);?>" class="btn-sm" style="background-color: #f41818;color:white">Reject</a>
 													<?php } ?>

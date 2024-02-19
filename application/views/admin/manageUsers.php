@@ -52,38 +52,18 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 						</div>
 						<?php }?>	
 
-
-<form method="POST" action="<?php echo base_url().'backend/Users/manageUsers/'; ?><?php if($this->uri->segment(4)!=""){ echo $this->uri->segment(4);}?>/
-								<?php //if($this->uri->segment(5)!=""){ echo $this->uri->segment(5);}?>/
-								<?php //if($this->uri->segment(6)!=""){ echo $this->uri->segment(6);}?>/
-								<?php //if($this->uri->segment(7)!=""){ echo $this->uri->segment(7);}?>/">
-								<?php 
-								// $srchDate ='Na';
-								// $srchStatus ='Na';
-								// $pageNo ='Na';
-								$per_page='Na';
-								
-								// if($this->uri->segment(4) != 'Na') { $srchStatus = $this->uri->segment(4); } else { $srchStatus ='Na'; }
-								// if($this->uri->segment(5) != 'Na') { $srchDate = $this->uri->segment(5); }
-								// if($this->uri->segment(6) != 'Na') { $pageNo = $this->uri->segment(6); }
-								if($this->uri->segment(4) != 'Na') { $per_page = $this->uri->segment(4); }
-								// echo "srchDate-".$srchDate."<br>";
-								// echo "srchStatus-".$srchStatus."<br>";
-								// echo "pageno-".$pageNo."<br>";
-								// echo "per_page-".$per_page."<br>";
-								?>
-						 		 
-
-						                                   
-						    </form>
+						<form class="form-inline search-form">
+							<div class="form-group">
+								<input class="form-control" type="text" id="customerfull_name" name="search_name" onkeydown="getCustomerByName(this)" placeholder="Search by name..">
+							</div>
+						</form><hr>
 
 							<div class="table-responsive">
-							<select class='form-control col-md-1' name='s1' id="page_id" style="margin-bottom:10px;float:left">
-								<option value='<?php echo base_url();?>backend/Users/manageUsers/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/10' <?php if($per_page=='10'){ echo 'selected';}?>>10</option>
-								<option value='<?php echo base_url();?>backend/Users/manageUsers/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/20' <?php if($per_page=='20'){ echo 'selected';}?>>20</option>
-								<option value='<?php echo base_url();?>backend/Users/manageUsers/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/50' <?php if($per_page=='50'){ echo 'selected';}?>>50</option>
-								<option value='<?php echo base_url();?>backend/Users/manageUsers/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/100' <?php if($per_page=='100'){ echo 'selected';}?>>100</option>
-								
+							<select class='form-control col-md-1' name='s1' id="page_id" style="margin-bottom:10px;float:left" onchange="setPagination()">
+								<option <?php if($this->session->userdata("pagination_rows") == '10') { ?> selected <?php } ?>  value='10'>10</option>
+								<option <?php if($this->session->userdata("pagination_rows") == '20') { ?> selected <?php } ?> value='20'>20</option>
+								<option <?php if($this->session->userdata("pagination_rows") == '50') { ?> selected <?php } ?> value='50'>50</option>
+								<option <?php if($this->session->userdata("pagination_rows") == '100') { ?> selected <?php } ?> value='100'>100</option>
 							</select>
 
 
@@ -104,7 +84,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 											<th>Actions</th>	
 										</tr>
 									</thead>	
-									<tbody>			
+									<tbody id="user_tbody">			
 										<?php $i=1;
 										foreach($users as $user)
 										{
@@ -123,10 +103,11 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<td><?php echo $user['email'];?></td>
 												<td><?php echo $user['mobile'];?></td>
 												<td><?php echo $user['address'];?></td>
-												<td><?php echo $user['status'];?></td>
+												<td style="color:<?php if($user['status']=='Active'){ echo '#058f05';}else if($user['status']=='Inactive'){ echo 'red';}else if($user['status']=='Delete'){ echo 'red';}?>">
+													<?php echo $user['status'];?></td>
 												<td>
 													<?php if($user['status']!='Active') { ?>
-														<a href="<?php echo base_url();?>backend/Users/change_status/<?php echo base64_encode($user['user_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-success">Active</a>
+														<a href="<?php echo base_url();?>backend/Users/change_status/<?php echo base64_encode($user['user_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-danger">Active</a>
 														<?php } else { ?>
 														<a href="<?php echo base_url();?>backend/Users/change_status/<?php echo base64_encode($user['user_id']);?>/<?php echo base64_encode('Inactive');?>" class="btn-sm btn-danger">Inactive</a>
 													<?php } ?>

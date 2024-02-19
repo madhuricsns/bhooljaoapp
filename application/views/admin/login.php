@@ -87,10 +87,12 @@
 									<?php }?>		
                                     <input type="hidden" name="user_type" id="user_type" value="Admin" />
                                     <div class="form-group">
+                                        <span class="icon-user before-icon"></span>
 										<input required="" name="username" type="text" class="form-control" placeholder="Username / Email" id="username">
 										<span id="err_username" style="color:red"></span>
                                     </div>
                                         <div class="form-group">
+                                            <span class="icon-lock before-icon"></span>
                                             <input required="" name="admin_password"  id="admin_password" type="password" class="form-control" placeholder="Password">
 											<span id="err_admin_password" style="color:red"></span>
                                         </div>

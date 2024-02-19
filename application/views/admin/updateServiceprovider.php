@@ -41,7 +41,7 @@
                                         </div>
                                       
                                             <div class="form-group col-md-4">
-                                                <label for="banner_image"><span>*</span> Profile</label>
+                                                <label for="banner_image"><span>*</span> Profile Photo</label>
                                                 <input class="form-control" id="servicefile1" type="file"  name="servicefile" />
                                                 <div class="err_msg" id="err_banner_image"></div>
                                                 <!-- <span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span> -->
@@ -49,14 +49,14 @@
 
 											<div class="col-md-2">
                                                 <?php 
-                                                   if($userInfo[0]['profile_pic']!="")
+                                                // print_r($userInfo);
+                                                if($userInfo[0]['profile_pic']!="")
 												{
-	
 												$str_images='<img src="'.base_url().'uploads/user_profile/'.$userInfo[0]['profile_pic'].'" style="width:60px;height:60px">';
 												}
 												else
 												{
-												$str_images='<img src="'.base_url().'uploads/service_provider/default.png" style="width:50px;height:50px">';
+												$str_images='<img src="'.base_url().'uploads/user_profile/default.png" style="width:50px;height:50px">';
 												}
 												?>
                                                 <?php echo $str_images;?> 
@@ -88,7 +88,7 @@
                                         <div class="col-md-6">
                                            	 <div class="form-group">
                                                 <label for="mobile_number"><span>*</span>Mobile Number</label>
-                                                <input type="text" class="form-control" id="mobile_number" name="mobile_number"  required value="<?php echo $userInfo[0]['mobile'];?>">
+                                                <input type="text" class="form-control" id="mobile_number" name="mobile_number" maxlength="10" required value="<?php echo $userInfo[0]['mobile'];?>">
 												 <div id="err_mobile_number" class="error_msg"></div>
                                             </div>
                                         </div>
@@ -161,6 +161,46 @@
 
                                      <div class="row">
 
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label><span>*</span> What we do</label>
+                                                    
+                                                    <table class="table1 col-md-6 " style="width:100%;max-width: 100%;border-collapse: collapse;    display: table;">
+                                                    
+                                                        <tbody id="tbodywhatwedo">
+                                                            <?php if(!empty($whatwedoList)) { ?>
+                                                            <tr>
+                                                                 <td> <!--<input type="text" class="form-control whatwedoArr" id="labelArr" name="whatwedoArr[]" placeholder="Enter What we do"  >
+                                                                    <div id="err_whatwedoArr" class="error_msg err_whatwedoArr"></div> -->
+                                                                </td>
+                                                                <td  class="text-center"><button class="btn btn-md btn-success" id="addwhatwedoRow" type="button">
+                                                                <i class="fa fa-plus"></i>
+                                                                </button></td>
+                                                            </tr>
+                                                            <?php foreach($whatwedoList as $what){ ?>
+                                                                <tr>
+                                                                    <td> <input type="text" class="form-control whatwedoArr" id="labelArr" name="whatwedoArr[]" placeholder="Enter What we do" value="<?php echo $what['description']?>" >
+                                                                        <div id="err_whatwedoArr" class="error_msg err_whatwedoArr"></div>
+                                                                    </td>
+                                                                    <td  class="text-center"> <button class="btn btn-danger WhatwedoremoveRow" type="button"><i class="fa fa-remove"></i></button></td>
+                                                                </tr>
+
+                                                            <?php } } else { ?>
+                                                                <tr>
+                                                                    <td> <input type="text" class="form-control whatwedoArr" id="labelArr" name="whatwedoArr[]" placeholder="Enter What we do"  >
+                                                                        <div id="err_whatwedoArr" class="error_msg err_whatwedoArr"></div>
+                                                                    </td>
+                                                                    <td  class="text-center"><button class="btn btn-md btn-success" id="addwhatwedoRow" type="button">
+                                                                    <i class="fa fa-plus"></i>
+                                                                    </button></td>
+                                                                </tr>
+                                                            <?php } ?>
+                                                        </tbody>
+                                                        
+                                                    </table>
+                                                </div>
+                                            </div>
+
                                            <div class="col-md-6">
                                             <div class="form-group">
                                                 <label ><span></span>Status</label>
@@ -171,6 +211,10 @@
 												</select>
                                             </div>
                                         </div>
+
+                                        
+
+
                                     </div>
 
                                             <!-- <div class="form-group"> -->

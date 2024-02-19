@@ -472,6 +472,44 @@ $('#addVehicleRow').on('click', function () {
         vehiclerowIdx--;
     });
 
+
+
+/************************************************ */  
+
+var whatwedorowIdx = 1;
+  // Add Why CHoose Us row
+$('#addwhatwedoRow').on('click', function () {
+    // alert();
+  // Adding a row inside the tbody.
+  $('#tbodywhatwedo').append(`<tr id="L${++whatwedorowIdx}">
+         <td>
+          <input type="text" class="form-control whatwedoArr" id="whatwedoArr" name="whatwedoArr[]" placeholder="Enter What we do" required >
+          <div id="err_whatwedoArr" class="error_msg err_whatwedoArr"></div>
+          </td>
+          <td class="text-center">
+          <button class="btn btn-danger WhatwedoremoveRow" 
+              type="button"><i class="fa fa-remove"></i></button>
+          </td>
+          </tr>`);
+  });
+
+// Remove Why CHoose Us row
+    $('#tbodywhatwedo').on('click', '.WhatwedoremoveRow', function () {
+    var child = $(this).closest('tr').nextAll();
+    child.each(function () {
+        var id = $(this).attr('id');
+        var idx = $(this).children('.row-index').children('p');
+        var dig = parseInt(id.substring(1));
+        idx.html(`${dig - 1}`);
+        $(this).attr('id', `L${dig - 1}`);
+    });
+        // Removing the current row.
+        $(this).closest('tr').remove();
+        whatwedorowIdx--;
+    });
+
+/************************************************ */
+
 $(document).ready(function(){
 	$("#serviceproviderDiv").hide();
     $("#customerDiv").hide();
@@ -484,16 +522,28 @@ $(document).ready(function(){
         {
             $("#serviceproviderDiv").show();
             $("#customerDiv").hide();
+            $("#user_ids_sp").attr('required', '');  
+            $("#user_ids_cust").removeAttr('required');  
+            $("#err_sp").html('Select Service Giver');  
+            $("#err_user").html('');  
         }
         else if(select_type=="Customer") 
         {
             $("#serviceproviderDiv").hide();
             $("#customerDiv").show();
+            $("#user_ids_cust").attr('required', ''); 
+            $("#user_ids_sp").removeAttr('required'); 
+            $("#err_user").html('Select Customer'); 
+            $("#err_sp").html(''); 
         }
         else if(select_type=="") 
         {
             $("#serviceproviderDiv").hide();
             $("#customerDiv").hide();
+            $("#user_ids_cust").removeAttr('required'); 
+            $("#user_ids_sp").removeAttr('required'); 
+            $("#err_sp").html('');  
+            $("#err_user").html('');  
         }
         
     }); 
@@ -526,11 +576,10 @@ $(document).ready(function(){
     }); 
 
     $("#category_id").change(function () { 
-                
        var category_id= $('select[name=category_id]').val();
        if(category_id!="")
        {
-    //    alert(category_id);  
+         //    alert(category_id);  
             $.ajax({
                 type:"POST",
                 url:"<?php echo base_url('backend/');?>Group/getServiceprovider",
@@ -547,6 +596,28 @@ $(document).ready(function(){
             alert('Please select Category');
         }
     });
+
+    // $("#category").change(function () { 
+    //    var category_id= $('select[name=category]').val();
+    //    if(category_id!="")
+    //    {
+    //         alert(category_id);  
+    //         $.ajax({
+    //             type:"POST",
+    //             url:"<?php echo base_url('backend/');?>Service/getsubcategory",
+    //             data:{
+    //                 category_id:category_id
+    //             }              
+    //             }).done(function(message){
+    //             alert(message);
+    //             $("#subcategory").html(message);
+    //         });
+    //     }
+    //     else
+    //     {
+    //         alert('Please select Category');
+    //     }
+    // });
 
    /* $("#page_id").change(function(){ // change function of listbox
         // alert($('#page_id').val());
@@ -775,32 +846,53 @@ function getChangeContent()
 
     }
 }
-function getProductByRest()
+function getCustomerByName()
 {
     //alert();
-    var sel_rest=document.getElementById('sel_rest').value;
-    $.ajax({
-                      type:"POST",
-                      url:"<?php echo base_url();?>backend/Banner/getProductByStore",
-                       data:{
-                               sel_rest:sel_rest,
-                               
-                             }              
-                        }).done(function(message){
-                        var res=message.split('_|_');
-                          
+    var sel_str=document.getElementById('customerfull_name').value;
+    console.log(sel_str);
+        $.ajax({
+            type:"POST",
+            url:"<?php echo base_url();?>backend/Users/searchUser",
+            data:{
+                searchName:sel_str,
+                }              
+            }).done(function(message){
+             
+                // console.log(message);
+                $('#user_tbody').empty();
+                $('#user_tbody').html(message);
+                $('#datatable-default_paginate').empty();
+        });
+}
 
-                            $('#sel_product').empty();
-                            $('#sel_product').append(message);
-      
-                       });
+function getSpByName()
+{
+    //alert();
+    var sel_str=document.getElementById('spfull_name').value;
+    // console.log(sel_str);
+        $.ajax({
+            type:"POST",
+            url:"<?php echo base_url();?>backend/Users/searchSP",
+            data:{
+                searchName:sel_str,
+                }              
+            }).done(function(message){
+             
+                // console.log(message);
+                $('#sp_tbody').empty();
+                $('#sp_tbody').html(message);
+                $('#datatable-default_paginate').empty();
+
+        });
 }
 
 
 function getIncomes()
 {
 	var filterval=$("#income_filter").val();
-	//alert(filterval);
+	// alert(filterval);
+   
       $.ajax({
             type:"POST",
             url:"<?php echo base_url('backend/');?>Dashboard/getIncomeFilters",
@@ -817,7 +909,18 @@ function getIncomes()
 				   $('#totalPaid').append(res[1]);
 				   $('#totalUnpaid').empty();
                    $('#totalUnpaid').append(res[2]);
-                    
+
+                   //
+              
+                var allincomeUrl ='Dashboard/income?report_type=AllIncome&filter='+filterval;
+                // alert(allincomeUrl);
+                var incomeurl = document.querySelector("#allincome");
+                incomeurl.href = allincomeUrl;
+
+                var allpaidurl ='Dashboard/income?report_type=Paid&filter='+filterval;
+                var paidurl = document.querySelector("#allpaid");
+                paidurl.href = allpaidurl;
+               
              });
 }
 
@@ -836,7 +939,7 @@ function setPagination()
             //alert(message);
 			//alert('<?php echo $this->router->fetch_class();?>');
 			//alert('<?php echo $this->router->fetch_method();?>');
-				window.location = '<?php echo base_url().'/backend/'.$this->router->fetch_class().'/'.$this->router->fetch_method();?>';      
+				window.location = '<?php echo base_url().'backend/'.$this->router->fetch_class().'/'.$this->router->fetch_method();?>';      
              });
 }
 </script>

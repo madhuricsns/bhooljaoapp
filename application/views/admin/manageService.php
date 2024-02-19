@@ -49,20 +49,14 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 							<?php echo $this->session->flashdata('error_msg');?>
 						</div>
-						<?php }?>										
+						<?php }?>	
+															
 						<div class="table-responsive">
-							<?php
-								$per_page='Na';
-								
-								if($this->uri->segment(4) != 'Na') { $per_page = $this->uri->segment(4); }
-
-							?>
-						<select class='form-control col-md-1' name='s1' id="page_id" style="margin-bottom:10px;float:left">
-								<option value='<?php echo base_url();?>backend/Service/manageService/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/10' <?php if($per_page=='10'){ echo 'selected';}?>>10</option>
-								<option value='<?php echo base_url();?>backend/Service/manageService/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/20' <?php if($per_page=='20'){ echo 'selected';}?>>20</option>
-								<option value='<?php echo base_url();?>backend/Service/manageService/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/50' <?php if($per_page=='50'){ echo 'selected';}?>>50</option>
-								<option value='<?php echo base_url();?>backend/Service/manageService/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/100' <?php if($per_page=='100'){ echo 'selected';}?>>100</option>
-								
+							<select class='form-control col-md-1' name='s1' id="page_id" style="margin-bottom:10px;float:left" onchange="setPagination()">
+								<option <?php if($this->session->userdata("pagination_rows") == '10') { ?> selected <?php } ?>  value='10'>10</option>
+								<option <?php if($this->session->userdata("pagination_rows") == '20') { ?> selected <?php } ?> value='20'>20</option>
+								<option <?php if($this->session->userdata("pagination_rows") == '50') { ?> selected <?php } ?> value='50'>50</option>
+								<option <?php if($this->session->userdata("pagination_rows") == '100') { ?> selected <?php } ?> value='100'>100</option>
 							</select>	
 							<div id="basicScenario" class="product-physical"></div>
 							<?php if($usercnt > 0)	{ ?>
@@ -92,12 +86,11 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<td><?php echo $service['category_name'];?></td>
 												<td><?php echo $service['service_name'];?></td>
 												<td><?php echo $service['service_description'];?></td>
-												<!--<td><?php// echo "₹".$service['min_price']."- ₹".$service['max_price'];?></td>-->
-												<td><?php echo $service['service_status'];?></td>
+												<td style="color:<?php if($service['service_status']=='Active'){ echo '#058f05';}else { echo 'red';}?>"><?php echo $service['service_status'];?></td>
 												
 												<td>
 													<?php if($service['service_status']!='Active') { ?>
-														<a href="<?php echo base_url();?>backend/Service/change_status/<?php echo base64_encode($service['service_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-success">Active</a>
+														<a href="<?php echo base_url();?>backend/Service/change_status/<?php echo base64_encode($service['service_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-danger">Active</a>
 														<?php } else { ?>
 														<a href="<?php echo base_url();?>backend/Service/change_status/<?php echo base64_encode($service['service_id']);?>/<?php echo base64_encode('Inactive');?>" class="btn-sm btn-danger">Inactive</a>
 													<?php } ?>

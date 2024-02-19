@@ -1,4 +1,4 @@
- <?php
+<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Users extends CI_Controller {
@@ -21,25 +21,12 @@ class Users extends CI_Controller {
 	{
 		$data['title']='Manage Customer';
 
-		$per_page='10';
-		$pageNo ='';
-		if($this->uri->segment(4)!='')
+		//Page limit - pagination
+		if($this->session->userdata("pagination_rows") != '')
 		{
-			if($this->uri->segment(4)!="Na")
-			{
-				$pageNo=($this->uri->segment(4));
-			}
+			$per_page = $this->session->userdata("pagination_rows");
 		}
-
-		if($this->uri->segment(5)!='')
-		{
-			if($this->uri->segment(5)!="Na")
-			{
-				$per_page=($this->uri->segment(5));
-			}
-		}
-		else
-		{
+		else {
 			$per_page='10';
 		}
 		
@@ -47,17 +34,11 @@ class Users extends CI_Controller {
 		
 		$config = array();
 		
-		$config["base_url"] = base_url().'backend/Users/manageUsers/'.$pageNo.'/'.$per_page;
+		$config["base_url"] = base_url().'backend/Users/manageUsers/'.$per_page;
 		// $config['per_page'] = 10;
-		if($per_page>100)
-		{
-			$config['per_page'] = 100;
-		}
-		else
-		{
-			$config['per_page'] = $per_page;
-		}
-		$config["uri_segment"] = 4;
+		$config['per_page'] = $per_page;
+		
+		$config["uri_segment"] = 5;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
 		$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
@@ -77,7 +58,14 @@ class Users extends CI_Controller {
 		#echo "<pre>"; print_r($config); exit;
 		$this->pagination->initialize($config);
 				
-		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		// if(HOSTPAGINATE == 'local')
+		// {
+		// 	$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		// }
+		// else
+		// {
+			$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+		// }
 		$data["total_rows"] = $config["total_rows"]; 
 		$data["links"] = $this->pagination->create_links();
 		//echo "ConttPerPage--".$config["per_page"];
@@ -346,7 +334,6 @@ class Users extends CI_Controller {
 		$this->load->view('admin/updateUser',$data);
 		$this->load->view('admin/admin_footer');
 	}
-
 	
 	public function viewUserDetails()
 	{
@@ -357,7 +344,10 @@ class Users extends CI_Controller {
 		$user_id_base64 = base64_encode($user_id);
 		$data['userinfo']=$this->User_model->getSingleUserInfo($user_id,1);
 		$data['bookingList']=$this->User_model->getAllBooking($user_id,1,"","");
-		
+		// $temp=$this->User_model->getAllBookingTemp($user_id,1,"","");
+		// print_r($temp);
+		// echo $this->db->last_query();
+
 		$this->load->view('admin/admin_header',$data);
 		$this->load->view('admin/viewUserDetails',$data);
 		$this->load->view('admin/admin_footer');
@@ -418,7 +408,7 @@ class Users extends CI_Controller {
 					'dateupdated' => date('Y-m-d H:i:s')
 				);
 
-				$deluser = $this->User_model->uptdateUser($input_data,$user_id);
+				$deluser = $this->Common_Model->update_data('users','user_id',$user_id,$input_data);
 				if($deluser > 0)
 				{
 					$this->session->set_flashdata('success','User deleted successfully.');
@@ -515,44 +505,24 @@ class Users extends CI_Controller {
 	public function manageServiceProvider()
 	{
 		$data['title']='Manage Service Givers';
-$per_page='10';
-		$pageNo ='';
-		if($this->uri->segment(4)!='')
-		{
-			if($this->uri->segment(4)!="Na")
-			{
-				$pageNo=($this->uri->segment(4));
-			}
-		}
 
-		if($this->uri->segment(5)!='')
+		// //Page limit - pagination
+		if($this->session->userdata("pagination_rows") != '')
 		{
-			if($this->uri->segment(5)!="Na")
-			{
-				$per_page=($this->uri->segment(5));
-			}
+			$per_page = $this->session->userdata("pagination_rows");
 		}
-		else
-		{
+		else {
 			$per_page='10';
 		}
-		
+
 		$data['serviceproviderscnt']=$this->User_model->getAllServiceProvider(0,"","");
 		
 		$config = array();
 		
-		$config["base_url"] = base_url().'backend/Users/manageServiceProvider/'.$pageNo.'/'.$per_page;
-		// $config['per_page'] = 10;
-		if($per_page>100)
-		{
-			$config['per_page'] = 100;
-		}
-		else
-		{
-			$config['per_page'] = $per_page;
-		}
+		$config["base_url"] = base_url().'backend/Users/manageServiceProvider/'.$per_page;
+		$config['per_page'] = $per_page;
 		
-		$config["uri_segment"] = 4;
+		$config["uri_segment"] = 5;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
 		$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
@@ -572,7 +542,14 @@ $per_page='10';
 		#echo "<pre>"; print_r($config); exit;
 		$this->pagination->initialize($config);
 				
-		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		// if(HOSTPAGINATE == 'local')
+		// {
+		// 	$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		// }
+		// else
+		// {
+			$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+		// }
 		$data["total_rows"] = $config["total_rows"]; 
 		$data["links"] = $this->pagination->create_links();
 		//echo "ConttPerPage--".$config["per_page"];
@@ -621,6 +598,8 @@ $per_page='10';
 				$status=$this->input->post('status');
 				$is_verified=$this->input->post('is_verified');
 				//$description=$this->input->post('description');
+				$whatwedoArr=$this->input->post('whatwedoArr');
+
 				$servicefile='';
 				if($_FILES['servicefile'])
 				{
@@ -658,7 +637,7 @@ $per_page='10';
 				{
 					$profile_id = "BJS".$this->Common_Model->randomCode();
 					$latitude = $longitude = '';
-					if($address != '')
+					if($address != '' && !is_numeric($address))
 					{
 						$latlngarr = $this->Common_Model->get_lat_long($address);
 						if(isset($latlngarr))
@@ -701,8 +680,23 @@ $per_page='10';
 							$inputData=array('service_provider_id'=>$user_id,'is_verified'=>$is_verified,'dateadded'=>date('Y-m-d H:i:s'));
 							$this->Common_Model->insert_data('sp_favourite_verify',$inputData);
 						}
-						$this->session->set_flashdata('success','Service Giver added successfully.');
 
+						if(!empty($whatwedoArr))
+						{
+							$delwhatwedo=$this->User_model->deleteWhatwedo($user_id);
+							foreach($whatwedoArr as $key=>$whatwedo)
+							{
+								$insert_data=array(
+									'service_provider_id'=>$user_id,
+									'description'=>$whatwedo,
+									'dateadded' => date('Y-m-d H:i:s')
+								);
+								$this->Common_Model->insert_data('sp_whatwedo',$insert_data);
+								// echo $this->db->last_query();
+							}
+						}
+
+						$this->session->set_flashdata('success','Service Giver added successfully.');
 						redirect(base_url().'backend/Users/manageServiceProvider');	
 					}
 					else
@@ -738,6 +732,7 @@ $per_page='10';
 		//echo "Brand_id--".$brand_id;exit();
 		$data['zoneList']=$this->User_model->getAllzone(1,"","");
 		$data['categoryList']=$this->User_model->getAllCategory(1,"","");
+		$data['whatwedoList']=$this->User_model->getWhatwedo(1,$user_id);
 		if($user_id)
 		{
 			$userInfo=$this->User_model->getSingleUserInfo($user_id,0);
@@ -784,6 +779,9 @@ $per_page='10';
 						$status=$this->input->post('status');
 						$is_verified = $this->input->post('is_verified');
 						$favourite_id = $this->input->post('favourite_id');
+						$whatwedoArr = $this->input->post('whatwedoArr');
+
+
 						$servicefile='';
 						if($_FILES['servicefile'])
 						{
@@ -817,7 +815,7 @@ $per_page='10';
 						}
 				
 						$latitude = $longitude = '';
-						if($address != '')
+						if($address != '' && !is_numeric($address))
 						{
 							$latlngarr = $this->Common_Model->get_lat_long($address);
 							if(isset($latlngarr))
@@ -883,6 +881,22 @@ $per_page='10';
 								$this->Common_Model->insert_data('sp_favourite_verify',$inputData);
 							}
 
+
+							if(!empty($whatwedoArr))
+							{
+								$delwhatwedo=$this->User_model->deleteWhatwedo($user_id);
+								foreach($whatwedoArr as $key=>$whatwedo)
+								{
+									$insert_data=array(
+										'service_provider_id'=>$user_id,
+										'description'=>$whatwedo,
+										'dateadded' => date('Y-m-d H:i:s')
+									);
+									$this->Common_Model->insert_data('sp_whatwedo',$insert_data);
+									// echo $this->db->last_query();
+								}
+							}
+
 							if($userdata)
 							{	
 								$this->session->set_flashdata('success','Service Giver updated successfully.');
@@ -935,7 +949,8 @@ $per_page='10';
 					'dateupdated' => date('Y-m-d H:i:s')
 				);
 
-				$deluser = $this->User_model->uptdateUser($input_data,$user_id);
+				// $deluser = $this->User_model->uptdateUser($input_data,$user_id);
+				$deluser =$this->Common_Model->update_data('users','user_id',$user_id,$input_data);
 				if($deluser > 0)
 				{
 					$this->session->set_flashdata('success','Service Giver deleted successfully.');
@@ -959,7 +974,7 @@ $per_page='10';
 		}
 	}
 
-public function viewServiceProviderDetails()
+	public function viewServiceProviderDetails()
 	{
 		$data['title']='View Service Giver Details';
 		$user_id=base64_decode($this->uri->segment(4));
@@ -1090,5 +1105,224 @@ public function viewServiceProviderDetails()
 		  $csvname = 'ServiceProviderListExport'.$todaysdate.'.csv';
 		  array_to_csv($array,$csvname);
 		  $data['success']= "download sample export data successfully!";
+	}
+
+	public function searchSP()
+	{
+		$data['title']='Manage Service Giver';
+		$searchStr=$this->input->post('searchName');
+		// echo "Search Name ".$searchStr;//exit;
+		//Page limit - pagination
+		if($this->session->userdata("pagination_rows") != '')
+		{
+			$per_page = $this->session->userdata("pagination_rows");
+		}
+		else {
+			$per_page='10';
+		}
+		
+		$data['usercnt']=$this->User_model->getSearchSP(0,$searchStr,"","");
+		
+		$config = array();
+		$config["base_url"] = base_url().'backend/Users/manageUsers/'.$per_page;
+		$config['per_page'] = $per_page;
+		$config["uri_segment"] = 5;
+		$config['full_tag_open'] = '<ul class="pagination">'; 
+		$config['full_tag_close'] = '</ul>';
+		$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
+		$config['first_tag_close'] = "</li>"; 
+		$config['prev_tag_open'] =	"<li class='paginate_button  page-item'>"; 
+		$config['prev_tag_close'] = "</li>";
+		$config['next_tag_open'] = "<li class='paginate_button  page-item'>";
+		$config['next_tag_close'] = "</li>"; 
+		$config['last_tag_open'] = "<li class='paginate_button  page-item'>"; 
+		$config['last_tag_close'] = "</li>";
+		$config['cur_tag_open'] = "<li class='paginate_button  page-item active'><a class='page-link active' href=''>"; 
+		$config['cur_tag_close'] = "</a></li>";
+		$config['num_tag_open'] = "<li class='paginate_button  page-item'>";
+		$config['num_tag_close'] = "</li>"; 
+		$config['attributes'] =array('class' => 'page-link');
+		$config["total_rows"] =$data['usercnt'];
+		#echo "<pre>"; print_r($config); exit;
+		$this->pagination->initialize($config);
+		
+		$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+		$data["total_rows"] = $config["total_rows"]; 
+		$data["links"] =$links= $this->pagination->create_links();
+		
+		$users=$this->User_model->getSearchSP(1,$searchStr,$config["per_page"],$page);
+		// echo $this->db->last_query();exit;
+		$output="";
+		$i=1;
+		foreach($users as $user)
+		{
+			$imgUrl="";
+			if(!empty($user['profile_pic']) == NULL)
+			{
+				$imgUrl=base_url().'./uploads/user_profile/default.png';
+			}
+			else
+			{
+				$imgUrl=base_url().'./uploads/user_profile/'.$user['profile_pic'];
+			}
+			$color="black";
+			if($user['status']=='Active'){ $color="#058f05";}else { $color="black";}
+			// 
+
+			$output.="<tr><td title=".$user['user_id'].">".$i."</td>";
+			$output.="<td><img class='img-circle img-fluid' src='".$imgUrl."' width='50px'></td>";
+			$output.="<td>".$user['full_name']."</td>";
+			$output.="<td>".$user['email']."</td>";
+			$output.="<td>".$user['mobile']."</td>";
+			$output.="<td>".$user['category_name']."</td>";
+			$output.="<td>".$user['zone_name']."</td>";
+			$output.="<td>".$user['status']."</td>";
+			if($user['status']!='Active') { 
+				$output.="<td><a href='".base_url()."backend/Users/spchange_status/".base64_encode($user['user_id'])."/".base64_encode('Active')."' class='btn-sm btn-success'>Active</a></td>";
+			}
+			else
+			{
+				$output.="<td><a href='".base_url()."backend/Users/spchange_status/".base64_encode($user['user_id'])."/".base64_encode('Inactive')."' class='btn-sm btn-danger'>Inactive</a></td>";
+			}
+		
+			$output.="<td>";
+			$output.="<a href='".base_url()."backend/Users/updateServiceprovider/".base64_encode($user['user_id'])."' ><img src='".base_url()."uploads/edit.svg'></a>";
+			$output.="<a href='".base_url()."backend/Users/deleteServiceprovider/".base64_encode($user['user_id'])."' onclick='javascript:return chk_isDeleteComnfirm();'><img src='".base_url()."uploads/trash-2.svg'></a>";
+			$output.="<a href='".base_url()."backend/Users/viewServiceProviderDetails/".base64_encode($user['user_id'])."' ><img src='".base_url()."uploads/eye.svg'></a>";
+			
+			$output.="</td>";
+							
+			$output.="</tr>";
+			$output.="<div class='dataTables_paginate paging_simple_numbers' id='datatable-default_paginate' style='margin-top:10px;'>".$links."</div>";
+
+			$i++;
+		}
+		echo $output;
+	}
+
+	public function searchUser()
+	{
+		$data['title']='Manage User';
+		$searchStr=$this->input->post('searchName');
+		// echo "Search Name ".$searchStr;//exit;
+		//Page limit - pagination
+		if($this->session->userdata("pagination_rows") != '')
+		{
+			$per_page = $this->session->userdata("pagination_rows");
+		}
+		else {
+			$per_page='10';
+		}
+		if($searchStr!="")
+		{
+			$data['usercnt']=$this->User_model->getSearchUser(0,$searchStr,"","");
+			
+			$config = array();
+			$config["base_url"] = base_url().'backend/Users/manageUsers/'.$per_page;
+			$config['per_page'] = $per_page;
+			$config["uri_segment"] = 5;
+			$config['full_tag_open'] = '<ul class="pagination">'; 
+			$config['full_tag_close'] = '</ul>';
+			$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
+			$config['first_tag_close'] = "</li>"; 
+			$config['prev_tag_open'] =	"<li class='paginate_button  page-item'>"; 
+			$config['prev_tag_close'] = "</li>";
+			$config['next_tag_open'] = "<li class='paginate_button  page-item'>";
+			$config['next_tag_close'] = "</li>"; 
+			$config['last_tag_open'] = "<li class='paginate_button  page-item'>"; 
+			$config['last_tag_close'] = "</li>";
+			$config['cur_tag_open'] = "<li class='paginate_button  page-item active'><a class='page-link active' href=''>"; 
+			$config['cur_tag_close'] = "</a></li>";
+			$config['num_tag_open'] = "<li class='paginate_button  page-item'>";
+			$config['num_tag_close'] = "</li>"; 
+			$config['attributes'] =array('class' => 'page-link');
+			$config["total_rows"] =$data['usercnt'];
+			#echo "<pre>"; print_r($config); exit;
+			$this->pagination->initialize($config);
+			
+			$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+			$data["total_rows"] = $config["total_rows"]; 
+			$data["links"] =$links= $this->pagination->create_links();
+			
+			$users=$this->User_model->getSearchUser(1,$searchStr,$config["per_page"],$page);
+		}
+		else
+		{
+			$data['usercnt']=$this->User_model->getAllUsers(0,"","");
+			
+			$config = array();
+			$config["base_url"] = base_url().'backend/Users/manageUsers/'.$per_page;
+			$config['per_page'] = $per_page;
+			$config["uri_segment"] = 5;
+			$config['full_tag_open'] = '<ul class="pagination">'; 
+			$config['full_tag_close'] = '</ul>';
+			$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
+			$config['first_tag_close'] = "</li>"; 
+			$config['prev_tag_open'] =	"<li class='paginate_button  page-item'>"; 
+			$config['prev_tag_close'] = "</li>";
+			$config['next_tag_open'] = "<li class='paginate_button  page-item'>";
+			$config['next_tag_close'] = "</li>"; 
+			$config['last_tag_open'] = "<li class='paginate_button  page-item'>"; 
+			$config['last_tag_close'] = "</li>";
+			$config['cur_tag_open'] = "<li class='paginate_button  page-item active'><a class='page-link active' href=''>"; 
+			$config['cur_tag_close'] = "</a></li>";
+			$config['num_tag_open'] = "<li class='paginate_button  page-item'>";
+			$config['num_tag_close'] = "</li>"; 
+			$config['attributes'] =array('class' => 'page-link');
+			$config["total_rows"] =$data['usercnt'];
+			#echo "<pre>"; print_r($config); exit;
+			$this->pagination->initialize($config);
+			
+			$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+			$data["total_rows"] = $config["total_rows"]; 
+			$data["links"] =$links= $this->pagination->create_links();
+			
+			$users=$this->User_model->getAllUsers(1,$config["per_page"],$page);
+		}
+		// echo $this->db->last_query();exit;
+		$output="";
+		$i=1;
+		foreach($users as $user)
+		{
+			$imgUrl="";
+			if(!empty($user['profile_pic']) == NULL)
+			{
+				$imgUrl=base_url().'./uploads/user_profile/default.png';
+			}
+			else
+			{
+				$imgUrl=base_url().'./uploads/user_profile/'.$user['profile_pic'];
+			}
+			$color="black";
+			if($user['status']=='Active'){ $color="#058f05";}else { $color="black";}
+			// 
+
+			$output.="<tr><td title=".$user['user_id'].">".$i."</td>";
+			$output.="<td><img class='img-circle img-fluid' src='".$imgUrl."' width='50px'></td>";
+			$output.="<td>".$user['full_name']."</td>";
+			$output.="<td>".$user['email']."</td>";
+			$output.="<td>".$user['mobile']."</td>";
+			$output.="<td>".$user['address']."</td>";
+			$output.="<td>".$user['status']."</td>";
+			if($user['status']!='Active') { 
+				$output.="<td><a href='".base_url()."backend/Users/change_status/".base64_encode($user['user_id'])."/".base64_encode('Active')."' class='btn-sm btn-success'>Active</a></td>";
+			}
+			else
+			{
+				$output.="<td><a href='".base_url()."backend/Users/change_status/".base64_encode($user['user_id'])."/".base64_encode('Inactive')."' class='btn-sm btn-danger'>Inactive</a></td>";
+			}
+		
+			$output.="<td>";
+			$output.="<a href='".base_url()."backend/Users/updateUser/".base64_encode($user['user_id'])."' ><img src='".base_url()."uploads/edit.svg'></a>";
+			$output.="<a href='".base_url()."backend/Users/deleteUser/".base64_encode($user['user_id'])."' onclick='javascript:return chk_isDeleteComnfirm();'><img src='".base_url()."uploads/trash-2.svg'></a>";
+			$output.="<a href='".base_url()."backend/Users/viewUserDetails/".base64_encode($user['user_id'])."' ><img src='".base_url()."uploads/eye.svg'></a>";
+			
+			$output.="</td>";
+							
+			$output.="</tr>";
+
+			$i++;
+		}
+		echo $output;
 	}
 }

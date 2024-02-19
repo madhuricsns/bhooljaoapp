@@ -407,5 +407,42 @@ class Profile extends REST_Controller {
 		$response = json_encode($obj);
 		print_r($response);
 	}
+
+	public function deleteAccount_post()
+	{
+		$token 			= $this->input->post("token");
+		$user_id 		= $this->input->post("user_id");
+		
+		if($token == TOKEN)
+		{
+			if($user_id =="" )
+			{
+				$data['responsemessage'] = 'Please provide valid data';
+				$data['responsecode'] = "400";
+			}	
+			else
+			{
+				$arrUserData = array(
+					'status' => 'Delete'
+					);
+						  
+				$result   = $this->Common_Model->update_data('users','user_id',$user_id,$arrUserData);
+				
+				// $arrData = $this->CustomerModel->getUserDetails($user_id);
+				
+				// $data['data'] = $arrData;
+				$data['responsemessage'] = 'Service giver deleted successfully';
+				$data['responsecode'] = "200";
+			}
+		}
+		else
+		{
+			$data['responsemessage'] = 'Token not match';
+			$data['responsecode'] =  "201";
+		}	
+		$obj = (object)$data;//Creating Object from array
+		$response = json_encode($obj);
+		print_r($response);
+	}
 	
 }

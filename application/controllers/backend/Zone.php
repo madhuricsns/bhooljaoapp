@@ -27,44 +27,12 @@ class Zone extends CI_Controller {
 			$per_page='10';
 		}
 		
-		/*$per_page='10';
-		
-		if($this->uri->segment(4)!='')
-		{
-			if($this->uri->segment(4)!="Na")
-			{
-				$pageNo=($this->uri->segment(4));
-			}
-		}
-
-		if($this->uri->segment(5)!='')
-		{
-			if($this->uri->segment(5)!="Na")
-			{
-				$per_page=($this->uri->segment(5));
-			}
-		}
-		else
-		{
-			$per_page='10';
-		}*/
 		
 		$data['zonecnt']=$this->Zone_model->getAllZone(0,"","");
-		
 		
 		$config = array();
 		$config["base_url"] = base_url().'backend/Zone/manageZones/'.$per_page;
 		$config['per_page'] = $per_page;
-		
-		// $config['per_page'] = 10;
-		/*if($per_page>100)
-		{
-			$config['per_page'] = 100;
-		}
-		else
-		{
-			$config['per_page'] = $per_page;
-		}*/
 		
 		$config["uri_segment"] = 5;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
@@ -124,7 +92,6 @@ class Zone extends CI_Controller {
 				$status=$this->input->post('status');
                 		
 				$zonename=$this->Zone_model->chkZoneName($address,0);
-
 
 				$latlong=$this->get_lat_long($address.",".$zone_pincode);
 						$parts=explode(",",$latlong);
@@ -196,7 +163,7 @@ class Zone extends CI_Controller {
 
 				if(isset($_POST['btn_updatezone']))
 				{
-                    print_r($_POST);//exit;
+                    // print_r($_POST);//exit;
 					$this->form_validation->set_rules('zone_name','Zone Name','required');
 					$this->form_validation->set_rules('zone_pincode','Zone Pincode','required');
 			        $this->form_validation->set_rules('status','Zone Status','required');
@@ -334,7 +301,7 @@ class Zone extends CI_Controller {
 /* start lat & long function*/
 public function get_lat_long($address)
   {
-  echo $address = str_replace(" ", "+", $address);
+ 	 $address = str_replace(" ", "+", $address);
 
     // echo "http://maps.google.com/maps/api/geocode/json?address=$zone_name&sensor=false";
     // exit;
@@ -350,7 +317,7 @@ public function get_lat_long($address)
 
 /* End lat & long function*/
 
-public function change_status()
+	public function change_status()
 	{
 		$data['title']='Change Status';
 		$data['error_msg']='';

@@ -50,7 +50,7 @@
 											<th style="width:10%">Actions</th>	
 										</tr>
 									</thead>	
-									<tbody>			sub
+									<tbody>			
 										<?php $i=1;
 										// print_r($serviceList);
 										foreach($subcategoryList as $sub)
@@ -63,7 +63,7 @@
 												<td><?php echo $sub['category_name'];?></td>
 												
 												<td><?php echo $sub['category_description'];?></td>
-												<td><?php echo $sub['category_status'];?></td>
+												<td style="color:<?php if($sub['category_status']=='Active'){ echo '#058f05';}else { echo 'red';}?>"><?php echo $sub['category_status'];?></td>
 												<td class="actions">  
 													<a href="<?php echo base_url();?>backend/Category/updateCategory/<?php echo base64_encode($sub['category_id']);?>"><i data-feather="edit"></i></a>
 													

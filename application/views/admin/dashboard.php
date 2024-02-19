@@ -22,7 +22,7 @@ $session_user_type=$sessiondata['user_type'];*/
 												<div class="card card-border">
 													<div class="card-body overviwe-icon total-booking" >
 														<div class="media1 static-top-widget row">
-															<a href="#"  >
+															<a href="<?php echo base_url("backend/");?>Booking/manageBooking"  >
 																<div class="media-body1 col-12 de-icon1">
 																	<div>
 																		<h5 class="m-0" style="color: #000;">Total Bookings</h5>
@@ -39,7 +39,7 @@ $session_user_type=$sessiondata['user_type'];*/
 												<div class="card card-border">
 													<div class="card-body overviwe-icon total-booking" >
 														<div class="media1 static-top-widget row">
-															<a href="#"  >
+															<a href="<?php echo base_url("backend/");?>Booking/manageBookingDemo"  >
 																<div class="media-body1 col-12 de-icon1">
 																	<div>
 																		<h5 class="m-0" style="color: #000;">Total Demo Bookings</h5>
@@ -56,7 +56,7 @@ $session_user_type=$sessiondata['user_type'];*/
 												<div class="card card-border">
 													<div class="card-body overviwe-icon service-pro-icon" >
 														<div class="media1 static-top-widget row">	
-															<a href="#"  >
+															<a href="<?php echo base_url("backend/");?>Users/manageServiceProvider"  >
 																<div class="media-body1 col-12 de-icon1">
 																	<div>
 																		<h5 class="m-0" style="color: #000;">Total Service Givers</h5>
@@ -89,7 +89,7 @@ $session_user_type=$sessiondata['user_type'];*/
 												<div class="card card-border">
 													<div class="card-body overviwe-icon user-icon" >
 														<div class="media1 static-top-widget row">
-															<a href="#"  >
+															<a href="<?php echo base_url("backend/");?>Users/manageUsers"  >
 																<div class="media-body1 col-12 de-icon1">
 																	<div>
 																		<h5 class="m-0" style="color: #000;">Total Users</h5>
@@ -140,7 +140,7 @@ $session_user_type=$sessiondata['user_type'];*/
 												<div class="card card-border">
 													<div class="card-body overviwe-icon pending-icon" >
 														<div class="media1 static-top-widget row">
-															<a href="#"  >
+															<a href="<?php echo base_url("backend/");?>Booking/manageBooking/waiting/Na/Na/Na"  >
 																<div class="media-body1 col-12 de-icon1">
 																	<div>
 																		<h5 class="m-0" style="color: #000;">Pending Bookings</h5>
@@ -172,7 +172,7 @@ $session_user_type=$sessiondata['user_type'];*/
 												<div class="card card-border">
 													<div class="card-body overviwe-icon ongoing-icon" >
 														<div class="media1 static-top-widget row">
-															<a href="#"  >
+															<a href="<?php echo base_url("backend/");?>Booking/manageBooking/ongoing/Na/Na/Na"  >
 																<div class="media-body1 col-12 de-icon1">
 																	<div>
 																		<h5 class="m-0" style="color: #000;">Ongoing Bookings</h5>
@@ -188,7 +188,7 @@ $session_user_type=$sessiondata['user_type'];*/
 												<div class="card card-border">
 													<div class="card-body overviwe-icon completed-icon" >
 														<div class="media1 static-top-widget row">
-															<a href="#"  >
+															<a href="<?php echo base_url("backend/");?>Booking/manageBooking/completed/Na/Na/Na"  >
 																<div class="media-body1 col-12 de-icon1">
 																	<div>
 																		<h5 class="m-0" style="color: #000;">Completed Bookings</h5>
@@ -204,72 +204,7 @@ $session_user_type=$sessiondata['user_type'];*/
 									</div>
 								</div>
 							</div>
-							<!-- <div class="col-md-12">
-								<div class="card">
-									<div class="card-body " >
-										<div class="card-header-dash">
-											<h4> Services wise Bookings </h4>
-										</div>
-										<div class="row">
-									
-											<div class="col-lg-6 col-xl-4 xl-30">
-												<div class="card card-border">
-													<div class="card-body  overviwe-icon service-pro-icon" >
-														<div class="media1 static-top-widget row">
-														
-															<a href="https://lobabooking.csnsindia.com/backend/Booking/manageBooking?service=c2VydmljZXM="  >
-															<div class="media-body1 col-12 de-icon1">
-																<div>
-																	<h5 class="m-0" style="color: #000;">Services Bookings</h5>
-																	<h2 class="counter">197</h2>
-																</div>
-															</div>
-															</a>
-														</div>
-													</div>
-												</div>
-											</div>
-
-											<div class="col-lg-6 col-xl-4 xl-30">
-												<div class="card card-border">
-													<div class="card-body overviwe-icon doctor-icon" >
-														<div class="media1 static-top-widget row">
-														
-															<a href="https://lobabooking.csnsindia.com/backend/Booking/manageBooking?service=ZG9jdG9y"  >
-															<div class="media-body1 col-12 de-icon1">
-																<div>
-																	<h5 class="m-0" style="color: #000;">Doctors Bookings</h5>
-																	<h2 class="counter">147</h2>
-																</div>
-															</div>
-															</a>
-														</div>
-													</div>
-												</div>
-											</div>
-
-											<div class="col-lg-6 col-xl-4 xl-30">
-												<div class="card card-border">
-													<div class="card-body overviwe-icon neurse-icon" >
-														<div class="media1 static-top-widget row">
-															<a href="https://lobabooking.csnsindia.com/backend/Booking/manageBooking?service=bnVyc2U="  >
-															<div class="media-body1 col-12 de-icon1">
-																<div>
-																	<h5 class="m-0" style="color: #000;">Nurses Bookings</h5>
-																	<h2 class="counter">68</h2>
-																</div>
-															</div>
-															</a>
-														</div>
-													</div>
-												</div>
-											</div>
-
-
-										</div>
-									</div>
-								</div>
-							</div> -->
+						
 							<div class="col-md-12">
 								<div class="card">
 									<div class="card-body" >
@@ -280,7 +215,6 @@ $session_user_type=$sessiondata['user_type'];*/
 												<span class=" pull-right mb-3" style="width:20%,">
 													<div class="income"><i class="fa fa-calendar"></i>
 														<select name="booking_filter"  data-show-content="true" id="income_filter" class="form-control income-filter pull-right" aria-label="Filter select" onchange="getIncomes()">
-														
 															<option selected value="Todays"> Todays </option>
 															<option value="Last Month">Last Month</option>
 															<option value="Last 6 Months">Last 6 Months</option>
@@ -296,7 +230,7 @@ $session_user_type=$sessiondata['user_type'];*/
 												<div class="card card-border">
 													<div class="card-body  overviwe-icon income-icon" >
 														<div class="media1 static-top-widget row">
-															<a href="#"  >
+															<a href="<?php echo base_url()?>backend/Dashboard/income?report_type=AllIncome&filter=Today" id="allincome">
 																<div class="media-body1 col-12 de-icon1">
 																	<div>
 																		<h5 class="m-0" style="color: #000;">All Income</h5>
@@ -312,7 +246,7 @@ $session_user_type=$sessiondata['user_type'];*/
 												<div class="card card-border">
 													<div class="card-body  overviwe-icon paid-icon" >
 														<div class="media1 static-top-widget row">
-															<a href="#"  >
+															<a href="<?php echo base_url()?>backend/Dashboard/income?report_type=Paid&filter=Today" id="allpaid" >
 																<div class="media-body1 col-12 de-icon1">
 																	<div>
 																		<h5 class="m-0" style="color: #000;"> Paid</h5>

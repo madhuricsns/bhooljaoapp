@@ -104,16 +104,17 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<td><?php echo $i;?></td>
 												<td><?php echo $zone['zone_name'];?></td>
 												<td><?php echo $zone['zone_pincode'];?></td>
-												<td><?php echo $zone['zone_status'];?></td>
+												<td style="color:<?php if($zone['zone_status']=='Active'){ echo '#058f05';}else if($zone['zone_status']=='Inactive'){ echo 'red';}else if($zone['zone_status']=='Delete'){ echo 'red';}?>">
+													<?php echo $zone['zone_status'];?></td>
 												<td>
 													<?php if($zone['zone_status']!='Active') { ?>
-														<a href="<?php echo base_url();?>backend/Zone/change_status/<?php echo base64_encode($zone['zone_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-success">Active</a>
+														<a href="<?php echo base_url();?>backend/Zone/change_status/<?php echo base64_encode($zone['zone_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-danger">Active</a>
 														<?php } else { ?>
 														<a href="<?php echo base_url();?>backend/Zone/change_status/<?php echo base64_encode($zone['zone_id']);?>/<?php echo base64_encode('Inactive');?>" class="btn-sm btn-danger">Inactive</a>
 													<?php } ?>
 												</td>
 												<td class="actions">                     
-			   <a href="<?php echo base_url();?>backend/Zone/update_Zone/<?php echo base64_encode($zone['zone_id']);?>"><i data-feather="edit"></i></a>
+			  										 <a href="<?php echo base_url();?>backend/Zone/update_Zone/<?php echo base64_encode($zone['zone_id']);?>"><i data-feather="edit"></i></a>
 													<a href="<?php echo base_url();?>backend/Zone/deleteZone/<?php echo base64_encode($zone['zone_id']);?>" onclick="javascript:return chk_isDeleteComnfirm();">
 													<i data-feather="trash-2"></i>
 													</a>

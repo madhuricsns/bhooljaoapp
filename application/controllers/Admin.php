@@ -313,9 +313,9 @@ class Admin extends CI_Controller {
 					
 					//$strUserType = "Admin";	
 					$latitude = $longitude = '';
-					if($address != '')
+					if($admin_address != '')
 					{
-						$latlngarr = $this->Common_Model->get_lat_long($address);
+						$latlngarr = $this->Common_Model->get_lat_long($admin_address);
 						if(isset($latlngarr))
 						{
 						  $latitude=$latlngarr['latitude'];

@@ -56,7 +56,7 @@
                                            	<div class="form-group ">
 											
                                                 <label for="mobile_number"><span>*</span>Mobile Number</label>
-                                                <input type="text" class="form-control" id="mobile_number" name="mobile_number"  required value="<?php echo $userInfo[0]['mobile'];?>">
+                                                <input type="text" class="form-control" id="mobile_number" name="mobile_number" maxlength="10" required value="<?php echo $userInfo[0]['mobile'];?>">
 												 <div id="err_mobile_number" class="error_msg"></div>
                                             </div>
                                             
@@ -98,7 +98,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group ">
-                                                <label for="banner_image" ><span>*</span> Profile</label>
+                                                <label for="banner_image" ><span>*</span> Profile Photo</label>
                                                 <input class="form-control " id="servicefile1" type="file"  name="servicefile" />
                                                 <span style="color:red">Note:Upload only jpg|png|bmp|jpeg</span><br/>
                                             </div>
@@ -108,7 +108,7 @@
                                                    if($userInfo[0]['profile_pic']!="")
 												{
 	
-												$str_images='<img src="'.base_url().'./uploads/user_profile/default.png/'.$userInfo[0]['profile_pic'].'" style="width:80px;height:80px">';
+												$str_images='<img src="'.base_url().'./uploads/user_profile/'.$userInfo[0]['profile_pic'].'" style="width:80px;height:80px">';
 												}
 												else
 												{

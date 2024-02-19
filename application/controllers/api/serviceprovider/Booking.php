@@ -311,6 +311,8 @@ class Booking extends REST_Controller {
 		$user_id	= $this->input->post("user_id");
 		$workphoto1	= $this->input->post("workphoto1");
 		$workphoto2	= $this->input->post("workphoto2");
+		$history_lat	= $this->input->post("history_lat");
+		$history_long	= $this->input->post("history_long");
 				
 		if($token == TOKEN)
 		{
@@ -348,7 +350,9 @@ class Booking extends REST_Controller {
 					'history_date' => $todayDate,
 					'history_time' => $todayTime,
 					'work_photo1' => $workphoto1,
-					'work_photo2' => $workphoto2
+					'work_photo2' => $workphoto2,
+					'history_lat' => $history_lat,
+					'history_long' => $history_long
 					);
 								
 				$this->Common_Model->insert_data('booking_history',$arrInputData);
@@ -566,6 +570,18 @@ class Booking extends REST_Controller {
 				//  $this->Common_Model->update_data('booking','booking_id','171',$inputData);
 
 				$arrBooking = $this->BookingModel->getNewBookings($user_id,$userLat,$userLong);
+				foreach($arrBooking as $key=>$booking){
+					$categoryData=$this->BookingModel->getCategory($booking['category_id']);
+					$main_category="";
+					if($categoryData->category_parent_id!=0)
+					{
+						$category=$this->BookingModel->getCategory($categoryData->category_parent_id);
+						$category_id=$categoryData->category_parent_id;
+						$main_category=$category->category_name;
+						$booking['category_name']=$main_category."-".$booking['category_name'];
+					}
+					$arrBooking[$key]=$booking;
+				}
 				
                 $data['responsecode'] = "200";
                 $data['data'] = $arrBooking;

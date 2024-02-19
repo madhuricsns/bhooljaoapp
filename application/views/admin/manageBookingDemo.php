@@ -51,9 +51,51 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 						</div>
 						<?php }?>	
 
+						<form name="frm_addslider" class="needs-validation" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/Booking/manageBookingDemo">
+							<input type="hidden" name="report" value="true">
+                            <div class="form-group row">
+								<div class="col-sm-2">
+                                    <label for="services_title" > Status</label>
+									<select name="bookingstatus" id="bookingstatus"class="form-control">
+							            <option value="">All</option>
+							            <option value="waiting" <?php if(isset($session_demobookingstatus)) if($session_demobookingstatus == 'waiting') echo 'selected';?> >Waiting</option>
+							            <option value="ongoing" <?php if(isset($session_demobookingstatus)) if($session_demobookingstatus == 'ongoing') echo 'selected';?>>Ongoing</option>
+							            <option value="completed" <?php if(isset($session_demobookingstatus)) if($session_demobookingstatus == 'completed') echo 'selected';?>>Completed</option>
+										<option value="canceled" <?php if(isset($session_demobookingstatus)) if($session_demobookingstatus == 'canceled') echo 'selected';?>>Canceled</option>
+							           
+							        </select>								
+								</div>
+								<div class="col-sm-2">
+                                    <label for="services_title" > Service</label>
+									<select name="category_id" id="category_id"class="form-control">
+							            <option value="">All</option>
+										<?php foreach($categoryList as $category) { ?>
+							            <option value="<?php echo $category['category_id'];?>" <?php if(isset($session_democategory_id)) if($session_democategory_id == $category['category_id']) echo 'selected';?> ><?php echo $category['category_name'];?></option>
+							           <?php } ?>
+							        </select>								
+								</div>
+                                <div class="col-sm-2">
+                                    <label for="services_title" > From Date</label>
+									<input type="date" class="form-control" onkeydown="return false" id="from_date" name="from_date" value="<?php if(isset($session_demofrom_date) && $session_demofrom_date!="") echo $session_demofrom_date;?>">
+								</div>
 
+                                <div class="col-sm-2">
+                                    <label for="services_title" > To Date</label>
+									<input type="date" class="form-control" onkeydown="return false" id="to_date" name="to_date" value="<?php if(isset($session_demoto_date) && $session_demoto_date!="") echo $session_demoto_date;?>">
+								</div>
+								
+								<div class="col-sm-2">
+									 <br>
+                                    <button class="btn btn-outline-success" name="btn_search" id="btn_search" title="Search Data"><span><i class="fa fa-search"></i><span></button>
+									<button class="btn btn-outline-secondary" name="btn_clear" id="btn_clear" title="Clear Search Data"><span><i class="fa fa-remove"></i></span></button>
+ 								</div>
+                                 <div class="col-sm-3">
+                                 
+ 								</div>
+							</div>
+						</form>
 
-						 <form method="POST" action="<?php echo base_url().'backend/Booking/searchdemo_list/'; ?><?php if($this->uri->segment(4)!=""){ echo $this->uri->segment(4);}?>/
+						 <!-- <form method="POST" action="<?php echo base_url().'backend/Booking/searchdemo_list/'; ?><?php if($this->uri->segment(4)!=""){ echo $this->uri->segment(4);}?>/
 								<?php if($this->uri->segment(5)!=""){ echo $this->uri->segment(5);}?>/
 								<?php if($this->uri->segment(6)!=""){ echo $this->uri->segment(6);}?>/
 								<?php if($this->uri->segment(7)!=""){ echo $this->uri->segment(7);}?>/">
@@ -95,16 +137,15 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 						</div>
 
 						                                   
-						    </form>
+						    </form> -->
 						    <hr>
 
 						    <div class="table-responsive">
-							<select class='form-control col-md-1' name='s1' id="page_id" style="margin-bottom:10px;float:left">
-								<option value='<?php echo base_url();?>backend/Booking/manageBookingDemo/<?php if(isset($srchStatus) && $srchStatus!="Na") { echo $srchStatus; } else { echo "Na";} ?>/<?php if(isset($srchDate) && $srchDate!='Na') { echo $srchDate; } else { echo 'Na'; }?>/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/10' <?php if($per_page=='10'){ echo 'selected';}?>>10</option>
-								<option value='<?php echo base_url();?>backend/Booking/manageBookingDemo/<?php if(isset($srchStatus) && $srchStatus!="Na") { echo $srchStatus; } else { echo "Na";} ?>/<?php if(isset($srchDate) && $srchDate!='Na') { echo $srchDate; } else { echo 'Na'; }?>/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/20' <?php if($per_page=='20'){ echo 'selected';}?>>20</option>
-								<option value='<?php echo base_url();?>backend/Booking/manageBookingDemo/<?php if(isset($srchStatus) && $srchStatus!="Na") { echo $srchStatus; } else { echo "Na";} ?>/<?php if(isset($srchDate) && $srchDate!='Na') { echo $srchDate; } else { echo 'Na'; }?>/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/50' <?php if($per_page=='50'){ echo 'selected';}?>>50</option>
-								<option value='<?php echo base_url();?>backend/Booking/manageBookingDemo/<?php if(isset($srchStatus) && $srchStatus!="Na") { echo $srchStatus; } else { echo "Na";} ?>/<?php if(isset($srchDate) && $srchDate!='Na') { echo $srchDate; } else { echo 'Na'; }?>/<?php if(isset($pageNo) && $pageNo!='Na') { echo $pageNo; } else { echo 'Na';}?>/100' <?php if($per_page=='100'){ echo 'selected';}?>>100</option>
-								
+							<select class='form-control col-md-1' name='s1' id="page_id" style="margin-bottom:10px;float:left" onchange="setPagination()">
+								<option <?php if($this->session->userdata("pagination_rows") == '10') { ?> selected <?php } ?>  value='10'>10</option>
+								<option <?php if($this->session->userdata("pagination_rows") == '20') { ?> selected <?php } ?> value='20'>20</option>
+								<option <?php if($this->session->userdata("pagination_rows") == '50') { ?> selected <?php } ?> value='50'>50</option>
+								<option <?php if($this->session->userdata("pagination_rows") == '100') { ?> selected <?php } ?> value='100'>100</option>
 							</select>
 
 						<div class="table-responsive">
@@ -115,20 +156,22 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 										<tr>
 											
 											<th>Order No</th>
-											<th>Booking Date</th>
-											<th>Time</th>
+											<th>Date/Time</th>
 											<th>Service Name</th>
 											<th>Customer</th>
 											<th>Service Giver</th>
 											<th>Status</th>
+											<th>Payment Status</th>
 											<th>Change Status</th>
 											<th>Actions</th>	
 										</tr>
 									</thead>	
 									<tbody>			
 										<?php $i=1;
+										$crdate=date("d-M-Y");
 										foreach($bookingDemoList as $booking)
 										{
+											$paymentsuccessCount = $this->Booking_model->getBookingTransactionSuccess($booking['booking_id']);
 											if($booking['booking_date'] != '0000-00-00') {
                                              $booking['booking_date']= new DateTime($booking['booking_date']);
                                             $booking['booking_date']=$booking['booking_date']->format('d-M-Y'); }
@@ -140,14 +183,13 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 											$main_categoryname="";
 											if($categoryData->category_parent_id!=0)
 											{
-										$category=$this->Booking_model->getCategoryDetails($categoryData->category_parent_id);
+												$category=$this->Booking_model->getCategoryDetails($categoryData->category_parent_id);
 												$main_categoryname=$category->category_name;
 											}
 											?>		
-										<tr>
+											<tr>
 												<td><?php echo $booking['order_no'];?></td> 
-												<td><?php echo $booking['booking_date'];?></td>
-												<td><?php echo $booking['time_slot'];?></td>
+												<td><?php echo $booking['booking_date'];?><br><?php echo $booking['time_slot'];?></td>
 												<td><?php if($main_categoryname!="") { echo $main_categoryname."-"; } ?><?php echo $booking['category_name'];?></td>
 												<td><?php echo $booking['full_name'];?></td>
 												<td><?php if($booking['service_provider_id']>0 ){
@@ -159,14 +201,11 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												echo "---";
 												} ?></td>
 												<td id="<?php echo $booking['booking_id'];?>"><?php echo $booking['booking_status'];?></td>
-
-
-
-												  <td>
-												  	
+												<td><?php if($paymentsuccessCount>0){ echo 'Success';} else if($paymentsuccessCount==0){ echo 'Pending';}?></td>
+												<td>
 												  	<?php 
-												  	$crdate=date("d-M-Y");
-												  	  if($booking['time_slot']!="" && $crdate<$booking['booking_date']  && $booking['booking_status']=='waiting') {
+												  	  if($booking['time_slot']!="" && $booking['booking_date']<$crdate  && ($booking['booking_status']=='waiting' || $booking['booking_status']=='ongoing')) {
+													
 													?>
 													    <select name='ChangeStatus' id='ChangeStatus' onchange="DemostatusChange(this)" class="form-control">
                                							 <option value="">Action</option>
@@ -174,30 +213,22 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 						                                  <option value='canceled' data-id="<?php echo $booking['booking_id'];?>">Canceled</option>
 						                              </select>
 						                              <?php } else{}?>
-													</td>
+												</td>
 
 
 												<td class="actions">
-							
-
-									<?php   if ($booking['booking_status']=='waiting' && $booking['service_provider_id']<1) {
-										?>
-										<a href="<?php echo base_url();?>backend/Booking/AssingServiceProvider/<?php echo base64_encode($booking['booking_id']);?>" title="Assign Service Provider"><i data-feather="user-check"></i></a>
-									<?php } else{}?>
+													<?php   if ($booking['booking_status']=='waiting' && $booking['service_provider_id']<1) {
+														?>
+														<a href="<?php echo base_url();?>backend/Booking/AssingServiceProvider/<?php echo base64_encode($booking['booking_id']);?>" title="Assign Service Provider"><i data-feather="user-check"></i></a>
+													<?php } else{}?>
 													<a href="<?php echo base_url();?>backend/Booking/viewBookingDemoDetails/<?php echo base64_encode($booking['booking_id']);?>"><i data-feather="eye"></i>
 													</a>
 
-										<?php   if ($booking['time_slot']<0 && $booking['booking_status']!='canceled') {
-											?>
-										<a href="<?php echo base_url();?>backend/Booking/AssingDateTime/<?php echo base64_encode($booking['booking_id']);?>" title="Assign Time"><i data-feather="check-circle"></i></a>
-										<?php } else{}?>														
-										
- 									
-                 
-
-
-
-											</td>				
+													<?php   if ($booking['time_slot']<0 && $booking['booking_status']!='canceled' && $paymentsuccessCount>0) {
+														?>
+													<a href="<?php echo base_url();?>backend/Booking/AssingDateTime/<?php echo base64_encode($booking['booking_id']);?>" title="Assign Time"><i data-feather="check-circle"></i></a>
+													<?php } else{}?>
+												</td>				
 											</tr>											
 											<?php $i++; }?>
 									</tbody>									
@@ -233,14 +264,13 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
         // var status = $('#status').val();
         // var status= $('select[name=ChangeStatus]').val();
           var id ="#"+booking_id;
-           alert(status,booking_id);
+        //    alert(status,booking_id);
         $.ajax({ 
-        	
             url: "<?php echo base_url();?>backend/Booking/change_status?booking_id="+booking_id+"&status="+status,
             success: function(res) { 
-                  console.log(res);
+                //   console.log(res);
                   $(id).html(status);
-                  alert(res);
+                //   alert(res);
             }
         });
     }

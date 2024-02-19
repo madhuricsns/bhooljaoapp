@@ -59,6 +59,25 @@
 			return $result;
 		}
 
+        public function getAllCartBookingTemp()
+		{
+			$this->db->select('b.order_no,b.booking_status,c.category_id,c.category_name,c.category_description,c.category_image,ad.address1 as address,b.booking_date,b.time_slot,b.expiry_date,b.duration,b.service_provider_id,b.payment_type');
+			$this->db->from(TBLPREFIX.'cart_booking as b');
+			// $this->db->where('b.booking_id',$booking_id);
+			$this->db->join(TBLPREFIX.'category as c','c.category_id = b.category_id','left');
+			$this->db->join(TBLPREFIX.'addresses as ad','ad.address_id = b.address_id','left');
+            $this->db->order_by('b.booking_id','desc');
+			$query = $this->db->get();
+			$result= $query->row();
+			// echo $this->db->last_query();
+			if(isset($result->category_image) && $result->category_image!="")
+			{
+				$result->category_image = base_url()."uploads/category_images/".$result->category_image;
+			}
+					
+			return $result;
+		}
+
         public function getCartBookingData($booking_id)
 		{
 			$this->db->select('b.order_no,b.booking_status,c.category_id,c.category_name,c.category_description,c.category_image,ad.address1 as address,b.booking_date,b.time_slot,b.expiry_date,b.duration,b.service_provider_id,b.payment_type');
@@ -79,7 +98,7 @@
 
         public function getCartBookingDataDetails($booking_id)
 		{
-			$this->db->select('b.*');
+			$this->db->select('b.*,c.category_name');
 			$this->db->from(TBLPREFIX.'cart_booking as b');
 			$this->db->where('b.booking_id',$booking_id);
 			$this->db->join(TBLPREFIX.'category as c','c.category_id = b.category_id','left');
@@ -236,10 +255,24 @@
         {
             $this->db->select('*');
             $this->db->from(TBLPREFIX.'promo_code');
-            // $this->db->where('service_id',$service_id);
+            $this->db->where('user_id',0);
             $this->db->where('promocode_status','Active');
             $query = $this->db->get();
             $result= $query->result_array();
+
+            return $result;
+        }
+
+        public function getUserPromocode($user_id) 
+        {
+            $this->db->select('*');
+            $this->db->from(TBLPREFIX.'promo_code');
+            $this->db->where('user_id',$user_id);
+            $this->db->where('coupon_used','NO');
+            $this->db->where('promocode_status','Active');
+            $query = $this->db->get();
+            $result= $query->result_array();
+
             return $result;
         }
 
@@ -762,6 +795,7 @@
 			$this->db->select('*');
 			$this->db->from(TBLPREFIX.'booking_payment');
 			$this->db->where('order_no',$orderNo);
+			$this->db->order_by('payment_id','desc');
 			// $this->db->where('user_id',$user_id);
 			return $this->db->get()->row();			
 		}

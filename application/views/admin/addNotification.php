@@ -80,7 +80,7 @@
 												<?php	}	
 												} ?>
 												</select>
-                                                <div id="err_user" class="error_msg"></div>
+                                                <div id="err_sp" class="error_msg"></div>
                                             </div>
 											</div>
 											
@@ -90,12 +90,12 @@
 												<select name="user_ids[]" id="user_ids_sp" class="form-control select2" multiple>
 													<option value="">Select Givers</option>
 													<option value="All">All</option>
-							<?php 
-										if(count($ServiceProviderList) > 0) {
-												foreach($ServiceProviderList as $user) { ?>
-										<option value="<?php echo $user['user_id']; ?>"><?php echo $user['full_name']; ?></option>		
-											<?php	}	
-											} ?>						
+													<?php 
+													if(count($ServiceProviderList) > 0) {
+															foreach($ServiceProviderList as $user) { ?>
+													<option value="<?php echo $user['user_id']; ?>"><?php echo $user['full_name']; ?></option>		
+														<?php	}	
+														} ?>						
 												</select>
                                                 <div id="err_user" class="error_msg"></div>
                                             </div>

@@ -26,7 +26,7 @@
 							<?php echo $this->session->flashdata('error_msg');?>
 						</div>
 						<?php }?>
-						<form class="needs-validation" name="frm_adduser" id="frm_adduser" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/users/addServiceprovider">
+						<form class="needs-validation" name="frm_adduser" id="frm_adduser" method="POST" enctype="multipart/form-data" action="<?php echo base_url();?>backend/Users/addServiceprovider">
                         <div class="tab-content" >
                             <div class="tab-pane fade active show">
                                     <!-- <div class="row"> -->
@@ -43,7 +43,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group file-upload">
 											<div class="form-group row">
-                                                <label for="profile_photo" ><span>*</span>Profile</label>
+                                                <label for="profile_photo" ><span>*</span>Profile Photo</label>
                                                 <input type="file" class="form-control " id="servicefile1" name="servicefile" >
 												<div id="err_profile_photo" class="error_msg"></div>
                                             </div>
@@ -167,6 +167,28 @@
                                                  <div id="err_is_verified" class="error_msg"></div>
                                             </div>
                                         </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+												<label><span>*</span> What we do</label>
+                                                
+												<table class="table1 col-md-6 " style="width:100%;max-width: 100%;border-collapse: collapse;    display: table;">
+												
+													<tbody id="tbodywhatwedo">
+														<tr>
+															<td> <input type="text" class="form-control whatwedoArr" id="labelArr" name="whatwedoArr[]" placeholder="Enter What we do"  >
+																<div id="err_whatwedoArr" class="error_msg err_whatwedoArr"></div>
+															</td>
+															<td  class="text-center"><button class="btn btn-md btn-success" id="addwhatwedoRow" type="button">
+															<i class="fa fa-plus"></i>
+															</button></td>
+														</tr>
+													</tbody>
+													
+												</table>
+											</div>
+                                        </div>
+
                                     </div>
                                             <div class="pull-right">
 						                            <button type="submit" class="btn btn-primary" name="btn_addsp" id="btn_addsp">Add</button>

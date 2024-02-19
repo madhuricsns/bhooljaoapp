@@ -99,6 +99,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 											<th>Promocode Discount</th>
 											<th>Status</th>
 											<th>Change Status</th>
+											<th>Customer</th>
 											<th>Actions</th>	
 										</tr>
 									</thead>	
@@ -117,14 +118,17 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<td><?php echo $promocode['promocode_type'];?></td>
 												
 												<td><?php echo $promocode['promocode_discount'];?></td>
-												<td><?php echo $promocode['promocode_status'];?></td>
+												<td style="color:<?php if($promocode['promocode_status']=='Active'){ echo '#058f05';}else if($promocode['promocode_status']=='Inactive'){ echo 'red';}else if($promocode['promocode_status']=='Delete'){ echo 'red';}?>">
+													<?php echo $promocode['promocode_status'];?></td>
 												<td>
 													<?php if($promocode['promocode_status']!='Active') { ?>
-														<a href="<?php echo base_url();?>backend/Promocode/change_status/<?php echo base64_encode($promocode['promocode_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-success">Active</a>
+														<a href="<?php echo base_url();?>backend/Promocode/change_status/<?php echo base64_encode($promocode['promocode_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-danger">Active</a>
 														<?php } else { ?>
 														<a href="<?php echo base_url();?>backend/Promocode/change_status/<?php echo base64_encode($promocode['promocode_id']);?>/<?php echo base64_encode('Inactive');?>" class="btn-sm btn-danger">Inactive</a>
 													<?php } ?>
 												</td>
+												
+												<td><?php echo $promocode['full_name'];?></td>
 												<td class="actions" <?php
 												
 												/* if(isset($modulesId)&& count($modulesId)>0)

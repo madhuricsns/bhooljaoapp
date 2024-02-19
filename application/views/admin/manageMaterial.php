@@ -104,10 +104,11 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												<td><?php echo $i;?></td>
 												<td><?php echo $material['material_name'];?></td>
 												<!-- <td><?php echo $material['material_qty'];?></td> -->
-												<td><?php echo $material['material_status'];?></td>
+												<td style="color:<?php if($material['material_status']=='Active'){ echo '#058f05';}else if($material['material_status']=='Inactive'){ echo 'red';}else if($material['material_status']=='Delete'){ echo 'red';}?>">
+													<?php echo $material['material_status'];?></td>
 												<td>
 													<?php if($material['material_status']!='Active') { ?>
-														<a href="<?php echo base_url();?>backend/Material/change_status/<?php echo base64_encode($material['material_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-success">Active</a>
+														<a href="<?php echo base_url();?>backend/Material/change_status/<?php echo base64_encode($material['material_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-danger">Active</a>
 														<?php } else { ?>
 														<a href="<?php echo base_url();?>backend/Material/change_status/<?php echo base64_encode($material['material_id']);?>/<?php echo base64_encode('Inactive');?>" class="btn-sm btn-danger">Inactive</a>
 													<?php } ?>

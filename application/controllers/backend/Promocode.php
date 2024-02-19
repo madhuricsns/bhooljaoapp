@@ -72,11 +72,10 @@ class Promocode extends CI_Controller {
 	{
 		$data['title']='Add Promocode';
 		$data['error_msg']='';
-		//$data['serviceList']=$this->Promocode_model->getAllservice(1,"","");
+		$data['userList']=$this->Promocode_model->getAllUsers(1);
 				
 		if(isset($_POST['btn_addPromocode']))
 		{
-			
 			$this->form_validation->set_rules('promocode_code','Promocode Code ','required');
 			$this->form_validation->set_rules('promocode_description','Promocode Description','required');
 			$this->form_validation->set_rules('promocode_discount','Promocode Discount','required');
@@ -91,6 +90,10 @@ class Promocode extends CI_Controller {
 				$promocode_discount=$this->input->post('promocode_discount');
 				$promocode_type=$this->input->post('promocode_type');
 				$status=$this->input->post('status');
+				$user_id=$this->input->post('user_id');
+				$customer_id=$user_id;
+				if($user_id=='All'){ $customer_id=0; }
+
 				if($promocode_type=='Percentage')
 				{
 					$discount=$promocode_discount."% OFF";
@@ -106,15 +109,14 @@ class Promocode extends CI_Controller {
 				if($promocode==0)
 				{
 					$input_data = array(
-						
 						'promocode_code'=>$promocode_code,
 						'promocode_description'=>$promocode_description,
 						'promocode_type'=>$promocode_type,
 						'promocode_discount'=>$promocode_discount,
 						'promocode_status'=>$status,
+						'user_id'=>$customer_id,
 						'dateupdated' => date('Y-m-d H:i:s'),
 						'dateadded' => date('Y-m-d H:i:s')
-						
 						);
 					// echo"<pre>";
 					// print_r($input_data);
@@ -128,25 +130,60 @@ class Promocode extends CI_Controller {
 						$titleC="New offer available";
 						$messageC="New Promo code available $promocode_code, discount of $discount";
 	
-						if(!empty($customers))
+						if($user_id=='All')
 						{
-							foreach($customers as $customer)
+							if(!empty($customers))
 							{
-								$input_dataC = array(
-									'noti_title'=>trim($titleC),
-									'noti_message'=>trim($messageC),
-									'noti_user_type'=>'Customer',
-									'noti_type'=>'Offer',
-									'noti_user_id'=>$customer['user_id'],
-									'noti_gcmID'=>$customer['user_fcm'],
-									'dateadded' => date('Y-m-d H:i:s')
-									);
+								foreach($customers as $customer)
+								{
+									$input_dataC = array(
+										'noti_title'=>trim($titleC),
+										'noti_message'=>trim($messageC),
+										'noti_user_type'=>'Customer',
+										'noti_type'=>'Offer',
+										'created_by'=>0,
+										'noti_user_id'=>$customer['user_id'],
+										'noti_gcmID'=>$customer['user_fcm'],
+										'dateadded' => date('Y-m-d H:i:s')
+										);
 
-								$notification_idc = $this->Common_Model->insert_data('notification',$input_dataC);
-								// echo $this->db->last_query();
-								$this->Common_Model->sendexponotification($titleC,$messageC,$customer['user_fcm']);
+									$notification_idc = $this->Common_Model->insert_data('notification',$input_dataC);
+									// echo $this->db->last_query();
+									$this->Common_Model->sendexponotification($titleC,$messageC,$customer['user_fcm']);
+								}
+									$input_dataC = array(
+										'noti_title'=>trim($titleC),
+										'noti_message'=>trim($messageC),
+										'noti_user_type'=>'Customer',
+										'noti_type'=>'Offer',
+										'noti_send_type'=>'All',
+										'created_by'=>1,
+										'dateadded' => date('Y-m-d H:i:s')
+										);
+
+									$notification_idc = $this->Common_Model->insert_data('notification',$input_dataC);
 							}
 						}
+						else
+						{
+							$customer=$this->Promocode_model->getUser($user_id);
+							$input_dataC = array(
+								'noti_title'=>trim($titleC),
+								'noti_message'=>trim($messageC),
+								'noti_user_type'=>'Customer',
+								'noti_type'=>'Offer',
+								'noti_send_type'=>'Single',
+								'noti_user_id'=>$user_id,
+								'noti_gcmID'=>$customer->user_fcm,
+								'created_by'=>1,
+								'dateadded' => date('Y-m-d H:i:s')
+								);
+
+							$notification_idc = $this->Common_Model->insert_data('notification',$input_dataC);
+							// echo $this->db->last_query();
+							$this->Common_Model->sendexponotification($titleC,$messageC,$customer->user_fcm);
+						}
+						// exit;
 						$this->session->set_flashdata('success','Promocode added successfully.');
 						redirect(base_url().'backend/Promocode/index');	
 					}
@@ -208,7 +245,6 @@ class Promocode extends CI_Controller {
 						//$description = $this->input->post('description');
 									
 						$input_data = array(
-								
 								'promocode_code'=>$promocode_code,
 								'promocode_description'=>$promocode_description,
 								'promocode_type'=>$promocode_type,
@@ -222,16 +258,13 @@ class Promocode extends CI_Controller {
 						if($promocodedata)
 						{	
 							$this->session->set_flashdata('success','Promocode updated successfully.');
-
 							redirect(base_url().'backend/Promocode/index');	
 						}
 						else
 						{
 							$this->session->set_flashdata('error','Error while updating Promocode.');
-
-						redirect(base_url().'backend/Promocode/updatePromocode/'.base64_encode($promocode_id));
+							redirect(base_url().'backend/Promocode/updatePromocode/'.base64_encode($promocode_id));
 						}	
-					
 					}
 					else
 					{

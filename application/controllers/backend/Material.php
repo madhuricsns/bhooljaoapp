@@ -31,45 +31,13 @@ class Material extends CI_Controller {
 		else {
 			$per_page='10';
 		}
-		
-		/*$per_page='10';
-		
-		if($this->uri->segment(4)!='')
-		{
-			if($this->uri->segment(4)!="Na")
-			{
-				$pageNo=($this->uri->segment(4));
-			}
-		}
-
-		if($this->uri->segment(5)!='')
-		{
-			if($this->uri->segment(5)!="Na")
-			{
-				$per_page=($this->uri->segment(5));
-			}
-		}
-		else
-		{
-			$per_page='10';
-		}*/
-		
-			$data['materialcnt']=$this->Material_model->getAllMaterial(0,"","");
-		
+		$data['materialcnt']=$this->Material_model->getAllMaterial(0,"","");
 		
 		
 		$config = array();
 		$config["base_url"] = base_url().'backend/Material/manageMaterial/'.$per_page;
 		$config['per_page'] = $per_page;
-		// $config['per_page'] = 10;
-		/*if($per_page>100)
-		{
-			$config['per_page'] = 100;
-		}
-		else
-		{
-			$config['per_page'] = $per_page;
-		}*/
+		
 		$config["uri_segment"] = 5;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
@@ -97,7 +65,6 @@ class Material extends CI_Controller {
 		//echo "Conttpage--".$page;
 		//exit();
 		$data['materialList']=$this->Material_model->getAllMaterial(1,$config["per_page"],$page);
-		
 		
 		//echo $this->db->last_query();exit;
 		$this->load->view('admin/admin_header',$data);
@@ -131,29 +98,22 @@ class Material extends CI_Controller {
 						'dateadded' => date('Y-m-d H:i:s')
 						);
 
-					/*echo"<pre>";
-					print_r($input_data);
-					exit();*/
-					
 					$insert_id = $this->Common_Model->insert_data('material',$input_data);
 					
 					if($insert_id)
 					{	
 						$this->session->set_flashdata('success','Material added successfully.');
-
 						redirect(base_url().'backend/Material/manageMaterial');	
 					}
 					else
 					{
 						$this->session->set_flashdata('error','Error while adding user.');
-
 						redirect(base_url().'backend/Material/addMaterial');
 					}	
 				}
 				else
 				{
 					$this->session->set_flashdata('error','Material name  already exist.');
-
 					redirect(base_url().'backend/Material/addMaterial');	
 				}
 
@@ -184,7 +144,7 @@ class Material extends CI_Controller {
 
 				if(isset($_POST['btn_updatematerial']))
 				{
-                    print_r($_POST);//exit;
+                    // print_r($_POST);//exit;
 					$this->form_validation->set_rules('material_name','Material Name','required');
 			
 			        $this->form_validation->set_rules('status','Material Status','required');
@@ -255,10 +215,32 @@ class Material extends CI_Controller {
 								'request_status'=> $statusTobeUpdated
 								);
 			$usertaskdata = $this->Common_Model->update_data('material_request','request_id',$request_id,$input_data);
-			if($usertaskdata){
+			if($usertaskdata)
+			{
+				/************************************************************** */
+				$materialRequest=$this->Material_model->getMaterialRequest($request_id);
+				$sp=$this->Material_model->getServiceProvider($materialRequest->service_provider_id);
+					// Send Notification 
+					$title="Material Request ".$statusTobeUpdated;
+					$message="Your $materialRequest->material_name Material Request has been $statusTobeUpdated";
+					$output=$this->Common_Model->sendexponotification($title,$message,$sp->user_fcm);
+
+					$inputData=array(
+						'noti_user_type'=>'Service Provider',
+						'noti_type'=>'Admin',
+						'noti_title'=>$title,
+						'noti_message'=>$message,
+						'noti_gcmID'=>$sp->user_fcm,
+						'noti_user_id'=>$sp->user_id,
+						'created_by'=>'1',
+						'dateadded'=>date('Y-m-d H:i:s')
+					);
+					$this->Common_Model->insert_data('notification',$inputData);
+				/************************************************************** */
+
 				$this->session->set_flashdata('success',$statusTobeUpdated.' successfully.');
 				redirect(base_url().'backend/Material/materialRequest/'.base64_encode($material_id));
-				}
+			}
 		}
 	}
 	public function deleteMaterial()

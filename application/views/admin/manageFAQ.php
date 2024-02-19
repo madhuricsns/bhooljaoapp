@@ -108,10 +108,10 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 												
 												<td><?php echo $faq['faq_answer'];?></td>
 												<td><?php echo $faq['faq_type'];?></td>
-												<td><?php echo $faq['faq_status'];?></td>
+												<td style="color:<?php if($faq['faq_status']=='Active'){ echo '#058f05';}else { echo 'red';}?>"><?php echo $faq['faq_status'];?></td>
 												<td>
 													<?php if($faq['faq_status']!='Active') { ?>
-														<a href="<?php echo base_url();?>backend/FAQ/change_status/<?php echo base64_encode($faq['faq_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-success">Active</a>
+														<a href="<?php echo base_url();?>backend/FAQ/change_status/<?php echo base64_encode($faq['faq_id']);?>/<?php echo base64_encode('Active');?>" class="btn-sm btn-danger">Active</a>
 														<?php } else { ?>
 														<a href="<?php echo base_url();?>backend/FAQ/change_status/<?php echo base64_encode($faq['faq_id']);?>/<?php echo base64_encode('Inactive');?>" class="btn-sm btn-danger">Inactive</a>
 													<?php } ?>

@@ -98,29 +98,12 @@ function order_change(order_id,order_status,user_type,admin_id,customer_id)
 
 // code for all manage pages
 
-
-
 function chk_isDeleteComnfirm()
 {
-
-
-
 	if(confirm("Are you really want to delete record?"))
-
-
-
 		return true;
-
-
-
 	else
-
-
-
 		return false;
-
-
-
 }
 
 $("#ckbCheckAll").click(function () {
@@ -159,44 +142,25 @@ function rst_status_change(rst_id,rst_status)
 // function for changing customer status
 
 function customer_status_change(user_id,user_status)
-
 {
-
 	$("#sucess_sttaus").hide();
-
 	var user_id=user_id;
-
 	var user_status=user_status;
-
-
-
 	if(user_id!='')
-
 	{
 		if(confirm("Do you really want to "+user_status+" record?"))
 		{
 			$.ajax({
-
 					type: "POST",
-
 					url: BASEPATH+"Users/ajaxSetUserStatus",
-
 					data:'user_id='+user_id+"&user_status="+user_status,
-
 					dataType: 'json',
-
 					success: function(response)
-
 					{
-		 
 						$("#sucess_sttaus").show();
-
 						$('#sucess_sttaus').fadeOut(3000);
-
 					}
-
 					});
-
 		}
 		else
 		{
@@ -226,9 +190,7 @@ $(document).ready(function($)
 	/* select all customers for notification section*/
 
 	$(".check_all_customers_notification").click(function(){
-
 		 $("input:checkbox.cls_check_all_customers").prop('checked',this.checked);
-
 	});
 
 /* valdiation for add  HelpCenter  */
@@ -411,7 +373,7 @@ $('#btn_addnoti').click(function(){
 	}
 	if(massage=="")
 	{
-		$("#err_massage").html('Enter massage.');
+		$("#err_massage").html('Enter message.');
 		flag=0;
 	}
 	if(select_type=="")
@@ -542,14 +504,14 @@ $('#btn_addmaterial').click(function(){
 
 $('#btn_addPromocode').click(function(){ 
 	// alert();
-	// var service_id=$("#service_id").val();
+	var user_id=$("#user_id").val();
 	var promocode_code=$("#promocode_code").val();
 	var promocode_description=$("#promocode_description").val();
 	var promocode_discount=$("#promocode_discount").val();
 	var promocode_type=$("#promocode_type").val();
 	var status=$("#status").val();
 	
-	// $("#err_service_id").html('');
+	$("#err_user_id").html('');
 	$("#err_promocode_code").html('');
 	$("#err_promocode_description").html('');
 	$("#err_promocode_discount").html('');
@@ -558,11 +520,11 @@ $('#btn_addPromocode').click(function(){
 	
 	var flag=1;
 	
-	// if(service_id=="")
-	// {
-	// 	$("#err_service_id").html('Select Service.');
-	// 	flag=0;
-	// }
+	if(user_id=="")
+	{
+		$("#err_user_id").html('Select Customer.');
+		flag=0;
+	}
 	if(promocode_code=="")
 	{
 		$("#err_promocode_code").html('Enter promocode.');
@@ -639,23 +601,31 @@ $('#btn_addcity').click(function(){
 });
 /* end Eidt city */
 /* valdiation for add  Material*/
-$('#btn_uptcity').click(function(){
-		var city_name=$("#city_name").val();
-	var state_id=$("#state_id").val();
+$('#btn_addgroup').click(function(){
+	var category_id=$("#category_id").val();
+	var group_name=$("#group_name").val();
+	var sp_id=$("#sp_id").val();
 	var status=$("#status").val();
 
-	$("#err_city_name").html('');
+	$("#err_category_id").html('');
+	$("#err_group_name").html('');
+	$("#err_sp_id").html('');
 	$("#err_status").html('');
 	var flag=1;
 	
-	if(city_name=="")
+	if(category_id=="")
 	{
-		$("#err_city_name").html('Enter city name.');
+		$("#err_category_id").html('Please select category.');
 		flag=0;
 	}
-	if(state_id=="")
+	if(group_name=="")
 	{
-		$("#err_state_id").html('Please select state.');
+		$("#err_group_name").html('Enter group name.');
+		flag=0;
+	}
+	if(sp_id=="")
+	{
+		$("#err_sp_id").html('Please select service giver.');
 		flag=0;
 	}
 	if(status=="")
@@ -741,8 +711,6 @@ $('#btn_updateprofile').click(function(){
 });
 /* end add city */
 
-
-
 /* valdiation for Add  Service provider*/
 $('#btn_addsp').click(function(){
 	var full_name=$("#full_name").val();
@@ -758,7 +726,7 @@ $('#btn_addsp').click(function(){
 	var is_verified=$("#is_verified").val();
 	var status=$("#status").val();
 
-	var profile_photo=$('#servicefile')[0].files.length;
+	// var profile_photo=$('#servicefile')[0].files.length;
 
 	$("#err_servicefile").html('');
 	$("#err_full_name").html('');
@@ -775,11 +743,11 @@ $('#btn_addsp').click(function(){
 	$("#err_profile_photo").html('');
 	var flag=1;
 	
-	if(profile_photo==0)
-	{
-		$("#err_profile_photo").html('Choose your profile.');
-		flag=0;
-	}
+	// if(profile_photo==0)
+	// {
+	// 	$("#err_profile_photo").html('Choose your profile.');
+	// 	flag=0;
+	// }
 	if(full_name=="")
 	{
 		$("#err_full_name").html('Enter full name.');
@@ -872,7 +840,7 @@ $('#btn_adduser').click(function(){
 	var daily_report=$("#daily_report").val();
 
 	var status=$("#status").val();
-	var profile_photo=$('#servicefile')[0].files.length;
+	var profile_photo="";//$('#servicefile')[0].files.length;
 
 	$("#err_profile_photo").html('');
 	$("#err_full_name").html('');
@@ -886,11 +854,11 @@ $('#btn_adduser').click(function(){
 	$("#err_status").html('');
 	var flag=1;
 	
-	if(profile_photo=="")
-	{
-		$("#err_profile_photo").html('Choose your profile.');
-		flag=0;
-	}
+	// if(profile_photo=="")
+	// {
+	// 	$("#err_profile_photo").html('Choose your profile.');
+	// 	flag=0;
+	// }
 	if(full_name=="")
 	{
 		$("#err_full_name").html('Enter full name.');

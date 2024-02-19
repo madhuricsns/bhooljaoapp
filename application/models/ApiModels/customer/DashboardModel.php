@@ -34,7 +34,7 @@
         {
             if(!empty($user_id))
             {
-                $this->db->select('full_name,address,user_lat,user_long,profile_pic');
+                $this->db->select('full_name,address,user_lat,user_long,profile_pic,status');
                 $this->db->from(TBLPREFIX.'users');
                 $this->db->where('user_id',$user_id);
                 $this->db->where('user_type','Customer');

@@ -32,16 +32,8 @@ class Notifications extends CI_Controller {
 		$data['notificationcnt']=$this->Notification_model->getAllNotifications(0,"","");
 		
 		$config = array();
-		
 		$config["base_url"] = base_url().'backend/Notifications/manageNotifications/'.$per_page;
-		
 		$config['per_page'] = $per_page;
-		
-		
-		//$arrGcmID[] = 'ExponentPushToken[ILvrAQKXZylNfqwZrnRmXO]';
-		/*$arrGcmID[] = 'ExponentPushToken[XiEPpvAeQshWRuImc99MHx]';
-		$this->Common_Model->sendexponotification('test', 'Testing notifications 5 pm sent...', $arrGcmID);*/
-		
 		//print $uriSegment; exit;
 		$config["uri_segment"] = 5;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
@@ -62,7 +54,6 @@ class Notifications extends CI_Controller {
 		$config["total_rows"] =$data['notificationcnt'];
 		//print_r($config);
 		$this->pagination->initialize($config);
-		
 		if(HOSTPAGINATE == 'local')
 		{
 			$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
@@ -129,16 +120,29 @@ class Notifications extends CI_Controller {
 								'noti_message'=>trim($notification_description),
 								'noti_user_type'=>$type,
 								'noti_type'=>'Admin',
+								'noti_send_type'=>'All',
 								'noti_user_id'=>$users['user_id'],
 								'noti_gcmID'=>$users['user_fcm'],
-								'created_by' => $session_data['admin_id'],
+								'created_by' => '0',
 								'dateadded' => date('Y-m-d H:i:s')
 								);
 							
 								$notification_id = $this->Notification_model->insert_notification($input_data);
-								
 								$this->Common_Model->sendexponotification($notification_name,$notification_description,$users['user_fcm']);
 							}
+							//Admin details purpose
+								$input_data = array(
+								'noti_title'=>trim($notification_name),
+								'noti_message'=>trim($notification_description),
+								'noti_user_type'=>$type,
+								'noti_type'=>'Admin',
+								'noti_send_type'=>'All',
+								// 'noti_user_id'=>$users['user_id'],
+								// 'noti_gcmID'=>$users['user_fcm'],
+								'created_by' => '1',
+								'dateadded' => date('Y-m-d H:i:s')
+								);
+								$notification_id = $this->Notification_model->insert_notification($input_data);
 						}
 						else if($type == 'Service Provider')
 						{
@@ -151,14 +155,26 @@ class Notifications extends CI_Controller {
 								'noti_type'=>'Admin',
 								'noti_user_id'=>$users['user_id'],
 								'noti_gcmID'=>$users['user_fcm'],
-								'created_by' => $session_data['admin_id'],
+								'created_by' => '0',
 								'dateadded' => date('Y-m-d H:i:s')
 								);
 							
 								$notification_id = $this->Notification_model->insert_notification($input_data);
-								
 								$this->Common_Model->sendexponotification($notification_name,$notification_description,$users['user_fcm']);
 							}
+							//Admin details purpose
+								$input_data = array(
+								'noti_title'=>trim($notification_name),
+								'noti_message'=>trim($notification_description),
+								'noti_user_type'=>$type,
+								'noti_type'=>'Admin',
+								'noti_send_type'=>'All',
+								// 'noti_user_id'=>$users['user_id'],
+								// 'noti_gcmID'=>$users['user_fcm'],
+								'created_by' => '1',
+								'dateadded' => date('Y-m-d H:i:s')
+								);
+								$notification_id = $this->Notification_model->insert_notification($input_data);
 						}
 						
 					} else 
@@ -172,9 +188,10 @@ class Notifications extends CI_Controller {
 								'noti_message'=>trim($notification_description),
 								'noti_user_type'=>$type,
 								'noti_type'=>'Admin',
+								'noti_send_type'=>'Single',
 								'noti_user_id'=>$user_id,
 								'noti_gcmID'=>$user->user_fcm,
-								'created_by' => $session_data['admin_id'],
+								'created_by' => '1',
 								'dateadded' => date('Y-m-d H:i:s')
 								);
 							
@@ -255,20 +272,29 @@ class Notifications extends CI_Controller {
 		$noti_id = base64_decode($this->uri->segment(4));
 		if($noti_id)
 		{ 
-				
-				$this->db->where('noti_id',$noti_id);
-				$deluser = $this->db->delete('bhool_notification');
-				if($deluser > 0)
-				{
-					$this->session->set_flashdata('success','Notification deleted successfully.');
-					redirect(base_url().'backend/Notifications/manageNotifications');	
-				}
-				else
-				{
-					$this->session->set_flashdata('error','Error while deleting notification.');
-					redirect(base_url().'backend/Notifications/manageNotifications');
-				}
+			$noti=$this->Notification_model->getNotification(1,$noti_id);
+			// print_r($noti);
 			
+			$this->db->where('noti_user_type',$noti->noti_user_type);
+			$this->db->where('noti_title',$noti->noti_title);
+			$this->db->where('noti_id!=',$noti_id);
+			// $q=$this->db->get()->result_array();
+			// 
+			$deluser = $this->db->delete('bhool_notification');
+			// echo $this->db->last_query();
+			// exit;
+			$this->db->where('noti_id',$noti_id);
+			$deluser = $this->db->delete('bhool_notification');
+			if($deluser > 0)
+			{
+				$this->session->set_flashdata('success','Notification deleted successfully.');
+				redirect(base_url().'backend/Notifications/manageNotifications');	
+			}
+			else
+			{
+				$this->session->set_flashdata('error','Error while deleting notification.');
+				redirect(base_url().'backend/Notifications/manageNotifications');
+			}
 		}
 		else
 		{

@@ -24,75 +24,90 @@ class Booking extends CI_Controller {
 	public function manageBooking()
 	{
 		$data['title']='Manage Booking';
-		$srchStatus = $srchDate = 'Na';
+		$data['categoryList']=$this->Booking_model->getAllCategory();
+		// print_r($data['categoryList']);exit;
+		// $srchStatus = $srchDate = 'Na';
 		$per_page='10';
-		if($this->uri->segment(4)!='')
+		
+		if(isset($_POST['btn_clear']))
 		{
-			if($this->uri->segment(4)!="Na")
-			{
-				$srchStatus=($this->uri->segment(4));
-			}
+			 $this->session->unset_userdata('session_bookingstatus');
+			 $this->session->unset_userdata('session_from_date');
+			 $this->session->unset_userdata('session_to_date');
+			 $this->session->unset_userdata('session_category_id');
+			 redirect(base_url().'backend/Booking/manageBooking');
+		}
+
+		$filter=array();
+
+		if(isset($_POST['btn_search']))
+		{
+			$this->session->unset_userdata('session_bookingstatus');
+			$this->session->unset_userdata('session_from_date');
+			$this->session->unset_userdata('session_to_date');
+			$this->session->unset_userdata('session_category_id');
+
+			$bookingstatus=$this->input->post('bookingstatus');
+			$from_date=$this->input->post('from_date');
+			$to_date=$this->input->post('to_date');
+			$category_id=$this->input->post('category_id');
+			 	
+				if($bookingstatus!=""){
+					$this->session->set_userdata(array("session_bookingstatus"=>$bookingstatus));
+					// $filter['status']=$this->session->userdata('session_bookingstatus');
+				}
+				if($from_date!=""){
+					$this->session->set_userdata(array("session_from_date"=>$from_date));
+					// $filter['from_date']=$this->session->userdata('session_from_date');
+				}
+				if($to_date!=""){
+					$this->session->set_userdata(array("session_to_date"=>$to_date));
+					// $filter['to_date']=$this->session->userdata('session_to_date');
+            	}
+				if($category_id!=""){
+					$this->session->set_userdata(array("session_category_id"=>$category_id));
+					// $filter['to_date']=$this->session->userdata('session_to_date');
+            	}
+		}
+
+		$data['session_bookingstatus'] = $this->session->userdata('session_bookingstatus');		
+		$data['session_from_date'] = $this->session->userdata('session_from_date');		
+		$data['session_to_date'] = $this->session->userdata('session_to_date');	
+		$data['session_category_id'] = $this->session->userdata('session_category_id');	
+
+		if($this->session->userdata('session_bookingstatus') != '')
+		{
+			$filter['status']=$this->session->userdata('session_bookingstatus');
+		}
+		if($this->session->userdata('session_from_date') != '')
+		{
+			$filter['from_date']=$this->session->userdata('session_from_date');
+		}
+		if($this->session->userdata('session_to_date')!= '')
+		{
+			$filter['to_date']=$this->session->userdata('session_to_date');
+		}
+		if($this->session->userdata('session_category_id')!= '')
+		{
+			$filter['category_id']=$this->session->userdata('session_category_id');
 		}
 		
-		if($this->uri->segment(5)!='')
+		// print_r($this->session->userdata());
+		if($this->session->userdata("pagination_rows") != '')
 		{
-			if($this->uri->segment(5)!="Na")
-			{
-				$srchDate=($this->uri->segment(5));
-			}
+			$per_page = $this->session->userdata("pagination_rows");
 		}
-
-		if($this->uri->segment(6)!='')
-		{
-			if($this->uri->segment(6)!="Na")
-			{
-				$pageNo=($this->uri->segment(6));
-			}
-		}
-
-		if($this->uri->segment(7)!='')
-		{
-			if($this->uri->segment(7)!="Na")
-			{
-				$per_page=($this->uri->segment(7));
-			}
-		}
-		else
-		{
+		else {
 			$per_page='10';
 		}
-		// echo $per_page;
-		$filter=array();
-		//$date_filter=array();
-		  $selectedBookingstatus = $srchStatus;
-		
-		  $search_date = $srchDate;
 
-			if ($search_date != 'Na') {
-	            // If a category is selected, filter the records by that Booking
-	            $filter['datesearch']=$search_date;
-	           //  $data['datesearch']=$search_date;
-	        } 
-
-		  if ($selectedBookingstatus != 'Na') {
-            // If a category is selected, filter the records by that Booking
-            $filter['status']=$selectedBookingstatus;
-        } 
 		$data['bookingcnt']=$this->Booking_model->getAllBooking(0,"","",$filter);
 		
 		$config = array();
-		$config["base_url"] = base_url().'backend/Booking/manageBooking/'.$srchStatus.'/'.$srchDate.'/'.$per_page;
-		// $config['per_page'] = 10;
-		if($per_page>100)
-		{
-			$config['per_page'] = 100;
-		}
-		else
-		{
-			$config['per_page'] = $per_page;
-		}
+		$config["base_url"] = base_url().'backend/Booking/manageBooking/'.$per_page;
+		$config['per_page'] = $per_page;
 		
-		$config["uri_segment"] = 6;
+		$config["uri_segment"] = 5;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
 		$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
@@ -113,19 +128,22 @@ class Booking extends CI_Controller {
 		$this->pagination->initialize($config);
 				
 		// $per_page = ($this->uri->segment(7)) ? $this->uri->segment(7) : 0;
-		$page = ($this->uri->segment(6)) ? $this->uri->segment(6) : 0;
+		// $page = ($this->uri->segment(6)) ? $this->uri->segment(6) : 0;
+		/*if(HOSTPAGINATE == 'local')
+		{
+			$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+		}
+		else
+		{*/
+			$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+		//}
+
 		$data["total_rows"] = $config["total_rows"]; 
 		$data["links"] = $this->pagination->create_links();
 
-		//echo "ConttPerPage--".$config["per_page"];
-		//echo "Conttpage--".$page;
-		//exit();
-		//$data['bookingList']=$this->Booking_model->getAllBooking(1,$config["per_page"],$page);
-		// $data['Bookingstatus'] = $this->Booking_model->getBookingstatus();
-		   $data['bookingList']=$this->Booking_model->getAllBooking(1,$config["per_page"],$page,$filter);
-        // echo $this->db->last_query();
-		// print_r($filter);
-		//  exit;
+		$data['bookingList']=$this->Booking_model->getAllBooking(1,$config["per_page"],$page,$filter);
+		// echo $this->db->last_query();
+		
 		$this->load->view('admin/admin_header',$data);
 		$this->load->view('admin/manageBooking',$data);
 		$this->load->view('admin/admin_footer');
@@ -330,10 +348,31 @@ class Booking extends CI_Controller {
 								
 								$notification_id = $this->Notification_model->insert_notification($input_data);
 								$this->Common_Model->sendexponotification($title,$message,$user->user_fcm);
+
+								// Send Customer Notification
+								$customer=$this->Notification_model->getUserDetails(1,$booking_user_id);
+								
+								$titleC="Your Booking Assigned SG";
+								$messageC="Booking no $orderno has been assigned to $user->full_name";
+			
+								$input_dataC = array(
+									'noti_title'=>trim($titleC),
+									'noti_message'=>trim($messageC),
+									'noti_user_type'=>'Customer',
+									'noti_type'=>'Booking',
+									'noti_user_id'=>$booking_user_id,
+									'noti_gcmID'=>$customer->user_fcm,
+									'created_by' => $session_data['admin_id'],
+									'dateadded' => date('Y-m-d H:i:s')
+									);
+
+								$notification_idc = $this->Notification_model->insert_notification($input_dataC);
+								$this->Common_Model->sendexponotification($titleC,$messageC,$customer->user_fcm);
 								
 							}
 							else
 							{
+								$group=$this->Booking_model->getGroup($group_id);
 								$groupBySP=$this->Booking_model->getGroupBySP($group_id,1);
 								
 								foreach($groupBySP as $sp){
@@ -356,29 +395,29 @@ class Booking extends CI_Controller {
 									$notification_id = $this->Notification_model->insert_notification($input_data);
 									$this->Common_Model->sendexponotification($title,$message,$user->user_fcm);
 								}
+
+								// Send Customer Notification
+								$customer=$this->Notification_model->getUserDetails(1,$booking_user_id);
+								
+								$titleC="Your Booking Assigned Service Group";
+								$messageC="Booking no $orderno has been assigned to ".$group[0]['group_name'];
+			
+								$input_dataC = array(
+									'noti_title'=>trim($titleC),
+									'noti_message'=>trim($messageC),
+									'noti_user_type'=>'Customer',
+									'noti_type'=>'Booking',
+									'noti_user_id'=>$booking_user_id,
+									'noti_gcmID'=>$customer->user_fcm,
+									'created_by' => $session_data['admin_id'],
+									'dateadded' => date('Y-m-d H:i:s')
+									);
+
+								$notification_idc = $this->Notification_model->insert_notification($input_dataC);
+								$this->Common_Model->sendexponotification($titleC,$messageC,$customer->user_fcm);
 							}
 							
-							// Send Customer Notification
-							$customer=$this->Notification_model->getUserDetails(1,$booking_user_id);
-							
-							$titleC="Your Booking Assigned SP";
-							$messageC="Booking no $orderno has been assigned to $user->full_name";
-		
-							$input_dataC = array(
-								'noti_title'=>trim($titleC),
-								'noti_message'=>trim($messageC),
-								'noti_user_type'=>'Customer',
-								'noti_type'=>'Booking',
-								'noti_user_id'=>$booking_user_id,
-								'noti_gcmID'=>$customer->user_fcm,
-								'created_by' => $session_data['admin_id'],
-								'dateadded' => date('Y-m-d H:i:s')
-								);
-
-							$notification_idc = $this->Notification_model->insert_notification($input_dataC);
-							$this->Common_Model->sendexponotification($titleC,$messageC,$customer->user_fcm);
-							
-							$this->session->set_flashdata('success','Assing Service Provider successfully.');
+							$this->session->set_flashdata('success','Assing Service Giver successfully.');
 							redirect(base_url().'backend/Booking/manageBooking');	
 						}
 						else
@@ -406,7 +445,177 @@ class Booking extends CI_Controller {
 					// echo"<pre>";
 					// print_r($bokingidInfo);
 					// exit();
+	}
+
+	public function changeAssingServiceProvider()
+	{
+		$data['title']='Change Assing Service Giver';
+		$data['error_msg']='';
+		$session_data=$this->session->userdata('logged_in');
+			$booking_id=base64_decode($this->uri->segment(4));
+
+			if($booking_id) {
+				$bokingInfo=$this->Booking_model->getSingleBookingInfo($booking_id,0);
+				
+			if($bokingInfo>0)
+			{
+				$data['bokingInfo'] =$booking= $this->Booking_model->getSingleBookingInfo($booking_id,1);
+				
+			$booking_user_id=$data['bokingInfo'][0]['user_id'];	
+			$category_id = $data['bokingInfo'][0]['category_id'];
+			$categoryData=$this->Booking_model->getCategoryDetails($category_id);
+			if($categoryData->category_parent_id!=0)
+			{
+				$category_id=$categoryData->category_parent_id;
 			}
+			$data['serviceGroup']=$this->Booking_model->getAllGroup(1,$category_id);
+			$data['usersList']=$this->Booking_model->getAllUsers(1,"","",$category_id);
+				if(isset($_POST['btn_upAssing']))
+				{
+					$servicepro=$this->input->post('service_provider');
+					$service_group_assign='NO';
+					
+					$group_id=$this->input->post('group_id');
+					if($group_id>0)
+					{
+						$service_group_assign='YES';
+					}
+					
+					// $status=$this->input->post('status');
+					if($group_id>0)
+					{
+						$input_data = array(
+							'service_provider_id'=>'0',
+							'service_group_assigned'=>$service_group_assign,
+							'service_group_id'=>$group_id,
+							);
+					}	
+					else
+					{
+						$input_data = array(
+							'service_provider_id'=>$servicepro,
+							'service_group_assigned'=>$service_group_assign
+							);
+					}
+					
+					// echo"<pre>";
+					// print_r($input_data);
+					// exit();
+					$updatedata = $this->Booking_model->uptdateAssingServiceprovider($input_data,$booking_id);
+					
+					// echo $this->db->last_query();exit;
+					if($updatedata)
+					{	
+						$orderno = $data['bokingInfo'][0]['order_no'];
+						if($service_group_assign=='NO')
+						{
+							$user=$this->Notification_model->getUserDetails(1,$servicepro);
+							
+							$title="New Booking Assigned";
+							$message="Booking no $orderno has been assigned to you";
+		
+							$input_data = array(
+								'noti_title'=>trim($title),
+								'noti_message'=>trim($message),
+								'noti_user_type'=>'Service Provider',
+								'noti_type'=>'Booking',
+								'noti_user_id'=>$servicepro,
+								'noti_gcmID'=>$user->user_fcm,
+								// 'created_by' => $session_data['admin_id'],
+								'dateadded' => date('Y-m-d H:i:s')
+								);
+							
+							$notification_id = $this->Notification_model->insert_notification($input_data);
+							$this->Common_Model->sendexponotification($title,$message,$user->user_fcm);
+
+							// Send Customer Notification
+							$customer=$this->Notification_model->getUserDetails(1,$booking_user_id);
+							
+							$titleC="Your Booking Assigned SG";
+							$messageC="Booking no $orderno has been assigned to $user->full_name";
+		
+							$input_dataC = array(
+								'noti_title'=>trim($titleC),
+								'noti_message'=>trim($messageC),
+								'noti_user_type'=>'Customer',
+								'noti_type'=>'Booking',
+								'noti_user_id'=>$booking_user_id,
+								'noti_gcmID'=>$customer->user_fcm,
+								'created_by' => $session_data['admin_id'],
+								'dateadded' => date('Y-m-d H:i:s')
+								);
+
+							$notification_idc = $this->Notification_model->insert_notification($input_dataC);
+							$this->Common_Model->sendexponotification($titleC,$messageC,$customer->user_fcm);
+							
+						}
+						else
+						{
+							$group=$this->Booking_model->getGroup($group_id);
+							$groupBySP=$this->Booking_model->getGroupBySP($group_id,1);
+							
+							foreach($groupBySP as $sp){
+								$user=$this->Notification_model->getUserDetails(1,$sp['service_provider_id']);
+								
+								$title="New Booking Assigned";
+								$message="Booking no $orderno has been assigned to your service group";
+			
+								$input_data = array(
+									'noti_title'=>trim($title),
+									'noti_message'=>trim($message),
+									'noti_user_type'=>'Service Provider',
+									'noti_type'=>'Booking',
+									'noti_user_id'=>$user->user_id,
+									'noti_gcmID'=>$user->user_fcm,
+									// 'created_by' => $session_data['admin_id'],
+									'dateadded' => date('Y-m-d H:i:s')
+									);
+								
+								$notification_id = $this->Notification_model->insert_notification($input_data);
+								$this->Common_Model->sendexponotification($title,$message,$user->user_fcm);
+							}
+
+							// Send Customer Notification
+							$customer=$this->Notification_model->getUserDetails(1,$booking_user_id);
+							
+							$titleC="Your Booking Assigned Service Group";
+							$messageC="Booking no $orderno has been assigned to ".$group[0]['group_name'];
+		
+							$input_dataC = array(
+								'noti_title'=>trim($titleC),
+								'noti_message'=>trim($messageC),
+								'noti_user_type'=>'Customer',
+								'noti_type'=>'Booking',
+								'noti_user_id'=>$booking_user_id,
+								'noti_gcmID'=>$customer->user_fcm,
+								'created_by' => $session_data['admin_id'],
+								'dateadded' => date('Y-m-d H:i:s')
+								);
+
+							$notification_idc = $this->Notification_model->insert_notification($input_dataC);
+							$this->Common_Model->sendexponotification($titleC,$messageC,$customer->user_fcm);
+						}
+						
+						$this->session->set_flashdata('success','Assing Service Giver successfully.');
+						redirect(base_url().'backend/Booking/viewBookingDetails/'.base64_encode($booking_id));	
+					}
+					else
+					{
+						$this->session->set_flashdata('error','Error while updating Service Provider.');
+						redirect(base_url().'backend/Booking/changeAssingServiceProvider/'.base64_encode($booking_id));
+					}	
+				}
+			}
+			else
+			{
+				$data['error_msg'] = 'Not found.';
+			}
+		}
+		
+		$this->load->view('admin/admin_header',$data);
+		$this->load->view('admin/change_AssingServicepro',$data);
+		$this->load->view('admin/admin_footer');
+	}
 	
 	
 	public function updateMaterial()
@@ -546,7 +755,7 @@ class Booking extends CI_Controller {
 		}
 	}
 
-public function viewBookingDetails()
+	public function viewBookingDetails()
 	{
 		$data['title']='Booking Details';
 	
@@ -563,7 +772,6 @@ public function viewBookingDetails()
 		$data['workHistory'] = $this->Booking_model->getBookingWorkHistory($booking_id);
 		
 		$data['transactionHistory'] = $this->Booking_model->getBookingTransactionHistory($booking_id);
-		
 		//echo $this->db->last_query();exit;
 		 $this->load->view('admin/admin_header',$data);
 		// $this->load->view('admin/addMaterial',$data);
@@ -599,74 +807,87 @@ public function viewBookingDetails()
 	public function manageBookingDemo()
 	{
 		$data['title']='Manage Booking Demo';
-		$srchStatus = $srchDate = 'Na';
+		$data['categoryList']=$this->Booking_model->getAllCategory();
 		$per_page='10';
-		if($this->uri->segment(4)!='')
+
+		if(isset($_POST['btn_clear']))
 		{
-			if($this->uri->segment(4)!="Na")
-			{
-				$srchStatus=($this->uri->segment(4));
-			}
+			 $this->session->unset_userdata('session_demobookingstatus');
+			 $this->session->unset_userdata('session_demofrom_date');
+			 $this->session->unset_userdata('session_demoto_date');
+			 $this->session->unset_userdata('session_democategory_id');
+ 
+			 redirect(base_url().'backend/Booking/manageBookingDemo');
+		}
+
+		$filter=array();
+
+		if(isset($_POST['btn_search']))
+		{
+			$this->session->unset_userdata('session_demobookingstatus');
+			$this->session->unset_userdata('session_demofrom_date');
+			$this->session->unset_userdata('session_demoto_date');
+			$this->session->unset_userdata('session_democategory_id');
+
+			$bookingstatus=$this->input->post('bookingstatus');
+			$from_date=$this->input->post('from_date');
+			$to_date=$this->input->post('to_date');
+			$category_id=$this->input->post('category_id');
+			 	
+				if($bookingstatus!=""){
+					$this->session->set_userdata(array("session_demobookingstatus"=>$bookingstatus));
+					// $filter['status']=$this->session->userdata('session_bookingstatus');
+				}
+				if($from_date!=""){
+					$this->session->set_userdata(array("session_demofrom_date"=>$from_date));
+					// $filter['from_date']=$this->session->userdata('session_from_date');
+				}
+				if($to_date!=""){
+					$this->session->set_userdata(array("session_demoto_date"=>$to_date));
+					// $filter['to_date']=$this->session->userdata('session_to_date');
+            	}
+				if($category_id!=""){
+					$this->session->set_userdata(array("session_category_id"=>$category_id));
+            	}
+		}
+
+		$data['session_demobookingstatus'] = $this->session->userdata('session_demobookingstatus');		
+		$data['session_demofrom_date'] = $this->session->userdata('session_demofrom_date');		
+		$data['session_demoto_date'] = $this->session->userdata('session_demoto_date');	
+		$data['session_democategory_id'] = $this->session->userdata('session_democategory_id');	
+
+		if($this->session->userdata('session_demobookingstatus') != '')
+		{
+			$filter['status']=$this->session->userdata('session_demobookingstatus');
+		}
+		if($this->session->userdata('session_demofrom_date') != '')
+		{
+			$filter['from_date']=$this->session->userdata('session_demofrom_date');
+		}
+		if($this->session->userdata('session_demoto_date')!= '')
+		{
+			$filter['to_date']=$this->session->userdata('session_demoto_date');
+		}
+		if($this->session->userdata('session_democategory_id')!= '')
+		{
+			$filter['category_id']=$this->session->userdata('session_democategory_id');
 		}
 		
-		if($this->uri->segment(5)!='')
+		if($this->session->userdata("pagination_rows") != '')
 		{
-			if($this->uri->segment(5)!="Na")
-			{
-				$srchDate=($this->uri->segment(5));
-			}
+			$per_page = $this->session->userdata("pagination_rows");
 		}
-
-		if($this->uri->segment(6)!='')
-		{
-			if($this->uri->segment(6)!="Na")
-			{
-				$pageNo=($this->uri->segment(6));
-			}
-		}
-
-		if($this->uri->segment(7)!='')
-		{
-			if($this->uri->segment(7)!="Na")
-			{
-				$per_page=($this->uri->segment(7));
-			}
-		}
-		else
-		{
+		else {
 			$per_page='10';
 		}
-		$filter=array();
-		//$date_filter=array();
-		  $selectedBookingstatus = $srchStatus;
-		
-		  $search_date = $srchDate;
 
-			if ($search_date != 'Na') {
-	            // If a category is selected, filter the records by that Booking
-	            $filter['datesearch']=$search_date;
-	           //  $data['datesearch']=$search_date;
-	        } 
-
-		  if ($selectedBookingstatus != 'Na') {
-            // If a category is selected, filter the records by that Booking
-            $filter['status']=$selectedBookingstatus;
-        } 
-		
 		$data['bookingdemocnt']=$this->Booking_model->getAllBookingDemo(0,"","",$filter);
 		
 		$config = array();
-		$config["base_url"] = base_url().'backend/Booking/manageBookingDemo/'.$srchStatus.'/'.$srchDate.'/'.$per_page;
-		// $config['per_page'] = 10;
-		if($per_page>100)
-		{
-			$config['per_page'] = 100;
-		}
-		else
-		{
-			$config['per_page'] = $per_page;
-		}
-		$config["uri_segment"] = 6;
+		$config["base_url"] = base_url().'backend/Booking/manageBookingDemo/'.$per_page;
+		$config['per_page'] = $per_page;
+		
+		$config["uri_segment"] = 5;
 		$config['full_tag_open'] = '<ul class="pagination">'; 
 		$config['full_tag_close'] = '</ul>';
 		$config['first_tag_open'] = "<li class='paginate_button  page-item'>";
@@ -686,32 +907,20 @@ public function viewBookingDetails()
 		#echo "<pre>"; print_r($config); exit;
 		$this->pagination->initialize($config);
 				
-		$page = ($this->uri->segment(6)) ? $this->uri->segment(6) : 0;
+		// $page = ($this->uri->segment(6)) ? $this->uri->segment(6) : 0;
+		/*if(HOSTPAGINATE == 'local')
+		{
+			$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+		}
+		else
+		{*/
+			$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+		//}
+
 		$data["total_rows"] = $config["total_rows"]; 
 		$data["links"] = $this->pagination->create_links();
-		//echo "ConttPerPage--".$config["per_page"];
-		//echo "Conttpage--".$page;
-		//exit();
-		//$data['bookingList']=$this->Booking_model->getAllBooking(1,$config["per_page"],$page);
-		// $data['Bookingstatus'] = $this->Booking_model->getBookingstatus();
-		// $filter=array();
-		// //$date_filter=array();
-		//  $selectedBookingstatus = $this->input->get('bookingstatus');
 		
-		//   $search_date = $this->input->get('datesearch');
-
-		// 	if ($search_date) {
-	    //         // If a category is selected, filter the records by that Booking
-	    //         $filter['datesearch']=$search_date;
-	    //        //  $data['datesearch']=$search_date;
-	    //     } 
-
-		//   if ($selectedBookingstatus) {
-        //     // If a category is selected, filter the records by that Booking
-        //     $filter['status']=$selectedBookingstatus;
-        // } 
-
-           $data['bookingDemoList']=$this->Booking_model->getAllBookingDemo(1,$config["per_page"],$page,$filter);
+		$data['bookingDemoList']=$this->Booking_model->getAllBookingDemo(1,$config["per_page"],$page,$filter);
       //   echo $this->db->last_query();
 		// print_r($filter);
 		//  exit;

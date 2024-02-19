@@ -239,7 +239,7 @@
 
         public function getBookingWorkHistory($booking_id)
 		{
-			$this->db->select('booking_id,history_date,history_time,work_photo1,work_photo2');
+			$this->db->select('booking_id,history_date,history_time,work_photo1,work_photo2,history_lat,history_long');
 			$this->db->from(TBLPREFIX.'booking_history');
 			$this->db->where('booking_id',$booking_id);
 			$query = $this->db->get();
@@ -528,7 +528,7 @@
 			  ) AS distance';
                 
             //(DATE_FORMAT(DATE(b.booking_date),'%M/%d/,%Y')) as booking_date
-			$this->db->select($distance_parameter.','.'b.booking_id,b.order_no,b.duration,c.category_name,c.category_image,u.profile_id,u.profile_pic,u.full_name,b.booking_date,b.time_slot,b.expiry_date,b.booking_status,b.service_provider_id
+			$this->db->select($distance_parameter.','.'b.booking_id,b.order_no,b.duration,c.category_id,c.category_name,c.category_image,u.profile_id,u.profile_pic,u.full_name,b.booking_date,b.time_slot,b.expiry_date,b.booking_status,b.service_provider_id
             ,a.address1 as address,a.address_id,a.address_lat,a.address_lng');
             $this->db->from(TBLPREFIX.'booking b');
             $this->db->where($wherecategory);
@@ -606,11 +606,17 @@
             // $quarter=$this->getQUARTER();
             // $user=$this->getUserDetails($user_id);
             
-            $this->db->select('h.booking_id,h.history_date,h.history_time,h.work_photo1,h.work_photo2,b.order_no,b.service_provider_id,u.full_name,u.profile_id');
+            $this->db->select('h.history_id,h.booking_id,h.history_date,h.history_time,h.work_photo1,h.work_photo2,b.order_no,b.service_provider_id,b.service_group_id,u.full_name,u.profile_id,
+            ');
 			$this->db->from(TBLPREFIX.'booking_history as h');
             $this->db->join(TBLPREFIX.'booking as b','b.booking_id=h.booking_id','left');
             $this->db->join(TBLPREFIX.'users as u','u.user_id=b.user_id','left');
-			$this->db->where('b.service_provider_id',$user_id);
+            $this->db->join(TBLPREFIX.'service_group as g','g.group_parent_id =b.service_group_id','left');
+            $this->db->join(TBLPREFIX.'service_group as sg','sg.group_id =b.service_group_id','left');
+
+			// $this->db->where('b.service_provider_id',$user_id);
+            $condition="(b.service_provider_id='".$user_id."' OR g.service_provider_id IN (".$user_id."))";
+            $this->db->where($condition);
             if($searchkeyword!="")
             {
                 $this->db->like('u.full_name',$searchkeyword);
@@ -639,8 +645,12 @@
                     $this->db->where("h.history_date <='".$to_date." 23:59:59'");
                     break;
             }
+            $this->db->order_by('h.history_date','desc');
+            $this->db->order_by('h.history_time','desc');
+            $this->db->group_by('b.booking_id');
             $query = $this->db->get();
 			$result= $query->result_array();
+            // echo $this->db->last_query();
 			// foreach($result as $k=>$row)
             // {
             //     if(isset($row['work_photo1']) && $row['work_photo1']!="")

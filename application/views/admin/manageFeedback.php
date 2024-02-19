@@ -80,6 +80,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 								<option <?php if($this->session->userdata("pagination_rows") == '20') { ?> selected <?php } ?> value='20'>20</option>
 								<option <?php if($this->session->userdata("pagination_rows") == '50') { ?> selected <?php } ?> value='50'>50</option>
 								<option <?php if($this->session->userdata("pagination_rows") == '100') { ?> selected <?php } ?> value='100'>100</option>
+								<!-- <option <?php if($this->session->userdata("pagination_rows") == '1') { ?> selected <?php } ?> value='1'>1</option> -->
 							</select>											
 						<div class="table-responsive">
 							<div id="basicScenario" class="product-physical"></div>
@@ -90,7 +91,7 @@ if($session_user_type=="Subadmin" && $session_subroles!="NULL")
 											<th style="width:10%;">Date</th>	
 											<th style="width:10%;">Booking</th>
 											<th style="width:20%;">User</th>
-											<th style="width:20%;">Service Provider</th>
+											<th style="width:20%;">Service Giver</th>
 											<th style="width:30%;">Feedback Message</th>
 											<th style="width:10%;">Action</th>
 										</tr>
